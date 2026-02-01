@@ -1,0 +1,276 @@
+:root {
+  --primary-color: #8A7779;    /* Dusty Rose */
+  --secondary-color: #EFC8AE;  /* Cream */
+  --dark-color: #1E1E1E;       /* Dark Gray */
+  --light-color: #FFFFFF;      /* White */
+  --accent-color: #dfa528;     /* Gold accent */
+  --whatsapp-green: #25D366;
+}
+
+/* Your existing CSS remains the same, just update color variables */
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+  }
+}
+
+/* Using Google Tajawal via next/font; no local Somar fonts */
+/* Force Tajawal font on ALL elements globally */
+*,
+*::before,
+*::after {
+  font-family: 'Tajawal', sans-serif !important;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--foreground);
+  font-family: 'Tajawal', sans-serif;
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Tajawal', sans-serif !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: light;
+  }
+}
+
+/* Colors */
+
+.primary-color {
+  color: var(--primary-color);
+}
+
+.primary-bg {
+  background-color: var(--primary-color);
+}
+
+.primary-bg:hover {
+  background-color: var(--primary-hover-color);
+}
+
+/* Utils */
+
+.clamp-3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  --webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.w-md-75 {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .w-md-75 {
+    width: 75%;
+  }
+}
+
+.slick-dots li button:before {
+  content: none !important;
+}
+
+.slick-dots li {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: var(--primary-color);
+  border-radius: 11px;
+  transition: all 0.3s ease-in-out;
+}
+
+.slick-dots li.slick-active {
+  width: 21px !important;
+}
+
+.testimonial-slide {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+@media screen and (max-width: 575px) {
+  .text-center-sm {
+    text-align: center;
+  }
+}
+
+.w-sm-75 {
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+  .w-sm-75 {
+    width: 75%;
+  }
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.custom-pagination .MuiPaginationItem-root.Mui-selected {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.custom-pagination .MuiPaginationItem-root.Mui-selected:hover {
+  background-color: var(--primary-hover-color);
+  color: #fff;
+}
+
+[dir="rtl"] .MuiPaginationItem-icon {
+  transform: rotate(180deg);
+}
+
+/* Navbar */
+
+#navbar a {
+  font-weight: 500;
+}
+
+#navbar a.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* Buttons */
+
+.primaryButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.primaryButton:hover {
+  background-color: var(--primary-hover-color);
+}
+
+.primaryButton {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.secondaryButton {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 100px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background-color: var(--secondary-hover-color);
+}
+/* Remove default link styles for footer links */
+a.footer-link,
+a.footer-link:visited,
+a.footer-link:active,
+a.footer-link:hover {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+/* Additional dark mode adjustments */
+.footer {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+select.form-select,
+select.form-control {
+  background-color: rgba(255,255,255,0.1) !important;
+  color: white !important;
+  border-color: rgba(255,255,255,0.3) !important;
+}
+
+select.form-select option,
+select.form-control option {
+  background-color: #1a1a1a !important;
+  color: white !important;
+}
+
+.navbar {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.navbar a {
+  color: #ffffff !important;
+}
+
+.navbar a:hover {
+  color: var(--primary-color) !important;
+}
+
+.card {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+.form-control {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #333333;
+}
+
+.form-control:focus {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: var(--primary-color);
+}
+
+.table {
+  color: #ffffff;
+}
+
+.table th,
+.table td {
+  border-color: #333333;
+}

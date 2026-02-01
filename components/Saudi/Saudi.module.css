@@ -1,0 +1,298 @@
+.container {
+  position: relative;
+  width: 100%;
+  /* Changed from height: 100vh to min-height: 100dvh to handle mobile browsers better */
+  min-height: 100dvh;
+  overflow: hidden; /* Keep hidden for desktop, override in mobile */
+  background: #000;
+  font-family: "Tajawal", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Background Video */
+.videoBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.backgroundVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.5;
+  filter: blur(2px) brightness(0.7);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, transparent 0%, #000 90%);
+  z-index: 2;
+}
+
+/* 2. Main Layout Wrapper */
+.mainWrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  /* Fill the available height */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4%;
+}
+
+/* --- ARABIC SPECIFIC STYLES --- */
+.wrapperAr {
+  direction: rtl;
+}
+
+.wrapperAr .textSection {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.wrapperAr .mapSection {
+  transform: translateX(-35%);
+}
+
+/* --- ENGLISH SPECIFIC STYLES --- */
+.wrapperEn {
+  direction: ltr;
+}
+
+.wrapperEn .textSection {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.wrapperEn .mapSection {
+  transform: translateX(10%);
+}
+
+/* Common Text Styles */
+.textSection {
+  flex: 0 0 35%;
+  color: white;
+  transition: all 0.5s ease;
+  /* Added z-index to ensure text is clickable over map elements if they overlap */
+  z-index: 15;
+}
+
+.mainTitle {
+  font-size: 18px !important;
+  /* font-weight: 800; */
+  margin-bottom: 20px;
+  line-height: 1.4;
+  color: #cda082 !important;
+
+  text-shadow: 0 2px 15px rgba(0, 0, 0, 1);
+}
+.description{
+  font-size: 24px !important;
+  color: #ffffff !important;
+  line-height: 1.6;
+  margin-top: 10px;
+}
+.subTitle {
+  font-size: 16px;
+  color: #ddd;
+  line-height: 1.8;
+}
+
+/* Map Section */
+.mapSection {
+  position: relative;
+  flex: 1;
+  height: 70vh; /* Use Viewport Height for map consistency */
+  transition: transform 0.5s ease;
+}
+
+/* SVG Lines Layer */
+.svgLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.connectionLine {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 3px;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+}
+
+/* City Buttons */
+.cityWrapper {
+  position: absolute;
+  transform: translate(50%, -50%);
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.cityWrapper:hover {
+  transform: translate(50%, -50%) scale(1.15);
+  z-index: 20;
+}
+
+.cityCircle {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
+  transition: border-color 0.3s;
+}
+
+.cityWrapper:hover .cityCircle {
+  border-color: #4ecdc4;
+}
+
+.cityThumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cityName {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px black;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 10px;
+  border-radius: 12px;
+  white-space: nowrap; /* Prevent text breaking */
+}
+
+/* Video Modal */
+.videoModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.videoContainer {
+  position: relative;
+  width: 90%;
+  max-width: 350px;
+  background: #000;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.videoPlayer {
+  width: 100%;
+  display: block;
+}
+
+/* =========================================
+   MOBILE RESPONSIVENESS FIXES
+   ========================================= */
+@media (max-width: 1024px) {
+  /* Reset transforms on tablet/mobile so map is centered */
+  .wrapperAr .mapSection,
+  .wrapperEn .mapSection {
+    transform: none;
+  }
+
+  .mapSection {
+    /* Reduce map height slightly on tablets */
+    height: 60vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    /* Allow scrolling on mobile if content is too tall */
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .mainWrapper {
+    flex-direction: column !important;
+    justify-content: flex-start; /* Start from top */
+    padding-top: 140px; /* Pushes content down from the very top edge */
+    padding-bottom: 50px;
+    height: auto;
+  }
+
+  .textSection {
+    width: 100%;
+    text-align: center !important;
+    padding: 0 20px;
+    margin-bottom: 40px; /* Space between text and map */
+    flex: none; /* Don't stretch */
+  }
+
+  .mainTitle {
+    font-size: 15px !important;
+  }
+  .subTitle {
+    color: #efc8ae;
+    font-size: 22px;
+  }
+  .mapSection {
+    width: 100%;
+    height: 400px; /* Fixed height for map on mobile */
+    flex: none;
+    margin-top: 20px;
+  }
+
+  .cityCircle {
+    width: 55px;
+    height: 55px;
+  }
+
+  .cityName {
+    font-size: 12px;
+  }
+}

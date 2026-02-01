@@ -1,0 +1,119 @@
+.hero-section {
+ background: linear-gradient(90deg, #0d6efd, #6610f2, #6f42c1);
+  color: #fff;
+  overflow: hidden;
+  padding: 3rem;       /* increased padding */
+
+
+}
+
+.hero-container {
+  max-width: 1200px;   /* slightly larger max width */
+  margin: 0 auto;
+}
+
+/* Text */
+.hero-section h2 {
+  font-size: 2.25rem;   /* larger heading */
+  line-height: 1.2;
+}
+
+.hero-section p {
+  font-size: 1.2rem;    /* larger paragraph */
+  line-height: 1.6;
+}
+
+/* Feature badges */
+.feature-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 50px;
+  background-color: #399dd9;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.feature-badge:hover {
+  transform: scale(1.05);
+  background-color: rgba(250, 250, 251, 0.8);
+}
+
+/* Shield / Icon */
+.shield-container {
+  position: relative;
+  width: 180px;   /* increased size */
+  height: 180px;
+  margin-bottom: 80px;
+  margin-top: 20px;
+
+}
+
+.shield-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150px;   /* increased */
+  height: 150px;  /* increased */
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px #fff, 0 0 50px #fff, 0 0 70px #fff;
+  animation: pulse-scale 1s infinite ease-in-out;
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 30px #fff, 0 0 50px #fff, 0 0 70px #fff;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 0 50px #fff, 0 0 70px #fff, 0 0 100px #fff;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 30px #fff, 0 0 50px #fff, 0 0 70px #fff;
+  }
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .hero-section h2 {
+    font-size: 2rem;
+  }
+  .hero-section p {
+    font-size: 1.1rem;
+  }
+  .shield-container {
+    width: 150px;
+    height: 150px;
+  }
+  .shield-center {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section h2 {
+    font-size: 1.5rem;
+  }
+  .hero-section p {
+    font-size: 1rem;
+  }
+  .shield-container {
+    width: 120px;
+    height: 120px;
+  }
+  .shield-center {
+    width: 100px;
+    height: 100px;
+  }
+}

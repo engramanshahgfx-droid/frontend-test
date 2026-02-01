@@ -1,0 +1,850 @@
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  Waves,
+  Star,
+  Clock,
+  Users,
+} from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import { useUI } from "../../providers/UIProvider";
+import { API_URL } from "../../lib/api";
+
+export default function IslandDestinationslocal({ lang }) {
+  const router = useRouter();
+  const currentLang = lang || "en";
+  const { openBookingOrAuth } = useUI();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Touch/swipe refs for mobile
+  const touchStartRef = useRef(null);
+  const touchDeltaRef = useRef(0);
+  // Responsive container height
+  const [containerHeight, setContainerHeight] = useState('650px');
+
+  // Respect reduced motion preference
+  const prefersReducedMotion = (typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || false;
+
+  // Static labels (fallback) 
+  const labels = {
+    en: {
+      title: "Discover Unique Destinations",
+      subtitle:
+        "Experience the perfect blend of luxury, nature, and adventure in Saudi Arabia's most stunning destinations",
+      viewDetails: "View Details",
+      bookNow: "Book Now",
+    },
+    ar: {
+      title: " مستعد لرحلة لا تنسى في السعودية",
+      subtitle:
+        "اختبر المزيج المثالي بين الفخامة والطبيعة والمغامرة في أجمل الوجهات السعودية",
+      viewDetails: "عرض التفاصيل",
+      bookNow: "احجز الآن",
+    },
+  };
+
+  const t = labels[lang] || labels.en;
+
+  // Safely parse JSON arrays from backend
+  const parseList = (value) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === "string") {
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        return value
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+      }
+    }
+    return [];
+  };
+
+  // Get localized field
+  const getText = (obj, field) => {
+    // Handle title and name fields (both used in different parts)
+    if (field === "title" && obj.title_en) {
+      return lang === "ar" ? obj.title_ar : obj.title_en;
+    }
+    if (field === "name" && obj.name_en) {
+      return lang === "ar" ? obj.name_ar : obj.name_en;
+    }
+
+    // Fallback for all other fields
+    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
+    return obj[fieldKey] || obj[field] || "";
+  };
+
+  // Build a full image URL for destination images
+  const getImageUrl = (img) => {
+    if (!img) return "/placeholder.png";
+    // If already a full URL or starts with /, return as-is
+    if (/^https?:\/\//.test(img) || img.startsWith("/")) return img;
+    // Otherwise, prepend /
+    return "/" + img;
+  }; 
+
+  // Fetch local island destinations from backend
+  useEffect(() => {
+    const controller = new AbortController();
+    const fetchLocal = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/island-destinations/local`;
+        console.debug('[IslandDestinationsLocal] Fetching from:', apiEndpoint);
+        
+        const res = await fetch(apiEndpoint, { 
+          signal: controller.signal,
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        });
+        console.debug('[IslandDestinationsLocal] Response status:', res.status);
+        
+        const json = await res.json();
+        console.debug('[IslandDestinationsLocal] Response data:', json);
+        
+        if (!res.ok) {
+          throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
+        }
+        
+        if (!json?.success) {
+          throw new Error(json?.message || 'Failed to fetch destinations');
+        }
+
+        const data = Array.isArray(json.data) ? json.data : [];
+        console.debug('[IslandDestinationsLocal] Loaded destinations count:', data.length);
+        
+        setDestinations(
+          data.map((d) => {
+            console.debug('[IslandDestinationsLocal] Destination loaded:', {id: d.id, slug: d.slug, title: d.title_en});
+            return {
+              ...d,
+              image: d.image || '/placeholder.png',
+            };
+          })
+        );
+        setLoading(false);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('[IslandDestinationsLocal] Fetch error:', err.message, err);
+          
+          // Fallback: Show helpful error message with instructions
+          if (err.message.includes('Failed to fetch')) {
+            setError('⚠️ Cannot connect to backend. Is the server running on http://127.0.0.1:8000?');
+          } else {
+            setError(err.message || 'Error loading island destinations');
+          }
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchLocal();
+    return () => controller.abort();
+  }, []);
+
+  // Auto-play functionality (with improved timing & reduced-motion support)
+  useEffect(() => {
+    if (destinations.length === 0) return;
+
+    if (prefersReducedMotion) {
+      setIsAutoPlaying(false);
+      return;
+    }
+
+    if (isHovered || !isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % destinations.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, destinations.length, isHovered, prefersReducedMotion]);
+
+  // Keyboard navigation & space toggles autoplay
+  useEffect(() => {
+    const onKey = (e) => {
+      // ignore typing inside inputs
+      if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+
+      if (e.key === 'ArrowLeft') {
+        setCurrentSlide(prev => {
+          const total = destinations.length;
+          return total ? (prev - 1 + total) % total : 0;
+        });
+      } else if (e.key === 'ArrowRight') {
+        setCurrentSlide(prev => {
+          const total = destinations.length;
+          return total ? (prev + 1) % total : 0;
+        });
+      } else if (e.key === ' ' || e.key === 'Spacebar') {
+        setIsAutoPlaying(s => !s);
+      }
+    };
+
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [destinations.length]);
+
+  // Responsive height based on viewport
+  useEffect(() => {
+    const updateHeight = () => {
+      if (typeof window === 'undefined') return;
+      const w = window.innerWidth;
+      if (w < 480) setContainerHeight('520px');
+      else if (w < 768) setContainerHeight('580px');
+      else setContainerHeight('650px');
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          padding: "60px 20px",
+          color: "#fff",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <p>Loading island destinations...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        style={{
+          textAlign: "center",
+          padding: "60px 20px",
+          color: "#fff",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background:
+            "linear-gradient(135deg, #8A7779 0%, #6e6768ff 50%, #5a4f50 100%)",
+        }}
+      >
+        <div>
+          <p style={{ color: "#ff6b6b", fontSize: "1.1rem" }}>{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              background: "#dfa528",
+              color: "#333",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Use destinations from API, fallback to empty array
+  const displayDestinations = destinations.length > 0 ? destinations : [];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => {
+      const total = displayDestinations.length;
+      if (total === 0) return 0;
+      return (prev + 1) % total;
+    });
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => {
+      const total = displayDestinations.length;
+      if (total === 0) return 0;
+      return (prev - 1 + total) % total;
+    });
+  };
+
+  const goToSlide = (index) => {
+    const total = displayDestinations.length;
+    if (total === 0) return;
+    setCurrentSlide(Math.max(0, Math.min(index, total - 1)));
+  };
+
+  // Touch handlers for swipe gestures (mobile)
+  const handleTouchStart = (e) => {
+    touchStartRef.current = e.touches ? e.touches[0].clientX : null;
+    touchDeltaRef.current = 0;
+  };
+
+  const handleTouchMove = (e) => {
+    if (!touchStartRef.current) return;
+    const currentX = e.touches ? e.touches[0].clientX : null;
+    touchDeltaRef.current = currentX - touchStartRef.current;
+  };
+
+  const handleTouchEnd = () => {
+    const delta = touchDeltaRef.current || 0;
+    const threshold = 50; // swipe threshold in px
+    if (delta > threshold) {
+      prevSlide();
+    } else if (delta < -threshold) {
+      nextSlide();
+    }
+    touchStartRef.current = null;
+    touchDeltaRef.current = 0;
+  };
+
+  // Helper: normalize packages for a destination
+  const getPackages = (destination) => {
+    // If API returns a packages array, use it. Accept flexible names.
+    const list = destination.packages || destination.options || destination.offers || destination.variants || [];
+    if (Array.isArray(list) && list.length > 0) {
+      // Normalize items to { id, title, price, slug }
+      return list.map((p, idx) => ({
+        id: p.id ?? idx,
+        title: p.title ?? p.name ?? p.label ?? `${getText(destination,'title')} - Option ${idx+1}`,
+        price: parseFloat(p.price) || parseFloat(p.amount) || parseFloat(p.price_en) || parseFloat(p.price_ar) || 0,
+        slug: p.slug ?? destination.slug ?? destination.id ?? '',
+      }));
+    }
+
+    // Fallback: single package based on destination price fields
+    const amount = (
+      parseFloat(destination.price) ||
+      parseFloat(destination.price_en) ||
+      parseFloat(destination.price_ar) ||
+      parseFloat(destination.amount) ||
+      0
+    );
+    return [{ id: 'base', title: getText(destination, 'title') || destination.name || 'Package', price: amount, slug: destination.slug || destination.id || '' }];
+  };
+
+  const handleBookNow = (destination, pkg) => {
+    // Use booking modal / auth flow when user chooses to book so payments work properly
+    // Ensure correct operator precedence: use parentheses when mixing ?? and ||
+    let title = (pkg?.title ?? getText(destination, "title")) || "";
+    // Remove URL if it's appended to the title
+    if (title.includes('http')) {
+      title = title.split(/https?:\/\//)[0].trim();
+    }
+
+    const amount = pkg?.price ?? (
+      parseFloat(destination.price) ||
+      parseFloat(destination.price_en) ||
+      parseFloat(destination.price_ar) ||
+      parseFloat(destination.amount) ||
+      0
+    );
+
+    const slug = pkg?.slug ?? destination.slug ?? destination.id ?? "";
+    console.debug('[IslandDestinationsLocal] book now ->', { slug, title, pkg, raw: destination, amount });
+    // openBookingOrAuth expects trip: { title, amount, slug }
+    try {
+      openBookingOrAuth({ title, amount, slug });
+    } catch (e) {
+      console.error('openBookingOrAuth not available', e);      // Fallback to WhatsApp contact if UI provider not available
+      const base =
+        typeof window !== "undefined" && window.location.origin
+          ? window.location.origin
+          : API_URL.replace(/\/api\/?$/, "");
+      const id = destination.id?.toString?.() || destination.slug || "";
+      const url = id ? `${base}/islands/${id}` : base;
+      const message =
+        lang === "ar"
+          ? `مرحبا، أريد الاستفسار عن ${title}. ${url}`
+          : `Hello, I'm interested in ${title}. ${url}`;
+      const phoneNumber = "+966547305060";
+      const whatsappUrl = `https://wa.me/${encodeURIComponent(phoneNumber)}?text=${encodeURIComponent(
+        message
+      )}`;
+      window.open(whatsappUrl, "_blank");
+    }
+  };
+
+  const handleWhatsApp = (destination) => {
+    const title = getText(destination, "title") || "";
+    const id = destination.id?.toString?.() || destination.slug || "";
+    const base =
+      typeof window !== "undefined" && window.location.origin
+        ? window.location.origin
+        : API_URL.replace(/\/api\/?$/, "");
+    const url = id ? `${base}/islands/${id}` : base;
+    const message =
+      lang === "ar"
+        ? `مرحبا، أريد الاستفسار عن ${title}. ${url}`
+        : `Hello, I'm interested in ${title}. ${url}`;
+    const phoneNumber = "+966547305060";
+    const whatsappUrl = `https://wa.me/${encodeURIComponent(
+      phoneNumber
+    )}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
+  };
+
+  const handleViewDetails = (destination) => {
+    // Fallback to id if slug is not available
+    const slug = destination.slug || destination.id || "";
+    const path = `/${currentLang}/local-islands/${slug}`;
+    console.debug("[IslandDestinationsLocal] view details (local) ->", {
+      slug,
+      path,
+      destination,
+    });
+
+    if (slug) {
+      router.push(path);
+    } else {
+      console.warn("[IslandDestinationsLocal] No slug or ID found for destination:", destination);
+    }
+  };
+
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        size={14}
+        fill={i < Math.floor(rating) ? "#dfa528" : "none"}
+        color="#dfa528"
+      />
+    ));
+  };
+
+  // Get visible slides for continuous carousel
+  const getVisibleSlides = () => {
+    const slides = [];
+    const total = displayDestinations.length;
+    if (total === 0) return slides;
+
+    // Always show 5 slides: previous 2, current, next 2
+    for (let i = -2; i <= 2; i++) {
+      const slideIndex = (currentSlide + i + total) % total;
+      slides.push({
+        index: slideIndex,
+        position: i,
+        destination: displayDestinations[slideIndex],
+      });
+    }
+
+    return slides;
+  };
+
+  const getSlideStyle = (position) => {
+    const baseStyle = {
+      transition: "all 0.5s ease-in-out",
+      position: "absolute",
+    };
+
+    switch (position) {
+      case -2: // Far left
+        return {
+          ...baseStyle,
+          transform: "translateX(-180%) scale(0.7)",
+          zIndex: 10,
+          opacity: 0.4,
+          filter: "blur(2px) brightness(0.6)",
+        };
+      case -1: // Left
+        return {
+          ...baseStyle,
+          transform: "translateX(-90%) scale(0.85)",
+          zIndex: 20,
+          opacity: 0.7,
+          filter: "blur(1px) brightness(0.8)",
+        };
+      case 0: // Center
+        return {
+          ...baseStyle,
+          transform: "translateX(0) scale(1)",
+          zIndex: 30,
+          opacity: 1,
+          filter: "brightness(1)",
+        };
+      case 1: // Right
+        return {
+          ...baseStyle,
+          transform: "translateX(90%) scale(0.85)",
+          zIndex: 20,
+          opacity: 0.7,
+          filter: "blur(1px) brightness(0.8)",
+        };
+      case 2: // Far right
+        return {
+          ...baseStyle,
+          transform: "translateX(180%) scale(0.7)",
+          zIndex: 10,
+          opacity: 0.4,
+          filter: "blur(2px) brightness(0.6)",
+        };
+      default:
+        return baseStyle;
+    }
+  };
+
+  const visibleSlides = getVisibleSlides();
+
+  return (
+    <>
+      <section
+        className="position-relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, #8A7779 0%, #6e6768ff 50%, #5a4f50 100%)",
+          color: "white",
+          direction: lang === "ar" ? "rtl" : "ltr",
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          padding: "clamp(1.5rem, 3vw, 3rem) 0",
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Background Pattern */}
+        <div
+          className="position-absolute w-100 h-100"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+            opacity: 0.5,
+          }}
+        />
+        <div className="container position-relative z-2">
+          {/* Section Header */}
+          <div className="text-center" style={{ marginBottom: "clamp(1.5rem, 4vw, 2.5rem)" }}>
+            <motion.h2
+              className="display-4 fw-bold mb-3"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              style={{
+                fontFamily: "'Tajawal', sans-serif",
+                background:
+                  "linear-gradient(135deg, #ffffff, #EFC8AE, #dfa528)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                textShadow: "0 4px 8px rgba(0,0,0,0.2)",
+                fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
+              }}
+            >
+              {t.title}
+            </motion.h2>
+
+            <motion.p
+              className="lead mb-5"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              style={{
+                fontFamily: "'Tajawal', sans-serif !important",
+                maxWidth: "600px",
+                margin: "0 auto",
+                color: "rgba(255,255,255,0.9)",
+                fontSize: "clamp(0.95rem, 3vw, 1.2rem)",
+              }}
+            >
+              {t.subtitle}
+            </motion.p>
+          </div>
+          {/* Slider Container */}
+          <div className="position-relative" style={{ height: containerHeight }} onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
+            {/* Navigation Arrows */}
+            <motion.button
+              onClick={prevSlide}
+              aria-label={lang === 'ar' ? 'Next slide' : 'Previous slide'}
+              className="btn position-absolute border-0"
+              tabIndex={0}
+              whileHover={{
+                scale: 1.1,
+                backgroundColor: "rgba(255,255,255,0.25)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                top: "50%",
+                [lang === "ar" ? "right" : "left"]: "30px",
+                transform: "translateY(-50%)",
+                zIndex: 40,
+                width: "clamp(44px, 8vw, 60px)",
+                height: "clamp(44px, 8vw, 60px)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(20px)",
+                border: "2px solid rgba(255,255,255,0.3)",
+                color: "white",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                outline: 'none',
+                touchAction: 'manipulation',
+                padding: 0,
+              }}
+            >
+              {lang === "ar" ? (
+                <ChevronRight size={28} />
+              ) : (
+                <ChevronLeft size={28} />
+              )}
+            </motion.button>
+
+            <motion.button
+              onClick={nextSlide}
+              aria-label={lang === 'ar' ? 'Previous slide' : 'Next slide'}
+              className="btn position-absolute border-0"
+              tabIndex={0}
+              whileHover={{
+                scale: 1.1,
+                backgroundColor: "rgba(255,255,255,0.25)",
+              }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                top: "50%",
+                [lang === "ar" ? "left" : "right"]: "30px",
+                transform: "translateY(-50%)",
+                zIndex: 40,
+                width: "clamp(44px, 8vw, 60px)",
+                height: "clamp(44px, 8vw, 60px)",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "rgba(255,255,255,0.15)",
+                backdropFilter: "blur(20px)",
+                border: "2px solid rgba(255,255,255,0.3)",
+                color: "white",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                outline: 'none',
+                touchAction: 'manipulation',
+                padding: 0,
+              }}
+            >
+              {lang === "ar" ? (
+                <ChevronLeft size={28} />
+              ) : (
+                <ChevronRight size={28} />
+              )}
+            </motion.button>
+
+            {/* Slides Container - Continuous Carousel */}
+            <div
+              className="d-flex align-items-center justify-content-center position-relative"
+              style={{ height: "100%" }}
+            >
+              <AnimatePresence mode="popLayout">
+                {visibleSlides.map(({ index, position, destination }) => {
+                  const isActive = position === 0;
+                  const style = getSlideStyle(position);
+
+                  // derive packages for this destination
+                  const packages = getPackages(destination);
+                  const pkgOptions = packages;
+                  const selected = pkgOptions && pkgOptions.length ? (pkgOptions[0]) : null;
+
+                  return (
+                    <motion.div
+                      key={`${destination.id}-${position}`}
+                      initial={style}
+                      animate={style}
+                      exit={style}
+                      transition={{
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 30,
+                        duration: 0.5,
+                      }}
+                      className="position-absolute"
+                      tabIndex={0}
+                      role="button"
+                      aria-label={`Go to slide ${index + 1} - ${getText(destination, 'title')}`}
+                      style={{
+                        width: "clamp(380px, 36vw, 420px)",
+                        cursor: "pointer",
+                        outline: "none",
+                      }}
+                      onClick={() => goToSlide(index)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') goToSlide(index); }} 
+                    >
+                      <motion.div
+                        className="rounded-4 overflow-hidden position-relative"
+                        whileHover={{ scale: isActive ? 1.02 : 1.05 }}
+                        style={{
+                          height: isActive ? "580px" : "500px",
+                          boxShadow: isActive
+                            ? "0 35px 60px rgba(0,0,0,0.3), 0 0 0 2px rgba(223, 165, 40, 0.3)"
+                            : "0 20px 40px rgba(0,0,0,0.2)",
+                          transition: prefersReducedMotion ? 'none' : 'transform 0.5s cubic-bezier(.2,.8,.2,1)',
+                          willChange: 'transform',
+                          overflow: 'hidden',
+                          position: 'relative',
+                        }}
+                      >
+                        <img
+                          src={getImageUrl(destination.image)}
+                          alt={getText(destination, 'title') || 'Island image'}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            display: 'block',
+                          }}
+                        />
+                        <div className="position-absolute bottom-0 start-0 end-0 p-4 text-white d-flex justify-content-center" style={{ background: 'linear-gradient(180deg, transparent, rgba(0,0,0,0.45))' }}>
+                          <div className="d-flex flex-wrap gap-2 align-items-center justify-content-center"> 
+                        {/* CTA overlay - only buttons (image remains as background) */}
+                            {isActive && pkgOptions && pkgOptions.length > 1 && (
+                              <select
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => {
+                                  // store selection on the element via dataset
+                                  const idx = parseInt(e.target.value, 10);
+                                  e.target.dataset.selIndex = idx;
+                                }}
+                                style={{ padding: '8px', borderRadius: 8, fontWeight: 700 }}
+                              >
+                                {pkgOptions.map((p, idx) => (
+                                  <option key={p.id} value={idx}>
+                                    {p.title} - {p.price} SAR
+                                  </option>
+                                ))}
+                              </select>
+                            )}
+
+                            <motion.button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // if a select exists, try to use its selected index
+                                const sel = e.currentTarget.parentElement.querySelector('select');
+                                let pkg = null;
+                                if (sel) {
+                                  const idx = parseInt(sel.value, 10);
+                                  pkg = pkgOptions[idx] || pkgOptions[0];
+                                }
+                                handleBookNow(destination, pkg);
+                              }}
+                              className="btn btn-warning fw-bold"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              style={{
+                                borderRadius: "25px",
+                                fontSize: "clamp(0.8rem, 2vw, 0.95rem)",
+                                background: "#EFC8AE",
+                                color: "#000",
+                                border: "none",
+                                minWidth: "clamp(100px, 25vw, 120px)",
+                                padding: "clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px)",
+                                touchAction: 'manipulation',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {t.bookNow}
+                            </motion.button>
+
+                            <motion.button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleWhatsApp(destination);
+                              }}
+                              className="btn d-flex align-items-center gap-1 fw-bold"
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              style={{
+                                borderRadius: "25px",
+                                fontSize: "clamp(0.8rem, 2vw, 0.95rem)",
+                                background: "#25D366",
+                                color: "#fff",
+                                border: "none",
+                                minWidth: "clamp(100px, 25vw, 120px)",
+                                padding: "clamp(8px, 2vw, 12px) clamp(10px, 2vw, 16px)",
+                                touchAction: 'manipulation',
+                                whiteSpace: 'nowrap',
+                              }}
+                              title={lang === "ar" ? "واتساب" : "WhatsApp"}
+                            >
+                              <FaWhatsapp style={{ fontSize: "clamp(14px, 3vw, 18px)" }} />
+                              <span style={{ fontSize: "clamp(0.8rem, 2vw, 0.95rem)" }}>
+                                {lang === "ar" ? "واتساب" : "WhatsApp"}
+                              </span>
+                            </motion.button>
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewDetails(destination);
+                              }}
+                              className="btn btn-outline-light"
+                              style={{
+                                borderRadius: "25px",
+                                fontSize: "clamp(0.8rem, 2vw, 0.9rem)",
+                                padding: "clamp(8px, 2vw, 12px) clamp(12px, 3vw, 18px)",
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {t.viewDetails}
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+
+            {/* Pagination Dots */}
+            <div className="d-flex justify-content-center mt-4">
+              {displayDestinations.map((_, index) => (
+                <motion.button
+                  key={index}
+                  onClick={() => goToSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                  role="tab"
+                  aria-selected={currentSlide === index}
+                  className="btn p-0 mx-1 border-0"
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                  style={{
+                    width: currentSlide === index ? "24px" : "8px",
+                    height: "8px",
+                    borderRadius: "4px",
+                    backgroundColor:
+                      currentSlide === index
+                        ? "#dfa528"
+                        : "rgba(255,255,255,0.4)",
+                    transition: "all 0.3s ease",
+                  }}
+                />
+              ))} 
+            </div>
+          </div>{" "}
+          {/* end slider container */}
+        </div>{" "}
+        {/* end container */}
+      </section>
+    </>
+  );
+}
