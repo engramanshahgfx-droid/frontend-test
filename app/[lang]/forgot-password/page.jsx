@@ -4,6 +4,7 @@ import styles from "@/styles/login.module.css";
 import { toast } from "react-toastify";
 import { LuAtSign } from "react-icons/lu";
 import { GoLock } from "react-icons/go";
+import { FiShield } from "react-icons/fi";
 import { useParams } from "next/navigation";
 import { authAPI } from '@/lib/api';
 
@@ -11,8 +12,8 @@ export default function ForgotPassword() {
   const params = useParams();
   const lang = params?.lang || 'en';
 
+  const [step, setStep] = useState(1); // 1: phone, 2: OTP, 3: password
   const [phone, setPhone] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -22,27 +23,39 @@ export default function ForgotPassword() {
   const translations = {
     en: {
       title: "Forgot Password",
-      subtitle: "Enter your phone number to receive an OTP to reset your password",
+      step1Title: "Enter Phone Number",
+      step1Subtitle: "Enter your phone number to receive an OTP",
+      step2Title: "Verify OTP",
+      step2Subtitle: "Enter the OTP sent to your phone",
+      step3Title: "Set New Password",
+      step3Subtitle: "Enter your new password",
       phonePlaceholder: "0501234567",
-      sendOtp: "Send OTP",  
-      verifyAndReset: "Verify & Reset Password",
-      otpPlaceholder: "Enter OTP",
+      otpPlaceholder: "Enter 6-digit OTP",
       passwordPlaceholder: "New password",
       confirmPasswordPlaceholder: "Confirm new password",
-      success: "Password reset successfully. You can now login.",
-      otpSent: (phone) => `OTP sent to ${phone}`,
+      sendOtp: "Send OTP",
+      verifyOtp: "Verify OTP",
+      resetPassword: "Reset Password",
+      success: "Password reset successfully! Redirecting to login...",
+      back: "Back",
     },
     ar: {
       title: "نسيت كلمة المرور",
-      subtitle: "أدخل رقم الجوال لتلقي رمز التحقق لإعادة تعيين كلمة المرور",
-      phonePlaceholder: "رقم الجوال (مثال: +966501234567)",
-      sendOtp: "إرسال الرمز",
-      verifyAndReset: "التحقق وإعادة التعيين",
-      otpPlaceholder: "أدخل رمز التحقق",
+      step1Title: "أدخل رقم الجوال",
+      step1Subtitle: "أدخل رقم جوالك لتلقي رمز التحقق",
+      step2Title: "تحقق من الرمز",
+      step2Subtitle: "أدخل الرمز المرسل إلى جوالك",
+      step3Title: "تعيين كلمة مرور جديدة",
+      step3Subtitle: "أدخل كلمة المرور الجديدة",
+      phonePlaceholder: "رقم الجوال",
+      otpPlaceholder: "أدخل رمز التحقق المكون من 6 أرقام",
       passwordPlaceholder: "كلمة المرور الجديدة",
       confirmPasswordPlaceholder: "تأكيد كلمة المرور الجديدة",
-      success: "تم إعادة تعيين كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول.",
-      otpSent: (phone) => `تم إرسال رمز التحقق إلى ${phone}`,
+      sendOtp: "إرسال الرمز",
+      verifyOtp: "التحقق من الرمز",
+      resetPassword: "تعيين كلمة المرور",
+      success: "تم إعادة تعيين كلمة المرور بنجاح! جاري التحويل إلى تسجيل الدخول...",
+      back: "رجوع",
     }
   };
 
@@ -53,9 +66,9 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       const data = await authAPI.sendOtp(phone, 'reset');
-      setOtpSent(true);
       setDevOtp(data.dev_otp || null);
-      toast.success(t.otpSent(phone));
+      setStep(2); // Move to OTP verification step
+      toast.success('OTP sent successfully');
     } catch (err) {
       console.error('sendOtp error', err);
       toast.error(err.message || 'Failed to send OTP');
@@ -64,20 +77,41 @@ export default function ForgotPassword() {
     }
   };
 
-  const handleReset = async (e) => {
+  const handleVerifyOtp = async (e) => {
+    e && e.preventDefault();
+    setLoading(true);
+    try {
+      const data = await authAPI.verifyOtp(phone, otpCode, 'reset');
+      if (!data.success) throw new Error(data.message || 'OTP verification failed');
+      setStep(3); // Move to password reset step
+      toast.success('OTP verified successfully');
+    } catch (err) {
+      console.error('verifyOtp error', err);
+      toast.error(err.message || 'OTP verification failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     if (password !== passwordConfirmation) {
       toast.error('Passwords do not match');
       return;
     }
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
     setLoading(true);
     try {
       const data = await authAPI.resetPassword(phone, otpCode, password, passwordConfirmation);
-      
       if (!data.success) throw new Error(data.message || 'Reset failed');
       toast.success(t.success);
-      // Redirect to login page
-      window.location.href = `/${lang}/login`;
+      // Redirect to login page after 2 seconds
+      setTimeout(() => {
+        window.location.href = `/${lang}/login`;
+      }, 2000);
     } catch (err) {
       console.error('Reset password error:', err);
       toast.error(err.message || 'Reset failed');
@@ -86,45 +120,124 @@ export default function ForgotPassword() {
     }
   };
 
+  const goBack = () => {
+    if (step === 1) return;
+    setStep(step - 1);
+  };
+
   return (
-    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)" }}>
+    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}>
       <div className="container py-5">
         <div className="d-flex flex-column align-items-center">
           <div className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`} style={{ borderRadius: "25px", border: "1px solid rgba(202, 218, 231, 1)", background: "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)" }}>
+            
+            {/* Icon */}
             <div className="d-flex justify-content-center align-items-center mb-4" style={{ width: "61px", height: "61px", backgroundColor: "white", borderRadius: "12px", boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)" }}>
-              <GoLock style={{ width: "30px", height: "30px" }} />
+              {step === 1 && <LuAtSign style={{ width: "30px", height: "30px" }} />}
+              {step === 2 && <FiShield style={{ width: "30px", height: "30px" }} />}
+              {step === 3 && <GoLock style={{ width: "30px", height: "30px" }} />}
             </div>
 
-            <div className="fs-4 text-center mb-2" style={{ fontWeight: 600 }}>{t.title}</div>
-            <div className="text-secondary text-center mb-4" style={{ fontSize: "14px" }}>{t.subtitle}</div>
+            {/* Title & Subtitle */}
+            <div className="fs-4 text-center mb-2" style={{ fontWeight: 600 }}>
+              {step === 1 && t.step1Title}
+              {step === 2 && t.step2Title}
+              {step === 3 && t.step3Title}
+            </div>
+            <div className="text-secondary text-center mb-4" style={{ fontSize: "14px" }}>
+              {step === 1 && t.step1Subtitle}
+              {step === 2 && t.step2Subtitle}
+              {step === 3 && t.step3Subtitle}
+            </div>
 
-            {!otpSent && (
+            {/* Step 1: Enter Phone */}
+            {step === 1 && (
               <form className="w-100" onSubmit={handleSendOtp}>
                 <div className="mb-3 position-relative">
-                  <div style={{ position: "absolute", top: "50%", transform: "translateY(-50%)", left: lang === "en" ? "8px" : "", right: lang === "ar" ? "8px" : "" }}>
-                    <LuAtSign style={{ width: "19px", height: "19px", color: "rgba(135, 135, 135, 1)" }} />
-                  </div>
-                  <input type="tel" className="form-control" style={{ borderRadius: "15px", paddingRight: lang === "ar" ? "35px" : "", paddingLeft: lang === "en" ? "35px" : "", height: "50px" }} placeholder={t.phonePlaceholder} value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                  <input 
+                    type="tel" 
+                    className="form-control" 
+                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
+                    placeholder={t.phonePlaceholder} 
+                    value={phone} 
+                    onChange={(e) => setPhone(e.target.value)} 
+                    required 
+                  />
                 </div>
-                <button type="submit" className="primaryButton w-100" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading}>{loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.sendOtp}</button>
+                <button type="submit" className="primaryButton w-100" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading}>
+                  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.sendOtp}
+                </button>
               </form>
             )}
 
-            {otpSent && (
-              <form className="w-100" onSubmit={handleReset}>
+            {/* Step 2: Verify OTP */}
+            {step === 2 && (
+              <form className="w-100" onSubmit={handleVerifyOtp}>
                 <div className="mb-3 position-relative">
-                  <input type="text" className="form-control" style={{ borderRadius: "15px", height: "50px" }} placeholder={t.otpPlaceholder} value={otpCode} onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0,6))} required />
+                  <input 
+                    type="text" 
+                    className="form-control text-center" 
+                    style={{ borderRadius: "15px", height: "50px", fontSize: "24px", letterSpacing: "8px", fontWeight: "bold" }} 
+                    placeholder={t.otpPlaceholder} 
+                    value={otpCode} 
+                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))} 
+                    maxLength={6}
+                    required 
+                  />
                 </div>
+                
+                {devOtp && (
+                  <div style={{ marginBottom: '10px', padding: '8px', background: '#e7f5e7', color: '#2d7d2d', borderRadius: '6px', textAlign: 'center' }}>
+                    Dev OTP: <strong>{devOtp}</strong>
+                  </div>
+                )}
+
+                <button type="submit" className="primaryButton w-100 mb-2" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading || otpCode.length !== 6}>
+                  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.verifyOtp}
+                </button>
+                
+                <button type="button" className="btn btn-outline-secondary w-100" onClick={goBack} style={{ borderRadius: "15px", height: "44px" }}>
+                  {t.back}
+                </button>
+              </form>
+            )}
+
+            {/* Step 3: Set New Password */}
+            {step === 3 && (
+              <form className="w-100" onSubmit={handleResetPassword}>
                 <div className="mb-3 position-relative">
-                  <input type="password" className="form-control" style={{ borderRadius: "15px", height: "50px" }} placeholder={t.passwordPlaceholder} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+                  <input 
+                    type="password" 
+                    className="form-control" 
+                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
+                    placeholder={t.passwordPlaceholder} 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    required 
+                    minLength={6} 
+                  />
                 </div>
+                
                 <div className="mb-3 position-relative">
-                  <input type="password" className="form-control" style={{ borderRadius: "15px", height: "50px" }} placeholder={t.confirmPasswordPlaceholder} value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} required minLength={6} />
+                  <input 
+                    type="password" 
+                    className="form-control" 
+                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
+                    placeholder={t.confirmPasswordPlaceholder} 
+                    value={passwordConfirmation} 
+                    onChange={(e) => setPasswordConfirmation(e.target.value)} 
+                    required 
+                    minLength={6} 
+                  />
                 </div>
 
-                {devOtp && <div style={{ marginBottom: '10px', padding: '8px', background: '#e7f5e7', color: '#2d7d2d', borderRadius: '6px' }}>Dev OTP: <strong>{devOtp}</strong></div>}
-
-                <button type="submit" className="primaryButton w-100" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading}>{loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.verifyAndReset}</button>
+                <button type="submit" className="primaryButton w-100 mb-2" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading || !password || !passwordConfirmation}>
+                  {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.resetPassword}
+                </button>
+                
+                <button type="button" className="btn btn-outline-secondary w-100" onClick={goBack} style={{ borderRadius: "15px", height: "44px" }}>
+                  {t.back}
+                </button>
               </form>
             )}
 
