@@ -6,23 +6,32 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useAuth } from "@/providers/AuthProvider";
-import { FiLogIn, FiPhone, FiShield } from "react-icons/fi";
+import { authAPI } from "@/lib/api";
+import { FiUserPlus, FiPhone, FiMail, FiUser, FiShield } from "react-icons/fi";
 import { GoLock } from "react-icons/go";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import Loading from "@/components/Loading";
 
-export default function LoginPage({ params }) {
+export default function RegisterPage({ params }) {
   const { lang } = use(params);
-  const { user, loading: authLoading, login, verifyOtp, sendOtp } = useAuth();
+  const { user, loading: authLoading, register, verifyOtp, sendOtp } = useAuth();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [userData, setUserData] = useState({
+  const [visibleConfirm, setVisibleConfirm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
     phone: "",
     password: "",
+    password_confirmation: "",
   });
+
+  // Email pre-check state
+  const [emailExists, setEmailExists] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
   
   // OTP flow state
   const [showOtp, setShowOtp] = useState(false);
@@ -32,38 +41,50 @@ export default function LoginPage({ params }) {
 
   const translations = {
     en: {
-      title: "Log in to your account",
-      subtitle: "Welcome back! Please enter your details",
-      phone: "Phone (e.g., +966501234567)",
+      title: "Create Account",
+      subtitle: "Join us today! Fill in your details to get started",
+      name: "Full Name",
+      email: "Email (optional)",
+      phone: "Phone",
+      phonePlaceholder: "+966xxxxxxxxx",
       password: "Password",
-      forgotPassword: "Forgot password?",
+      confirmPassword: "Confirm Password",
+      register: "Create Account",
+      haveAccount: "Have an account?",
       login: "Login",
-      newHere: "New here?",
-      createAccount: "Create Account",
       otpTitle: "Verify Your Phone",
       otpSubtitle: "Enter the verification code sent to your phone",
       otpPlaceholder: "Enter 6-digit code",
       verify: "Verify",
       resendCode: "Resend Code",
-      backToLogin: "Back to Login",
+      backToRegister: "Back to Registration",
       codeSentTo: "Code sent to",
+      emailAvailable: "Email available",
+      emailTaken: "This email is already registered.",
+      checkingEmail: "Checking email...",
     },
     ar: {
-      title: "تسجيل الدخول إلى حسابك",
-      subtitle: "مرحبًا بعودتك! الرجاء إدخال بياناتك",
-      phone: "رقم الجوال (مثال: +966501234567)",
+      title: "إنشاء حساب",
+      subtitle: "انضم إلينا اليوم! أكمل بياناتك للبدء",
+      name: "الاسم الكامل",
+      email: "البريد الإلكتروني (اختياري)",
+      phone: "رقم الجوال",
+      phonePlaceholder: "+966xxxxxxxxx",
       password: "كلمة المرور",
-      forgotPassword: "هل نسيت كلمة المرور؟",
+      confirmPassword: "تأكيد كلمة المرور",
+      register: "إنشاء حساب",
+      haveAccount: "لديك حساب؟",
       login: "تسجيل الدخول",
-      newHere: "جديد هنا؟",
-      createAccount: "إنشاء حساب",
       otpTitle: "تحقق من رقم الجوال",
       otpSubtitle: "أدخل رمز التحقق المرسل إلى هاتفك",
       otpPlaceholder: "أدخل الرمز المكون من 6 أرقام",
       verify: "تحقق",
       resendCode: "إعادة إرسال الرمز",
-      backToLogin: "العودة لتسجيل الدخول",
+      backToRegister: "العودة للتسجيل",
       codeSentTo: "تم إرسال الرمز إلى",
+      emailAvailable: "البريد الإلكتروني متاح",
+      emailTaken: "هذا البريد مسجل مسبقاً.",
+      checkingEmail: "جاري التحقق من البريد...",
     },
   };
 
@@ -77,9 +98,32 @@ export default function LoginPage({ params }) {
     }
   }, [resendCooldown]);
 
+  // Debounced email existence check
+  useEffect(() => {
+    let timer;
+    setEmailExists(false);
+
+    if (!formData.email) return;
+
+    timer = setTimeout(async () => {
+      setCheckingEmail(true);
+      try {
+        const res = await authAPI.emailExists(formData.email);
+        setEmailExists(!!res.exists);
+      } catch (err) {
+        console.error('Email check failed:', err);
+        setEmailExists(false);
+      } finally {
+        setCheckingEmail(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [formData.email]);
+
   const handleDataChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevState) => ({
+    setFormData((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -98,33 +142,47 @@ export default function LoginPage({ params }) {
     }
   };
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+    
+    if (emailExists) {
+      toast.error(t.emailTaken);
+      return;
+    }
+
+    if (formData.password !== formData.password_confirmation) {
+      toast.error(lang === 'ar' ? 'كلمات المرور غير متطابقة' : 'Passwords do not match');
+      return;
+    }
+
     setLoading(true);
     
     try {
-      const result = await login({
-        phone: userData.phone,
-        password: userData.password,
-      });
+      const registerData = {
+        name: formData.name,
+        email: formData.email && formData.email.trim() ? formData.email.trim() : null,
+        phone: formData.phone,
+        password: formData.password,
+        password_confirmation: formData.password_confirmation,
+      };
+
+      const result = await register(registerData);
 
       if (result.success) {
         if (result.requiresOtp) {
-          // Show OTP input
           setShowOtp(true);
           setDevOtp(result.devOtp);
           setResendCooldown(60);
         } else {
-          // Direct login (admin)
-          toast.success(lang === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Login successful!');
+          toast.success(lang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account created successfully!');
           const returnUrl = getReturnUrl();
           clearReturnUrl();
           router.push(returnUrl);
         }
       }
     } catch (error) {
-      toast.error(error.message || (lang === 'ar' ? 'حدث خطأ أثناء تسجيل الدخول' : 'An error occurred during login'));
-      console.error('Login error:', error);
+      toast.error(error.message || (lang === 'ar' ? 'حدث خطأ أثناء التسجيل' : 'An error occurred during registration'));
+      console.error('Registration error:', error);
     } finally {
       setLoading(false);
     }
@@ -135,10 +193,10 @@ export default function LoginPage({ params }) {
     setLoading(true);
     
     try {
-      const result = await verifyOtp(userData.phone, otpCode, 'login');
+      const result = await verifyOtp(formData.phone, otpCode, 'register');
       
       if (result.success) {
-        toast.success(lang === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Login successful!');
+        toast.success(lang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account created successfully!');
         const returnUrl = getReturnUrl();
         clearReturnUrl();
         router.push(returnUrl);
@@ -157,7 +215,7 @@ export default function LoginPage({ params }) {
     
     setLoading(true);
     try {
-      const result = await sendOtp(userData.phone, 'login');
+      const result = await sendOtp(formData.phone, 'register');
       if (result.success) {
         setResendCooldown(60);
         setDevOtp(result.devOtp);
@@ -177,7 +235,6 @@ export default function LoginPage({ params }) {
   };
 
   useEffect(() => {
-    // Only redirect if user is logged in AND we've finished loading
     if (user && !authLoading) {
       const timer = setTimeout(() => {
         const returnUrl = getReturnUrl();
@@ -188,12 +245,10 @@ export default function LoginPage({ params }) {
     }
   }, [user, authLoading, lang, router]);
 
-  // Show loading while checking auth
   if (authLoading) {
     return <Loading />;
   }
 
-  // If user is logged in, show loading while redirecting
   if (user) {
     return <Loading />;
   }
@@ -203,7 +258,7 @@ export default function LoginPage({ params }) {
     return (
       <div
         className="d-flex align-items-center"
-        style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#acaaaa" }}
+        style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}
       >
         <div className="container py-5">
           <div className="d-flex flex-column align-items-center">
@@ -213,7 +268,7 @@ export default function LoginPage({ params }) {
                 borderRadius: "25px",
                 border: "1px solid rgba(202, 218, 231, 1)",
                 background:
-                  "linear-gradient(180deg, #E2F2FF 0%,",
+                  "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)",
               }}
             >
               <div
@@ -235,7 +290,7 @@ export default function LoginPage({ params }) {
                 {t.otpSubtitle}
               </div>
               <div className="text-center mb-4" style={{ fontSize: "14px", color: "#0d6efd" }}>
-                {t.codeSentTo}: <strong>{userData.phone}</strong>
+                {t.codeSentTo}: <strong>{formData.phone}</strong>
               </div>
               
               {devOtp && (
@@ -293,7 +348,7 @@ export default function LoginPage({ params }) {
                   onClick={handleBackFromOtp}
                   style={{ borderRadius: "15px", height: "44px" }}
                 >
-                  {t.backToLogin}
+                  {t.backToRegister}
                 </button>
               </form>
             </div>
@@ -303,7 +358,7 @@ export default function LoginPage({ params }) {
     );
   }
 
-  // Otherwise show login form
+  // Registration Form
   return (
     <div
       className="d-flex align-items-center"
@@ -327,92 +382,149 @@ export default function LoginPage({ params }) {
                 height: "61px",
                 backgroundColor: "white",
                 borderRadius: "12px",
-                boxShadow: " 0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
+                boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
               }}
             >
-              <FiLogIn style={{ width: "30px", height: "30px" }} />
+              <FiUserPlus style={{ width: "30px", height: "30px" }} />
             </div>
-            <div
-              className="fs-4 text-center mb-2"
-              style={{ fontWeight: "600" }}
-            >
+            <div className="fs-4 text-center mb-2" style={{ fontWeight: "600" }}>
               {t.title}
             </div>
-            <div
-              className="text-secondary text-center mb-4"
-              style={{ fontSize: "14px" }}
-            >
+            <div className="text-secondary text-center mb-4" style={{ fontSize: "14px" }}>
               {t.subtitle}
             </div>
-            <form className="w-100" onSubmit={handleLogin}>
+            
+            <form className="w-100" onSubmit={handleRegister}>
+              {/* Name */}
               <div className="mb-3 position-relative">
+                <label className="form-label small fw-semibold">{t.name}</label>
                 <div
                   style={{
                     position: "absolute",
                     top: "50%",
                     transform: "translateY(-50%)",
-                    left: lang === "en" ? "8px" : "",
-                    right: lang === "ar" ? "8px" : "",
+                    marginTop: "12px",
+                    left: lang === "en" ? "12px" : "",
+                    right: lang === "ar" ? "12px" : "",
                   }}
                 >
-                  <FiPhone
-                    style={{
-                      width: "19px",
-                      height: "19px",
-                      color: "rgba(135, 135, 135, 1)",
-                    }}
-                  />
+                  <FiUser style={{ width: "18px", height: "18px", color: "rgba(135, 135, 135, 1)" }} />
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  style={{
+                    borderRadius: "15px",
+                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingRight: lang === "ar" ? "40px" : "",
+                    height: "50px",
+                  }}
+                  name="name"
+                  value={formData.name}
+                  onChange={handleDataChange}
+                  required
+                />
+              </div>
+
+              {/* Email (optional) */}
+              <div className="mb-3 position-relative">
+                <label className="form-label small fw-semibold">{t.email}</label>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    marginTop: "12px",
+                    left: lang === "en" ? "12px" : "",
+                    right: lang === "ar" ? "12px" : "",
+                  }}
+                >
+                  <FiMail style={{ width: "18px", height: "18px", color: "rgba(135, 135, 135, 1)" }} />
+                </div>
+                <input
+                  type="email"
+                  className="form-control"
+                  style={{
+                    borderRadius: "15px",
+                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingRight: lang === "ar" ? "40px" : "",
+                    height: "50px",
+                  }}
+                  name="email"
+                  value={formData.email}
+                  onChange={handleDataChange}
+                />
+                {checkingEmail && (
+                  <small className="text-muted">{t.checkingEmail}</small>
+                )}
+                {!checkingEmail && emailExists && (
+                  <small className="text-danger">⚠️ {t.emailTaken}</small>
+                )}
+                {!checkingEmail && !emailExists && formData.email && (
+                  <small className="text-success">✅ {t.emailAvailable}</small>
+                )}
+              </div>
+
+              {/* Phone */}
+              <div className="mb-3 position-relative">
+                <label className="form-label small fw-semibold">{t.phone}</label>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    marginTop: "12px",
+                    left: lang === "en" ? "12px" : "",
+                    right: lang === "ar" ? "12px" : "",
+                  }}
+                >
+                  <FiPhone style={{ width: "18px", height: "18px", color: "rgba(135, 135, 135, 1)" }} />
                 </div>
                 <input
                   type="tel"
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "35px" : "",
-                    paddingRight: lang === "ar" ? "35px" : "",
+                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
-                  placeholder={t.phone}
-                  id="userPhone"
+                  placeholder={t.phonePlaceholder}
                   name="phone"
-                  value={userData.phone}
+                  value={formData.phone}
                   onChange={handleDataChange}
                   required
                 />
               </div>
 
-              <div className="mb-2 position-relative">
+              {/* Password */}
+              <div className="mb-3 position-relative">
+                <label className="form-label small fw-semibold">{t.password}</label>
                 <div
                   style={{
                     position: "absolute",
                     top: "50%",
                     transform: "translateY(-50%)",
-                    left: lang === "en" ? "8px" : "",
-                    right: lang === "ar" ? "8px" : "",
+                    marginTop: "12px",
+                    left: lang === "en" ? "12px" : "",
+                    right: lang === "ar" ? "12px" : "",
                   }}
                 >
-                  <GoLock
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      color: "rgba(135, 135, 135, 1)",
-                    }}
-                  />
+                  <GoLock style={{ width: "18px", height: "18px", color: "rgba(135, 135, 135, 1)" }} />
                 </div>
                 <input
                   type={visible ? "text" : "password"}
                   className="form-control"
-                  placeholder={t.password}
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "35px" : "",
-                    paddingRight: lang === "ar" ? "35px" : "",
+                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
-                  id="userPassword"
                   name="password"
-                  value={userData.password}
+                  value={formData.password}
                   onChange={handleDataChange}
+                  minLength={6}
                   required
                 />
                 {visible ? (
@@ -421,8 +533,9 @@ export default function LoginPage({ params }) {
                       position: "absolute",
                       top: "50%",
                       transform: "translateY(-50%)",
-                      right: lang === "en" ? 10 : "",
-                      left: lang === "ar" ? 10 : "",
+                      marginTop: "12px",
+                      right: lang === "en" ? 12 : "",
+                      left: lang === "ar" ? 12 : "",
                       color: "rgba(134, 141, 151, 1)",
                       cursor: "pointer",
                     }}
@@ -434,8 +547,9 @@ export default function LoginPage({ params }) {
                       position: "absolute",
                       top: "50%",
                       transform: "translateY(-50%)",
-                      right: lang === "en" ? 10 : "",
-                      left: lang === "ar" ? 10 : "",
+                      marginTop: "12px",
+                      right: lang === "en" ? 12 : "",
+                      left: lang === "ar" ? 12 : "",
                       color: "rgba(134, 141, 151, 1)",
                       cursor: "pointer",
                     }}
@@ -444,39 +558,84 @@ export default function LoginPage({ params }) {
                 )}
               </div>
 
-              <div className="mb-3 d-flex justify-content-end">
-                <Link
-                  href={`/${lang}/forgot-password`}
-                  className="text-decoration-none text-dark"
-                  style={{ fontSize: "14px", fontWeight: "600" }}
+              {/* Confirm Password */}
+              <div className="mb-4 position-relative">
+                <label className="form-label small fw-semibold">{t.confirmPassword}</label>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    marginTop: "12px",
+                    left: lang === "en" ? "12px" : "",
+                    right: lang === "ar" ? "12px" : "",
+                  }}
                 >
-                  {t.forgotPassword}
-                </Link>
+                  <GoLock style={{ width: "18px", height: "18px", color: "rgba(135, 135, 135, 1)" }} />
+                </div>
+                <input
+                  type={visibleConfirm ? "text" : "password"}
+                  className="form-control"
+                  style={{
+                    borderRadius: "15px",
+                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingRight: lang === "ar" ? "40px" : "",
+                    height: "50px",
+                  }}
+                  name="password_confirmation"
+                  value={formData.password_confirmation}
+                  onChange={handleDataChange}
+                  minLength={6}
+                  required
+                />
+                {visibleConfirm ? (
+                  <VisibilityIcon
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      marginTop: "12px",
+                      right: lang === "en" ? 12 : "",
+                      left: lang === "ar" ? 12 : "",
+                      color: "rgba(134, 141, 151, 1)",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setVisibleConfirm(false)}
+                  />
+                ) : (
+                  <VisibilityOffIcon
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      marginTop: "12px",
+                      right: lang === "en" ? 12 : "",
+                      left: lang === "ar" ? 12 : "",
+                      color: "rgba(134, 141, 151, 1)",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setVisibleConfirm(true)}
+                  />
+                )}
               </div>
 
               <button
                 type="submit"
                 className="primaryButton w-100"
                 style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }}
-                disabled={loading}
+                disabled={loading || emailExists}
               >
                 {loading ? (
-                  <>
-                    <span
-                      className="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                  </>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 ) : (
-                  <>{t.login}</>
+                  t.register
                 )}
               </button>
 
               <div className="text-center mt-3" style={{ fontSize: "14px" }}>
-                {t.newHere}{" "}
-                <Link href={`/${lang}/register`} style={{ color: "#0d6efd", fontWeight: "500" }}>
-                  {t.createAccount}
+                {t.haveAccount}{" "}
+                <Link href={`/${lang}/login`} style={{ color: "#0d6efd", fontWeight: "500" }}>
+                  {t.login}
                 </Link>
               </div>
             </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useMemo, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 
 const UIContext = createContext();
@@ -13,6 +14,14 @@ export const useUI = () => {
 
 export default function UIProvider({ children }) {
   const { isAuthenticated } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  // Get current language from pathname
+  const getCurrentLang = () => {
+    const match = pathname?.match(/^\/(en|ar)(?:\/|$)/);
+    return match ? match[1] : 'en';
+  };
 
   const [authModal, setAuthModal] = useState({ open: false, mode: "login" });
   const [bookingModal, setBookingModal] = useState({
@@ -28,10 +37,19 @@ export default function UIProvider({ children }) {
   const [dashboardRefreshKey, setDashboardRefreshKey] = useState(0);
   const triggerDashboardRefresh = React.useCallback(() => setDashboardRefreshKey(k => k + 1), []);
 
-  // Stable modal helpers to avoid changing references across renders
+  // Redirect to login/register page instead of opening modal
   const openAuthModal = React.useCallback((mode = "login") => {
-    setAuthModal({ open: true, mode });
-  }, []);
+    const lang = getCurrentLang();
+    const returnUrl = typeof window !== 'undefined' ? window.location.pathname : '';
+    const page = mode === "register" ? "register" : "login";
+    
+    // Store return URL for redirect after login
+    if (returnUrl && typeof window !== 'undefined') {
+      sessionStorage.setItem('auth_return_url', returnUrl);
+    }
+    
+    router.push(`/${lang}/${page}`);
+  }, [router, pathname]);
 
   const closeAuthModal = React.useCallback(() => {
     setAuthModal((s) => ({ ...s, open: false }));
@@ -53,11 +71,14 @@ export default function UIProvider({ children }) {
     if (isAuthenticated) {
       openBookingModal(trip);
     } else {
+      // Store pending trip for after login
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('pending_booking_trip', JSON.stringify(trip));
+      }
       setPendingTrip(trip);
-      setAuthModal({ open: true, mode: "login" });
-      setBookingModal({ open: false, trip: null });
+      openAuthModal("login");
     }
-  }, [isAuthenticated, openBookingModal]);
+  }, [isAuthenticated, openBookingModal, openAuthModal]);
 
   // ============================================
   // RESERVATION MODAL (No Authentication Required)

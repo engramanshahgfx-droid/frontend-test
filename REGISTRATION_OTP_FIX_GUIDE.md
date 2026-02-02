@@ -25,7 +25,7 @@ Confirm:     Test@123
 You should see: ✅ "OTP sent to phone"
 
 ### Step 4: Get the OTP Code
-The OTP code is: **1234**
+The OTP code is: **123456**
 
 Where to find it:
 - **Option A (Easiest):** Check API response
@@ -33,7 +33,7 @@ Where to find it:
   2. Go to Network tab
   3. Find request: `/api/register`
   4. Click Response tab
-  5. Look for: `"dev_otp": "1234"`
+  5. Look for: `"dev_otp": "123456"`
 
 - **Option B (Server logs):**
   ```bash
@@ -229,7 +229,7 @@ Backend validation:
   ✅ Accepts null
   
 OTP Service (OTP_MODE=fixed):
-  ✅ Generate: 1234
+  ✅ Generate: 123456
   ✅ Store in DB
   ✅ Return in response
   
@@ -265,7 +265,7 @@ The registration form works on mobile too:
 ### Q: Why is email optional?
 **A:** Many users only have phone numbers. Email is optional for flexibility.
 
-### Q: Why is OTP code hardcoded (1234)?
+### Q: Why is OTP code hardcoded (123456)?
 **A:** Development mode only. In production, real SMS will be sent. The hardcoded code is only visible in dev for testing.
 
 ### Q: Can I use any phone number?
