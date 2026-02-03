@@ -94,7 +94,7 @@ export default function OffersPage({ lang }) {
             id: o.id,
             title: isRTL ? o.title_ar || o.title_en : o.title_en || o.title_ar,
             description: isRTL ? o.description_ar || o.description_en : o.description_en || o.description_ar,
-            image: o.image || '/offers/1800.jpeg',
+            image: o.image ? `${apiBase}${o.image}` : `${apiBase}/islands/1800.jpeg`,
             duration: isRTL ? (o.duration_ar || o.duration_en || o.duration) : (o.duration_en || o.duration_ar || o.duration),
             location: isRTL ? o.location_ar || o.location_en : o.location_en || o.location_ar,
             groupSize: isRTL ? (o.group_size_ar || o.group_size_en || o.group_size) : (o.group_size_en || o.group_size_ar || o.group_size),
@@ -198,7 +198,7 @@ export default function OffersPage({ lang }) {
                       height="1120"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       onError={(e) => {
-                        e.target.src = '/offers/354.jpeg';
+                        e.target.src = `${apiBase}/islands/354.jpeg`;
                       }}
                     />
                   </div>
