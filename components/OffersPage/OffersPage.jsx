@@ -44,6 +44,8 @@ export default function OffersPage({ lang }) {
   
   // API base URL
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+  // Public assets base URL (without /api)
+  const assetsBase = apiBase.replace('/api', '');
 
   // Return a short preview (first paragraph or up to max chars)
   const getSummary = (text, maxChars = 220) => {
@@ -94,7 +96,7 @@ export default function OffersPage({ lang }) {
             id: o.id,
             title: isRTL ? o.title_ar || o.title_en : o.title_en || o.title_ar,
             description: isRTL ? o.description_ar || o.description_en : o.description_en || o.description_ar,
-            image: o.image ? `${apiBase}${o.image}` : `${apiBase}/islands/1800.jpeg`,
+            image: o.image ? `${assetsBase}${o.image}` : `${assetsBase}/islands/1800.jpeg`,
             duration: isRTL ? (o.duration_ar || o.duration_en || o.duration) : (o.duration_en || o.duration_ar || o.duration),
             location: isRTL ? o.location_ar || o.location_en : o.location_en || o.location_ar,
             groupSize: isRTL ? (o.group_size_ar || o.group_size_en || o.group_size) : (o.group_size_en || o.group_size_ar || o.group_size),
@@ -118,7 +120,7 @@ export default function OffersPage({ lang }) {
       setOffers([]);
       setLoading(false);
     }
-  }, [lang, isRTL, apiBase]);
+  }, [lang, isRTL, apiBase, assetsBase]);
 
   React.useEffect(() => {
     fetchOffers();
@@ -198,7 +200,7 @@ export default function OffersPage({ lang }) {
                       height="1120"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       onError={(e) => {
-                        e.target.src = `${apiBase}/islands/354.jpeg`;
+                        e.target.src = `${assetsBase}/islands/354.jpeg`;
                       }}
                     />
                   </div>
