@@ -62,7 +62,7 @@
 }
 
 .wrapperAr .mapSection {
-  transform: translateX(-35%);
+  transform: translateX(-10%);
 }
 
 /* --- ENGLISH SPECIFIC STYLES --- */
@@ -76,7 +76,7 @@
 }
 
 .wrapperEn .mapSection {
-  transform: translateX(10%);
+  transform: translateX(-10%);
 }
 
 /* Common Text Styles */
@@ -294,5 +294,132 @@
 
   .cityName {
     font-size: 12px;
+  }
+}
+
+/* =========================================
+   NEW: City Label Styles (text only, no icons)
+   ========================================= */
+.cityLabelWrapper {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.cityLabelWrapper:hover {
+  z-index: 100;
+}
+
+.cityDot {
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+.cityLabelWrapper:hover .cityDot {
+  width: 10px;
+  height: 10px;
+  background: #dfa528;
+  box-shadow: 0 0 15px rgba(223, 165, 40, 0.8);
+}
+
+.cityLabelText {
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.cityLabelWrapper:hover .cityLabelText {
+  color: #dfa528;
+  font-size: 12px;
+}
+
+/* Saudi Map SVG Styling */
+.saudiMapSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Hover Popup Image */
+.hoverPopup {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 10px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  animation: popupFadeIn 0.2s ease;
+  min-width: 180px;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.popupImage {
+  width: 180px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.popupCityName {
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a;
+  background: white;
+}
+
+/* Responsive for new city labels */
+@media (max-width: 768px) {
+  .cityLabelText {
+    font-size: 9px;
+  }
+  
+  .cityDot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .hoverPopup {
+    min-width: 140px;
+  }
+  
+  .popupImage {
+    width: 140px;
+    height: 90px;
+  }
+  
+  .popupCityName {
+    font-size: 11px;
+    padding: 6px 10px;
   }
 }

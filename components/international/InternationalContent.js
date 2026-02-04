@@ -321,14 +321,12 @@ export default function InternationalContent({ lang }) {
       if (containerWidth && containerWidth > 0) {
         return (px / containerWidth) * 100; // convert px -> percent
       }
-      // If no container width available return px value as percent-like number (not ideal)
       return px;
     }
     return 0;
   }; 
 
-  // Swiper.js will handle autoplay, looping and user interactions (touch/drag) natively.
-  // Keep slide refs for measurement only where needed.
+
   const flightsSlidesRef = useRef(null);
   const hotelsSlidesRef = useRef(null);
   const packagesSlidesRef = useRef(null);
@@ -338,225 +336,7 @@ export default function InternationalContent({ lang }) {
   // Fetch data from API on component mount
   useEffect(() => {
     const fetchData = async () => {
-      // Static data from seeders - complete with real travel data
-      // const staticFlights = [
-      //   { 
-      //     id: 1, 
-      //     airline_en: 'Emirates', 
-      //     airline_ar: 'الإمارات', 
-      //     route_en: 'Dubai - London', 
-      //     route_ar: 'دبي - لندن', 
-      //     departure_time: '06:00 AM', 
-      //     arrival_time: '02:30 PM', 
-      //     duration: '7h 30m', 
-      //     stops_en: 'Non-stop', 
-      //     stops_ar: 'بدون توقف'
-      //   },
-      //   { 
-      //     id: 2, 
-      //     airline_en: 'Qatar Airways', 
-      //     airline_ar: 'الخطوط الجوية القطرية', 
-      //     route_en: 'Doha - Bangkok', 
-      //     route_ar: 'الدوحة - بانكوك', 
-      //     departure_time: '02:00 PM', 
-      //     arrival_time: '11:30 PM', 
-      //     duration: '5h 30m', 
-      //     stops_en: 'Non-stop', 
-      //     stops_ar: 'بدون توقف'
-      //   },
-      //   { 
-      //     id: 3, 
-      //     airline_en: 'British Airways', 
-      //     airline_ar: 'الخطوط الجوية البريطانية', 
-      //     route_en: 'London - New York', 
-      //     route_ar: 'لندن - نيويورك', 
-      //     departure_time: '10:00 AM', 
-      //     arrival_time: '01:00 PM', 
-      //     duration: '8h 15m', 
-      //     stops_en: 'Non-stop', 
-      //     stops_ar: 'بدون توقف'
-      //   },
-      //   { 
-      //     id: 4, 
-      //     airline_en: 'Singapore Airlines', 
-      //     airline_ar: 'الخطوط الجوية السنغافورية', 
-      //     route_en: 'Singapore - Tokyo', 
-      //     route_ar: 'سنغافورة - طوكيو', 
-      //     departure_time: '11:00 PM', 
-      //     arrival_time: '07:00 AM+1', 
-      //     duration: '6h 30m', 
-      //     stops_en: 'Non-stop', 
-      //     stops_ar: 'بدون توقف'
-      //   }
-      // ];
-
-      // const staticHotels = [
-      //   { 
-      //     id: 1, 
-      //     name_en: 'Burj Al Arab', 
-      //     name_ar: 'برج العرب', 
-      //     location_en: 'Dubai, UAE', 
-      //     location_ar: 'دبي، الإمارات', 
-      //     rating: 5, 
-      //     image: '/hotels/burj-al-arab.jpg',
-      //     amenities_en: '["WiFi","Spa","Pool","Gym"]', 
-      //     amenities_ar: '["واي فاي","سبا","مسبح","صالة رياضة"]'
-      //   },
-      //   { 
-      //     id: 2, 
-      //     name_en: 'Marina Bay Sands', 
-      //     name_ar: 'مارينا باي ساندز', 
-      //     location_en: 'Singapore', 
-      //     location_ar: 'سنغافورة', 
-      //     rating: 5, 
-      //     image: '/offers/Singapore.png',
-      //     amenities_en: '["WiFi","Rooftop Pool","Fine Dining"]', 
-      //     amenities_ar: '["واي فاي","حمام السقف","مطاعم فاخرة"]'
-      //   },
-      //   { 
-      //     id: 3, 
-      //     name_en: 'The Plaza New York', 
-      //     name_ar: 'ذا بلازا نيويورك', 
-      //     location_en: 'New York, USA', 
-      //     location_ar: 'نيويورك، الولايات المتحدة', 
-      //     rating: 5, 
-      //     image: '/brand.jpg',
-      //     amenities_en: '["WiFi","Restaurant","Concierge"]', 
-      //     amenities_ar: '["واي فاي","مطعم","خدمة كونسيرج"]'
-      //   },
-      //   { 
-      //     id: 4, 
-      //     name_en: 'Ritz Paris', 
-      //     name_ar: 'ريتز باريس', 
-      //     location_en: 'Paris, France', 
-      //     location_ar: 'باريس، فرنسا', 
-      //     rating: 5, 
-      //     image: '/vision.jpg',
-      //     amenities_en: '["WiFi","Spa","Michelin Star Dining"]', 
-      //     amenities_ar: '["واي فاي","سبا","مطعم نجم ميشلان"]'
-      //   }
-      // ];
-
-      // const staticPackages = [
-      //   {
-      //     id: 1,
-      //     title_en: 'Trip to AlUla',
-      //     title_ar: 'رحلة إلى العلا',
-      //     description_en: 'Join us on a trip to AlUla, where you can discover breathtaking natural landscapes and historical landmarks like Hegra (Mada\'in Saleh).',
-      //     description_ar: 'انضم إلينا في رحلة إلى العلا، حيث يمكنك اكتشاف المناظر الطبيعية الخلابة والمعالم التاريخية.',
-      //     type_en: 'Heritage Tour',
-      //     type_ar: 'جولة تراثية',
-      //     image: '/cities/alula.jpg',
-      //     duration: '3 Days / 2 Nights'
-      //   },
-      //   {
-      //     id: 2,
-      //     title_en: 'Charming Sea Cruise in Jeddah',
-      //     title_ar: 'رحلة بحرية ساحرة في جدة',
-      //     description_en: 'Relax on a sea cruise to Jeddah and enjoy beautiful marine views and beach activities.',
-      //     description_ar: 'استمتع برحلة بحرية إلى جدة واستمتع بأجمل المناظر البحرية وأنشطة الشاطئ.',
-      //     type_en: 'Beach Cruise',
-      //     type_ar: 'رحلة بحرية شاطئية',
-      //     image: '/offers/jeddah-sea.png',
-      //     duration: '2 Days / 1 Night'
-      //   },
-      //   {
-      //     id: 3,
-      //     title_en: 'Dubai Luxury Escape',
-      //     title_ar: 'هروب فاخر إلى دبي',
-      //     description_en: '5-star experience with shopping and desert safari',
-      //     description_ar: 'تجربة من فئة الخمس نجوم مع التسوق والسفاري',
-      //     type_en: 'Luxury',
-      //     type_ar: 'فاخرة',
-      //     image: '/desert2.mp4',
-      //     duration: '5 Days / 4 Nights'
-      //   },
-      //   {
-      //     id: 4,
-      //     title_en: 'Paris Romance Package',
-      //     title_ar: 'حزمة باريس الرومانسية',
-      //     description_en: 'Experience the magic of Paris with guided tours and fine dining',
-      //     description_ar: 'اختبر سحر باريس مع الجولات الموجهة والعشاء الفاخر',
-      //     type_en: 'Romance',
-      //     type_ar: 'رومانسية',
-      //     image: '/vision.webp',
-      //     duration: '5 Days / 4 Nights'
-      //   },
-      //   {
-      //     id: 5,
-      //     title_en: 'Singapore City Break',
-      //     title_ar: 'عطلة مدينة سنغافورة',
-      //     description_en: 'Modern city-state with amazing food and attractions',
-      //     description_ar: 'دولة مدينة حديثة مع طعام رائع ومعالم سياحية',
-      //     type_en: 'City Break',
-      //     type_ar: 'عطلة مدينة',
-      //     image: '/offers/Singapore.png',
-      //     duration: '4 Days / 3 Nights'
-      //   },
-      //   {
-      //     id: 6,
-      //     title_en: 'Bali Paradise Package',
-      //     title_ar: 'حزمة جنة بالي',
-      //     description_en: 'Tropical paradise with beaches, temples, and culture',
-      //     description_ar: 'جنة استوائية مع شواطئ ومعابد وثقافة',
-      //     type_en: 'Beach & Culture',
-      //     type_ar: 'شاطئ وثقافة',
-      //     image: '/offers/Indonesia.png',
-      //     duration: '6 Days / 5 Nights'
-      //   }
-      // ];
-
-      // const staticDestinations = [
-      //   { 
-      //     id: 1, 
-      //     name_en: 'Bali, Indonesia', 
-      //     name_ar: 'بالي، إندونيسيا', 
-      //     description_en: 'Tropical island paradise with pristine beaches and temples', 
-      //     description_ar: 'جنة جزيرة استوائية مع شواطئ خالية ومعابد', 
-      //     image: '/offers/Indonesia.png'
-      //   },
-      //   { 
-      //     id: 2, 
-      //     name_en: 'Tokyo, Japan', 
-      //     name_ar: 'طوكيو، اليابان', 
-      //     description_en: 'Modern metropolis with ancient traditions and culture', 
-      //     description_ar: 'عاصمة حديثة مع تقاليد قديمة وثقافة غنية', 
-      //     image: '/offers/Singapore.png'
-      //   },
-      //   { 
-      //     id: 3, 
-      //     name_en: 'Paris, France', 
-      //     name_ar: 'باريس، فرنسا', 
-      //     description_en: 'The City of Light with iconic landmarks and romance', 
-      //     description_ar: 'مدينة الأضواء مع معالم أيقونية ورومانسية', 
-      //     image: '/vision.webp'
-      //   },
-      //   { 
-      //     id: 4, 
-      //     name_en: 'New York, USA', 
-      //     name_ar: 'نيويورك، الولايات المتحدة', 
-      //     description_en: 'The city that never sleeps with world-class attractions', 
-      //     description_ar: 'المدينة التي لا تنام مع معالم من الدرجة العالمية', 
-      //     image: '/brand.jpg'
-      //   },
-      //   { 
-      //     id: 5, 
-      //     name_en: 'Dubai, UAE', 
-      //     name_ar: 'دبي، الإمارات', 
-      //     description_en: 'Luxury destination with stunning architecture and shopping', 
-      //     description_ar: 'وجهة فاخرة مع عمارة مذهلة والتسوق العالمي', 
-      //     image: '/offers/jeddah-sea.png'
-      //   },
-      //   { 
-      //     id: 6, 
-      //     name_en: 'Maldives', 
-      //     name_ar: 'جزر المالديف', 
-      //     description_en: 'Overwater bungalows and crystal clear waters', 
-      //     description_ar: 'أكواخ فوق الماء ومياه صافية جداً', 
-      //     image: '/offers/Maldives.jpg'
-      //   }
-      // ];
-
+   
       try {
         console.debug('[InternationalContent] Fetching data from backend API...');
 
@@ -763,9 +543,14 @@ export default function InternationalContent({ lang }) {
     setSelectedBookingData({
       type: "flight",
       destination: {
+        id: flight.id,
         title: getFlightText(flight, 'route'),
         description: `${getFlightText(flight, 'airline_en' === lang ? 'airline_en' : 'airline_ar')} - ${flight.duration} - ${getFlightText(flight, 'stops')}`,
         image: undefined,
+        country_en: flight.country_en,
+        country_ar: flight.country_ar,
+        city_en: flight.city_en,
+        city_ar: flight.city_ar,
         flightInfo: flight
       }
     });
@@ -777,9 +562,14 @@ export default function InternationalContent({ lang }) {
     setSelectedBookingData({
       type: "hotel",
       destination: {
+        id: hotel.id,
         title: getHotelText(hotel, 'name'),
         description: getHotelText(hotel, 'location'),
         image: hotel.image || undefined,
+        country_en: hotel.country_en,
+        country_ar: hotel.country_ar,
+        city_en: hotel.city_en,
+        city_ar: hotel.city_ar,
         hotelInfo: hotel
       }
     });
@@ -791,9 +581,14 @@ export default function InternationalContent({ lang }) {
     setSelectedBookingData({
       type: "package",
       destination: {
+        id: pkg.id,
         title: getPackageText(pkg, 'title'),
         description: getPackageText(pkg, 'description'),
         image: pkg.image || undefined,
+        country_en: pkg.country_en,
+        country_ar: pkg.country_ar,
+        city_en: pkg.city_en,
+        city_ar: pkg.city_ar,
         packageInfo: pkg
       }
     });
@@ -805,9 +600,14 @@ export default function InternationalContent({ lang }) {
     setSelectedBookingData({
       type: "activity",
       destination: {
+        id: destination.id,
         title: getDestinationText(destination, 'name'),
         description: getDestinationText(destination, 'description'),
         image: destination.image || undefined,
+        country_en: destination.country_en,
+        country_ar: destination.country_ar,
+        city_en: destination.city_en,
+        city_ar: destination.city_ar,
         destinationInfo: destination
       }
     });

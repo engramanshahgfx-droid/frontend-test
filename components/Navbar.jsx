@@ -365,6 +365,7 @@ export default function Navbar({ lang }) {
                     aria-expanded={userMenuOpen}
                   >
                     <FaUserCircle size={20} />
+                    <span className="user-name">{user?.name || (lang === "ar" ? "حسابي" : "Account")}</span>
                     {userMenuOpen ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
                   </button>
                   {userMenuOpen && (

@@ -156,42 +156,7 @@ export default function BookingModal({
 
   // International flight options
   const flightOptions = [
-    {
-      airline: "Emirates",
-      from: "JED",
-      to: "DXB",
-      time: "06:00 AM",
-      duration: "2h 30m",
-      price: "$299",
-      class: "Economy",
-    },
-    {
-      airline: "Turkish Airlines",
-      from: "RUH",
-      to: "IST",
-      time: "10:00 AM",
-      duration: "4h 15m",
-      price: "$349",
-      class: "Economy",
-    },
-    {
-      airline: "British Airways",
-      from: "DMM",
-      to: "LHR",
-      time: "08:00 PM",
-      duration: "6h 45m",
-      price: "$599",
-      class: "Business",
-    },
-    {
-      airline: "Qatar Airways",
-      from: "MED",
-      to: "BKK",
-      time: "02:00 PM",
-      duration: "7h 30m",
-      price: "$449",
-      class: "Economy",
-    },
+    
   ];
 
   // Helper to get tomorrow's date as YYYY-MM-DD for default date fields
@@ -232,6 +197,8 @@ export default function BookingModal({
     customDinnerLocal: "",
 
     // International fields (existing)
+    internationalCountry: "",
+    internationalCity: "",
     checkInDate: defaultDate,
     checkOutDate: defaultDate,
     roomType: "standard",
@@ -246,6 +213,7 @@ export default function BookingModal({
     },
     flightFrom: "JED",
     flightTo: "DXB",
+    flightType: "return",
     departureDate: defaultDate,
     returnDate: defaultDate,
     flightClass: "economy",
@@ -331,6 +299,8 @@ export default function BookingModal({
         customDinnerLocal: "",
 
         // International fields
+        internationalCountry: destination?.country_en || destination?.country || "",
+        internationalCity: destination?.city_en || destination?.city || "",
         checkInDate: "",
         checkOutDate: "",
         roomType: "standard",
@@ -345,6 +315,7 @@ export default function BookingModal({
         },
         flightFrom: "JED",
         flightTo: flightTo,
+        flightType: "return",
         departureDate: "",
         returnDate: "",
         flightClass: "economy",
@@ -369,7 +340,7 @@ export default function BookingModal({
   const content = {
     en: {
       title: "Book Your Trip",
-      steps: ["Booking Type", "Details", "Contact Info"],
+      steps: [" Type", "Details", "Contact Info"],
 
       // Location selection
       bookingLocation: "Booking Type",
@@ -738,6 +709,8 @@ export default function BookingModal({
                 source: "international",
                 bookingType: formData.bookingType,
                 destination: destination?.title,
+                country: formData.internationalCountry,
+                city: formData.internationalCity,
                 numberOfGuests: formData.numberOfGuests,
                 checkInDate: formData.checkInDate,
                 checkOutDate: formData.checkOutDate,
@@ -750,6 +723,7 @@ export default function BookingModal({
                 hotelAmenities: formData.hotelAmenities,
                 flightFrom: formData.flightFrom,
                 flightTo: formData.flightTo,
+                flightType: formData.flightType,
                 departureDate: formData.departureDate,
                 returnDate: formData.returnDate,
                 flightClass: formData.flightClass,
@@ -1157,7 +1131,73 @@ export default function BookingModal({
         </div>
       ))}
 
-      <div className="col-12 mt-4">
+      {/* Country and City Manual Input */}
+      <div className="col-12 mt-3">
+        <div className="bg-dark bg-opacity-25 rounded-3 p-3">
+          <h6 className="text-warning mb-3 d-flex align-items-center gap-2">
+            <MapPin size={18} />
+            {lang === 'ar' ? 'الوجهة' : 'Destination'}
+          </h6>
+          
+          {/* Country Input */}
+          <div className="mb-3">
+            <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
+              <Globe size={16} className="text-warning" />
+              <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
+                {lang === 'ar' ? 'الدولة' : 'Country'}
+              </span>
+              <small className="text-warning ms-1">*</small>
+            </label>
+            <input
+              type="text"
+              name="internationalCountry"
+              value={formData.internationalCountry}
+              onChange={handleInputChange}
+              className="form-control"
+              placeholder={lang === 'ar' ? 'أدخل اسم الدولة (مثال: تايلاند)' : 'Enter country name (e.g., Thailand)'}
+              required
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                color: "#fff",
+                borderRadius: "8px",
+                padding: "10px 12px",
+                fontSize: "0.9rem",
+              }}
+            />
+          </div>
+
+          {/* City Input */}
+          <div className="mb-2">
+            <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
+              <MapPin size={16} className="text-warning" />
+              <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
+                {lang === 'ar' ? 'المدينة' : 'City'}
+              </span>
+              <small className="text-warning ms-1">*</small>
+            </label>
+            <input
+              type="text"
+              name="internationalCity"
+              value={formData.internationalCity}
+              onChange={handleInputChange}
+              className="form-control"
+              placeholder={lang === 'ar' ? 'أدخل اسم المدينة (مثال: بانكوك)' : 'Enter city name (e.g., Bangkok)'}
+              required
+              style={{
+                background: "rgba(255,255,255,0.1)",
+                border: "1px solid rgba(255,255,255,0.3)",
+                color: "#fff",
+                borderRadius: "8px",
+                padding: "10px 12px",
+                fontSize: "0.9rem",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="col-12 mt-3">
         <label
           className="form-label d-flex align-items-center gap-2 mb-2"
           style={{ color: "#fff" }}
@@ -1819,28 +1859,28 @@ export default function BookingModal({
           <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
             {t.roomCount}
           </span>
+          <small className="text-warning ms-1">*</small>
         </label>
-        <div className="d-flex flex-wrap gap-2">
-          {[1, 2, 3, 4].map((num) => (
-            <button
-              key={num}
-              type="button"
-              onClick={() =>
-                setFormData((prev) => ({ ...prev, roomCount: num }))
-              }
-              className={`btn px-3 py-2 ${
-                formData.roomCount === num ? "btn-warning" : "btn-outline-light"
-              }`}
-              style={{
-                borderRadius: "10px",
-                fontSize: "0.85rem",
-              }}
-            >
-              {num} {lang === "ar" ? "غرفة" : "Room"}
-              {num > 1 ? (lang === "ar" ? "غرف" : "s") : ""}
-            </button>
-          ))}
-        </div>
+        <input
+          type="number"
+          name="roomCount"
+          min={1}
+          max={10}
+          value={formData.roomCount}
+          onChange={handleInputChange}
+          className="form-control"
+          placeholder={lang === 'ar' ? 'أدخل عدد الغرف' : 'Enter number of rooms'}
+          required
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.3)",
+            color: "#fff",
+            borderRadius: "8px",
+            padding: "10px 12px",
+            fontSize: "0.9rem",
+            maxWidth: "160px",
+          }}
+        />
       </div>
 
       <div className="col-12 mb-2">
@@ -2037,6 +2077,41 @@ export default function BookingModal({
 
       <div className="col-12 mb-2">
         <label
+          className="form-label d-flex align-items-center gap-2 mb-2"
+          style={{ color: "#fff" }}
+        >
+          <Plane size={16} className="text-warning" />
+          <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
+            {lang === 'ar' ? 'نوع الرحلة' : 'Flight Type'}
+          </span>
+          <small className="text-warning ms-1">*</small>
+        </label>
+        <div className="d-flex flex-wrap gap-2">
+          {['oneway', 'return'].map((type) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => setFormData((prev) => ({ ...prev, flightType: type }))}
+              className={`btn px-3 py-2 ${
+                formData.flightType === type
+                  ? "btn-warning"
+                  : "btn-outline-light"
+              }`}
+              style={{
+                borderRadius: "10px",
+                fontSize: "0.85rem",
+              }}
+            >
+              {type === 'oneway'
+                ? (lang === 'ar' ? 'ذهاب فقط' : 'One Way')
+                : (lang === 'ar' ? 'ذهاب وعودة' : 'Return')}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="col-12 mb-2">
+        <label
           className="form-label d-flex align-items-center gap-2 mb-1"
           style={{ color: "#fff" }}
         >
@@ -2063,6 +2138,37 @@ export default function BookingModal({
           }}
         />
       </div>
+
+      {formData.flightType === 'return' && (
+        <div className="col-12 mb-2">
+          <label
+            className="form-label d-flex align-items-center gap-2 mb-1"
+            style={{ color: "#fff" }}
+          >
+            <Calendar size={16} className="text-warning" />
+            <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
+              {t.returnDate}
+            </span>
+            <small className="text-warning ms-1">*</small>
+          </label>
+          <input
+            type="date"
+            name="returnDate"
+            value={formData.returnDate}
+            onChange={handleInputChange}
+            className="form-control"
+            required
+            style={{
+              background: "rgba(255,255,255,0.1)",
+              border: "1px solid rgba(255,255,255,0.3)",
+              color: "#fff",
+              borderRadius: "8px",
+              padding: "10px 12px",
+              fontSize: "0.9rem",
+            }}
+          />
+        </div>
+      )}
 
       <div className="col-12 mb-2">
         <label
@@ -2560,7 +2666,11 @@ export default function BookingModal({
             style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.8)" }}
           >
             <div className="col-6">{t.destination}:</div>
-            <div className="col-6 text-end">{destination?.title}</div>
+            <div className="col-6 text-end">
+              {formData.internationalCountry && formData.internationalCity
+                ? `${formData.internationalCountry} → ${formData.internationalCity}`
+                : formData.internationalCountry || formData.internationalCity || destination?.title}
+            </div>
 
             <div className="col-6">
               {bookingType === "activity"
@@ -2587,11 +2697,61 @@ export default function BookingModal({
               {formData.numberOfGuests} {lang === "ar" ? "أشخاص" : "People"}
             </div>
 
-            <div className="col-6">{t.checkIn}:</div>
-            <div className="col-6 text-end">{formData.checkInDate}</div>
+            {bookingType === "flight" && (
+              <>
+                <div className="col-6">{lang === 'ar' ? 'نوع الرحلة' : 'Flight Type'}:</div>
+                <div className="col-6 text-end">
+                  {formData.flightType === 'oneway'
+                    ? (lang === 'ar' ? 'ذهاب فقط' : 'One Way')
+                    : (lang === 'ar' ? 'ذهاب وعودة' : 'Return')}
+                </div>
 
-            <div className="col-6">{t.checkOut}:</div>
-            <div className="col-6 text-end">{formData.checkOutDate}</div>
+                <div className="col-6">{t.departureDate}:</div>
+                <div className="col-6 text-end">{formData.departureDate}</div>
+
+                {formData.flightType === 'return' && (
+                  <>
+                    <div className="col-6">{t.returnDate}:</div>
+                    <div className="col-6 text-end">{formData.returnDate}</div>
+                  </>
+                )}
+
+                <div className="col-6">{t.flightClass}:</div>
+                <div className="col-6 text-end">
+                  {formData.flightClass === "economy"
+                    ? t.economy
+                    : formData.flightClass === "business"
+                    ? t.business
+                    : t.first}
+                </div>
+              </>
+            )}
+
+            {bookingType === "hotel" && (
+              <>
+                <div className="col-6">{t.checkIn}:</div>
+                <div className="col-6 text-end">{formData.checkInDate}</div>
+
+                <div className="col-6">{t.checkOut}:</div>
+                <div className="col-6 text-end">{formData.checkOutDate}</div>
+
+                <div className="col-6">{t.roomCount}:</div>
+                <div className="col-6 text-end">
+                  {formData.roomCount} {lang === "ar" ? "غرفة" : "Room"}
+                  {formData.roomCount > 1 ? (lang === "ar" ? "" : "s") : ""}
+                </div>
+              </>
+            )}
+
+            {(bookingType === "activity" || bookingType === "package") && (
+              <>
+                <div className="col-6">{t.checkIn}:</div>
+                <div className="col-6 text-end">{formData.checkInDate}</div>
+
+                <div className="col-6">{t.checkOut}:</div>
+                <div className="col-6 text-end">{formData.checkOutDate}</div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -2818,24 +2978,11 @@ export default function BookingModal({
               >
                 <div className="position-absolute bottom-0 start-0 end-0 p-3">
                   <h4
-                    className="fw-bold mb-1"
+                    className="fw-bold"
                     style={{ fontSize: "1.3rem", color: "#fff" }}
                   >
                     {t.title}
                   </h4>
-                  <p
-                    className="small mb-0"
-                    style={{
-                      fontSize: "0.85rem",
-                      color: "rgba(255,255,255,0.9)",
-                    }}
-                  >
-                    {bookingLocation === "local"
-                      ? `${t.bookLocally} • ${t.steps[currentStep - 1]}`
-                      : `${destination?.title || ""} • ${
-                          t.steps[currentStep - 1]
-                        }`}
-                  </p>
                 </div>
               </div>
 

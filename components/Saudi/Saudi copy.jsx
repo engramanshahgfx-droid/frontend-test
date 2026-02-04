@@ -1,0 +1,681 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import styles from "./Saudi.module.css";
+
+const Saudi = ({ lang = "ar" }) => {
+  const [selectedCity, setSelectedCity] = useState(null);
+
+  // 1. Text Content
+  const content = {
+    en: {
+      title: "Welcome to Tilal Rimal. We provide high-quality, competitively priced tourism experiences that combine enjoyment with local expertise to create unforgettable memories. Our dedicated team plans every trip with care.",
+      subtitle: "",
+      desc: "Let us plan while you enjoy the journey.",
+            button: "Descover More",  //link with about page 
+
+    },
+
+    ar: {
+      title: "مرحبًا بكم في تلال رمال. نقدم تجارب سياحية عالية الجودة وبأسعار تنافسية تجمع بين المتعة والخبرة المحلية لصنع ذكريات لا تُنسى. فريقنا المتفاني يخطط لكل رحلة بعناية — اكتشف السعودية بمنظور جديد.",
+      subtitle: "        ",
+      desc: "دعنا نخطط بينما تستمتع بالرحلة.",
+                  button: "اكتشف المزيد",  //link with about page 
+
+    },
+  };
+
+  const t = content[lang] || content.ar;
+
+ export default function SaudiCitiesShowcase({ lang }) {
+   // const [selectedCity, setSelectedCity] = useState(null);
+   const [showPopup, setShowPopup] = useState(false);
+ 
+  const handleCityClick = (city) => {
+     setSelectedCity(city);
+     setShowPopup(true);
+   };
+ 
+   const closePopup = () => {
+     setShowPopup(false);
+     setSelectedCity(null);
+   };
+ 
+   return (
+     <section className="saudi-map-section" dir={lang === "ar" ? "rtl" : "ltr"}>
+       {/* Full Screen Map Container */}
+       <div className="map-container">
+         {/* Background gradient */}
+         <div className="map-gradient-bg"></div>
+ 
+         {/* Detailed Saudi Arabia SVG Map with Zones */}
+         <svg className="saudi-border-svg" viewBox="0 0 1215 953" fill="none" xmlns="http://www.w3.org/2000/svg">
+           {/* SVG Filters for glow effects */}
+           <defs>
+             <filter id="filter0_d" x="613.538" y="178.618" width="175.393" height="684.845" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+               <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+               <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+               <feOffset/>
+               <feGaussianBlur stdDeviation="2.44072"/>
+               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.73 0"/>
+               <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+               <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+             </filter>
+             <filter id="filter1_d" x="600.038" y="277.272" width="25.3928" height="11.3928" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+               <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+               <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+               <feOffset/>
+               <feGaussianBlur stdDeviation="2.44072"/>
+               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.73 0"/>
+               <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+               <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+             </filter>
+             <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+               <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+               <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+               <feOffset/>
+               <feGaussianBlur stdDeviation="9.76289"/>
+               <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+               <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+               <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+             </filter>
+           </defs>
+ 
+           {/* Main Saudi Arabia Border - Solid white stroke */}
+           <path 
+             opacity="0.7" 
+             d="M62.8653 160.984L69.385 145.856L107.041 157.665L130.425 162.186L153.874 150.415L168.328 132.964L204.833 127.093L212.232 125.863L223.845 106.936L241.475 97.2952L184.427 37.1834L305.033 21.6938L313.551 14.8207L374.767 27.9015L414.422 47.9662L455.395 73.8055L467.23 80.9622L614.853 198.921L691.414 184.314L748.503 213.467L764.336 237.135L768.903 243.085L779.048 248.466L783.841 246.506L787.859 247.538L792.69 248.613L795.083 249.557L796.532 252.894L798.663 258.713L817.238 264.658L820.036 278.007L830.289 292.519L840.918 298.688L853.909 309.819L857.907 326.33L866.234 332.969L867.734 345.469L855.41 348.572L860.857 368.42L869.355 377.026L873.571 389.475L879.258 389.782L887.405 404.887L886.704 417.885L902.287 441.378L923.981 460.103L949.104 461.243L956.651 478.09L954.763 482.877L958.521 488.741L963.174 493.108L971.122 496.796L965.131 532.322L1081.02 558.945L1148.63 588.577L1163.47 586.208L1184.29 623.181L1138.74 727.456L970.127 771.876L955.403 772.965L903.103 775.846L847.422 780.989L823.731 782.154L806.364 786.92L781.744 797.692L773.236 800.296L767.314 801.507L755.361 811.055L740.849 823.308L727.611 842.148L723.633 851.211L721.84 853.411L721.718 855.68L719.09 857.856L717.422 857.766L714.672 862.211L711.129 865.848L706.834 867.913L700.994 867.598L697.698 866.655L693.526 866.429L691.981 864.049L691.353 860.187C690.865 858.885 689.732 856.119 689.097 855.472C688.463 854.825 687.83 853.107 687.593 852.328L682.753 849.005L676.913 848.69L669.361 849.596L665.246 850.357L657.175 848.938L651.489 848.631L646.003 847.787L640.163 847.472L633.791 844.417C631.899 843.294 628.759 841.701 627.424 841.629C626.089 841.557 623.728 840.205 622.643 839.636L616.994 838.622L611.352 837.495L605.665 837.188C604.607 836.111 601.254 836.644 600.653 835.387C600.051 834.129 595.138 832.044 592.885 832.432C590.911 832.836 585.24 832.835 583.905 832.763C582.237 832.673 578.218 833.27 576.55 833.18C575.215 833.108 571.398 833.298 570.814 833.776C568.562 834.165 568.048 834.351 566.713 834.279C565.379 834.207 564.249 834.656 564.276 834.147C563.748 833.609 563.545 834.609 562.276 833.316C560.69 831.699 561.268 829.911 560.434 829.866C559.599 829.821 558.891 829.067 557.14 830.503C555.739 831.653 552.38 833.292 552.129 832.768C551.573 832.738 548.784 831.682 548.116 831.646L545.679 831.514C541.617 831.295 539.12 833.094 537.424 833.513L531.649 834.831L526.687 836.193C525.386 836.122 521.942 836.498 521.942 836.498L520.059 872.245L530.589 884.91L529.451 904.547L518.067 917.496L498.857 911.662L466.412 891.313L446.064 850.189L405.857 815.717L398.164 796.228L395.134 791.991L386.701 780.469L389.731 771.33L386.701 767.093L383.714 762.043L379.234 754.469L374.293 740.351L367.114 725.463L361.734 719.469L357.848 716L353.149 712.488L348.406 709.787L344.476 707.131L335.52 699.469L331.633 696L327.723 693.345L322.104 691.412L315.011 686.956L307.188 680.954L300.977 675.259L297.291 668.075L293.492 662.981L286.531 656.087L281.327 646.844L274.498 637.513L274.474 622.846L271.202 608.004L270.234 595.73L270.717 586.794L271.199 577.858L271.681 568.921L267.48 549.609L256.522 526.204L250.768 512.043L245.564 502.8L238.734 493.469L233.486 485.038L223.32 477.157L213.532 466.626L202.334 462.762L193.617 458.218L184.219 451.193L176.752 438.568L170.779 428.469L176.752 414.969L170.779 395.755L158.789 376.369L144.231 359.288C138.676 356.544 129.76 340.582 128.486 333.995C128.142 332.216 118.093 314.929 109.074 301.172L93.1972 278.317L84.15 264.792L74.4219 248.787L56.1083 225.8L36.6108 224.748L54.4138 181.712L62.8653 160.984Z" 
+             stroke="white" 
+             strokeWidth="2.44072"
+             fill="none"
+           />
+ 
+           {/* Eastern Province to Riyadh line */}
+           <g opacity="0.7" filter="url(#filter0_d)">
+             <path d="M717.422 857.766L719.09 845.469C721.471 838.969 726.434 825.069 727.234 821.469C728.234 816.969 735.734 781.969 737.234 774.469C738.734 766.969 744.234 738.469 746.234 727.469C748.234 716.469 769.734 596.469 773.234 573.469C776.034 555.069 781.068 509.135 783.234 488.469L773.734 476.969L756.734 465.469L739.734 455.969L729.234 452.469L747.234 365.969L722.234 353.469L717.734 340.469L707.734 343.469L689.234 324.969L667.234 326.33L659.234 317.469L634.734 300.469L631.734 290.969L619.234 282.469L691.414 184.314" stroke="white" strokeWidth="1.63" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Small connecting line */}
+           <g opacity="0.7" filter="url(#filter1_d)">
+             <path d="M605.734 282.969H619.734" stroke="white" strokeWidth="1.63" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Southern regions - Asir, Najran, Jazan zones */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M250.234 511.969L266.769 484.124L273.147 480.026L293.549 497.149L308.427 498.206L301.874 504.819L305.45 509.118L314.818 509.784L321.336 503.673L332.592 509.023L325.512 523.184L334.458 529.887L333.721 540.452L353.429 535.784L364.58 542.644L368.283 529.255L405.646 509.66L412.81 510.169L402.327 493.75L430.195 491.178L430.638 468.962L451.191 468.736L453.59 475.196L456.463 491.832L460.548 506.719L466.433 518.443L475.524 531.155L499.852 533.283L502.839 538.332L502.818 553.812L509.098 558.224L526.07 560.77L527.806 573.9L531.079 588.742L520.629 601.214L519.226 627.211L526.784 638.602L510.722 646.563L489.783 645.076L475.409 652.651L464.623 656.436L452.279 666.683L444.705 664.123L439.275 654.636L431.631 653.082L428.711 647.313L424.948 653.619L421.091 653.345L420.856 648.777L409.589 651.517L399.786 641.214L394.171 642.332L391.124 654.251L384.23 657.806L383.949 661.831L375.532 671.346L365.637 678.228L372.931 684.813L373.671 698.012L389.078 715.287L402.325 700.047L404.435 693.624L415.151 690.845L421.998 695.882L421.261 706.448L420.488 717.517L412.622 727.071L395.399 727.871L394.872 735.418L377.234 745.352L411.147 748.203L415.439 758.115L414.526 771.196L419.791 775.109L422.078 789.935L413.139 800.732L399.786 797.968" stroke="white" strokeWidth="1.62715" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Central regions - Riyadh, Qassim zones */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M291.734 226.469L303.133 216.564L315.978 214.454L322.406 209.368L336.14 210.344L394.734 192.469L413.175 198.181L430.894 197.424L443.694 203.875L488.576 201.52L487.596 215.557L500.396 222.008L505.725 216.844L521.107 217.937L520.722 223.451L528.962 224.036L542.65 233.573L563.386 237.061L565.457 254.841L575.989 262.138L594.258 261.42L604.979 281.83L602.734 303.969L583.734 306.969L566.734 292.969L543.234 297.913L528.234 308.469L507.234 322.969L494.734 321.969L489.734 331.469L471.234 332.469L481.234 340.969L474.234 348.469L461.734 347.469L464.734 360.469L447.734 363.469L444.234 375.969L425.734 383.969L413.891 385.647L405.697 376.5L382.578 383.423L381.844 393.951L358.431 389.266L344.698 388.29L333.955 384.001L340.873 371.897L335.11 367.457L342.063 354.852L342.763 344.826L346.244 334.493L335.093 328.159L340.734 319.469L338.734 313.969" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Northern border region line */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M254.862 27.9478L254.557 33.6089L250.836 43.738L262.586 66.2147L283.019 67.6656L296.234 67.4681" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Western regions - Tabuk, Madinah, Makkah zones */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M227.034 409.402L227.1 410.213C227.431 410.186 227.713 409.961 227.811 409.643L227.034 409.402ZM237.132 376.826L237.909 377.068C238.028 376.686 237.851 376.274 237.492 376.097L237.132 376.826ZM221.824 369.255L221.013 369.192C220.988 369.523 221.166 369.837 221.464 369.984L221.824 369.255ZM222.72 357.634L223.531 357.697C223.549 357.456 223.46 357.22 223.288 357.052L222.72 357.634ZM198.365 333.845L198.933 333.263C198.711 333.046 198.386 332.974 198.094 333.078L198.365 333.845ZM188.845 337.206L188.034 337.142C188.012 337.417 188.131 337.683 188.35 337.851C188.568 338.019 188.857 338.064 189.116 337.973L188.845 337.206ZM190.345 317.739L189.905 317.055C189.691 317.192 189.553 317.422 189.534 317.676L190.345 317.739ZM198.072 312.78L198.512 313.465C198.702 313.343 198.833 313.147 198.873 312.924C198.913 312.702 198.858 312.472 198.722 312.292L198.072 312.78ZM186.172 296.935L185.369 297.065C185.39 297.195 185.442 297.318 185.522 297.424L186.172 296.935ZM183.847 282.626L184.65 282.496C184.634 282.399 184.601 282.306 184.552 282.222L183.847 282.626ZM178.411 273.148L178.164 272.373C177.929 272.447 177.742 272.624 177.653 272.853C177.564 273.082 177.583 273.339 177.706 273.552L178.411 273.148ZM196.558 267.361L196.805 268.137C196.828 268.129 196.851 268.121 196.873 268.112L196.558 267.361ZM201.699 265.2L202.15 264.523C201.922 264.372 201.634 264.344 201.383 264.45L201.699 265.2ZM210.174 270.852L209.723 271.529C209.894 271.643 210.102 271.688 210.304 271.655L210.174 270.852ZM229.002 267.809L229.608 267.265C229.422 267.059 229.145 266.961 228.872 267.005L229.002 267.809ZM235.767 275.342L236.373 274.8L236.372 274.799L235.767 275.342ZM260.466 302.957L259.86 303.499C260.009 303.666 260.221 303.764 260.446 303.77C260.67 303.776 260.887 303.689 261.044 303.529L260.466 302.957ZM270.509 292.807L270.571 291.996C270.333 291.978 270.099 292.065 269.931 292.235L270.509 292.807ZM286.701 294.05L287.512 294.113C287.529 293.898 287.459 293.685 287.318 293.521C287.178 293.357 286.978 293.255 286.763 293.239L286.701 294.05ZM285.753 306.359L284.941 306.296C284.925 306.511 284.995 306.724 285.135 306.888C285.276 307.052 285.476 307.154 285.691 307.17L285.753 306.359ZM320.993 309.064L321.21 308.28C321.159 308.266 321.107 308.257 321.055 308.253L320.993 309.064ZM338.504 313.915L338.287 314.699C338.634 314.796 339.003 314.652 339.194 314.347L338.504 313.915ZM354.895 287.702L355.585 288.133C355.723 287.913 355.747 287.639 355.649 287.397L354.895 287.702ZM352.213 281.066L352.967 280.762C352.884 280.556 352.72 280.393 352.514 280.311L352.213 281.066ZM341.369 276.727L340.565 276.605C340.509 276.978 340.717 277.341 341.068 277.482L341.369 276.727ZM345.289 250.724L346.093 250.846C346.139 250.543 346.01 250.239 345.76 250.061L345.289 250.724ZM321.434 233.777L320.736 234.195C320.794 234.291 320.872 234.375 320.964 234.44L321.434 233.777ZM317.959 227.974L318.657 227.556C318.517 227.323 318.27 227.174 317.997 227.161L317.959 227.974ZM280.175 221.255L280.533 220.525C280.439 220.479 280.336 220.451 280.231 220.443L280.175 221.255ZM250.935 219.183L250.398 219.793C250.532 219.911 250.701 219.982 250.879 219.995L250.935 219.183ZM231.613 202.154L230.832 201.927C230.744 202.23 230.84 202.556 231.076 202.764L231.613 202.154ZM238.197 179.383L238.978 179.609C239.066 179.306 238.97 178.979 238.733 178.771C238.495 178.563 238.159 178.511 237.87 178.637L238.197 179.383ZM219.323 187.643L218.996 186.898C218.85 186.962 218.725 187.068 218.639 187.202L219.323 187.643ZM213.102 197.306L212.875 198.087C213.221 198.188 213.592 198.049 213.787 197.747L213.102 197.306ZM190.283 190.637L190.511 189.856C190.416 189.828 190.316 189.818 190.218 189.826L190.283 190.637ZM156.831 193.318L156.019 193.261C156.003 193.497 156.09 193.729 156.259 193.896C156.427 194.063 156.66 194.148 156.896 194.129L156.831 193.318ZM157.534 183.265L158.346 183.322C158.377 182.874 158.039 182.485 157.591 182.453L157.534 183.265ZM150.914 182.796L150.205 183.194C150.339 183.432 150.584 183.588 150.857 183.607L150.914 182.796ZM142.039 167.012L142.748 166.613C142.584 166.322 142.259 166.16 141.927 166.206L142.039 167.012ZM105.652 172.011L105.044 172.551C105.225 172.754 105.494 172.854 105.763 172.817L105.652 172.011ZM98.4558 163.923L99.0633 163.383C98.7938 163.08 98.3427 163.021 98.0053 163.245L98.4558 163.923ZM90.897 168.944L90.2994 169.496C90.5705 169.79 91.0148 169.843 91.3475 169.622L90.897 168.944ZM69.8319 144.917C69.527 144.586 69.0123 144.565 68.6823 144.87C68.3522 145.175 68.3318 145.689 68.6366 146.02L69.8319 144.917ZM291.252 226.703L290.893 227.433C290.993 227.482 291.102 227.51 291.214 227.515L291.252 226.703ZM197.214 411.785L197.149 410.974C196.741 411.007 196.42 411.338 196.402 411.747L197.214 411.785Z" fill="white"/>
+           </g>
+ 
+           {/* Northern regions - Hail, Northern Border zones */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M280.208 220.922L287.473 188.747L292.682 183.303L281.117 163.416L289.523 157.925L270.402 132.49L248.987 124.413L245.498 107.486L255.289 92.2974L285.8 94.2189L294.322 91.3671L296.177 67.2522L338.595 67.1676L349.734 74.0059L359.641 74.7094L375.384 86.9141L386.297 81.1378L418.221 83.4048L431.831 97.2651L451.493 99.0693L450.716 113.33L461.488 114.451L460.599 130.164L437.625 146.518L409.093 160.398L409.768 155.774L396.483 165.012L394.558 192.592" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Eastern Province internal lines */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M425.734 383.968L434.234 388.968L430.758 409.413L445.234 421.468L460.396 434.055L468.068 427.766L475.431 428.163L489.503 438.211L495.329 435.941L513.201 436.905L516.859 414.43L543.293 407.709L557.893 393.831L599.413 394.442L607.864 373.715L593.218 358.259L589.197 327.081L616.159 310.611L609.922 305.386L607.617 302.818L602.734 303.969" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Small connector line */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M460.234 433.969L460.542 446.427L451.255 452.443L450.817 460.567L451.234 468.969" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Southern coastal region lines */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M432.234 652.969L430.033 658.756L434.948 668.128L432.487 671.462L425.04 674.442L415.234 690.969M422.234 789.969L430.401 789.114L439.853 797.304L449.932 796.516L459.66 808.736L464.093 809.051L468.114 799.311L472.411 793.601L477.398 793.955L479.403 805.126L491.8 811.019L499.004 811.53L502.985 818.33L507.139 822.635L518.222 823.422L521.271 819.628L516.586 811.453L520.28 805.339L517.314 797.963L516.847 795.253L517.787 781.785L524.857 777.625L523.17 773.024L518.547 763.755L521.491 753.993L524.626 746.044L526.799 722.492L535.367 714.153L541.365 700.104L544.284 691.299L550.803 676.171L526.734 638.468" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+ 
+           {/* Eastern coastal region lines */}
+           <g opacity="0.7" filter="url(#glowFilter)">
+             <path d="M541.364 700.105L548.237 708.623L558.097 722.191C563.915 725.974 575.521 734.903 578.517 736.329C581.514 737.755 596.903 743.211 602.495 744.956L621.224 745.152L635.847 745.941L665.356 742.645L702.813 743.037L744.234 740.969M518.234 823.469L520.538 831.019L524.589 836.361" stroke="white" strokeWidth="1.62715" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 4"/>
+           </g>
+         </svg>
+ 
+         {/* Neighboring Countries Labels */}
+         <div className="neighbor-labels">
+           <span className="neighbor" style={{ top: "3%", left: "8%" }}>
+             {lang === "ar" ? "الأردن" : "Jordan"}
+           </span>
+           <span className="neighbor" style={{ top: "2%", left: "30%" }}>
+             {lang === "ar" ? "العراق" : "Iraq"}
+           </span>
+           <span className="neighbor" style={{ top: "5%", left: "68%" }}>
+             {lang === "ar" ? "الكويت" : "Kuwait"}
+           </span>
+           <span className="neighbor gulf" style={{ top: "22%", left: "92%" }}>
+             {lang === "ar" ? "الخليج العربي" : "Arabian Gulf"}
+           </span>
+           <span className="neighbor" style={{ top: "45%", left: "90%" }}>
+             {lang === "ar" ? "الإمارات العربية المتحدة" : "UAE"}
+           </span>
+           <span className="neighbor" style={{ top: "65%", left: "88%" }}>
+             {lang === "ar" ? "عُمان" : "Oman"}
+           </span>
+           <span className="neighbor" style={{ top: "92%", left: "42%" }}>
+             {lang === "ar" ? "اليمن" : "Yemen"}
+           </span>
+           <span className="neighbor redsea" style={{ top: "40%", left: "2%" }}>
+             {lang === "ar" ? "البحر الأحمر" : "Red Sea"}
+           </span>
+           <span className="neighbor" style={{ top: "92%", left: "5%" }}>
+             {lang === "ar" ? "مصر" : "Egypt"}
+           </span>
+         </div>
+ 
+      
+ 
+    
+       </div>
+ 
+    
+ 
+       <style jsx>{`
+         .saudi-map-section {
+           position: relative;
+           width: 100%;
+           height: 100vh;
+           min-height: 750px;
+           overflow: hidden;
+           font-family: 'Tajawal', sans-serif;
+           background: linear-gradient(135deg, #1a3a5c 0%, #0d2840 50%, #1a3a5c 100%);
+         }
+ 
+         .map-container {
+           position: relative;
+           width: 100%;
+           height: 100%;
+         }
+ 
+         .map-gradient-bg {
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: 
+             radial-gradient(ellipse at 50% 50%, rgba(26, 58, 92, 0.3) 0%, rgba(13, 40, 64, 0.6) 100%),
+             linear-gradient(180deg, #1a4a6e 0%, #0d2840 50%, #1a3a5c 100%);
+         }
+ 
+         /* Saudi Border SVG - Detailed map */
+         .saudi-border-svg {
+           position: absolute;
+           top: 2%;
+           left: 5%;
+           width: 90%;
+           height: 96%;
+           pointer-events: none;
+         }
+ 
+         /* Neighbor Labels */
+         .neighbor-labels {
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           pointer-events: none;
+         }
+ 
+         .neighbor {
+           position: absolute;
+           color: rgba(255, 255, 255, 0.55);
+           font-size: 13px;
+           font-weight: 500;
+           text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+           letter-spacing: 0.5px;
+         }
+ 
+         .neighbor.redsea {
+           writing-mode: vertical-rl;
+           text-orientation: mixed;
+           font-size: 12px;
+         }
+ 
+         .neighbor.gulf {
+           writing-mode: vertical-rl;
+           text-orientation: mixed;
+         }
+ 
+         /* City Markers */
+         .city-marker {
+           position: absolute;
+           transform: translate(-50%, -50%);
+           cursor: pointer;
+           z-index: 10;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           gap: 6px;
+           transition: all 0.3s ease;
+         }
+ 
+         .city-marker:hover {
+           z-index: 20;
+         }
+ 
+         .marker-dot {
+           width: 10px;
+           height: 10px;
+           background: #ffffff;
+           border-radius: 50%;
+           box-shadow: 
+             0 0 0 3px rgba(255, 255, 255, 0.25),
+             0 2px 8px rgba(0, 0, 0, 0.4);
+           transition: all 0.3s ease;
+         }
+ 
+         .city-marker:hover .marker-dot {
+           transform: scale(1.4);
+           background: #f8d568;
+           box-shadow: 
+             0 0 0 5px rgba(248, 213, 104, 0.35),
+             0 4px 15px rgba(0, 0, 0, 0.5);
+         }
+ 
+         .city-label {
+           background: rgba(255, 255, 255, 0.95);
+           padding: 5px 12px;
+           border-radius: 16px;
+           box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+           white-space: nowrap;
+           transition: all 0.3s ease;
+         }
+ 
+         .city-label span {
+           font-size: 12px;
+           font-weight: 600;
+           color: #2c3e50;
+         }
+ 
+         .city-marker:hover .city-label {
+           background: #8a7779;
+           transform: scale(1.08);
+           box-shadow: 0 5px 20px rgba(138, 119, 121, 0.4);
+         }
+ 
+         .city-marker:hover .city-label span {
+           color: #fff;
+         }
+ 
+         /* Map Title */
+         .map-title {
+           position: absolute;
+           bottom: 25px;
+           left: 50%;
+           transform: translateX(-50%);
+           text-align: center;
+           color: white;
+           z-index: 5;
+           background: rgba(0, 0, 0, 0.3);
+           padding: 15px 35px;
+           border-radius: 30px;
+           backdrop-filter: blur(10px);
+         }
+ 
+         .map-title h1 {
+           font-size: 1.6rem;
+           font-weight: 700;
+           margin: 0 0 6px 0;
+           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+         }
+ 
+         .map-title p {
+           font-size: 0.95rem;
+           opacity: 0.85;
+           margin: 0;
+         }
+ 
+         /* Popup Modal */
+         .popup-overlay {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(0, 0, 0, 0.75);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           z-index: 1000;
+           backdrop-filter: blur(8px);
+           animation: fadeIn 0.25s ease;
+         }
+ 
+         @keyframes fadeIn {
+           from { opacity: 0; }
+           to { opacity: 1; }
+         }
+ 
+         .popup-content {
+           position: relative;
+           background: white;
+           border-radius: 24px;
+           overflow: hidden;
+           max-width: 480px;
+           width: 92%;
+           max-height: 85vh;
+           box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+           animation: slideUp 0.35s ease;
+         }
+ 
+         @keyframes slideUp {
+           from {
+             opacity: 0;
+             transform: translateY(40px) scale(0.95);
+           }
+           to {
+             opacity: 1;
+             transform: translateY(0) scale(1);
+           }
+         }
+ 
+         .popup-close {
+           position: absolute;
+           top: 12px;
+           right: 12px;
+           background: rgba(255, 255, 255, 0.95);
+           border: none;
+           width: 38px;
+           height: 38px;
+           border-radius: 50%;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 16px;
+           color: #333;
+           transition: all 0.3s ease;
+           z-index: 10;
+           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+         }
+ 
+         .popup-close:hover {
+           background: #e74c3c;
+           color: white;
+           transform: rotate(90deg);
+         }
+ 
+         .popup-image {
+           position: relative;
+           width: 100%;
+           height: 260px;
+           overflow: hidden;
+         }
+ 
+         .popup-image img {
+           width: 100%;
+           height: 100%;
+           object-fit: cover;
+           transition: transform 0.5s ease;
+         }
+ 
+         .popup-content:hover .popup-image img {
+           transform: scale(1.05);
+         }
+ 
+         .popup-info {
+           padding: 25px 30px 30px;
+           text-align: center;
+         }
+ 
+         .popup-info h2 {
+           font-size: 1.7rem;
+           font-weight: 700;
+           color: #2c3e50;
+           margin: 0 0 12px 0;
+         }
+ 
+         .popup-info p {
+           font-size: 1rem;
+           color: #7f8c8d;
+           margin: 0 0 22px 0;
+           line-height: 1.6;
+         }
+ 
+         .popup-btn {
+           display: inline-block;
+           background: linear-gradient(135deg, #8a7779, #a89294);
+           color: white;
+           padding: 13px 32px;
+           border-radius: 25px;
+           text-decoration: none;
+           font-weight: 600;
+           font-size: 1rem;
+           transition: all 0.3s ease;
+           box-shadow: 0 4px 15px rgba(138, 119, 121, 0.3);
+         }
+ 
+         .popup-btn:hover {
+           transform: translateY(-3px);
+           box-shadow: 0 8px 30px rgba(138, 119, 121, 0.45);
+         }
+ 
+         /* Responsive */
+         @media (max-width: 900px) {
+           .neighbor {
+             font-size: 11px;
+           }
+ 
+           .city-label {
+             padding: 4px 10px;
+           }
+ 
+           .city-label span {
+             font-size: 11px;
+           }
+ 
+           .marker-dot {
+             width: 8px;
+             height: 8px;
+           }
+ 
+           .map-title h1 {
+             font-size: 1.3rem;
+           }
+ 
+           .map-title p {
+             font-size: 0.85rem;
+           }
+         }
+ 
+         @media (max-width: 600px) {
+           .saudi-map-section {
+             min-height: 600px;
+           }
+ 
+           .city-label {
+             padding: 3px 8px;
+           }
+ 
+           .city-label span {
+             font-size: 9px;
+           }
+ 
+           .neighbor {
+             font-size: 9px;
+           }
+ 
+           .marker-dot {
+             width: 7px;
+             height: 7px;
+           }
+ 
+           .map-title {
+             padding: 12px 25px;
+           }
+ 
+           .map-title h1 {
+             font-size: 1.1rem;
+           }
+ 
+           .map-title p {
+             font-size: 0.8rem;
+           }
+ 
+           .popup-content {
+             max-width: 95%;
+           }
+ 
+           .popup-image {
+             height: 200px;
+           }
+ 
+           .popup-info {
+             padding: 20px;
+           }
+ 
+           .popup-info h2 {
+             font-size: 1.4rem;
+           }
+         }
+       `}</style>
+     </section>
+   );
+ }
+
+  const getCity = (id) => citiesData.find((c) => c.id === id);
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.videoBackground}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className={styles.backgroundVideo}
+        >
+          <source src="/AllSections.mp4" type="video/mp4" />
+        </video>
+        <div className={styles.overlay}></div>
+      </div>
+
+      <div
+        className={`${styles.mainWrapper} ${
+          lang === "en" ? styles.wrapperEn : styles.wrapperAr
+        }`}
+      >
+    <div className={styles.textSection}>
+  <h1 className={`${styles.mainTitle} whitespace-nowrap overflow-hidden text-white`} style={{ fontSize: "1.75rem" }}>
+    {t.title}
+  </h1>
+  <h2 className={`${styles.subTitle} text-yellow-400 text-[8px] md:text-[10px] whitespace-nowrap`}>
+    {t.subtitle}
+  </h2>
+  <p className={`${styles.description} text-white text-[20px] md:text-[20px] mt-1`}>
+    {t.desc}
+  </p>
+  <Link href={`/${lang}/about-us`}>
+    <button 
+      style={{
+        background: "linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%)",
+        marginTop: "24px",
+        padding: "12px 32px",
+        fontSize: "16px",
+        fontWeight: "bold",
+        color: "#1a1a1a",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        boxShadow: "0 4px 15px rgba(223, 165, 40, 0.3)",
+        textTransform: "capitalize"
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.boxShadow = "0 8px 25px rgba(223, 165, 40, 0.5)";
+        e.target.style.transform = "translateY(-2px)";
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.boxShadow = "0 4px 15px rgba(223, 165, 40, 0.3)";
+        e.target.style.transform = "translateY(0)";
+      }}
+    >
+      {t.button}
+    </button>
+  </Link>
+</div>
+
+        <div className={styles.mapSection}>
+          <svg className={styles.svgLayer}>
+            {connections.map(([startId, endId], index) => {
+              const c1 = getCity(startId);
+              const c2 = getCity(endId);
+              if (!c1 || !c2) return null;
+              return (
+                <line
+                  key={index}
+                  x1={`${100 - c1.right}%`}
+                  y1={`${c1.top}%`}
+                  x2={`${100 - c2.right}%`}
+                  y2={`${c2.top}%`}
+                  className={styles.connectionLine}
+                />
+              );
+            })}
+          </svg>
+
+          {citiesData.map((city) => (
+            <div
+              key={city.id}
+              className={styles.cityWrapper}
+              style={{ top: `${city.top}%`, right: `${city.right}%` }}
+              onClick={() => setSelectedCity(city)}
+            >
+              <div className={styles.cityCircle}>
+                <img
+                  src={city.img}
+                  alt={city.nameEn}
+                  className={styles.cityThumb}
+                />
+              </div>
+              <span className={styles.cityName}>
+                {lang === "ar" ? city.nameAr : city.nameEn}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {selectedCity && (
+        <div
+          className={styles.videoModal}
+          onClick={() => setSelectedCity(null)}
+        >
+          <div
+            className={styles.videoContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.closeButton}
+              onClick={() => setSelectedCity(null)}
+            >
+              ✕
+            </button>
+            <video controls autoPlay className={styles.videoPlayer}>
+              <source src={selectedCity.vid} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Saudi;
