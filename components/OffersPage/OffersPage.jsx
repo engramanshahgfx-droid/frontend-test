@@ -5,37 +5,50 @@ import Link from 'next/link';
 import { FaStar, FaClock, FaMapMarkerAlt, FaWhatsapp, FaUsers } from "react-icons/fa";
 
 export default function OffersPage({ lang }) {
-  const content = {
-    en: {
-      heroTitle: "Exclusive Offers Not to Be Missed",
-      heroSubtitle: "Take advantage of the best tourism opportunities we offer, and enjoy unique experiences at attractive prices!",
-      featuredOffers: "Featured Offers",
-      contactUs: "Contact Us",
-      days: "Days",
-      nights: "Nights",
-      persons: "Persons",
-      included: "What's Included",
-      mostPopular: "Most Popular",
-      viewDetails: "View Details",
-      loading: "Loading offers...",
-      noOffers: "No offers available at the moment.",
-    },
-    ar: {
-      heroTitle: "عروض حصرية لا تُفوَّت",
-      heroSubtitle: "استفيدوا من أفضل الفرص السياحية التي نقدمها، وستمتعوا بتجارب مميزة بأسعار مغرية!",
-      featuredOffers: "العروض المميزة",
-      contactUs: "تواصل معنا",
-      days: "أيام",
-      nights: "ليالي",
-      persons: "أشخاص",
-      included: "ما المضمن",
-      mostPopular: "الأكثر شيوعاً",
-      viewDetails: "عرض التفاصيل",
-      loading: "جاري تحميل العروض...",
-      noOffers: "لا توجد عروض متاحة حالياً.",
-    }
-  };
-
+ const content = {
+  en: {
+    heroTitle: "Exclusive Offers Not to Be Missed",
+    heroSubtitle: "Take advantage of the best tourism opportunities we offer, and enjoy unique experiences at attractive prices!",
+    featuredOffers: "Featured Offers",
+    contactUs: "Contact Us",
+    days: "Days",
+    nights: "Nights",
+    persons: "Persons",
+    included: "What's Included",
+    mostPopular: "Most Popular",
+    viewDetails: "View Details",
+    loading: "Loading offers...",
+    noOffers: "No offers available at the moment.",
+  },
+  ar: {
+    heroTitle: "عروض حصرية لا تُفوَّت",
+    heroSubtitle: "استفيدوا من أفضل الفرص السياحية التي نقدمها، وستمتعوا بتجارب مميزة بأسعار مغرية!",
+    featuredOffers: "العروض المميزة",
+    contactUs: "تواصل معنا",
+    days: "أيام",
+    nights: "ليالي",
+    persons: "أشخاص",
+    included: "ما المضمن",
+    mostPopular: "الأكثر شيوعاً",
+    viewDetails: "عرض التفاصيل",
+    loading: "جاري تحميل العروض...",
+    noOffers: "لا توجد عروض متاحة حالياً.",
+  },
+  zh: {
+    heroTitle: "不容错过的独家优惠",
+    heroSubtitle: "利用我们提供的最佳旅游机会，以诱人价格享受独特体验！",
+    featuredOffers: "精选优惠",
+    contactUs: "联系我们",
+    days: "天",
+    nights: "晚",
+    persons: "人",
+    included: "包含项目",
+    mostPopular: "最受欢迎",
+    viewDetails: "查看详情",
+    loading: "正在加载优惠...",
+    noOffers: "目前暂无可用优惠。",
+  }
+};
   const [offers, setOffers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState(null);

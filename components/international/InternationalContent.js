@@ -151,7 +151,56 @@ export default function InternationalContent({ lang }) {
         "حمّل خرائط وتطبيقات ترجمة دون اتصال",
         "تعلّم بعض العبارات المحلية الأساسية"
       ]
-    }
+    },
+     zh: {
+    pageTitle: "国际旅行",
+    pageSubtitle: "用我们优质的国际旅行服务探索世界",
+    searchTitle: "预订您的国际旅行",
+    searchSubtitle: "寻找全球航班、酒店和套餐的最佳优惠",
+    flightTab: "航班",
+    hotelTab: "酒店",
+    offersTab: "套餐",
+    popularDestinationsTab: "热门目的地",
+    popularDestinations: "热门目的地",
+    featuredPackages: "精选国际套餐",
+    whyChooseUs: "为什么选择我们的国际服务",
+    travelTips: "国际旅行提示",
+    bookNow: "立即预订",
+    viewDetails: "查看详情",
+    contactUs: "联系我们",
+    needHelp: "需要帮助？",
+    contactSupport: "联系我们的支持团队",
+    features: [
+      {
+        icon: <FaGlobe />,
+        title: "全球网络",
+        description: "覆盖全球500多家航空公司和20多万家酒店"
+      },
+      {
+        icon: <FaCheckCircle />,
+        title: "最优价格保证",
+        description: "我们保证所有国际套餐的最优价格"
+      },
+      {
+        icon: <FaStar />,
+        title: "优质支持",
+        description: "24/7多语言客户支持"
+      },
+      {
+        icon: <FaStar />,
+        title: "团体折扣",
+        description: "家庭和团体预订特别优惠"
+      }
+    ],
+    tips: [
+      "检查护照有效期（至少6个月）",
+      "研究目的地的签证要求",
+      "购买全面的旅行保险",
+      "告知银行您的国际旅行计划",
+      "下载离线地图和翻译应用",
+      "学习基本的当地用语"
+    ]
+  }
   };
 
   const t = content[lang] || content.ar;

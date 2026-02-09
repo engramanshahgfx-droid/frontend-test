@@ -15,31 +15,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "Building Construction",
         ar: "إنشاء المباني",
+        zh: "建筑施工",
       },
       subtitle: {
         en: "Quality Construction for Residential & Commercial Projects",
         ar: "بناء بجودة عالية للمشاريع السكنية والتجارية",
+        zh: "为住宅和商业项目提供高质量施工",
       },
       description: {
         en: "We specialize in constructing residential, government, educational, and healthcare buildings with global quality standards, ensuring durability and functionality.",
         ar: "نتخصص في إنشاء المباني السكنية والحكومية والتعليمية والصحية بمعايير جودة عالمية، مع ضمان المتانة والوظائفية.",
+        zh: "我们专注于按照全球质量标准建造住宅、政府、教育和医疗建筑，确保耐用性和功能性。",
       },
       features: [
         {
           en: "Residential & commercial buildings",
           ar: "المباني السكنية والتجارية",
+          zh: "住宅和商业建筑",
         },
         {
           en: "Government & educational facilities",
           ar: "المرافق الحكومية والتعليمية",
+          zh: "政府教育设施",
         },
         {
           en: "Healthcare & hospitality projects",
           ar: "مشاريع الرعاية الصحية والضيافة",
+          zh: "医疗和酒店项目",
         },
         {
           en: "Quality assurance & compliance",
           ar: "ضمان الجودة والامتثال",
+          zh: "质量保证与合规",
         },
       ],
       image: "/services/BC.png",
@@ -48,31 +55,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "Infrastructure Development",
         ar: "تطوير البنية التحتية",
+        zh: "基础设施开发",
       },
       subtitle: {
         en: "Comprehensive Road Works & Urban Development",
         ar: "أعمال الطرق الشاملة والتطوير الحضري",
+        zh: "全面的道路工程和城市发展",
       },
       description: {
         en: "We provide complete infrastructure solutions including road construction, traffic systems, lighting, and urban development projects with modern engineering techniques.",
         ar: "نوفر حلول بنية تحتية كاملة تشمل إنشاء الطرق، أنظمة المرور، الإنارة، ومشاريع التطوير الحضري بتقنيات هندسية حديثة.",
+        zh: "我们提供完整的基础设施解决方案，包括道路建设、交通系统、照明和城市发展项目，采用现代工程技术。",
       },
       features: [
         {
           en: "Road construction & paving",
           ar: "إنشاء الطرق والتعبيد",
+          zh: "道路建设与铺设",
         },
         {
           en: "Traffic signals & systems",
           ar: "الإشارات المرورية والأنظمة",
+          zh: "交通信号与系统",
         },
         {
           en: "Street lighting & utilities",
           ar: "إنارة الشوارع والمرافق",
+          zh: "街道照明与公用设施",
         },
         {
           en: "Urban planning & development",
           ar: "التخطيط الحضري والتطوير",
+          zh: "城市规划与发展",
         },
       ],
       image: "/services/MO.png",
@@ -81,31 +95,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "Finishing Works",
         ar: "أعمال التشطيب",
+        zh: "装修工程",
       },
       subtitle: {
         en: "Premium Interior & Exterior Finishing Solutions",
         ar: "حلول تشطيب داخلية وخارجية فاخرة",
+        zh: "优质室内外装修解决方案",
       },
       description: {
         en: "We deliver high-quality finishing works including modern paints, flooring, gypsum board installations, cladding, and comprehensive interior design solutions.",
         ar: "نقدم أعمال تشطيب عالية الجودة تشمل الدهانات الحديثة، الأرضيات، تركيب الجبس بورد، الكلادينج، وحلول التصميم الداخلي الشاملة.",
+        zh: "我们提供高质量的装修工程，包括现代涂料、地板、石膏板安装、外墙覆层和全面的室内设计解决方案。",
       },
       features: [
         {
           en: "Interior & exterior painting",
           ar: "الدهانات الداخلية والخارجية",
+          zh: "室内外涂装",
         },
         {
           en: "Flooring & wall finishes",
           ar: "تشطيبات الأرضيات والجدران",
+          zh: "地板和墙面装修",
         },
         {
           en: "Gypsum board & false ceilings",
           ar: "الجبس بورد والأسقف المعلقة",
+          zh: "石膏板和假天花",
         },
         {
           en: "Cladding & facade works",
           ar: "أعمال الكلادينج والواجهات",
+          zh: "外墙覆层和立面工程",
         },
       ],
       image: "/services/FW.png",
@@ -114,31 +135,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "HVAC Systems",
         ar: "أنظمة التكييف",
+        zh: "暖通空调系统",
       },
       subtitle: {
         en: "Modern Climate Control Solutions",
         ar: "حلول التحكم المناخي الحديثة",
+        zh: "现代气候控制解决方案",
       },
       description: {
         en: "We install and maintain advanced HVAC systems that ensure comfortable, energy-efficient environments for residential, commercial, and industrial spaces.",
         ar: "نقوم بتركيب وصيانة أنظمة التكييف المتقدمة التي تضمن بيئات مريحة وموفرة للطاقة للمساحات السكنية والتجارية والصناعية.",
+        zh: "我们安装和维护先进的暖通空调系统，为住宅、商业和工业空间提供舒适、节能的环境。",
       },
       features: [
         {
           en: "Central air conditioning",
           ar: "التكييف المركزي",
+          zh: "中央空调",
         },
         {
           en: "Energy-efficient systems",
           ar: "أنظمة موفرة للطاقة",
+          zh: "节能系统",
         },
         {
           en: "Ventilation & air quality",
           ar: "التهوية وجودة الهواء",
+          zh: "通风与空气质量",
         },
         {
           en: "Maintenance & servicing",
           ar: "الصيانة والخدمة",
+          zh: "维护与服务",
         },
       ],
       image: "/services/HVC.png",
@@ -147,31 +175,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "Landscaping & Sports Facilities",
         ar: "التشجير والمرافق الرياضية",
+        zh: "景观美化和体育设施",
       },
       subtitle: {
         en: "Creating Beautiful Outdoor Spaces",
         ar: "إنشاء مساحات خارجية جميلة",
+        zh: "创造美丽的户外空间",
       },
       description: {
         en: "We design and implement stunning landscapes, sports facilities, and recreational areas including gardens, playgrounds, and athletic fields with natural and artificial turf.",
         ar: "نصمم وننفذ مناظر طبيعية خلابة ومرافق رياضية ومساحات ترفيهية تشمل الحدائق، الملاعب، والمجالات الرياضية بالعشب الطبيعي والصناعي.",
+        zh: "我们设计和实施令人惊叹的景观、体育设施和休闲区域，包括花园、游乐场和采用天然及人造草坪的体育场地。",
       },
       features: [
         {
           en: "Garden design & implementation",
           ar: "تصميم وتنفيذ الحدائق",
+          zh: "花园设计与实施",
         },
         {
           en: "Sports fields & playgrounds",
           ar: "المجالات الرياضية والملاعب",
+          zh: "运动场地和游乐场",
         },
         {
           en: "Natural & artificial turf",
           ar: "العشب الطبيعي والصناعي",
+          zh: "天然和人造草坪",
         },
         {
           en: "Irrigation systems",
           ar: "أنظمة الري",
+          zh: "灌溉系统",
         },
       ],
       image: "/services/LS.png",
@@ -180,31 +215,38 @@ export default function ValueSlider({ lang = "en" }) {
       title: {
         en: "Maintenance & Operation",
         ar: "الصيانة والتشغيل",
+        zh: "维护与运营",
       },
       subtitle: {
         en: "Comprehensive Facility Management",
         ar: "إدارة المرافق الشاملة",
+        zh: "全面的设施管理",
       },
       description: {
         en: "We provide complete building maintenance, operation, and cleaning services with specialized teams and modern equipment to ensure optimal facility performance.",
         ar: "نوفر خدمات صيانة وتشغيل وتنظيف المباني الكاملة بفرق متخصصة ومعدات حديثة لضمان الأداء الأمثل للمرافق.",
+        zh: "我们提供完整的建筑维护、运营和清洁服务，拥有专业团队和现代设备，确保设施的最佳性能。",
       },
       features: [
         {
           en: "Building maintenance & repairs",
           ar: "صيانة وإصلاح المباني",
+          zh: "建筑维护与维修",
         },
         {
           en: "Electrical & plumbing services",
           ar: "خدمات الكهرباء والسباكة",
+          zh: "电气和管道服务",
         },
         {
           en: "Cleaning & sanitation",
           ar: "التنظيف والتعقيم",
+          zh: "清洁与卫生",
         },
         {
           en: "Facility management",
           ar: "إدارة المرافق",
+          zh: "设施管理",
         },
       ],
       image: "/services/MO.png",
@@ -215,13 +257,14 @@ export default function ValueSlider({ lang = "en" }) {
     heading: {
       en: "Our Core Services",
       ar: "خدماتنا الأساسية",
+      zh: "我们的核心服务",
     },
     subheading: {
       en: "Comprehensive contracting and construction solutions for commercial, industrial, and residential applications",
       ar: "حلول مقاولات وإنشاءات شاملة للتطبيقات التجارية والصناعية والسكنية",
+      zh: "为商业、工业和住宅应用提供全面的承包和施工解决方案",
     },
   };
-
   return (
     <section className="py-16 bg-white" dir={isRTL ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4">

@@ -77,33 +77,95 @@ export default function BookingModal() {
   }, [basePrice, form.guests]);
 
   const t = useMemo(
-    () => ({
-      title: isRTL ? `حجز ${selectedTrip.title || trip.title || "رحلة"}` : `Book ${selectedTrip.title || trip.title || "Trip"}`,
-      steps: [
-        isRTL ? "تفاصيل الرحلة" : "Trip Details",
-        isRTL ? "بيانات المستخدم" : "User Info",
-        isRTL ? "مراجعة" : "Review",
-        isRTL ? "الدفع" : "Payment",
-      ],
-      trip: isRTL ? "الرحلة" : "Trip",
-      date: isRTL ? "التاريخ" : "Date",
-      guests: isRTL ? "عدد الأشخاص" : "Persons",
-      notes: isRTL ? "ملاحظات" : "Notes",
-      name: isRTL ? "الاسم" : "Name",
-      email: isRTL ? "البريد الإلكتروني" : "Email",
-      phone: isRTL ? "الجوال" : "Phone",
-      review: isRTL ? "مراجعة" : "Review",
-      total: isRTL ? "الإجمالي" : "Total",
-      payment: isRTL ? "الدفع" : "Payment",
-      redirect: isRTL ? "سيتم تحويلك لصفحة الدفع الآمنة." : "We will redirect you to the secure payment page.",
-      payConfirm: isRTL ? "ادفع وأكّد" : "Pay & Confirm",
-      continue: isRTL ? "متابعة" : "Continue",
-      back: isRTL ? "رجوع" : "Back",
-      personsPlaceholder: isRTL ? "أدخل عدد الأشخاص" : "Enter number of persons",
-      notesPlaceholder: isRTL ? "أدخل ملاحظاتك" : "Add any notes",
-      processing: isRTL ? "جاري المعالجة..." : "Processing...",
-    }),
-    [isRTL, trip.title]
+    () => {
+      // Determine language-specific text
+      const tripTitle = selectedTrip.title || trip.title || "";
+      
+      if (lang === "ar") {
+        return {
+          title: `حجز ${tripTitle || "رحلة"}`,
+          steps: [
+            "تفاصيل الرحلة",
+            "بيانات المستخدم",
+            "مراجعة",
+            "الدفع",
+          ],
+          trip: "الرحلة",
+          date: "التاريخ",
+          guests: "عدد الأشخاص",
+          notes: "ملاحظات",
+          name: "الاسم",
+          email: "البريد الإلكتروني",
+          phone: "الجوال",
+          review: "مراجعة",
+          total: "الإجمالي",
+          payment: "الدفع",
+          redirect: "سيتم تحويلك لصفحة الدفع الآمنة.",
+          payConfirm: "ادفع وأكّد",
+          continue: "متابعة",
+          back: "رجوع",
+          personsPlaceholder: "أدخل عدد الأشخاص",
+          notesPlaceholder: "أدخل ملاحظاتك",
+          processing: "جاري المعالجة...",
+        };
+      } else if (lang === "zh") {
+        return {
+          title: `预订${tripTitle || "行程"}`,
+          steps: [
+            "行程详情",
+            "用户信息",
+            "审核",
+            "支付",
+          ],
+          trip: "行程",
+          date: "日期",
+          guests: "人数",
+          notes: "备注",
+          name: "姓名",
+          email: "电子邮件",
+          phone: "手机号码",
+          review: "审核",
+          total: "总计",
+          payment: "支付",
+          redirect: "我们将把您重定向到安全支付页面。",
+          payConfirm: "支付并确认",
+          continue: "继续",
+          back: "返回",
+          personsPlaceholder: "输入人数",
+          notesPlaceholder: "添加任何备注",
+          processing: "处理中...",
+        };
+      } else {
+        // English (default)
+        return {
+          title: `Book ${tripTitle || "Trip"}`,
+          steps: [
+            "Trip Details",
+            "User Info",
+            "Review",
+            "Payment",
+          ],
+          trip: "Trip",
+          date: "Date",
+          guests: "Persons",
+          notes: "Notes",
+          name: "Name",
+          email: "Email",
+          phone: "Phone",
+          review: "Review",
+          total: "Total",
+          payment: "Payment",
+          redirect: "We will redirect you to the secure payment page.",
+          payConfirm: "Pay & Confirm",
+          continue: "Continue",
+          back: "Back",
+          personsPlaceholder: "Enter number of persons",
+          notesPlaceholder: "Add any notes",
+          processing: "Processing...",
+        };
+      }
+    },
+    [lang, trip.title, selectedTrip.title]
   );
 
   const canContinue = useMemo(() => {
@@ -372,10 +434,18 @@ export default function BookingModal() {
         router.refresh?.();
       }, 1500);
     } catch (err) {
-      setStatus({ state: "error", message: err?.message || (isRTL ? "حدث خطأ" : "Something went wrong") });
+      // Language-specific error messages
+      let errorMessage;
+      if (lang === "ar") {
+        errorMessage = err?.message || "حدث خطأ";
+      } else if (lang === "zh") {
+        errorMessage = err?.message || "出现错误";
+      } else {
+        errorMessage = err?.message || "Something went wrong";
+      }
+      setStatus({ state: "error", message: errorMessage });
     }
   };
-
   if (!mounted || !bookingModal.open || !isAuthenticated) return null;
 
   // Styles

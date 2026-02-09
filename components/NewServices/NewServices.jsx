@@ -29,6 +29,11 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
       viewDetails: "حجز رحلات محلية",
       bookNow: "حجز رحلات دولية",
     },
+
+      zh: {
+    viewDetails: "本地预订",
+    bookNow: "国际预订",
+  },
   };
 
   const t = translations[lang] || translations.en;

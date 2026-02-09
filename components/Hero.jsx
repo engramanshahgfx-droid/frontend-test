@@ -2,8 +2,10 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight, FaMapMarkerAlt, FaTemperatureHigh, FaCompass, FaUmbrellaBeach, FaMountain, FaCity, FaTree, FaWater } from "react-icons/fa";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function SaudiCitiesShowcase({ lang }) {
+  const { t, isRTL } = useTranslation();
   const [selectedCity, setSelectedCity] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
@@ -182,6 +184,16 @@ export default function SaudiCitiesShowcase({ lang }) {
     }
   ];
 
+  // Ensure zh entries exist for all city translations (quick fallback: copy English)
+  saudiCities.forEach((city) => {
+    ['name', 'season', 'description'].forEach((k) => {
+      if (city[k] && !city[k].zh) city[k].zh = city[k].en || '';
+    });
+    if (Array.isArray(city.highlights)) {
+      city.highlights = city.highlights.map((h) => ({ ...(h), zh: h.en }));
+    }
+  });
+
   // Auto-play functionality
   useEffect(() => {
     if (isAutoPlaying) {
@@ -232,7 +244,7 @@ export default function SaudiCitiesShowcase({ lang }) {
         {!isVideoLoaded && (
           <div className="video-loading">
             <div className="loading-spinner"></div>
-            <span>{lang === "ar" ? "جاري التحميل..." : "Loading..."}</span>
+            <span>{t('general.loading')}</span>
           </div>
         )}
       </div>
@@ -242,19 +254,16 @@ export default function SaudiCitiesShowcase({ lang }) {
         <div className="section-header">
           <div className="header-content">
             <h1 className="section-title">
-              {lang === "ar" ? "روائع المملكة" : "Saudi Wonders"}
+              {t('hero.title')}
             </h1>
             <p className="section-subtitle">
-              {lang === "ar" 
-                ? "اكتشف التنوع الاستثنائي والتراث الثري للمملكة العربية السعودية"
-                : "Discover the extraordinary diversity and rich heritage of Saudi Arabia"
-              }
+              {t('hero.subtitle')}
             </p>
             <div className="header-badges">
-              <span className="badge">🏜️ {lang === "ar" ? "صحراء" : "Desert"}</span>
-              <span className="badge">🏔️ {lang === "ar" ? "جبال" : "Mountains"}</span>
-              <span className="badge">🏖️ {lang === "ar" ? "سواحل" : "Coasts"}</span>
-              <span className="badge">🏙️ {lang === "ar" ? "مدن" : "Cities"}</span>
+              <span className="badge">🏜️ {t('hero.badges.desert')}</span>
+              <span className="badge">🏔️ {t('hero.badges.mountains')}</span>
+              <span className="badge">🏖️ {t('hero.badges.coasts')}</span>
+              <span className="badge">🏙️ {t('hero.badges.cities')}</span>
             </div>
           </div>
         </div>
@@ -282,7 +291,7 @@ export default function SaudiCitiesShowcase({ lang }) {
             <div className="highlights-section">
               <div className="highlights-header">
                 <IconComponent className="section-icon" />
-                <h3>{lang === "ar" ? "أبرز المعالم" : "Key Highlights"}</h3>
+                <h3>{t('hero.keyHighlights')}</h3>
               </div>
               <div className="highlights-grid">
                 {currentCity.highlights.map((highlight, index) => (
@@ -320,14 +329,14 @@ export default function SaudiCitiesShowcase({ lang }) {
 
             <div className="action-section">
               <button className="btn btn-primary">
-                <span>{lang === "ar" ? "اكتشف الرحلات" : "Discover Tours"}</span>
+                <span>{t('hero.action.discoverTours')}</span>
                 <div className="btn-glow"></div>
               </button>
               <button className="btn btn-secondary">
-                {lang === "ar" ? "خطط رحلتك" : "Plan Your Trip"}
+                {t('hero.action.planTrip')}
               </button>
               <button className="btn btn-outline">
-                {lang === "ar" ? "شاهد الفيديو" : "Watch Video"}
+                {t('hero.action.watchVideo')}
               </button>
             </div>
           </div>
@@ -337,8 +346,8 @@ export default function SaudiCitiesShowcase({ lang }) {
             <div className="map-container">
               <div className="saudi-map-card">
                 <div className="map-header">
-                  <h3>{lang === "ar" ? "خريطة المملكة" : "Kingdom Map"}</h3>
-                  <span className="map-subtitle">{lang === "ar" ? "انقر على المدن لاكتشافها" : "Click cities to explore"}</span>
+                  <h3>{t('hero.map.title')}</h3>
+                  <span className="map-subtitle">{t('hero.map.subtitle')}</span>
                 </div>
                 
                 <div className="map-visual">

@@ -373,6 +373,191 @@ export default function JanuaryOffers({ lang }) {
           desc: "عند الوصول للمطار"
         }
       ]
+    },
+
+    zh: {
+      heroTitle: "一月专属优惠",
+      heroSubtitle: "特别蜜月和新年套餐，提供惊人折扣。不要错过这些限时优惠！",
+      discountText: "一月特别优惠",
+      featuredOffers: "一月精选套餐",
+      contactUs: "联系我们",
+      days: "天",
+      nights: "晚",
+      persons: "人",
+      included: "套餐包括",
+      limitedSpots: "名额有限",
+      mostPopular: "最受欢迎",
+      honeymoonSpecial: "蜜月特别",
+      newYearOffer: "新年特别",
+      
+      offers: [
+        {
+          id: 1,
+          title: "马来西亚蜜月之旅",
+          category: "一月优惠 • 蜜月",
+          description: "体验完美的马来西亚蜜月之旅，参观雪兰莪、兰卡威和吉隆坡。享受浪漫的环境，包括早餐、导游服务和特殊服务。",
+          image: "/offers/malaysia.png",
+          discount: "20%",
+          duration: "8天7晚",
+          location: "马来西亚",
+          groupSize: "2人",
+          badge: "蜜月特别",
+          itinerary: ["2雪兰莪", "3兰卡威", "3吉隆坡"],
+          features: [
+            "含早餐酒店",
+            "预先安排的游览和接送",
+            "专业导游",
+            "服务费和税费包含",
+            "机场鲜花接待",
+            "免费上网SIM卡",
+            "蜜月房间装饰"
+          ],
+          highlights: ["浪漫海滩", "兰卡威岛", "城市观光", "情侣活动"]
+        },
+        {
+          id: 2,
+          title: "印度尼西亚蜜月之旅",
+          category: "新年优惠 • 蜜月",
+          description: "在美丽的印度尼西亚庆祝您的蜜月，参观雅加达和巴厘岛。在巴厘岛天堂岛屿享受5晚全包服务。",
+          image: "/offers/Indonesia.png",
+          discount: "25%",
+          duration: "7天6晚",
+          location: "印度尼西亚",
+          groupSize: "2人",
+          badge: "新年特别",
+          itinerary: ["1雅加达", "5巴厘岛", "1雅加达"],
+          features: [
+            "酒店或度假村",
+            "包含所有游览",
+            "国内航班",
+            "专业导游",
+            "免费机场鲜花接待",
+            "免费上网SIM卡",
+            "蜜月房间装饰"
+          ],
+          highlights: ["巴厘岛海滩", "文化游览", "浪漫晚餐", "岛屿跳跃"]
+        },
+        {
+          id: 3,
+          title: "新加坡蜜月之旅",
+          category: "新年优惠 • 蜜月",
+          description: "新加坡4晚住宿，包含酒店住宿和火车游览。适合寻求现代城市体验和豪华住宿的情侣。",
+          image: "/offers/Singapore.png",
+          discount: "15%",
+          duration: "5天4晚",
+          location: "新加坡",
+          groupSize: "2人",
+          badge: "名额有限",
+          itinerary: ["新加坡城市观光"],
+          features: [
+            "酒店和火车游览",
+            "包含所有观光",
+            "导游服务",
+            "税费包含",
+            "免费机场鲜花接待",
+            "免费上网SIM卡"
+          ],
+          highlights: ["城市灯光", "滨海湾花园", "圣淘沙岛", "购物"]
+        },
+        {
+          id: 4,
+          title: "斯里兰卡冒险之旅",
+          category: "新年优惠 • 蜜月",
+          description: "斯里兰卡7晚住宿，探索尼甘布、康提、本托塔和科伦坡。体验丰富的文化和美丽的海滩。",
+          image: "/offers/SriLanka.png",
+          discount: "18%",
+          duration: "8天7晚",
+          location: "斯里兰卡",
+          groupSize: "2人",
+          badge: "最受欢迎",
+          itinerary: ["1尼甘布", "2康提", "2本托塔", "2科伦坡"],
+          features: [
+            "包含司机和游览",
+            "导游服务",
+            "服务费和税费包含",
+            "包含早餐",
+            "免费机场鲜花接待",
+            "免费上网SIM卡"
+          ],
+          highlights: ["文化遗址", "海滩度假村", "野生动物园", "茶园"]
+        },
+        {
+          id: 5,
+          title: "泰国情侣套餐",
+          category: "新年优惠 • 2人",
+          description: "泰国9晚住宿，探索曼谷和美丽的普吉岛。适合寻求冒险和放松的情侣。",
+          image: "/offers/Thailand.png",
+          discount: "22%",
+          duration: "10天9晚",
+          location: "泰国",
+          groupSize: "2人",
+          badge: "最佳价值",
+          itinerary: ["2曼谷", "5普吉岛", "2曼谷"],
+          features: [
+            "酒店住宿",
+            "司机和观光",
+            "国内航班",
+            "导游服务",
+            "免费机场鲜花接待",
+            "免费上网SIM卡"
+          ],
+          highlights: ["普吉岛海滩", "曼谷城市", "岛屿游览", "夜市"]
+        },
+        {
+          id: 6,
+          title: "奢华马尔代夫之旅",
+          category: "一月特别 • 蜜月",
+          description: "马尔代夫极致奢华蜜月，包含水上别墅、私人海滩通道和浪漫晚餐。",
+          image: "/offers/Maldives.png",
+          discount: "30%",
+          duration: "6天5晚",
+          location: "马尔代夫",
+          groupSize: "2人",
+          badge: "奢华",
+          itinerary: ["私人岛屿度假村"],
+          features: [
+            "水上别墅",
+            "包含所有餐食",
+            "私人接送",
+            "水疗积分",
+            "海滩浪漫晚餐",
+            "免费上网",
+            "水上运动设备"
+          ],
+          highlights: ["私人海滩", "浮潜", "水疗护理", "日落游轮"]
+        }
+      ],
+      
+      categories: {
+        all: "所有优惠",
+        honeymoon: "蜜月",
+        newyear: "新年",
+        luxury: "奢华",
+        popular: "最受欢迎"
+      },
+      
+      additionalInfo: [
+        {
+          icon: "✈️",
+          title: "所有国内航班",
+          desc: "包含在套餐中"
+        },
+        {
+          icon: "🏨",
+          title: "五星级酒店",
+          desc: "豪华住宿"
+        },
+        {
+          icon: "📱",
+          title: "免费SIM卡",
+          desc: "包含上网套餐"
+        },
+        {
+          icon: "💐",
+          title: "鲜花接待",
+          desc: "机场到达时"
+        }
+      ]
     }
   };
 
@@ -392,9 +577,14 @@ export default function JanuaryOffers({ lang }) {
     "أماكن محدودة": <FaUsers />,
     "الأكثر شيوعاً": <FaStar />,
     "أفضل قيمة": <FaStar />,
-    "فاخر": <FaHotel />
+    "فاخر": <FaHotel />,
+    "蜜月特别": <FaRing />,
+    "新年特别": <FaGlassCheers />,
+    "名额有限": <FaUsers />,
+    "最受欢迎": <FaStar />,
+    "最佳价值": <FaStar />,
+    "奢华": <FaHotel />
   };
-
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="offers-page">
       {/* Hero Section with Video Background */}

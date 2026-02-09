@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const supportedLanguages = ["en", "ar"];
+const supportedLanguages = ["en", "ar", "zh"];
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;

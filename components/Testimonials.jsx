@@ -70,6 +70,38 @@ export default function Testimonials({ lang = "en" }) {
         rating: 5,
       },
     ],
+    zh: [
+      {
+        name: "righteous",
+        quote: "Our trip to the Hail Mountains was a wonderful experience! Everything was excellently organized, and the staff was very helpful.",
+        rating: 5,
+      },
+      {
+        name: "pleasant",
+        quote: "Tourism in Saudi Arabia with your team is different, like you've never seen it before. Thank you, Hills and Sands team.",
+        rating: 5,
+      },
+      {
+        name: "immortal",
+        quote: "Special thanks to Omar for his attention to the smallest details of the adventure and to the cooperative team; a truly unique experience.",
+        rating: 5,
+      },
+      {
+        name: "satisfied",
+        quote: "Amazing service and unforgettable memories. The attention to detail and customer care was exceptional throughout our journey.",
+        rating: 5,
+      },
+      {
+        name: "adventurer",
+        quote: "The desert safari experience was breathtaking! Professional guides and well-planned itinerary made our trip memorable.",
+        rating: 5,
+      },
+      {
+        name: "explorer",
+        quote: "From start to finish, everything was perfectly arranged. We felt safe and well taken care of during our entire Saudi adventure.",
+        rating: 5,
+      },
+    ],
   };
 
   const testimonials = testimonialsContent[lang] || testimonialsContent.en;

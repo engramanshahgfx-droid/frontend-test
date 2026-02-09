@@ -17,7 +17,7 @@ export default function BookingExample() {
   // State to control when to show the booking modal
   const [isBookingOpen, setIsBookingOpen] = useState(false);
 
-  const translations = {
+const translations = {
     en: {
       title: 'Book Your Experience',
       subtitle: 'Choose what you\'d like to book',
@@ -31,6 +31,13 @@ export default function BookingExample() {
       button: 'فتح الحجز',
       buttonSmall: 'احجز الآن',
       description: 'انقر على أي زر "احجز الآن" لبدء عملية الحجز. سيُطلب منك الاختيار بين رحلات دولية أو أنشطة محلية.',
+    },
+    zh: {
+      title: '预订您的体验',
+      subtitle: '选择您想预订的项目',
+      button: '打开预订',
+      buttonSmall: '立即预订',
+      description: '点击任意"立即预订"按钮开始预订流程。系统将要求您选择国际旅行或本地活动。',
     },
   };
 

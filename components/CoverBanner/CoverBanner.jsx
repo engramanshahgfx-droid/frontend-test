@@ -4,27 +4,75 @@ import Slider from 'react-slick';
 
 export default function CoverBanner({ lang, data }) {
   // Fallback data in case props are undefined
-  const safeData = data || {
-    title: "The Magic of Nature As You've Never Seen Before",
-    subtitle: "Discover the Kingdom from a New Perspective",
-    description: "Let us plan.. and you enjoy the journey",
+const safeData = data || {
+    title: {
+      en: "The Magic of Nature As You've Never Seen Before",
+      ar: "سحر الطبيعة كما لم تره من قبل",
+      zh: "大自然的神奇，前所未见"
+    },
+    subtitle: {
+      en: "Discover the Kingdom from a New Perspective",
+      ar: "اكتشف المملكة من منظور جديد",
+      zh: "从新视角探索王国"
+    },
+    description: {
+      en: "Let us plan.. and you enjoy the journey",
+      ar: "دعنا نخطط.. وأنت استمتع بالرحلة",
+      zh: "让我们来规划.. 您只管享受旅程"
+    },
     featuredTrips: [
       {
-        title: "Egyptian Night",
-        description: "Enjoy evening activities in natural surroundings",
-        badge: "Featured",
+        title: {
+          en: "Egyptian Night",
+          ar: "ليلة مصرية",
+          zh: "埃及之夜"
+        },
+        description: {
+          en: "Enjoy evening activities in natural surroundings",
+          ar: "استمتع بأنشطة مسائية في أجواء طبيعية",
+          zh: "在自然环境中享受晚间活动"
+        },
+        badge: {
+          en: "Featured",
+          ar: "مميز",
+          zh: "精选"
+        },
         image: "/trips/egyptian-night.jpg"
       },
       {
-        title: "Jeddah Winter",
-        description: "Enjoy evening activities in natural surroundings", 
-        badge: "Featured",
+        title: {
+          en: "Jeddah Winter",
+          ar: "شتاء جدة", 
+          zh: "吉达冬日"
+        },
+        description: {
+          en: "Enjoy evening activities in natural surroundings",
+          ar: "استمتع بأنشطة مسائية في أجواء طبيعية",
+          zh: "在自然环境中享受晚间活动"
+        },
+        badge: {
+          en: "Featured",
+          ar: "مميز",
+          zh: "精选"
+        },
         image: "/trips/jeddah-winter.jpg"
       },
       {
-        title: "Foundation Day",
-        description: "Experience different atmospheres",
-        badge: "Featured", 
+        title: {
+          en: "Foundation Day",
+          ar: "يوم التأسيس",
+          zh: "建国日"
+        },
+        description: {
+          en: "Experience different atmospheres",
+          ar: "اختبر أجواء مختلفة",
+          zh: "体验不同氛围"
+        },
+        badge: {
+          en: "Featured", 
+          ar: "مميز",
+          zh: "精选"
+        },
         image: "/trips/foundation-day.jpg"
       }
     ]

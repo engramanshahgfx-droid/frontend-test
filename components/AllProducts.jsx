@@ -14,7 +14,7 @@ export default function AllProjects({ lang, projects }) {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   
-  const content = {
+const content = {
     en: {
       viewLabel: "View Details",
       searchPlaceholder: "Search projects...",
@@ -43,8 +43,21 @@ export default function AllProjects({ lang, projects }) {
       duration: "المدة",
       client: "العميل",
     },
+    zh: {
+      viewLabel: "查看详情",
+      searchPlaceholder: "搜索项目...",
+      filterLabel: "项目类型",
+      notFound: "未找到项目",
+      noProjects: "无项目可显示",
+      status: "状态",
+      completed: "已完成",
+      inProgress: "进行中",
+      upcoming: "即将开始",
+      location: "位置",
+      duration: "时长",
+      client: "客户",
+    },
   };
-
   const { 
     viewLabel, 
     searchPlaceholder, 

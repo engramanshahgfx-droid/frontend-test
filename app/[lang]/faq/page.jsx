@@ -130,15 +130,13 @@ export default async function FAQs({ params }) {
       <div className="py-5" style={{ backgroundColor: "#52a9ff" }}>
         <div className="container d-flex flex-column align-items-center text-white">
           <h1 className="text-center mb-3" style={{ fontWeight: "700" }}>
-            {lang === "ar" ? "الأسئلة المتكررة" : "Frequently Asked Questions"}
+            {t('faq.title')}
           </h1>
           <p
             className="text-center w-md-75"
             dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            {lang === "ar"
-              ? "هنا ستجد إجابات لأكثر الأسئلة شيوعًا حول خدمات براندرايز للبرمجيات. إذا كان لديك أي أسئلة أخرى، لا تتردد في الاتصال بنا."
-              : "Here you can find answers to the most common questions about BrandRaize software services. If you have any other questions, feel free to contact us."}
+            {t('faq.description')}
           </p>
         </div>
       </div>

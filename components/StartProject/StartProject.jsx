@@ -20,21 +20,70 @@ export default function StartProject({ lang }) {
 
   const [activeReservation, setActiveReservation] = useState(null);
 
-  const handleReservation = (type = "domestic") => {
-    setActiveReservation(type);
-    openReservationModal({
-      title: type === "domestic"
-        ? (lang === "ar" ? "حجز محلي" : "Domestic Reservation")
-        : (lang === "ar" ? "حجز دولي" : "International Reservation"),
-      slug: "",
-      type,
-      // Inform the modal which booking location/tab to open
-      bookingLocation: type === "domestic" ? "local" : "international",
-      preferredBookingType: "activity",
-      isLocalService: type === "domestic",
-    });
-  }; 
+  // Localized UI strings (en / ar / zh)
+  const content = {
+    en: {
+      title: "Unique destinations await you",
+      desc: "Let us plan your perfect journey from start to finish. Enjoy unique travel experiences, local guides, and memories that last a lifetime.",
+      domesticBtn: "Domestic Reservation",
+      internationalBtn: "International Reservation",
+      features: {
+        f1: { title: "Exclusive Destinations", subtitle: "Best hidden places" },
+        f2: { title: "Local Guides", subtitle: "Area experts" },
+        f3: { title: "Flexible Scheduling", subtitle: "Plan around your schedule" },
+        f4: { title: "5-Star Reviews", subtitle: "Happy customers" },
+      },
+    },
+    ar: {
+      title: "وجهات مميزة بانتظارك",
+      desc: "دعنا نخطط لرحلتك المثالية من البداية إلى النهاية. استمتع بتجارب سياحية فريدة، مرشدين محليين، وذكريات تدوم مدى الحياة.",
+      domesticBtn: "حجز محلي",
+      internationalBtn: "حجز دولي",
+      features: {
+        f1: { title: "وجهات حصرية", subtitle: "أفضل الأماكن المخفية" },
+        f2: { title: "مرشدون محليون", subtitle: "خبراء بالمنطقة" },
+        f3: { title: "مرونة المواعيد", subtitle: "خطط حسب جدولك" },
+        f4: { title: "تقييمات 5 نجوم", subtitle: "عملاء سعداء" },
+      },
+    },
+    zh: {
+      title: "独特的目的地在等您",
+      desc: "让我们为您规划完美的旅程。从头到尾享受独特的旅行体验、本地向导和永生难忘的回忆。",
+      domesticBtn: "国内预订",
+      internationalBtn: "国际预订",
+      features: {
+        f1: { title: "独家目的地", subtitle: "最佳隐秘景点" },
+        f2: { title: "本地向导", subtitle: "本地专家" },
+        f3: { title: "灵活安排", subtitle: "按您的时间表安排" },
+        f4: { title: "五星评价", subtitle: "满意的客户" },
+      },
+    },
+  };
 
+const reservationTitles = {
+  domestic: {
+    en: "Domestic Reservation",
+    ar: "حجز محلي",
+    zh: "国内预订"
+  },
+  international: {
+    en: "International Reservation",
+    ar: "حجز دولي",
+    zh: "国际预订"
+  }
+};
+
+const handleReservation = (type = "domestic") => {
+  setActiveReservation(type);
+  openReservationModal({
+    title: reservationTitles[type][lang] || reservationTitles[type].en,
+    slug: "",
+    type,
+    bookingLocation: type === "domestic" ? "local" : "international",
+    preferredBookingType: "activity",
+    isLocalService: type === "domestic",
+  });
+};
   return (
     <section
       className="position-relative py-5 text-center text-white"
@@ -98,9 +147,7 @@ export default function StartProject({ lang }) {
             transition={{ duration: 1, delay: 0.3 }}
             style={{ color: "#ffffff", fontSize: "1.75rem" }}
           >
-            {lang === "ar"
-              ? "وجهات مميزة بانتظارك"
-              : "Unique destinations await you"}
+            {(content[lang] || content.en).title}
           </motion.h1>
 
           <motion.p
@@ -114,9 +161,7 @@ export default function StartProject({ lang }) {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            {lang === "ar"
-              ? "دعنا نخطط لرحلتك المثالية من البداية إلى النهاية. استمتع بتجارب سياحية فريدة، مرشدين محليين، وذكريات تدوم مدى الحياة."
-              : "Let us plan your perfect journey from start to finish. Enjoy unique travel experiences, local guides, and memories that last a lifetime."}
+            {(content[lang] || content.en).desc}
           </motion.p> 
 
           <motion.div
@@ -146,7 +191,7 @@ export default function StartProject({ lang }) {
               }}
               aria-pressed={activeReservation === 'domestic'}
             >
-              {lang === "ar" ? "حجز محلي" : "Domestic Reservation"}
+              {(content[lang] || content.en).domesticBtn}
               <Calendar size={20} />
             </button>
             <button
@@ -171,7 +216,7 @@ export default function StartProject({ lang }) {
               aria-pressed={activeReservation === 'international'}
             >
               <MapPin size={20} />{' '}
-              {lang === 'ar' ? ' حجز دولي' : 'International Reservation'}
+              {(content[lang] || content.en).internationalBtn}
             </button>
           </motion.div>
 
@@ -196,12 +241,10 @@ export default function StartProject({ lang }) {
                   <MapPin size={24} color="#4a90e2" />
                 </div>
                 <h6 className="fw-bold mb-1" style={{ color: "#ffffff" }}>
-                  {lang === "ar" ? "وجهات حصرية" : "Exclusive Destinations"}
+                  {(content[lang] || content.en).features.f1.title}
                 </h6>
                 <small style={{ color: "#cccccc" }}>
-                  {lang === "ar"
-                    ? "أفضل الأماكن المخفية"
-                    : "Best hidden places"}
+                  {(content[lang] || content.en).features.f1.subtitle}
                 </small>
               </div>
             </div>
@@ -219,10 +262,10 @@ export default function StartProject({ lang }) {
                   <Users size={24} color="#22c55e" />
                 </div>
                 <h6 className="fw-bold mb-1" style={{ color: "#ffffff" }}>
-                  {lang === "ar" ? "مرشدون محليون" : "Local Guides"}
+                  {(content[lang] || content.en).features.f2.title}
                 </h6>
                 <small style={{ color: "#cccccc" }}>
-                  {lang === "ar" ? "خبراء بالمنطقة" : "Area experts"}
+                  {(content[lang] || content.en).features.f2.subtitle}
                 </small>
               </div>
             </div>
@@ -240,12 +283,10 @@ export default function StartProject({ lang }) {
                   <Calendar size={24} color="#f59e0b" />
                 </div>
                 <h6 className="fw-bold mb-1" style={{ color: "#ffffff" }}>
-                  {lang === "ar" ? "مرونة المواعيد" : "Flexible Scheduling"}
+                  {(content[lang] || content.en).features.f3.title}
                 </h6>
                 <small style={{ color: "#cccccc" }}>
-                  {lang === "ar"
-                    ? "خطط حسب جدولك"
-                    : "Plan around your schedule"}
+                  {(content[lang] || content.en).features.f3.subtitle}
                 </small>
               </div>
             </div>
@@ -263,10 +304,10 @@ export default function StartProject({ lang }) {
                   <Star size={24} color="#a855f7" />
                 </div>
                 <h6 className="fw-bold mb-1" style={{ color: "#ffffff" }}>
-                  {lang === "ar" ? "تقييمات 5 نجوم" : "5-Star Reviews"}
+                  {(content[lang] || content.en).features.f4.title}
                 </h6>
                 <small style={{ color: "#cccccc" }}>
-                  {lang === "ar" ? "عملاء سعداء" : "Happy customers"}
+                  {(content[lang] || content.en).features.f4.subtitle}
                 </small>
               </div>
             </div>

@@ -150,7 +150,80 @@ export default function Transportation({ lang }) {
       contactTitle: "Need Help Planning Your Trip?",
       contactDescription: "Our team is available to help you arrange all your transportation details during your visit to the Kingdom",
       contactButton: "Contact Us for Consultation"
-    }
+    },
+    zh: {
+    heroTitle: "从未见过的自然魅力",
+    pageTitle: "沙特阿拉伯交通指南",
+    pageSubtitle: "出租车、地铁、航班等综合指南",
+    
+    introTitle: "如何在沙特阿拉伯出行",
+    introDescription: "王国提供综合交通系统，确保城市和地标之间的便捷通行。无论您想探索城市还是长途旅行，都能找到适合您需求的交通方式——从私家车和地铁，到高速列车、现代巴士和航班。",
+
+    flightsTitle: "沙特阿拉伯航班",
+    flightsDescription: "通过连接18个国内机场和10个国际机场的现代化航空网络，您可以在王国境内和海外舒适快速地旅行，获得前往各个城市和旅游目的地的广泛选择。",
+    flightsSubtitle: "探索沙特阿拉伯的国内和国际航班",
+
+    airlines: [
+      {
+        name: "沙特阿拉伯航空",
+        description: "沙特阿拉伯的首要国家航空公司，拥有连接沙特与全球各大洲的广泛国内和国际航班网络。",
+        image: "/saudi-airlane.jpg",
+        features: ["国内航班", "国际航班", "全球网络", "豪华服务"]
+      },
+      {
+        name: "纳斯航空",
+        description: "一家沙特航空公司，全天候运营国内和国际航班，提供前往世界各地主要旅游目的地的直飞航班。",
+        image: "/flynas.jpg",
+        features: ["经济实惠航班", "多个目的地", "直飞航班", "快速服务"]
+      },
+      {
+        name: "阿德尔航空",
+        description: "提供前往沙特最重要城市和旅游目的地的每日航班，同时也可提供国际航班。",
+        image: "/Adele.jpg",
+        features: ["每日航班", "本地目的地", "竞争性价格", "优质服务"]
+      }
+    ],
+
+    carsTitle: "沙特阿拉伯租车和驾驶",
+    carsDescription: "如果您喜欢自由出行并按自己的方式探索沙特阿拉伯，汽车是理想选择。王国提供现代化道路和双语标识，此外机场和城市中遍布本地和国际租车公司。",
+    carFeatures: [
+      "现代化高速公路",
+      "阿拉伯语和英语双语标识",
+      "国际租车公司",
+      "汽车预订应用程序"
+    ],
+
+    trainsTitle: "火车和地铁",
+    trainsDescription: "沙特阿拉伯提供现代化的火车网络，让您能够快速舒适地在城市间旅行，此外先进的铁路系统也便利了利雅得等大城市内的出行。",
+
+    trainServices: [
+      {
+        name: "沙特阿拉伯铁路公司（SAR）",
+        description: "提供安全舒适运输的火车网络。通过从利雅得到古赖阿特的北部线路和从利雅得到达曼的东部线路。",
+        image: "/sar.jpg",
+        routes: ["利雅得 → 古赖阿特", "利雅得 → 达曼"],
+        features: ["空调", "舒适座椅", "餐饮服务", "WiFi"]
+      },
+      {
+        name: "哈拉曼高速铁路",
+        description: "被认为是中东最快的火车之一，通过吉达和阿卜杜拉国王经济城等主要车站连接圣城。",
+        image: "/Haramain.jpg",
+        routes: ["麦加 → 麦地那", "吉达 → 麦地那"],
+        features: ["高速", "电子票务", "豪华服务", "固定班次"]
+      },
+      {
+        name: "利雅得地铁",
+        description: "旨在改变利雅得市民和游客的出行方式。由连接主要区域的6条线路和85个车站组成，包括商业区、各种文化地标和住宅区。",
+        image: "/riyadh-metro.png",
+        routes: ["6条主要线路", "85个车站"],
+        features: ["全面覆盖", "数字票务", "频繁班次", "便捷通行"]
+      }
+    ],
+
+    contactTitle: "需要帮助规划您的行程吗？",
+    contactDescription: "我们的团队可帮助您安排访问王国期间的所有交通细节",
+    contactButton: "联系我们咨询"
+  }
   };
 
   const t = content[lang] || content.ar;

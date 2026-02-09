@@ -4,7 +4,7 @@ import Testimonials from "@/components/Testimonials"; // Add @/ prefix
 export default async function TripsArchivePage({ params }) {
   try {
     const { lang } = await params;
-    const validLang = ['ar', 'en'].includes(lang) ? lang : 'ar';
+    const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
     return (
       <>
         <TripsArchive lang={validLang} />

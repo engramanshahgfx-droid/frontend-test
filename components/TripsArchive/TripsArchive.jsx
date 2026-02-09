@@ -46,6 +46,23 @@ export default function TripsArchive({ lang }) {
       retry: "إعادة المحاولة",
       dateTBD: "قريباً",
     },
+    zh: {
+      heroTitle: "大自然的神奇，前所未见",
+      heroSubtitle: "从新视角探索沙特阿拉伯",
+      heroDescription: "让我们来规划... 您只管享受旅程",
+
+      sectionTitle: "我们之前的旅行",
+      sectionDescription:
+        "浏览我们与客户体验过的旅行集合，享受最美丽的旅游体验。",
+
+      viewDetails: "立即预订",
+      featured: "精选",
+      loadMoreText: "加载更多",
+      loadMoreQuestion: "想看更多旅行吗？",
+      errorFetchingTrips: "获取旅行失败。请重试。",
+      retry: "重试",
+      dateTBD: "日期待定",
+    },
   };
 
   const safeLang = lang && content[lang] ? lang : "ar";

@@ -51,9 +51,43 @@ export default function IslandDestinationslocal({ lang }) {
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
     },
+      zh: {
+    title: "探索独特目的地",
+    subtitle: "在沙特阿拉伯最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
+    viewDetails: "查看详情",
+    bookNow: "立即预订",
+  },
   };
 
   const t = labels[lang] || labels.en;
+
+  // Fallback data when backend is offline
+  const fallbackDestinations = [
+    {
+      id: 1,
+      slug: "farasan-islands",
+      title_en: "Farasan Islands",
+      title_ar: "جزر فرسان",
+      title_zh: "法拉桑岛",
+      description_en: "Pristine islands with crystal-clear waters",
+      description_ar: "جزر بكر مع مياه صافية جداً",
+      description_zh: "原始岛屿，水晶般清澈的海水",
+      image: "/placeholder.png",
+      type: "local"
+    },
+    {
+      id: 2,
+      slug: "karan-island",
+      title_en: "Karan Island",
+      title_ar: "جزيرة قران",
+      title_zh: "卡兰岛",
+      description_en: "Beautiful island destination with beaches",
+      description_ar: "وجهة جزيرة جميلة مع شواطئ",
+      description_zh: "美丽的岛屿目的地，有海滩",
+      image: "/placeholder.png",
+      type: "local"
+    }
+  ];
 
   // Safely parse JSON arrays from backend
   const parseList = (value) => {
@@ -77,15 +111,21 @@ export default function IslandDestinationslocal({ lang }) {
   const getText = (obj, field) => {
     // Handle title and name fields (both used in different parts)
     if (field === "title" && obj.title_en) {
-      return lang === "ar" ? obj.title_ar : obj.title_en;
+      if (lang === "zh") return obj.title_zh || obj.title_en;
+      if (lang === "ar") return obj.title_ar || obj.title_en;
+      return obj.title_en;
     }
     if (field === "name" && obj.name_en) {
-      return lang === "ar" ? obj.name_ar : obj.name_en;
+      if (lang === "zh") return obj.name_zh || obj.name_en;
+      if (lang === "ar") return obj.name_ar || obj.name_en;
+      return obj.name_en;
     }
 
-    // Fallback for all other fields
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || obj[field] || "";
+    // Fallback for all other fields with Chinese support
+    let fieldKey = `${field}_en`;
+    if (lang === "zh") fieldKey = `${field}_zh`;
+    else if (lang === "ar") fieldKey = `${field}_ar`;
+    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
   // Build a full image URL for destination images
@@ -104,7 +144,7 @@ export default function IslandDestinationslocal({ lang }) {
       setLoading(true);
       setError(null);
       try {
-        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/island-destinations/local`;
+        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/island-destinations?type=local`;
         console.debug('[IslandDestinationsLocal] Fetching from:', apiEndpoint);
         
         const res = await fetch(apiEndpoint, { 
@@ -131,26 +171,30 @@ export default function IslandDestinationslocal({ lang }) {
         const data = Array.isArray(json.data) ? json.data : [];
         console.debug('[IslandDestinationsLocal] Loaded destinations count:', data.length);
         
-        setDestinations(
-          data.map((d) => {
-            console.debug('[IslandDestinationsLocal] Destination loaded:', {id: d.id, slug: d.slug, title: d.title_en});
-            return {
-              ...d,
-              image: d.image || '/placeholder.png',
-            };
-          })
-        );
+        if (data.length > 0) {
+          setDestinations(
+            data.map((d) => {
+              console.debug('[IslandDestinationsLocal] Destination loaded:', {id: d.id, slug: d.slug, title: d.title_en});
+              return {
+                ...d,
+                image: d.image || '/placeholder.png',
+              };
+            })
+          );
+        } else {
+          // Use fallback if API returns empty
+          console.warn('[IslandDestinationsLocal] API returned empty data, using fallback');
+          setDestinations(fallbackDestinations);
+        }
         setLoading(false);
       } catch (err) {
         if (err.name !== 'AbortError') {
-          console.error('[IslandDestinationsLocal] Fetch error:', err.message, err);
+          console.error('[IslandDestinationsLocal] Fetch error:', err.message);
           
-          // Fallback: Show helpful error message with instructions
-          if (err.message.includes('Failed to fetch')) {
-            setError('⚠️ Cannot connect to backend. Is the server running on http://127.0.0.1:8000?');
-          } else {
-            setError(err.message || 'Error loading island destinations');
-          }
+          // Use fallback data when backend is offline
+          console.warn('[IslandDestinationsLocal] Backend offline, using fallback destinations');
+          setDestinations(fallbackDestinations);
+          setError(null); // Don't show error if we have fallback
           setLoading(false);
         }
       }

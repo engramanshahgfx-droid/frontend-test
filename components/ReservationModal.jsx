@@ -284,14 +284,16 @@ useEffect(() => {
   // global runtime error capture (helps reproduce the error inside the modal)
   useEffect(() => {
     const onError = (e) => {
-      const msg = e?.message || (e?.error && e.error.message) || (e?.reason && e.reason.message) || 'An error occurred';
-      console.error('[ReservationModal] runtime error', e);
+      // Try multiple sources for a human-friendly message
+      const msg = e?.message || (e?.error && e.error.message) || (e?.reason && e.reason.message) || (e?.detail && typeof e.detail === 'string' && e.detail) || 'An error occurred';
+      // Enhanced logging to capture non-enumerable properties and cross-origin errors
+      console.error('[ReservationModal] runtime error', e, { error: e?.error || null, reason: e?.reason || null, stack: e?.error?.stack || e?.stack || null });
       setRuntimeError(msg);
     };
 
     const onRejection = (e) => {
-      const msg = e?.reason?.message || JSON.stringify(e?.reason) || 'Unhandled promise rejection';
-      console.error('[ReservationModal] unhandledrejection', e);
+      const msg = e?.reason?.message || (typeof e?.reason === 'string' && e.reason) || JSON.stringify(e?.reason) || 'Unhandled promise rejection';
+      console.error('[ReservationModal] unhandledrejection', e, { reason: e?.reason });
       setRuntimeError(msg);
     };
 
@@ -389,7 +391,7 @@ useEffect(() => {
     }
   }, [isOpen, destination, bookingLocation]);
 
-  const content = {
+ const content = {
     en: {
       title: "Book Your Trip",
       steps: ["Booking Type", "Details", "Contact Info"],
@@ -569,14 +571,109 @@ useEffect(() => {
       submit: "إكمال الدفع",
       processing: "معالجة الدفع...",
       success: "تم إرسال طلب الحجز!",
-      successMessage: "سنتصل بك خلال 24 ساعة لتأكيد حجزك.",
+      successMessage: "سنتصل بك خلال 24 سلة لتأكيد حجزك.",
       close: "إغلاق",
       required: "* الحقول المطلوبة",
       guestOptions: ["١","٢","٣","٤","٥","٦","٧","٨","٩","١٠","١٠+"],
       validationError: "يرجى ملء جميع الحقول المطلوبة"
+    },
+    zh: {
+      title: "预订您的旅程",
+      steps: ["预订类型", "详细信息", "联系信息"],
+      
+      // Location selection
+      bookingLocation: "预订类型",
+      bookLocally: "活动",
+      bookInternationally: "国际旅行",
+      
+      // Local booking specific
+      selectRegion: "选择地区",
+      selectCity: "选择城市",
+      selectCountry: "选择国家",
+      selectDestination: "选择目的地",
+      chooseCountry: "选择一个国家",
+      chooseCity: "选择一个城市",
+      chooseDestination: "选择一个目的地",
+      loadingDestinations: "加载中...",
+      noDestinationsFound: "未找到目的地",
+      name: "姓名",
+      date: "日期",
+      localDestination: "具体位置",
+      entertainmentOptions: "娱乐选项",
+      folkloreOptions: "民俗文化表演",
+      localActivities: "活动",
+      seaTrips: "海上旅行",
+      foodBeverages: "食品和饮料",
+      hotDrinksLocal: "热饮",
+      otherOption: "其他（请具体说明）",
+      
+      // International booking
+      bookingTypeTitle: "您想预订什么？",
+      bookActivity: "活动和体验",
+      bookHotel: "酒店住宿",
+      bookFlight: "航班",
+      bookPackage: "完整套餐",
+      
+      activityTitle: "活动和体验",
+      numberOfGuests: "客人数量",
+      dates: "日期",
+      checkIn: "入住日期",
+      checkOut: "退房日期",
+      entertainment: "娱乐 🎶",
+      entertainmentPlaceholder: "首选的娱乐活动（音乐、表演等）",
+      culturalShow: "传统文化表演",
+      activities: "活动 🌍",
+      sightseeing: "观光",
+      culturalTours: "文化游览",
+      shopping: "购物",
+      
+      hotelTitle: "酒店住宿",
+      selectHotel: "选择酒店",
+      roomType: "房型",
+      roomCount: "房间数量",
+      amenities: "设施",
+      breakfastIncluded: "包含早餐",
+      freeWifi: "免费WiFi",
+      parking: "停车场",
+      swimmingPool: "游泳池",
+      
+      flightTitle: "航班预订",
+      flightFrom: "出发地",
+      flightTo: "目的地",
+      departureDate: "出发日期",
+      returnDate: "返回日期",
+      flightClass: "舱位等级",
+      economy: "经济舱",
+      business: "商务舱",
+      first: "头等舱",
+      passengers: "乘客",
+      selectFlight: "选择航班",
+      airline: "航空公司",
+      departure: "出发时间",
+      duration: "时长",
+      
+      phoneNumber: "电话号码",
+      email: "电子邮件地址",
+      destination: "目的地",
+      foodDrinks: "食品和饮料 🍽",
+      hotDrinks: "热饮（咖啡、茶）",
+      customDinner: "定制晚餐",
+      otherPreferences: "其他食物偏好",
+      otherPreferencesPlaceholder: "过敏、饮食限制等",
+      specialRequests: "特殊要求",
+      specialRequestsPlaceholder: "任何额外要求或备注...",
+      back: "返回",
+      next: "下一步",
+      submit: "完成支付",
+      processing: "处理支付中...",
+      success: "预订请求已发送！",
+      successMessage: "我们将在24小时内联系您确认您的预订。",
+      close: "关闭",
+      required: "* 必填字段",
+      guestOptions: ["1","2","3","4","5","6","7","8","9","10","10+"],
+      validationError: "请填写所有必填字段"
     }
   };
-
   const t = content[lang] || content.en;
 
   const handleInputChange = (e) => {

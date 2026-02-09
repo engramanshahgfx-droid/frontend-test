@@ -76,6 +76,41 @@ export default function AboutSaudi({ lang }) {
       },
       ctaTitle: "Ready to Explore the Kingdom?",
       ctaDescription: "Embark on an unforgettable journey through Saudi Arabia"
+    },
+    zh: {
+      heroTitle: "大自然的神奇，前所未见",
+      heroSubtitle: "关于沙特阿拉伯",
+      heroDescription: "从新视角探索王国",
+      
+      culture: {
+        title: "文化",
+        content: "沙特阿拉伯王国拥有丰富的遗产和古老的传统，曾在历史上作为主要商业中心，并见证了伊斯兰教的诞生。近年来，王国经历了重要的文化转型，发展了数个世纪的传统习俗以适应我们当代的时代。"
+      },
+      
+      language: {
+        title: "语言",
+        content: "阿拉伯语是沙特阿拉伯王国的官方语言，是公共事务和交易中使用的主要语言。英语被认为是王国的非官方第二语言，大部分人口都会说英语。所有道路标志都显示阿拉伯语和英语信息。"
+      },
+      
+      vision: {
+        title: "沙特2030年愿景",
+        content: "自沙特王储兼首相穆罕默德·本·萨勒曼·本·阿卜杜勒阿齐兹·阿勒沙特亲王殿下（愿真主保佑他）启动沙特2030年愿景以来，该愿景旨在多元化经济来源并减少对石油收入的依赖。从那时起，沙特阿拉伯王国一直经历着转型阶段，并在采矿、工业和物流等各种有前景的部门实现了日益增长，这些发展基于三个主要支柱：充满活力的社会、繁荣的经济和雄心勃勃的国家。"
+      },
+      
+      backButton: "返回首页",
+      exploreMore: "探索更多",
+      stats: {
+        regions: "地区",
+        population: "人口",
+        founded: "成立年份"
+      },
+      pillars: {
+        vibrant: "充满活力的社会",
+        thriving: "繁荣的经济",
+        ambitious: "雄心勃勃的国家"
+      },
+      ctaTitle: "准备好探索王国了吗？",
+      ctaDescription: "开启穿越沙特阿拉伯的难忘旅程"
     }
   };
 

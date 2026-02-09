@@ -1,0 +1,270 @@
+.languageSwitcher {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+}
+
+.switcherButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  /* Keep a subtle white border so the control is visible on dark backgrounds */
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  /* Force white text so the switcher is always visible */
+  color: #fff;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.switcherButton:hover {
+  /* Hover visual intentionally neutralized */
+  border-color: inherit;
+  background-color: transparent;
+}
+
+.switcherButton:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* When navbar is dark (scrolled) we want the language switcher text to be white */
+:global(.navbar.scrolled) .languageSwitcher .switcherButton {
+  color: #fff;
+  border-color: rgba(255,255,255,0.12);
+  background-color: transparent;
+}
+
+:global(.navbar.scrolled) .languageSwitcher .languageName {
+  color: #fff;
+}
+
+:global(.navbar.scrolled) .languageSwitcher .chevron {
+  color: #fff;
+}
+
+.flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 20px;
+}
+
+.flagImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 3px;
+}
+.languageName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #fff; /* always white */
+} 
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+  color: #fff; /* always white */
+}
+
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Styles */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 98;
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+  min-width: 200px;
+  animation: slideDown 0.2s ease;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #333;
+  transition: all 0.15s ease;
+  text-align: left;
+  font-family: inherit;
+}
+
+.dropdownItem:hover {
+  /* Remove hover background to avoid highlight on hover */
+  background-color: transparent;
+}
+
+.dropdownItem:focus {
+  outline: none;
+  background-color: #e8e8e8;
+}
+
+.langInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.langName {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.langNative {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Language code badge (EN / AR / ZH) shown next to flag in dropdown */
+.langCode {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #111;
+  margin-left: 0.6rem;
+  letter-spacing: 0.8px;
+}
+
+[dir="rtl"] .langCode {
+  margin-left: 0;
+  margin-right: 0.6rem;
+}
+
+/* Code shown on the main switcher button when in flag-only mode */
+.langCodeButton {
+  font-weight: 800;
+  font-size: 0.95rem;
+  margin-left: 0.5rem;
+  color: inherit;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* RTL Support (for Arabic) */
+[dir="rtl"] .switcherButton {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .dropdown {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .dropdownItem {
+  text-align: right;
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .langInfo {
+  align-items: flex-end;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+  .switcherButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .languageName {
+    display: none;
+  }
+
+  .dropdown {
+    min-width: 180px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .dropdownItem {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .flag {
+    font-size: 1.1rem;
+  }
+
+  .langName {
+    font-size: 0.8rem;
+  }
+
+  .langNative {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .switcherButton {
+    padding: 0.35rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .chevron {
+    display: none;
+  }
+
+  .dropdown {
+    min-width: 160px;
+  }
+}

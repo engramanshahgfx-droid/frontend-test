@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from 'react'; // Add this import
+import { useState, useEffect } from 'react';
 
 export default function WhyChooseUs({ lang }) {
   const router = useRouter();
@@ -38,6 +38,19 @@ export default function WhyChooseUs({ lang }) {
       ],
       cta: "اكتشف قصتنا",
     },
+    zh: {
+      title: "欢迎来到Tilal Rimal",
+      subtitle: "提供卓越的旅游体验",
+      description:
+        "我们以极具竞争力的价格提供高品质的旅游体验，将乐趣与宝贵见解相结合，为您创造难忘的回忆。我们充满热情的年轻团队精心策划和执行每一次旅行，确保为您留下终生的美好记忆。",
+      stats: [
+        { number: "500+", label: "快乐旅行者" },
+        { number: "50+", label: "目的地" },
+        { number: "98%", label: "满意度" },
+        { number: "5", label: "年经验" },
+      ],
+      cta: "了解我们的故事",
+    },
   };
 
   const t = content[lang] || content.en;
@@ -45,6 +58,8 @@ export default function WhyChooseUs({ lang }) {
   const handleExploreStory = () => {
     if (lang === "ar") {
       router.push("/ar/about-us");
+    } else if (lang === "zh") {
+      router.push("/zh/about-us");
     } else {
       router.push("/en/about-us");
     }
@@ -57,7 +72,7 @@ export default function WhyChooseUs({ lang }) {
     <section
       className="position-relative py-5"
       style={{
-        fontFamily: "'Tajawal', sans-serif",
+        fontFamily: lang === "ar" ? "'Tajawal', sans-serif" : lang === "zh" ? "'Noto Sans SC', sans-serif" : "'Inter', sans-serif",
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%)",
         color: "white",
         direction: lang === "ar" ? "rtl" : "ltr",
@@ -89,6 +104,7 @@ export default function WhyChooseUs({ lang }) {
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                   color: "#ffffff", // Fallback color
+                  fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "inherit",
                 }}
               >
                 {t.title}
@@ -98,8 +114,9 @@ export default function WhyChooseUs({ lang }) {
                 className="lead mb-5"
                 style={{
                   color: "#e0e0e0",
-                  lineHeight: "1.8",
-                  fontSize: "1.2rem",
+                  lineHeight: lang === "zh" ? "1.9" : "1.8",
+                  fontSize: lang === "zh" ? "1.15rem" : "1.2rem",
+                  fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "inherit",
                 }}
               >
                 {t.description}
@@ -111,7 +128,7 @@ export default function WhyChooseUs({ lang }) {
                   onClick={handleExploreStory}
                   className="btn btn-warning px-4 py-3 fw-bold"
                   style={{
-                    fontFamily: "'Tajawal', sans-serif",
+                    fontFamily: lang === "ar" ? "'Tajawal', sans-serif" : lang === "zh" ? "'Noto Sans SC', sans-serif" : "'Inter', sans-serif",
                     borderRadius: "12px",
                     fontSize: "1.1rem",
                     transition: "all 0.3s ease",
@@ -147,7 +164,7 @@ export default function WhyChooseUs({ lang }) {
                   <div
                     className="text-center p-4 rounded-3"
                     style={{
-                      fontFamily: "'Tajawal', sans-serif",
+                      fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "'Tajawal', sans-serif",
                       background: "rgba(255,255,255,0.05)",
                       border: "1px solid rgba(255,255,255,0.1)",
                       backdropFilter: "blur(10px)",
@@ -168,13 +185,13 @@ export default function WhyChooseUs({ lang }) {
                     <div
                       className="display-6 fw-bold mb-2"
                       style={{
-                        fontFamily: "'Tajawal', sans-serif",
+                        fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "'Tajawal', sans-serif",
                         background: "linear-gradient(135deg, #dfa528, #EFC8AE)",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",
-                        color: "#dfa528", // Fallback color
-                        minHeight: "60px", // Ensure consistent height
+                        color: "#dfa528",
+                        minHeight: "60px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
@@ -184,7 +201,10 @@ export default function WhyChooseUs({ lang }) {
                     </div>
                     <div
                       className="small fw-medium"
-                      style={{ color: "#cccccc" }}
+                      style={{ 
+                        color: "#cccccc",
+                        fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "inherit",
+                      }}
                     >
                       {stat.label}
                     </div>
@@ -197,4 +217,4 @@ export default function WhyChooseUs({ lang }) {
       </div>
     </section>
   );
-}
+} 

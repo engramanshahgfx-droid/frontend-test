@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Flag of Saudi Arabia">
+  <rect width="900" height="600" fill="#006c35"/>
+  <!-- Shahada text: rendered using default Arabic-capable fonts if available -->
+  <g transform="translate(80,260)">
+    <text x="0" y="0" fill="#fff" font-family="sans-serif" font-weight="700" font-size="42">لا إله إلا الله محمد رسول الله</text>
+  </g>
+  <!-- Stylized sword under the text -->
+  <g transform="translate(120,330) scale(1.6)" fill="#fff">
+    <rect x="0" y="0" width="520" height="12" rx="6"/>
+    <polygon points="520,6 540,0 540,12" />
+    <rect x="80" y="8" width="40" height="18" rx="4" />
+  </g>
+</svg>

@@ -65,7 +65,7 @@ export default function UnifiedBookingEntry({ isOpen, onClose, lang = 'en' }) {
 function TypeSelectionModal({ isOpen, onClose, onSelect, lang = 'en' }) {
   const isAr = lang === 'ar';
 
-  const translations = {
+const translations = {
     en: {
       title: 'How would you like to book?',
       subtitle: 'Choose the type of experience you\'re interested in',
@@ -83,6 +83,15 @@ function TypeSelectionModal({ isOpen, onClose, onSelect, lang = 'en' }) {
       local: 'أنشطة محلية',
       localDesc: 'استكشف الجاذبيات المحلية والترفيه والطعام',
       cancel: 'إلغاء',
+    },
+    zh: {
+      title: '您想如何预订？',
+      subtitle: '选择您感兴趣的体验类型',
+      international: '国际旅行',
+      internationalDesc: '预订航班、酒店、完整套餐等',
+      local: '本地活动',
+      localDesc: '探索当地景点、娱乐和美食',
+      cancel: '取消',
     },
   };
 

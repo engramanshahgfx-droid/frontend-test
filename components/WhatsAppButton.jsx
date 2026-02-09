@@ -6,7 +6,9 @@ const WhatsAppButton = ({ lang = "en" }) => {
   const phoneNumber = "+966547305060"; 
   const message = lang === "ar" 
     ? "مرحبا، أريد الاستفسار عن خدماتكم" 
-    : "Hello, I would like to inquire about your services";
+    : lang === "zh" 
+      ? "你好，我想咨询你们的服务" 
+      : "Hello, I would like to inquire about your services";
 
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
   
@@ -84,7 +86,7 @@ const WhatsAppButton = ({ lang = "en" }) => {
           handleClick();
         }
       }}
-      aria-label={lang === "ar" ? "زر واتساب" : "WhatsApp Button"}
+      aria-label={lang === "ar" ? "زر واتساب" : lang === "zh" ? "WhatsApp 按钮" : "WhatsApp Button"}
       style={{
         position: "fixed",
         bottom: `${bottom}px`,

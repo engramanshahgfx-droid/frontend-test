@@ -4,7 +4,7 @@ import InternationalContent from "@/components/international/InternationalConten
 export default async function International({ params }) {
   try {
     const { lang } = await params;
-    const validLang = ['ar', 'en'].includes(lang) ? lang : 'ar';
+    const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
     return <InternationalContent lang={validLang} />;
   } catch (error) {
     console.error('Error in International page:', error);
@@ -14,7 +14,7 @@ export default async function International({ params }) {
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
-  const validLang = ['ar', 'en'].includes(lang) ? lang : 'ar';
+  const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
   
   const metadata = {
     en: {
@@ -35,6 +35,17 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: "عروض وحزم سفر خاصة",
         description: "عروض محدودة الوقت مع خصومات مذهلة على حزم السفر",
+        type: "website",
+        images: ["/og-international.jpg"]
+      }
+    },
+    zh: {
+      title: "特别优惠与旅行套餐 | 旅行公司",
+      description: "发现令人惊叹的旅行优惠和套餐，享受难以置信的折扣。为您的下一次探险提供限时特别优惠。",
+      keywords: "旅行优惠, 套餐, 折扣, 沙特阿拉伯旅游, 特别优惠",
+      openGraph: {
+        title: "特别优惠与旅行套餐",
+        description: "对旅行套餐提供限时惊人折扣的特别优惠",
         type: "website",
         images: ["/og-international.jpg"]
       }

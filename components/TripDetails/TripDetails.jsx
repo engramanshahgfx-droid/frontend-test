@@ -79,6 +79,36 @@ export default function TripDetails({ lang, tripId }) {
           "الحضور في المعاد"
         ],
         image: "/trips/egyptian.jpg"
+      },
+      zh: {
+        title: "埃及之夜",
+        date: "2025年2月3日 – 下午5:00",
+        groupSize: "30人",
+        location: "吉达，阿尔戈拉",
+        duration: "7小时",
+        category: "音乐晚会",
+        schedule: [
+          "下午4:00 - 进入农场，在自然环境中享受晚间活动",
+          "下午5:00 - 建国日游行",
+          "下午6:30 – 8:30 - 进入农场，在自然环境中享受晚间活动",
+          "每半小时彩色表演",
+          "传统男子民俗乐队（7种颜色）",
+          "女子民俗乐队",
+          "传统待客之道和建国日分发活动",
+          "骑马或骑骆驼",
+          "饮品"
+        ],
+        additionalServices: [
+          "传统食物",
+          "农场厨房晚餐",
+          "爆米花、甜玉米、冰淇淋",
+          "特色饮品"
+        ],
+        importantNotes: [
+          "遵守沙特阿拉伯正式着装规定",
+          "准时到达"
+        ],
+        image: "/trips/egyptian.jpg"
       }
     },
     "2": {
@@ -125,20 +155,134 @@ export default function TripDetails({ lang, tripId }) {
           "معدات السباحة مطلوبة"
         ],
         image: "/trips/jeddah.jpg"
+      },
+      zh: {
+        title: "吉达冬季",
+        date: "2024年1月15日 – 下午4:00",
+        groupSize: "25人",
+        location: "吉达，滨海路",
+        duration: "2天",
+        category: "冬季活动",
+        schedule: [
+          "第1天：冬季活动和夜间活动",
+          "第2天：海洋氛围和娱乐"
+        ],
+        additionalServices: [
+          "冬季装备租赁",
+          "热饮",
+          "传统食物"
+        ],
+        importantNotes: [
+          "建议穿着保暖衣物",
+          "需要游泳装备"
+        ],
+        image: "/trips/jeddah.jpg"
       }
     }
     // Add more trips as needed
   };
 
-  const safeLang = lang && ['ar', 'en'].includes(lang) ? lang : 'ar';
+  const safeLang = lang && ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
   const isRTL = safeLang === 'ar';
   
   // Get trip data based on ID, fallback to first trip if not found
   const trip = tripData[tripId]?.[safeLang] || tripData["1"][safeLang];
 
+  // Helper function to get back button text based on language
+  const getBackButtonText = () => {
+    switch(safeLang) {
+      case 'ar': return "العودة";
+      case 'zh': return "返回";
+      default: return "Back";
+    }
+  };
+
+  // Helper function to get booking title based on language
+  const getBookingTitle = () => {
+    switch(safeLang) {
+      case 'ar': return "احجز رحلتك";
+      case 'zh': return "预订行程";
+      default: return "Book Your Trip";
+    }
+  };
+
+  // Helper function to get price label based on language
+  const getPriceLabel = () => {
+    switch(safeLang) {
+      case 'ar': return "السعر:";
+      case 'zh': return "价格:";
+      default: return "Price:";
+    }
+  };
+
+  // Helper function to get booking info text based on language
+  const getBookingInfo = () => {
+    switch(safeLang) {
+      case 'ar': return "للاستفسارات: ٠٥٠١٢٣٤٥٦٧";
+      case 'zh': return "咨询电话: 0501234567";
+      default: return "For inquiries: 0501234567";
+    }
+  };
+
+  // Helper function to get schedule title based on language
+  const getScheduleTitle = () => {
+    switch(safeLang) {
+      case 'ar': return "جدول الرحلة";
+      case 'zh': return "行程安排";
+      default: return "Trip Schedule";
+    }
+  };
+
+  // Helper function to get services title based on language
+  const getServicesTitle = () => {
+    switch(safeLang) {
+      case 'ar': return "خدمات إضافية";
+      case 'zh': return "额外服务";
+      default: return "Additional Services";
+    }
+  };
+
+  // Helper function to get notes title based on language
+  const getNotesTitle = () => {
+    switch(safeLang) {
+      case 'ar': return "ملاحظات هامة";
+      case 'zh': return "重要提示";
+      default: return "Important Notes";
+    }
+  };
+
+  // Helper function to get info card titles based on language
+  const getInfoCardTitles = () => {
+    switch(safeLang) {
+      case 'ar': 
+        return {
+          date: "التوقيت",
+          groupSize: "عدد المجموعة",
+          location: "موقع الرحلة",
+          duration: "مدة الرحلة"
+        };
+      case 'zh':
+        return {
+          date: "日期时间",
+          groupSize: "团体人数",
+          location: "行程地点",
+          duration: "行程时长"
+        };
+      default:
+        return {
+          date: "Date & Time",
+          groupSize: "Group Size",
+          location: "Trip Location",
+          duration: "Trip Duration"
+        };
+    }
+  };
+
   const goBack = () => {
     router.back();
   };
+
+  const infoCardTitles = getInfoCardTitles();
 
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="trip-details-page">
@@ -147,7 +291,7 @@ export default function TripDetails({ lang, tripId }) {
         <div className="container">
           <button onClick={goBack} className="back-btn">
             <FaArrowLeft className={isRTL ? "ms-2" : "me-2"} />
-            {isRTL ? "العودة" : "Back"}
+            {getBackButtonText()}
           </button>
         </div>
       </div>
@@ -173,7 +317,7 @@ export default function TripDetails({ lang, tripId }) {
                 <div className="info-card">
                   <FaCalendar className="info-icon" />
                   <div className="info-content">
-                    <h6>{isRTL ? "التوقيت" : "Date & Time"}</h6>
+                    <h6>{infoCardTitles.date}</h6>
                     <p>{trip.date}</p>
                   </div>
                 </div>
@@ -182,7 +326,7 @@ export default function TripDetails({ lang, tripId }) {
                 <div className="info-card">
                   <FaUsers className="info-icon" />
                   <div className="info-content">
-                    <h6>{isRTL ? "عدد المجموعة" : "Group Size"}</h6>
+                    <h6>{infoCardTitles.groupSize}</h6>
                     <p>{trip.groupSize}</p>
                   </div>
                 </div>
@@ -191,7 +335,7 @@ export default function TripDetails({ lang, tripId }) {
                 <div className="info-card">
                   <FaMapMarkerAlt className="info-icon" />
                   <div className="info-content">
-                    <h6>{isRTL ? "موقع الرحلة" : "Trip Location"}</h6>
+                    <h6>{infoCardTitles.location}</h6>
                     <p>{trip.location}</p>
                   </div>
                 </div>
@@ -200,7 +344,7 @@ export default function TripDetails({ lang, tripId }) {
                 <div className="info-card">
                   <FaClock className="info-icon" />
                   <div className="info-content">
-                    <h6>{isRTL ? "مدة الرحلة" : "Trip Duration"}</h6>
+                    <h6>{infoCardTitles.duration}</h6>
                     <p>{trip.duration}</p>
                   </div>
                 </div>
@@ -216,7 +360,7 @@ export default function TripDetails({ lang, tripId }) {
             {/* Schedule */}
             <div className="section-card mb-4">
               <h3 className="section-title">
-                {isRTL ? "جدول الرحلة" : "Trip Schedule"}
+                {getScheduleTitle()}
               </h3>
               <ul className="schedule-list">
                 {trip.schedule.map((item, index) => (
@@ -230,7 +374,7 @@ export default function TripDetails({ lang, tripId }) {
             {/* Additional Services */}
             <div className="section-card mb-4">
               <h3 className="section-title">
-                {isRTL ? "خدمات إضافية" : "Additional Services"}
+                {getServicesTitle()}
               </h3>
               <ul className="services-list">
                 {trip.additionalServices.map((service, index) => (
@@ -244,7 +388,7 @@ export default function TripDetails({ lang, tripId }) {
             {/* Important Notes */}
             <div className="section-card">
               <h3 className="section-title text-warning">
-                {isRTL ? "ملاحظات هامة" : "Important Notes"}
+                {getNotesTitle()}
               </h3>
               <ul className="notes-list">
                 {trip.importantNotes.map((note, index) => (
@@ -260,34 +404,32 @@ export default function TripDetails({ lang, tripId }) {
           <div className="col-lg-4">
             <div className="booking-card">
               <h4 className="booking-title">
-                {isRTL ? "احجز رحلتك" : "Book Your Trip"}
+                {getBookingTitle()}
               </h4>
               <div className="price-section">
                 <span className="price-label">
-                  {isRTL ? "السعر:" : "Price:"}
+                  {getPriceLabel()}
                 </span>
                 <span className="price-amount">
-                  {isRTL ? "٣٥٠ ر.س" : "350 SAR"}
+                  {safeLang === 'ar' ? "٣٥٠ ر.س" : safeLang === 'zh' ? "350 沙特里亚尔" : "350 SAR"}
                 </span>
               </div>
               <button
                 className="book-btn"
                 onClick={() => openBookingOrAuth({ title: trip.title, amount: 350, slug: tripId })}
               >
-                {isRTL ? "احجز الآن" : "Book Now"}
+                {safeLang === 'ar' ? "احجز الآن" : safeLang === 'zh' ? "立即预订" : "Book Now"}
               </button>
               <div className="booking-info">
                 <p>
-                  {isRTL 
-                    ? "للاستفسارات: ٠٥٠١٢٣٤٥٦٧" 
-                    : "For inquiries: 0501234567"
-                  }
+                  {getBookingInfo()}
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+  
 
       <style jsx>{`
         .trip-details-page {

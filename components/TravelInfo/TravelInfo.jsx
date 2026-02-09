@@ -301,6 +301,134 @@ export default function TravelInfo({ lang }) {
         "Our team is available to answer all your questions and provide advice for your trip",
       contactButton: "Contact Us Now",
     },
+
+    zh: {
+    heroTitle: "从未见过的自然魅力",
+    heroSubtitle: "从全新视角探索沙特阿拉伯",
+    heroDescription: "让我们来规划...您享受旅程",
+
+    sectionTitle: "您访问期间的重要信息",
+    sectionDescription: "访问沙特阿拉伯是享受其正宗遗产、热情好客和壮丽景色的绝佳机会。为帮助您轻松愉快地探索王国，我们收集了一些在交通、购物和与居民交流时有用的信息。",
+
+    seasonsTitle: "沙特阿拉伯的季节",
+    seasonsSubtitle: "何时计划访问王国？",
+
+    seasons: [
+      {
+        id: 1,
+        name: "夏季",
+        icon: <FaSun size={40} />,
+        image: "/summer.png",
+        video: "/summer-saudi.mp4",
+        description: "王国的夏季是享受游泳、探索沙特海域深处众多迷人潜水点以及体验浮潜、帆船等的理想时间。要享受凉爽的夏日氛围，建议参观塔伊夫山或在达曼附近的海湾水域放松。",
+        activities: [
+          "游泳",
+          "潜水",
+          "帆船",
+          "参观塔伊夫山",
+          "在海湾放松"
+        ],
+      },
+      {
+        id: 2,
+        name: "冬季",
+        icon: <FaSnowflake size={40} />,
+        image: "/winter1.png",
+        video: "/winter-saudi.mp4",
+        description: "沙特阿拉伯的冬季白天温和，夜晚寒冷，是露营、攀岩或探索充满活力的沙特城市的理想时间。欧拉被认为是重要的冬季目的地之一，因为它拥有迷人的考古遗址如古墓，访问北部地区和艾西尔地区时还可以欣赏雪景。",
+        activities: [
+          "露营",
+          "攀岩",
+          "探索欧拉",
+          "观赏雪景",
+          "考古参观"
+        ],
+      },
+      {
+        id: 3,
+        name: "春季",
+        icon: <FaSeedling size={40} />,
+        image: "/spring1.png",
+        video: "/spring-saud.mp4",
+        description: "王国的春季氛围因地区而异。北部天气偏凉（夜间温度降至15°C），中部和南部地区温暖，艾西尔山区高地多雨。在利雅得，天气温和，适合散步和沙丘越野等户外活动。",
+        activities: [
+          "散步",
+          "沙丘越野",
+          "参观北部",
+          "探索艾西尔",
+          "户外活动"
+        ],
+      },
+      {
+        id: 4,
+        name: "秋季",
+        icon: <FaLeaf size={40} />,
+        image: "/autumn1.png",
+        video: "/autumn-saudi.mp4",
+        description: "秋季天气在沙特阿拉伯北部和西南部高地寒冷宜人，而白天气温保持温暖，早秋可达30多度。夜晚更为温和，适合散步、户外用餐或在艾赫萨的沙漠泉水中放松，无论是清凉的还是温暖的泉水。",
+        activities: [
+          "散步",
+          "户外用餐",
+          "艾赫萨泉水",
+          "参观北部",
+          "放松休息"
+        ],
+      },
+    ],
+
+    paymentTitle: "支付方式和金融服务",
+    currencyTitle: "沙特货币",
+    currencyDescription: "沙特阿拉伯王国的国家货币是沙特里亚尔（SAR），由100个哈拉拉组成。沙特里亚尔以固定汇率与美元挂钩。",
+
+    paymentMethods: [
+      {
+        title: "现金支付",
+        description: "沙特里亚尔是王国全境接受的官方货币。您可以在机场、银行和遍布各地的兑换处兑换货币。",
+        icon: <FaCreditCard size={30} />,
+        image: "/cash.png",
+      },
+      {
+        title: "信用卡",
+        description: "大多数商店、酒店和餐厅接受Visa、Mastercard、American Express等国际卡。Apple Pay和Samsung Pay也受支持。",
+        icon: <FaCreditCard size={30} />,
+        image: "/payment.png",
+      },
+      {
+        title: "自动取款机",
+        description: "ATM机遍布沙特各城市。使用谷歌地图查找离您最近的ATM机。",
+        icon: <FaMapMarkerAlt size={30} />,
+        image: "/atm.png",
+      },
+      {
+        title: "移动支付应用",
+        description: "STC Pay和Mada Pay等应用可在许多商店和餐厅进行电子支付。",
+        icon: <FaPhone size={30} />,
+        image: "/pay.png",
+      },
+    ],
+
+    healthcareTitle: "您可能关心的信息",
+    healthcareSubtitle: "王国的医疗保健服务",
+
+    healthcareInfo: [
+      {
+        question: "如果您需要在沙特阿拉伯看医生怎么办？",
+        answer: "如果需要医疗帮助，您可以访问任何医院、诊所或医疗中心，因为其中许多都有英语工作人员。您也可以联系您的大使馆寻求帮助，并确保您的旅行保险涵盖医疗费用。",
+        icon: <FaHospital size={30} />,
+        image: "/doctor.jpg",
+      },
+      {
+        question: "在沙特阿拉伯哪里可以购买药品？",
+        answer: "常见药品如止痛药、止咳糖浆和抗过敏药可以在大多数药店（覆盖沙特阿拉伯所有地区和社区）无需处方购买，但更有效的药物可能需要处方。",
+        icon: <FaPhone size={30} />,
+        image: "/pharmacy.jpg",
+      },
+    ],
+
+    contactTitle: "您还有其他问题吗？",
+    contactDescription: "我们的团队随时为您解答所有问题并为您的旅程提供建议",
+    contactButton: "立即联系我们",
+  }
   };
 
   const t = content[lang] || content.ar;

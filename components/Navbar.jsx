@@ -6,6 +6,9 @@ import { usePathname, useRouter } from "next/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuth } from "../providers/AuthProvider";
 import { useUI } from "../providers/UIProvider";
+import en from "@/public/locales/en/common.json";
+import ar from "@/public/locales/ar/common.json";
+import zh from "@/public/locales/zh/common.json";
 import {
   FaWhatsapp,
   FaTimes,
@@ -82,29 +85,31 @@ export default function Navbar({ lang }) {
     return pathname === `/${lang}${href}`;
   };
 
+  // Simple translation helper using locale JSONs
+  const translations = { en, ar, zh };
+  const t = (key) => {
+    const keys = key.split('.');
+    let v = translations[lang] || translations.en;
+    for (const k of keys) {
+      if (v && typeof v === 'object' && k in v) v = v[k];
+      else return key;
+    }
+    return typeof v === 'string' ? v : key;
+  };
+
+  // Fallback helper for dropdown data objects that may not include all locales (e.g., zh)
+  const localize = (obj) => {
+    if (!obj) return "";
+    return obj[lang] || obj.en || obj.ar || Object.values(obj)[0] || "";
+  };
+
   const menuItems = [
-    { href: "/", label: lang === "ar" ? "الرئيسية" : "Home" },
-    {
-      href: "/about-us",
-      label: lang === "ar" ? "من نحن" : "About Us",
-    },
-    {
-      href: "/international",
-      label: lang === "ar" ? " العروض الدولية" : "International offers",
-      dropdown: false,
-      type: "international",
-    },
-    { href: "/offers", label: lang === "ar" ? "العروض المحلية" : "Domestic offers" },
-    {
-      href: "/trips-archive",
-      label: lang === "ar" ? "أرشيف الرحلات" : "Trips Archive",
-    },
-    {
-      href: "/basic",
-      label: lang === "ar" ? " متطلبات السفر" : "Travel Requirements",
-      dropdown: true,
-      type: "basic",
-    },
+    { href: "/", label: t('nav.home') },
+    { href: "/about-us", label: t('nav.about') },
+    { href: "/international", label: t('nav.international'), dropdown: false, type: "international" },
+    { href: "/offers", label: t('nav.offers') },
+    { href: "/trips-archive", label: t('nav.trips') },
+    { href: "/basic", label: t('nav.travelRequirements'), dropdown: true, type: "basic" },
   ];
 
   const internationalData = [
@@ -194,14 +199,13 @@ export default function Navbar({ lang }) {
     switch (type) {
       case "basic":
         return {
-          title: lang === "ar" ? "أساسيات السفر" : "Travel basic",
-          subtitle: lang === "ar" ? "استعد لرحلتك" : "Prepare for your journey",
+          title: t('navbar.basic.title'),
+          subtitle: t('navbar.basic.subtitle'),
         };
       case "international":
         return {
-          title: lang === "ar" ? " العروض الدولية" : "International offers",
-          subtitle:
-            lang === "ar" ? "خدمات السفر العالمية" : "Global travel services",
+          title: t('navbar.international.title'),
+          subtitle: t('navbar.international.subtitle'),
         };
       default:
         return { title: "", subtitle: "" };
@@ -210,7 +214,7 @@ export default function Navbar({ lang }) {
 
   const handleBookCTA = () => {
     // alert("clicked"); // uncomment for manual click test
-    openBookingOrAuth({ title: lang === "ar" ? "حجز رحلة" : "Book a Trip", amount: 0 });
+    openBookingOrAuth({ title: t('buttons.bookNow'), amount: 0 });
   };
 
   const handleLogout = async () => {
@@ -244,7 +248,7 @@ export default function Navbar({ lang }) {
           <div className="d-lg-none d-flex align-items-center gap-3">
             <LanguageSwitcher
               lang={lang}
-              displayText={lang === "ar" ? "EN" : "ع"}
+              showFlagOnly
             />
 
             {/* Mobile Toggler */}
@@ -317,8 +321,8 @@ export default function Navbar({ lang }) {
                                       {data.icon}
                                     </div>
                                     <div className="service-content">
-                                      <h6>{data.title[lang]}</h6>
-                                      <p>{data.description[lang]}</p>
+                                      <h6>{localize(data.title)}</h6>
+                                      <p>{localize(data.description)}</p>
                                     </div>
                                   </Link>
                                 )
@@ -347,13 +351,13 @@ export default function Navbar({ lang }) {
             <div className="d-flex align-items-center ms-4 gap-3">
               <LanguageSwitcher
                 lang={lang}
-                displayText={lang === "ar" ? "EN" : "ع"}
+                showFlagOnly
               />
               {/* <button
                 className="btn btn-book d-flex align-items-center gap-2"
                 onClick={handleBookCTA}
               >
-                <FaWhatsapp /> {lang === "ar" ? "احجز رحلتك" : "Book Now"}
+                <FaWhatsapp /> {t('buttons.bookNow')
               </button> */}
 
               {isAuthenticated ? (
@@ -365,19 +369,19 @@ export default function Navbar({ lang }) {
                     aria-expanded={userMenuOpen}
                   >
                     <FaUserCircle size={20} />
-                    <span className="user-name">{user?.name || (lang === "ar" ? "حسابي" : "Account")}</span>
+                    <span className="user-name">{user?.name || t('general.account')}</span>
                     {userMenuOpen ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
                   </button>
                   {userMenuOpen && (
                     <div className="user-dropdown">
                       <Link href={`/${lang}/dashboard`} className="user-link" onClick={() => setUserMenuOpen(false)}>
-                        <FaUser size={14} /> {lang === "ar" ? "لوحة التحكم" : "Dashboard"}
+                        <FaUser size={14} /> {t('nav.dashboard')}
                       </Link>
                       <Link href={`/${lang}/dashboard?tab=bookings`} className="user-link" onClick={() => setUserMenuOpen(false)}>
-                        <FaWhatsapp size={14} /> {lang === "ar" ? "حجوزاتي" : "My Bookings"}
+                        <FaWhatsapp size={14} /> {t('nav.bookings')}
                       </Link>
                       <button className="user-link logout" onClick={handleLogout}>
-                        <FaSignOutAlt size={14} /> {lang === "ar" ? "تسجيل الخروج" : "Logout"}
+                        <FaSignOutAlt size={14} /> {t('buttons.logout')}
                       </button>
                     </div>
                   )}
@@ -459,10 +463,10 @@ export default function Navbar({ lang }) {
                           </span>
                           <div>
                             <div className="service-title">
-                              {data.title[lang]}
+                              {localize(data.title)}
                             </div>
                             <div className="service-desc">
-                              {data.description[lang]}
+                              {localize(data.description)}
                             </div>
                           </div>
                         </Link>
@@ -677,6 +681,35 @@ export default function Navbar({ lang }) {
         .dropdown-item:hover {
           background: rgba(138, 119, 121, 0.05);
           border-color: var(--secondary-color);
+          transform: translateY(-2px);
+        }
+
+        /* When navbar is scrolled (dark header) make dropdown dark to match */
+        .navbar.scrolled .dropdown-menu {
+          background: linear-gradient(180deg, rgba(12,12,12,0.96), rgba(28,28,36,0.96));
+          border-color: rgba(255,255,255,0.06);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .navbar.scrolled .dropdown-header h6 {
+          color: var(--light-color);
+        }
+
+        .navbar.scrolled .dropdown-header p {
+          color: rgba(255,255,255,0.85);
+        }
+
+        .navbar.scrolled .service-content h6 {
+          color: var(--light-color);
+        }
+
+        .navbar.scrolled .service-content p {
+          color: rgba(255,255,255,0.75);
+        }
+
+        .navbar.scrolled .dropdown-item:hover {
+          background: rgba(255,255,255,0.03);
+          border-color: rgba(255,255,255,0.06);
           transform: translateY(-2px);
         }
 

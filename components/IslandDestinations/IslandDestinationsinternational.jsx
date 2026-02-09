@@ -43,9 +43,43 @@ export default function IslandDestinationsinternational({ lang }) {
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
     },
+    zh: {
+    title: "探索世界",
+    subtitle: "在世界最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
+    viewDetails: "查看详情",
+    bookNow: "立即预订",
+  },
   };
 
   const t = labels[lang] || labels.en;
+
+  // Fallback data when backend is offline
+  const fallbackDestinations = [
+    {
+      id: 1,
+      slug: "maldives",
+      title_en: "Maldives",
+      title_ar: "المالديف",
+      title_zh: "马尔代夫",
+      description_en: "Paradise islands with turquoise waters",
+      description_ar: "جزر الجنة بمياه فيروزية",
+      description_zh: "天堂岛屿，有绿松石色的海水",
+      image: "/placeholder.png",
+      type: "international"
+    },
+    {
+      id: 2,
+      slug: "bali",
+      title_en: "Bali",
+      title_ar: "بالي",
+      title_zh: "巴厘岛",
+      description_en: "Exotic island with culture and nature",
+      description_ar: "جزيرة غريبة بالثقافة والطبيعة",
+      description_zh: "有文化和自然的异国岛屿",
+      image: "/placeholder.png",
+      type: "international"
+    }
+  ];
 
   // Safely parse JSON arrays from backend
   const parseList = (value) => {
@@ -69,15 +103,21 @@ export default function IslandDestinationsinternational({ lang }) {
   const getText = (obj, field) => {
     // Handle title and name fields (both used in different parts)
     if (field === "title" && obj.title_en) {
-      return lang === "ar" ? obj.title_ar : obj.title_en;
+      if (lang === "zh") return obj.title_zh || obj.title_en;
+      if (lang === "ar") return obj.title_ar || obj.title_en;
+      return obj.title_en;
     }
     if (field === "name" && obj.name_en) {
-      return lang === "ar" ? obj.name_ar : obj.name_en;
+      if (lang === "zh") return obj.name_zh || obj.name_en;
+      if (lang === "ar") return obj.name_ar || obj.name_en;
+      return obj.name_en;
     }
 
-    // Fallback for all other fields
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || obj[field] || "";
+    // Fallback for all other fields with Chinese support
+    let fieldKey = `${field}_en`;
+    if (lang === "zh") fieldKey = `${field}_zh`;
+    else if (lang === "ar") fieldKey = `${field}_ar`;
+    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
   // Build a full image URL for destination images
@@ -98,25 +138,56 @@ export default function IslandDestinationsinternational({ lang }) {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${API_URL.replace(/\/$/, '')}/island-destinations?type=international`, { signal: controller.signal });
+        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/island-destinations?type=international`;
+        console.debug('[IslandDestinationsInternational] Fetching from:', apiEndpoint);
+        
+        const res = await fetch(apiEndpoint, { 
+          signal: controller.signal,
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        });
+        console.debug('[IslandDestinationsInternational] Response status:', res.status);
+        
         const json = await res.json();
-        if (!res.ok || !json?.success) {
+        console.debug('[IslandDestinationsInternational] Response data:', json);
+        
+        if (!res.ok) {
+          throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
+        }
+        
+        if (!json?.success) {
           throw new Error(json?.message || 'Failed to fetch destinations');
         }
+        
         const data = Array.isArray(json.data) ? json.data : [];
-        setDestinations(
-          data.map((d) => ({
-            ...d,
-            image: d.image || '/placeholder.png',
-          }))
-        );
+        console.debug('[IslandDestinationsInternational] Loaded destinations count:', data.length);
+        
+        if (data.length > 0) {
+          setDestinations(
+            data.map((d) => ({
+              ...d,
+              image: d.image || '/placeholder.png',
+            }))
+          );
+        } else {
+          // Use fallback if API returns empty
+          console.warn('[IslandDestinationsInternational] API returned empty data, using fallback');
+          setDestinations(fallbackDestinations);
+        }
+        setLoading(false);
       } catch (err) {
         if (err.name !== 'AbortError') {
-          console.error('[IslandDestinationsInternational] fetch error', err);
-          setError(err.message || 'Error loading island destinations');
+          console.error('[IslandDestinationsInternational] Fetch error:', err.message);
+          
+          // Use fallback data when backend is offline
+          console.warn('[IslandDestinationsInternational] Backend offline, using fallback destinations');
+          setDestinations(fallbackDestinations);
+          setError(null); // Don't show error if we have fallback
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
       }
     };
 

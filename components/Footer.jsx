@@ -11,6 +11,9 @@ import {
   FaPhone,
   FaEnvelope,
 } from "react-icons/fa";
+import en from "@/public/locales/en/common.json";
+import ar from "@/public/locales/ar/common.json";
+import zh from "@/public/locales/zh/common.json";
 
 export default function Footer({ lang }) {
   const pathname = usePathname();
@@ -74,9 +77,59 @@ export default function Footer({ lang }) {
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
 
-  const t = lang === "ar" ? arabicText : englishText;
+  const chineseText = {
+    companyName: "Tilal R",
+    description:
+      "旅游行程组织 - 我们提供结合乐趣、冒险和有意义价值的独特旅行，遍及整个王国。",
+    companyTitle: "公司",
+    contactTitle: "联系我们",
+    legalTitle: "法律条款",
+    links: {
+      home: "首页",
+      about: "关于我们",
+      international: "国际优惠",
+      offers: "国内优惠",
+      archive: "行程存档",
+      basics: "旅行要求",
+    },
+    legal: {
+      terms: "条款与条件",
+    },
+    rightsReserved: "保留所有权利。",
+    address: "吉达，沙特阿拉伯",
+    phone: "966547305060",
+    email: "Info@tilalr.com",
+    website: "tilalr.com",
+    googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
+  };
+
+  // Get the appropriate text based on language
+  let localeText;
+  switch(lang) {
+    case "ar":
+      localeText = arabicText;
+      break;
+    case "zh":
+      localeText = chineseText;
+      break;
+    default:
+      localeText = englishText;
+  }
+
   const isRTL = lang === "ar";
 
+  // Translation helper for localized strings (from JSON files)
+  const translations = { en, ar, zh };
+  const tr = (key) => {
+    const keys = key.split('.');
+    let v = translations[lang] || translations.en;
+    for (const k of keys) {
+      if (v && typeof v === 'object' && k in v) v = v[k];
+      else return key;
+    }
+    return typeof v === 'string' ? v : key;
+  };
+  
   return (
     <footer
       className="footer lh-lg"
@@ -100,7 +153,7 @@ export default function Footer({ lang }) {
             <Link href={`/${lang}`}>
               <img
                 src="/logo.png"
-                alt={`${t.companyName} logo`}
+                alt={`${localeText.companyName} logo`}
                 style={{
                   width: "140px",
                   height: "auto",
@@ -113,12 +166,10 @@ export default function Footer({ lang }) {
               style={{ fontSize: "14px", color: "#e0e0e0", lineHeight: "1.4" }}
             >
               <span className="fw-bold" style={{ color: "#dfa528" }}>
-                {t.companyName}
+                {localeText.companyName}
               </span>{" "}
-              — {t.description}
+              — {localeText.description}
             </p>
-
-            {/* Contact Information - FIXED RTL */}
             <div className="mt-2">
               <div
                 className={`d-flex align-items-center mb-1 ${
@@ -128,7 +179,7 @@ export default function Footer({ lang }) {
                 {isRTL ? (
                   <>
                     <a
-                      href={t.googleMapsUrl}
+                      href={localeText.googleMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-decoration-none ms-1"
@@ -139,7 +190,7 @@ export default function Footer({ lang }) {
                         flex: 1,
                       }}
                     >
-                      {t.address}
+                      {localeText.address}
                     </a>
                     <FaMapMarkerAlt
                       size={12}
@@ -154,13 +205,13 @@ export default function Footer({ lang }) {
                       style={{ color: "#dfa528", flexShrink: 0 }}
                     />
                     <a
-                      href={t.googleMapsUrl}
+                      href={localeText.googleMapsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-decoration-none"
                       style={{ fontSize: "12px", color: "#e0e0e0" }}
                     >
-                      {t.address}
+                      {localeText.address}
                     </a>
                   </>
                 )}
@@ -174,7 +225,7 @@ export default function Footer({ lang }) {
                 {isRTL ? (
                   <>
                     <a
-                      href={`tel:${t.phone}`}
+                      href={`tel:${localeText.phone}`}
                       className="text-decoration-none ms-1"
                       style={{
                         fontSize: "12px",
@@ -183,7 +234,7 @@ export default function Footer({ lang }) {
                         flex: 1,
                       }}
                     >
-                      {t.phone}
+                      {localeText.phone}
                     </a>
                     <FaPhone
                       size={12}
@@ -198,11 +249,11 @@ export default function Footer({ lang }) {
                       style={{ color: "#dfa528", flexShrink: 0 }}
                     />
                     <a
-                      href={`tel:${t.phone}`}
+                      href={`tel:${localeText.phone}`}
                       className="text-decoration-none"
                       style={{ fontSize: "12px", color: "#e0e0e0" }}
                     >
-                      {t.phone}
+                      {localeText.phone}
                     </a>
                   </>
                 )}
@@ -216,7 +267,7 @@ export default function Footer({ lang }) {
                 {isRTL ? (
                   <>
                     <a
-                      href={`mailto:${t.email}`}
+                      href={`mailto:${localeText.email}`}
                       className="text-decoration-none ms-1"
                       style={{
                         fontSize: "12px",
@@ -225,7 +276,7 @@ export default function Footer({ lang }) {
                         flex: 1,
                       }}
                     >
-                      {t.email}
+                      {localeText.email}
                     </a>
                     <FaEnvelope
                       size={12}
@@ -240,11 +291,11 @@ export default function Footer({ lang }) {
                       style={{ color: "#dfa528", flexShrink: 0 }}
                     />
                     <a
-                      href={`mailto:${t.email}`}
+                      href={`mailto:${localeText.email}`}
                       className="text-decoration-none"
                       style={{ fontSize: "12px", color: "#e0e0e0" }}
                     >
-                      {t.email}
+                      {localeText.email}
                     </a>
                   </>
                 )}
@@ -306,7 +357,7 @@ export default function Footer({ lang }) {
                 fontSize: "0.95rem",
               }}
             >
-              {t.companyTitle}
+              {localeText.companyTitle}
             </h6>
             <div className="d-flex flex-column">
               <div className="mb-1">
@@ -314,7 +365,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.home}
+                  {localeText.links.home}
                 </Link>
               </div>
               <div className="mb-1">
@@ -322,7 +373,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}/about-us`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.about}
+                  {localeText.links.about}
                 </Link>
               </div>
               <div className="mb-1">
@@ -330,7 +381,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}/international`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.international}
+                  {localeText.links.international}
                 </Link>
               </div>
               <div className="mb-1">
@@ -338,7 +389,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}/offers`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.offers}
+                  {localeText.links.offers}
                 </Link>
               </div>
               <div className="mb-1">
@@ -346,7 +397,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}/trips-archive`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.archive}
+                  {localeText.links.archive}
                 </Link>
               </div>
               <div>
@@ -354,7 +405,7 @@ export default function Footer({ lang }) {
                   href={`/${lang}/about-saudi`}
                   className="text-decoration-none footer-link"
                 >
-                  {t.links.basics}
+                  {localeText.links.basics}
                 </Link>
               </div>
             </div>
@@ -373,7 +424,7 @@ export default function Footer({ lang }) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {t.legalTitle}
+                  {localeText.legalTitle}
                 </h6>
                 <div className="d-flex flex-column">
                   <div className="mb-1">
@@ -381,7 +432,7 @@ export default function Footer({ lang }) {
                       href={`/${lang}/terms`}
                       className="text-decoration-none footer-link"
                     >
-                      {t.legal.terms}
+                      {localeText.legal.terms}
                     </Link>
                   </div>
                   <div className="mb-1">
@@ -389,7 +440,7 @@ export default function Footer({ lang }) {
                       href={`/${lang}/privacy`}
                       className="text-decoration-none footer-link"
                     >
-                      {t.legal.privacy}
+                      {localeText.legal.privacy}
                     </Link>
                   </div>
                   <div>
@@ -397,7 +448,7 @@ export default function Footer({ lang }) {
                       href={`/${lang}/contact-us`}
                       className="text-decoration-none footer-link"
                     >
-                      {t.contactTitle}
+                      {localeText.contactTitle}
                     </Link>
                   </div>
                 </div>
@@ -413,7 +464,7 @@ export default function Footer({ lang }) {
                     fontSize: "0.95rem",
                   }}
                 >
-                  {t.contactTitle}
+                  {localeText.contactTitle}
                 </h6>
                 <div className="d-flex flex-column">
                   <div className="mb-1">
@@ -421,7 +472,7 @@ export default function Footer({ lang }) {
                       href="tel:966547305060"
                       className="text-decoration-none footer-link"
                     >
-                      {t.contactTitle}
+                      {localeText.phone}
                     </a>
                   </div>
                   <div className="mb-1">
@@ -431,7 +482,7 @@ export default function Footer({ lang }) {
                       rel="noopener noreferrer"
                       className="text-decoration-none footer-link"
                     >
-                      {lang === "ar" ? "احجز عبر واتساب" : "Book via WhatsApp"}
+                      {tr('footer.bookViaWhatsApp')}
                     </a>
                   </div>
                   <div>
@@ -439,7 +490,7 @@ export default function Footer({ lang }) {
                       href="mailto:Info@tilalr.com"
                       className="text-decoration-none footer-link"
                     >
-                      {lang === "ar" ? "راسلنا" : "Email Us"}
+                      {tr('footer.emailUs')}
                     </a>
                   </div>
                 </div>
@@ -459,15 +510,15 @@ export default function Footer({ lang }) {
               {/* License Line */}
               <div style={{ fontSize: "12px" }}>
                 <span style={{ color: "#dfa528", fontWeight: "600" }}>
-                  {lang === "ar" ? "رقم الترخيص: 73106935" : "License: 73106935"}
+                  {tr('footer.license')}
                 </span>
               </div>
-              
+
               {/* Copyright and Rights Line */}
               <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-1">
                 <span style={{ fontSize: "12px" }}>
                   &copy; 2025{" "}
-                  <span style={{ color: "#dfa528" }}>{t.companyName}</span>
+                  <span style={{ color: "#dfa528" }}>{localeText.companyName}</span>
                 </span>
                 <span
                   className="d-none d-md-inline"
@@ -477,7 +528,7 @@ export default function Footer({ lang }) {
                   |{" "}
                 </span>
                 <span style={{ color: "#e0e0e0", fontSize: "12px" }}>
-                  {t.rightsReserved}
+                  {localeText.rightsReserved}
                 </span>
               </div>
             </div>

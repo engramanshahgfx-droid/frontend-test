@@ -80,7 +80,45 @@ export default function TravelBasic({ lang }) {
           buttonText: "Learn More"
         }
       ]
-    }
+    },
+     zh: {
+    heroTitle: "探索王国指南",
+    heroSubtitle: "前往沙特阿拉伯旅行所需的一切信息",
+    categories: [
+      {
+        id: 1,
+        title: "签证入境要求",
+        description: "了解进入沙特阿拉伯的签证要求和必要程序",
+        icon: <FaPassport size={40} />,
+        link: "/visa-requirements",
+        buttonText: "了解更多"
+      },
+      {
+        id: 2,
+        title: "旅行指南",
+        description: "规划旅程的综合指南，包括最佳访问时间和当地习俗",
+        icon: <FaMap size={40} />,
+        link: "/travel-guide",
+        buttonText: "了解更多"
+      },
+      {
+        id: 3,
+        title: "关于沙特阿拉伯",
+        description: "探索王国丰富的文化、历史遗产和多样的地理区域",
+        icon: <FaGlobe size={40} />,
+        link: "/about-saudi",
+        buttonText: "了解更多"
+      },
+      {
+        id: 4,
+        title: "抵达目的地",
+        description: "关于机场、内部交通以及城市间最佳出行方式的信息",
+        icon: <FaPlane size={40} />,
+        link: "/transportation",
+        buttonText: "了解更多"
+      }
+    ]
+  }
   };
 
   const t = content[lang] || content.ar;

@@ -19,31 +19,28 @@ export default function UIProvider({ children }) {
 
   // Get current language from pathname
   const getCurrentLang = () => {
-    const match = pathname?.match(/^\/(en|ar)(?:\/|$)/);
+    const match = pathname?.match(/^\/(en|ar|zh)(?:\/|$)/);
     return match ? match[1] : 'en';
   };
 
   const [authModal, setAuthModal] = useState({ open: false, mode: "login" });
   const [bookingModal, setBookingModal] = useState({
     open: false,
-    trip: null, // { slug, title, amount }
+    trip: null, 
   });
   const [reservationModal, setReservationModal] = useState({
     open: false,
-    trip: null, // { slug, title, type }
+    trip: null, 
   });
   const [pendingTrip, setPendingTrip] = useState(null);
-  // Dashboard refresh key to let components request a reload of dashboard data
   const [dashboardRefreshKey, setDashboardRefreshKey] = useState(0);
   const triggerDashboardRefresh = React.useCallback(() => setDashboardRefreshKey(k => k + 1), []);
 
-  // Redirect to login/register page instead of opening modal
   const openAuthModal = React.useCallback((mode = "login") => {
     const lang = getCurrentLang();
     const returnUrl = typeof window !== 'undefined' ? window.location.pathname : '';
     const page = mode === "register" ? "register" : "login";
     
-    // Store return URL for redirect after login
     if (returnUrl && typeof window !== 'undefined') {
       sessionStorage.setItem('auth_return_url', returnUrl);
     }
@@ -55,9 +52,6 @@ export default function UIProvider({ children }) {
     setAuthModal((s) => ({ ...s, open: false }));
   }, []);
 
-  // ============================================
-  // BOOKING MODAL (Requires Authentication)
-  // ============================================
   const openBookingModal = React.useCallback((trip = {}) => {
     setPendingTrip(null);
     setBookingModal({ open: true, trip });

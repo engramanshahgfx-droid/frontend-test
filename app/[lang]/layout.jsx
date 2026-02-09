@@ -23,7 +23,7 @@ const tajawal = Tajawal({
 });
 
 export async function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "ar" }];
+  return [{ lang: "en" }, { lang: "ar" }, { lang: "zh" }];
 }
 
 export async function generateMetadata({ params }) {
@@ -39,7 +39,11 @@ export async function generateMetadata({ params }) {
   en: {
     title: "Tilal Rimal - Tourism Trips Organization",
     description: "We offer unique tourism trips that combine fun, adventure, and meaningful value throughout Saudi Arabia. Family trips, school trips, corporate trips, and private groups.",
-  }
+  },
+  zh: {
+      title: "Tilal Rimal - 旅游行程组织",
+      description: "我们提供结合乐趣、冒险和有意义的独特旅游行程，遍及沙特阿拉伯各地。家庭旅行、学校旅行、企业旅行和私人团体旅行。",
+    }
 };
 
   const baseUrl = "";
@@ -55,6 +59,7 @@ export async function generateMetadata({ params }) {
       languages: {
         en: `${baseUrl}/en`,
         ar: `${baseUrl}/ar`,
+        zh: `${baseUrl}/zh`,
       },
     },
     openGraph: {

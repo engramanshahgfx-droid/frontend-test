@@ -22,7 +22,7 @@ export default function Contact({ lang }) {
     message: "",
   });
 
-  const content = {
+ const content = {
     ar: {
       contactTitle: "تواصل معنا",
       contactSubtitle: "نحن هنا لمساعدتك في تخطيط رحلتك المثالية",
@@ -77,7 +77,36 @@ export default function Contact({ lang }) {
         hours: "Open 24/7",
       },
     },
+    zh: {
+      contactTitle: "联系我们",
+      contactSubtitle: "我们在这里帮助您规划完美的旅程",
+
+      form: {
+        name: "全名",
+        email: "电子邮件地址",
+        phone: "电话号码",
+        tripType: "行程类型",
+        message: "告诉我们您理想的旅程",
+        submit: "发送请求",
+        tripTypes: [
+          "家庭旅行",
+          "企业旅行",
+          "学校旅行",
+          "个人旅行",
+          "团体旅行",
+        ],
+      },
+
+      contactInfo: {
+        address: "法赫德国王路，六十街，吉达 21454",
+        phone: "+966547305060",
+        email: "info@tilalr.com",
+        hours: "24/7 开放",
+      },
+    },
   };
+  // Ensure Chinese fallback exists
+  if (!content.zh) content.zh = content.en;
 
   const t = content[lang] || content.ar;
   const isRTL = lang === "ar";

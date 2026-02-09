@@ -42,33 +42,93 @@ export default function AuthModal({ onAuthenticated }) {
   const [resendCooldown, setResendCooldown] = useState(0);
 
   const t = useMemo(
-    () => ({
-      loginTitle: isRTL ? "تسجيل الدخول" : "Login",
-      registerTitle: isRTL ? "إنشاء حساب" : "Create Account",
-      otpTitle: isRTL ? "التحقق من الرمز" : "Verify OTP",
-      email: isRTL ? "البريد الإلكتروني" : "Email",
-      password: isRTL ? "كلمة المرور" : "Password",
-      confirmPassword: isRTL ? "تأكيد كلمة المرور" : "Confirm Password",
-      name: isRTL ? "الاسم" : "Name",
-      phone: isRTL ? "رقم الجوال" : "Phone",
-      loginBtn: isRTL ? "تسجيل الدخول" : "Login",
-      haveAccount: isRTL ? "لديك حساب؟" : "Have an account?",
-      newHere: isRTL ? "مستخدم جديد؟" : "New here?",
-      goLogin: isRTL ? "تسجيل الدخول" : "Login",
-      goRegister: isRTL ? "إنشاء حساب" : "Create Account",
-      loadingLogin: isRTL ? "جاري تسجيل الدخول..." : "Logging in...",
-      loadingRegister: isRTL ? "جاري إنشاء الحساب..." : "Creating account...",
-      otpLabel: isRTL ? "رمز التحقق" : "Verification Code",
-      otpPlaceholder: isRTL ? "أدخل الرمز المكون من 6 أرقام" : "Enter 6-digit code",
-      verifyBtn: isRTL ? "تحقق" : "Verify",
-      loadingVerify: isRTL ? "جاري التحقق..." : "Verifying...",
-      resendOtp: isRTL ? "إعادة إرسال الرمز" : "Resend Code",
-      otpSentTo: isRTL ? "تم إرسال الرمز إلى" : "Code sent to",
-      backToLogin: isRTL ? "العودة لتسجيل الدخول" : "Back to Login",
-      devOtpHint: isRTL ? "رمز التطوير" : "Dev OTP",
-      forgotPassword: isRTL ? "هل نسيت كلمة المرور؟" : "Forgot password?",
-    }),
-    [isRTL]
+    () => {
+      // Determine which language text to use
+      if (lang === "ar") {
+        return {
+          loginTitle: "تسجيل الدخول",
+          registerTitle: "إنشاء حساب",
+          otpTitle: "التحقق من الرمز",
+          email: "البريد الإلكتروني",
+          password: "كلمة المرور",
+          confirmPassword: "تأكيد كلمة المرور",
+          name: "الاسم",
+          phone: "رقم الجوال",
+          loginBtn: "تسجيل الدخول",
+          haveAccount: "لديك حساب؟",
+          newHere: "مستخدم جديد؟",
+          goLogin: "تسجيل الدخول",
+          goRegister: "إنشاء حساب",
+          loadingLogin: "جاري تسجيل الدخول...",
+          loadingRegister: "جاري إنشاء الحساب...",
+          otpLabel: "رمز التحقق",
+          otpPlaceholder: "أدخل الرمز المكون من 6 أرقام",
+          verifyBtn: "تحقق",
+          loadingVerify: "جاري التحقق...",
+          resendOtp: "إعادة إرسال الرمز",
+          otpSentTo: "تم إرسال الرمز إلى",
+          backToLogin: "العودة لتسجيل الدخول",
+          devOtpHint: "رمز التطوير",
+          forgotPassword: "هل نسيت كلمة المرور؟",
+        };
+      } else if (lang === "zh") {
+        return {
+          loginTitle: "登录",
+          registerTitle: "创建账户",
+          otpTitle: "验证验证码",
+          email: "电子邮件",
+          password: "密码",
+          confirmPassword: "确认密码",
+          name: "姓名",
+          phone: "手机号码",
+          loginBtn: "登录",
+          haveAccount: "已有账户？",
+          newHere: "新用户？",
+          goLogin: "登录",
+          goRegister: "创建账户",
+          loadingLogin: "正在登录...",
+          loadingRegister: "正在创建账户...",
+          otpLabel: "验证码",
+          otpPlaceholder: "输入6位验证码",
+          verifyBtn: "验证",
+          loadingVerify: "正在验证...",
+          resendOtp: "重新发送验证码",
+          otpSentTo: "验证码已发送至",
+          backToLogin: "返回登录",
+          devOtpHint: "开发验证码",
+          forgotPassword: "忘记密码？",
+        };
+      } else {
+        // English (default)
+        return {
+          loginTitle: "Login",
+          registerTitle: "Create Account",
+          otpTitle: "Verify OTP",
+          email: "Email",
+          password: "Password",
+          confirmPassword: "Confirm Password",
+          name: "Name",
+          phone: "Phone",
+          loginBtn: "Login",
+          haveAccount: "Have an account?",
+          newHere: "New here?",
+          goLogin: "Login",
+          goRegister: "Create Account",
+          loadingLogin: "Logging in...",
+          loadingRegister: "Creating account...",
+          otpLabel: "Verification Code",
+          otpPlaceholder: "Enter 6-digit code",
+          verifyBtn: "Verify",
+          loadingVerify: "Verifying...",
+          resendOtp: "Resend Code",
+          otpSentTo: "Code sent to",
+          backToLogin: "Back to Login",
+          devOtpHint: "Dev OTP",
+          forgotPassword: "Forgot password?",
+        };
+      }
+    },
+    [lang]
   );
 
   useEffect(() => {
@@ -162,10 +222,24 @@ export default function AuthModal({ onAuthenticated }) {
           onAuthenticated?.();
         }
       } else {
-        setError(res.error?.message || (isRTL ? "فشل تسجيل الدخول" : "Login failed"));
+        // Language-specific error messages
+        if (lang === "ar") {
+          setError(res.error?.message || "فشل تسجيل الدخول");
+        } else if (lang === "zh") {
+          setError(res.error?.message || "登录失败");
+        } else {
+          setError(res.error?.message || "Login failed");
+        }
       }
     } catch (err) {
-      setError(err?.message || (isRTL ? "فشل تسجيل الدخول" : "Login failed"));
+      // Language-specific error messages
+      if (lang === "ar") {
+        setError(err?.message || "فشل تسجيل الدخول");
+      } else if (lang === "zh") {
+        setError(err?.message || "登录失败");
+      } else {
+        setError(err?.message || "Login failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -178,7 +252,14 @@ export default function AuthModal({ onAuthenticated }) {
     try {
       // Prevent registration if email already exists
       if (emailExists) {
-        setError('This email is already registered. Please login to view your reservations.');
+        // Language-specific error message
+        if (lang === "ar") {
+          setError('هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول لعرض حجوزاتك.');
+        } else if (lang === "zh") {
+          setError('此电子邮件已注册。请登录以查看您的预订。');
+        } else {
+          setError('This email is already registered. Please login to view your reservations.');
+        }
         setLoading(false);
         return;
       }
@@ -206,10 +287,24 @@ export default function AuthModal({ onAuthenticated }) {
           onAuthenticated?.();
         }
       } else {
-        setError(res.error?.message || (isRTL ? "فشل إنشاء الحساب" : "Registration failed"));
+        // Language-specific error messages
+        if (lang === "ar") {
+          setError(res.error?.message || "فشل إنشاء الحساب");
+        } else if (lang === "zh") {
+          setError(res.error?.message || "创建账户失败");
+        } else {
+          setError(res.error?.message || "Registration failed");
+        }
       }
     } catch (err) {
-      setError(err?.message || (isRTL ? "فشل إنشاء الحساب" : "Registration failed"));
+      // Language-specific error messages
+      if (lang === "ar") {
+        setError(err?.message || "فشل إنشاء الحساب");
+      } else if (lang === "zh") {
+        setError(err?.message || "创建账户失败");
+      } else {
+        setError(err?.message || "Registration failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -225,10 +320,24 @@ export default function AuthModal({ onAuthenticated }) {
         handleAuthSuccess();
         onAuthenticated?.();
       } else {
-        setError(res.message || (isRTL ? "رمز غير صحيح" : "Invalid code"));
+        // Language-specific error messages
+        if (lang === "ar") {
+          setError(res.message || "رمز غير صحيح");
+        } else if (lang === "zh") {
+          setError(res.message || "验证码无效");
+        } else {
+          setError(res.message || "Invalid code");
+        }
       }
     } catch (err) {
-      setError(err?.message || (isRTL ? "فشل التحقق" : "Verification failed"));
+      // Language-specific error messages
+      if (lang === "ar") {
+        setError(err?.message || "فشل التحقق");
+      } else if (lang === "zh") {
+        setError(err?.message || "验证失败");
+      } else {
+        setError(err?.message || "Verification failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -245,10 +354,24 @@ export default function AuthModal({ onAuthenticated }) {
         setResendCooldown(60);
         setDevOtp(res.devOtp);
       } else {
-        setError(res.message || (isRTL ? "فشل إعادة الإرسال" : "Failed to resend"));
+        // Language-specific error messages
+        if (lang === "ar") {
+          setError(res.message || "فشل إعادة الإرسال");
+        } else if (lang === "zh") {
+          setError(res.message || "重新发送失败");
+        } else {
+          setError(res.message || "Failed to resend");
+        }
       }
     } catch (err) {
-      setError(err?.message || (isRTL ? "فشل إعادة الإرسال" : "Failed to resend"));
+      // Language-specific error messages
+      if (lang === "ar") {
+        setError(err?.message || "فشل إعادة الإرسال");
+      } else if (lang === "zh") {
+        setError(err?.message || "重新发送失败");
+      } else {
+        setError(err?.message || "Failed to resend");
+      }
     } finally {
       setLoading(false);
     }

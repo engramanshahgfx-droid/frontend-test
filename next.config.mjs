@@ -4,10 +4,19 @@ const nextConfig = {
   output: 'standalone',
   
   images: {
-    domains: [
-      "d1foa0aaimjyw4.cloudfront.net",
-      "admin.tilalr.com",
-      "test.tilalr.com",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'd1foa0aaimjyw4.cloudfront.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'admin.tilalr.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'test.tilalr.com',
+      },
     ],
     // Enable image optimization in Docker
     unoptimized: process.env.NODE_ENV === 'development',
