@@ -125,18 +125,25 @@ export default async function FAQs({ params }) {
 
   const faqs = lang === "ar" ? faqsAr : faqsEn;
 
+  const titles = {
+    en: { title: "Frequently Asked Questions", description: "Find answers to common questions about our services" },
+    ar: { title: "الأسئلة المتكررة", description: "اعثر على إجابات لأكثر الأسئلة شيوعًا حول خدماتنا" },
+  };
+
+  const headerText = titles[lang] || titles.en;
+
   return (
     <>
       <div className="py-5" style={{ backgroundColor: "#52a9ff" }}>
         <div className="container d-flex flex-column align-items-center text-white">
           <h1 className="text-center mb-3" style={{ fontWeight: "700" }}>
-            {t('faq.title')}
+            {headerText.title}
           </h1>
           <p
             className="text-center w-md-75"
             dir={lang === "ar" ? "rtl" : "ltr"}
           >
-            {t('faq.description')}
+            {headerText.description}
           </p>
         </div>
       </div>

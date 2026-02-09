@@ -51,7 +51,7 @@ export default function BlogClient({ articles, lang }) {
     e.preventDefault();
     if (searchQuery !== "") {
       const result = articles.filter((article) =>
-        article.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (article.title || "").toLowerCase().includes(searchQuery.toLowerCase())
       );
       if (result.length > 0) {
         setcurrentPageIndex(1);

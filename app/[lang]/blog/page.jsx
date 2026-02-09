@@ -50,12 +50,13 @@ export default async function Blog({ params }) {
     return {
       ...data,
       id: doc.id,
-      title: data.title[lang],
-      description: data.description[lang],
-      slug: data.title["en"],
+      title: data.title?.[lang] || data.title?.["en"] || "Untitled",
+      description: data.description?.[lang] || data.description?.["en"] || "",
+      excerpt: data.excerpt?.[lang] || data.excerpt?.["en"] || "",
+      slug: data.title?.["en"] || "article",
       timestamp: data.timestamp?.toDate().toISOString() || null,
     };
-  });
+  }).filter(article => article.title && article.title !== "Untitled");
 
   return <BlogClient articles={articles} lang={lang} />;
 }

@@ -18,15 +18,7 @@ const nextConfig = {
         hostname: 'test.tilalr.com',
       },
     ],
-    // Enable image optimization in Docker
     unoptimized: process.env.NODE_ENV === 'development',
-  },
-  
-  // Experimental features for better Docker support
-  experimental: {
-    // Reduce memory usage during build
-    workerThreads: false,
-    cpus: 1,
   },
 };
 
