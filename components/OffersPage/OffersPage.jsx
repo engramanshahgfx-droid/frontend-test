@@ -5,50 +5,53 @@ import Link from 'next/link';
 import { FaStar, FaClock, FaMapMarkerAlt, FaWhatsapp, FaUsers } from "react-icons/fa";
 
 export default function OffersPage({ lang }) {
- const content = {
-  en: {
-    heroTitle: "Exclusive Offers Not to Be Missed",
-    heroSubtitle: "Take advantage of the best tourism opportunities we offer, and enjoy unique experiences at attractive prices!",
-    featuredOffers: "Featured Offers",
-    contactUs: "Contact Us",
-    days: "Days",
-    nights: "Nights",
-    persons: "Persons",
-    included: "What's Included",
-    mostPopular: "Most Popular",
-    viewDetails: "View Details",
-    loading: "Loading offers...",
-    noOffers: "No offers available at the moment.",
-  },
-  ar: {
-    heroTitle: "عروض حصرية لا تُفوَّت",
-    heroSubtitle: "استفيدوا من أفضل الفرص السياحية التي نقدمها، وستمتعوا بتجارب مميزة بأسعار مغرية!",
-    featuredOffers: "العروض المميزة",
-    contactUs: "تواصل معنا",
-    days: "أيام",
-    nights: "ليالي",
-    persons: "أشخاص",
-    included: "ما المضمن",
-    mostPopular: "الأكثر شيوعاً",
-    viewDetails: "عرض التفاصيل",
-    loading: "جاري تحميل العروض...",
-    noOffers: "لا توجد عروض متاحة حالياً.",
-  },
-  zh: {
-    heroTitle: "不容错过的独家优惠",
-    heroSubtitle: "利用我们提供的最佳旅游机会，以诱人价格享受独特体验！",
-    featuredOffers: "精选优惠",
-    contactUs: "联系我们",
-    days: "天",
-    nights: "晚",
-    persons: "人",
-    included: "包含项目",
-    mostPopular: "最受欢迎",
-    viewDetails: "查看详情",
-    loading: "正在加载优惠...",
-    noOffers: "目前暂无可用优惠。",
-  }
-};
+  const content = {
+    en: {
+      heroTitle: "Exclusive Offers Not to Be Missed",
+      heroSubtitle: "Take advantage of the best tourism opportunities we offer, and enjoy unique experiences at attractive prices!",
+      featuredOffers: "Featured Offers",
+      contactUs: "Contact Us",
+      days: "Days",
+      nights: "Nights",
+      persons: "Persons",
+      included: "What's Included",
+      mostPopular: "Most Popular",
+      viewDetails: "View Details",
+      loading: "Loading offers...",
+      noOffers: "No offers available at the moment.",
+      error: "Failed to load offers. Please try again later.",
+    },
+    ar: {
+      heroTitle: "عروض حصرية لا تُفوَّت",
+      heroSubtitle: "استفيدوا من أفضل الفرص السياحية التي نقدمها، وستمتعوا بتجارب مميزة بأسعار مغرية!",
+      featuredOffers: "العروض المميزة",
+      contactUs: "تواصل معنا",
+      days: "أيام",
+      nights: "ليالي",
+      persons: "أشخاص",
+      included: "ما المضمن",
+      mostPopular: "الأكثر شيوعاً",
+      viewDetails: "عرض التفاصيل",
+      loading: "جاري تحميل العروض...",
+      noOffers: "لا توجد عروض متاحة حالياً.",
+      error: "فشل تحميل العروض. يرجى المحاولة لاحقاً.",
+    },
+    zh: {
+      heroTitle: "不容错过的独家优惠",
+      heroSubtitle: "利用我们提供的最佳旅游机会，以诱人价格享受独特体验！",
+      featuredOffers: "精选优惠",
+      contactUs: "联系我们",
+      days: "天",
+      nights: "晚",
+      persons: "人",
+      included: "包含项目",
+      mostPopular: "最受欢迎",
+      viewDetails: "查看详情",
+      loading: "正在加载优惠...",
+      noOffers: "目前暂无可用优惠。",
+      error: "加载优惠失败。请稍后重试。",
+    },
+  };
   const [offers, setOffers] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [fetchError, setFetchError] = React.useState(null);
@@ -58,7 +61,6 @@ export default function OffersPage({ lang }) {
   // API base URL
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
 
-  // Return a short preview (first paragraph or up to max chars)
   const getSummary = (text, maxChars = 220) => {
     if (!text) return "";
     const normalized = String(text).replace(/\r\n/g, "\n").trim();
@@ -103,18 +105,27 @@ export default function OffersPage({ lang }) {
         else if (data && Array.isArray(data.offers)) items = data.offers;
 
         if (items.length > 0) {
-          const parsed = items.map((o) => ({
-            id: o.id,
-            title: isRTL ? o.title_ar || o.title_en : o.title_en || o.title_ar,
-            description: isRTL ? o.description_ar || o.description_en : o.description_en || o.description_ar,
-            image: o.image || '/offers/corporate-trips.jpg',
-            duration: isRTL ? (o.duration_ar || o.duration_en || o.duration) : (o.duration_en || o.duration_ar || o.duration),
-            location: isRTL ? o.location_ar || o.location_en : o.location_en || o.location_ar,
-            groupSize: isRTL ? (o.group_size_ar || o.group_size_en || o.group_size) : (o.group_size_en || o.group_size_ar || o.group_size),
-            badge: isRTL ? (o.badge_ar || o.badge_en || o.badge) : (o.badge_en || o.badge_ar || o.badge),
-            features: normalizeArray(isRTL ? (o.features_ar || o.features_en || o.features) : (o.features_en || o.features_ar || o.features)),
-            highlights: normalizeArray(isRTL ? (o.highlights_ar || o.highlights_en || o.highlights) : (o.highlights_en || o.highlights_ar || o.highlights)),
-          }));
+          const parsed = items.map((o) => {
+            // Helper to get localized text
+            const getLocalized = (field) => {
+              if (lang === 'zh') return o[`${field}_zh`] || o[`${field}_en`];
+              if (lang === 'ar') return o[`${field}_ar`] || o[`${field}_en`];
+              return o[`${field}_en`] || o[field];
+            };
+            
+            return {
+              id: o.id,
+              title: getLocalized('title'),
+              description: getLocalized('description'),
+              image: o.image || '/offers/corporate-trips.jpg',
+              duration: getLocalized('duration'),
+              location: getLocalized('location'),
+              groupSize: getLocalized('group_size') || o.group_size,
+              badge: getLocalized('badge'),
+              features: normalizeArray(getLocalized('features')),
+              highlights: normalizeArray(getLocalized('highlights')),
+            };
+          });
 
           setOffers(parsed);
           setLoading(false);
@@ -122,13 +133,16 @@ export default function OffersPage({ lang }) {
         }
       }
       
-      // No data from API
-      setOffers([]);
+      // No data from API - use fallback
+      console.warn('[OffersPage] No data from API, using fallback offers');
+      setOffers(fallbackOffers);
       setLoading(false);
     } catch (err) {
       console.error('API fetch failed:', err.message);
-      setFetchError(err.message);
-      setOffers([]);
+      // Use fallback offers on error
+      console.warn('[OffersPage] Using fallback offers due to API error');
+      setOffers(fallbackOffers);
+      setFetchError(null); // Don't show error if we have fallback
       setLoading(false);
     }
   }, [lang, isRTL, apiBase]);

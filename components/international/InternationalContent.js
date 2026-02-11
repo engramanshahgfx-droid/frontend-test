@@ -525,30 +525,64 @@ export default function InternationalContent({ lang }) {
 
   // Helper functions to get localized data
   const getFlightText = (flight, field) => {
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return flight[fieldKey] || "";
+    let fieldKey;
+    if (lang === "zh") {
+      fieldKey = `${field}_zh`;
+    } else if (lang === "ar") {
+      fieldKey = `${field}_ar`;
+    } else {
+      fieldKey = `${field}_en`;
+    }
+    return flight[fieldKey] || flight[`${field}_en`] || "";
   };
 
   const getHotelText = (hotel, field) => {
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return hotel[fieldKey] || "";
+    let fieldKey;
+    if (lang === "zh") {
+      fieldKey = `${field}_zh`;
+    } else if (lang === "ar") {
+      fieldKey = `${field}_ar`;
+    } else {
+      fieldKey = `${field}_en`;
+    }
+    return hotel[fieldKey] || hotel[`${field}_en`] || "";
   };
 
   const getPackageText = (pkg, field) => {
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return pkg[fieldKey] || "";
+    let fieldKey;
+    if (lang === "zh") {
+      fieldKey = `${field}_zh`;
+    } else if (lang === "ar") {
+      fieldKey = `${field}_ar`;
+    } else {
+      fieldKey = `${field}_en`;
+    }
+    return pkg[fieldKey] || pkg[`${field}_en`] || "";
   };
 
   const getDestinationText = (destination, field) => {
     // Handle both API format (title_en/description_en) and static format (name_en/description_en)
-    let fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    
-    // If looking for 'name' but it doesn't exist, try 'title' (API uses title_en/title_ar)
-    if (field === 'name' && !destination[fieldKey]) {
-      fieldKey = lang === "ar" ? 'title_ar' : 'title_en';
+    let fieldKey;
+    if (lang === "zh") {
+      fieldKey = `${field}_zh`;
+    } else if (lang === "ar") {
+      fieldKey = `${field}_ar`;
+    } else {
+      fieldKey = `${field}_en`;
     }
     
-    return destination[fieldKey] || "";
+    // If looking for 'name' but it doesn't exist, try 'title' (API uses title_en/title_ar/title_zh)
+    if (field === 'name' && !destination[fieldKey]) {
+      if (lang === "zh") {
+        fieldKey = 'title_zh';
+      } else if (lang === "ar") {
+        fieldKey = 'title_ar';
+      } else {
+        fieldKey = 'title_en';
+      }
+    }
+    
+    return destination[fieldKey] || destination[`${field}_en`] || "";
   };
 
   // Safely parse a value that may be an array or a JSON-encoded array string

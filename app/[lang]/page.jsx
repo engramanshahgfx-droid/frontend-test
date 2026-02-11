@@ -187,7 +187,7 @@ const content = {
   console.log('🔍 Initial services (from hardcoded content):', services?.length || 0, 'items');
   
   // Define API URL in outer scope so catch/fallbacks can reference it safely
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://admin.tilalr.com/api';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
   try {
     console.log('📡 Attempting to fetch services from:', `${apiUrl}/services`);
 
@@ -235,7 +235,8 @@ const content = {
         }));
         console.log('✅ Services updated from API:', services.length, 'items');
       }
-    } else {
+    }
+     else {
       // Attempt to read response body for debugging
       let bodyText = '';
       try {

@@ -15,6 +15,19 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useUI } from "../../providers/UIProvider";
 import { API_URL } from "../../lib/api";
 
+// Fallback data if API fails
+const fallbackDestinations = [
+  {
+    id: 1,
+    slug: "island-1",
+    title_en: "Island Destination",
+    title_ar: "وجهة جزيرة",
+    title_zh: "岛屿目的地",
+    image: "/placeholder.png",
+    rating: 4.5,
+  },
+];
+
 export default function IslandDestinationslocal({ lang }) {
   const router = useRouter();
   const currentLang = lang || "en";
@@ -35,7 +48,7 @@ export default function IslandDestinationslocal({ lang }) {
   // Respect reduced motion preference
   const prefersReducedMotion = (typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || false;
 
-  // Static labels (fallback) 
+  // Dynamic labels based on language
   const labels = {
     en: {
       title: "Discover Unique Destinations",
@@ -45,49 +58,21 @@ export default function IslandDestinationslocal({ lang }) {
       bookNow: "Book Now",
     },
     ar: {
-      title: " مستعد لرحلة لا تنسى في السعودية",
+      title: "مستعد لرحلة لا تنسى في السعودية",
       subtitle:
         "اختبر المزيج المثالي بين الفخامة والطبيعة والمغامرة في أجمل الوجهات السعودية",
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
     },
-      zh: {
-    title: "探索独特目的地",
-    subtitle: "在沙特阿拉伯最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
-    viewDetails: "查看详情",
-    bookNow: "立即预订",
-  },
+    zh: {
+      title: "探索独特目的地",
+      subtitle: "在沙特阿拉伯最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
+      viewDetails: "查看详情",
+      bookNow: "立即预订",
+    },
   };
 
   const t = labels[lang] || labels.en;
-
-  // Fallback data when backend is offline
-  const fallbackDestinations = [
-    {
-      id: 1,
-      slug: "farasan-islands",
-      title_en: "Farasan Islands",
-      title_ar: "جزر فرسان",
-      title_zh: "法拉桑岛",
-      description_en: "Pristine islands with crystal-clear waters",
-      description_ar: "جزر بكر مع مياه صافية جداً",
-      description_zh: "原始岛屿，水晶般清澈的海水",
-      image: "/placeholder.png",
-      type: "local"
-    },
-    {
-      id: 2,
-      slug: "karan-island",
-      title_en: "Karan Island",
-      title_ar: "جزيرة قران",
-      title_zh: "卡兰岛",
-      description_en: "Beautiful island destination with beaches",
-      description_ar: "وجهة جزيرة جميلة مع شواطئ",
-      description_zh: "美丽的岛屿目的地，有海滩",
-      image: "/placeholder.png",
-      type: "local"
-    }
-  ];
 
   // Safely parse JSON arrays from backend
   const parseList = (value) => {
@@ -182,17 +167,16 @@ export default function IslandDestinationslocal({ lang }) {
             })
           );
         } else {
-          // Use fallback if API returns empty
-          console.warn('[IslandDestinationsLocal] API returned empty data, using fallback');
+          // Use fallback data if API returns empty
+          console.warn('[IslandDestinationsLocal] API returned empty, using fallback');
           setDestinations(fallbackDestinations);
         }
         setLoading(false);
       } catch (err) {
         if (err.name !== 'AbortError') {
           console.error('[IslandDestinationsLocal] Fetch error:', err.message);
-          
-          // Use fallback data when backend is offline
-          console.warn('[IslandDestinationsLocal] Backend offline, using fallback destinations');
+          // Use fallback data on error instead of showing error state
+          console.warn('[IslandDestinationsLocal] Using fallback destinations due to API error');
           setDestinations(fallbackDestinations);
           setError(null); // Don't show error if we have fallback
           setLoading(false);

@@ -42,6 +42,17 @@ export default function LocalIslandDetailPage() {
       features: "المميزات",
       description: "الوصف",
     },
+    zh: {
+      backButton: "返回",
+      bookNow: "立即预订",
+      duration: "行程时间",
+      groupSize: "团队规模",
+      location: "位置",
+      price: "价格",
+      per_person: "每人",
+      features: "特色",
+      description: "描述",
+    },
   };
 
   const t = labels[lang] || labels.en;
@@ -52,7 +63,14 @@ export default function LocalIslandDetailPage() {
     if (field === "groupSize" || field === "group_size") {
       return obj.group_size || obj.groupSize || "";
     }
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
+    let fieldKey;
+    if (lang === "ar") {
+      fieldKey = `${field}_ar`;
+    } else if (lang === "zh") {
+      fieldKey = `${field}_zh`;
+    } else {
+      fieldKey = `${field}_en`;
+    }
     return obj[fieldKey] || obj[field] || "";
   };
 
@@ -243,10 +261,14 @@ export default function LocalIslandDetailPage() {
           ? window.location.origin
           : API_URL.replace(/\/api\/?$/, "");
       const url = slugVal ? `${base}/${lang}/local-islands/${slugVal}` : base;
-      const message =
-        lang === "ar"
-          ? `مرحبا، أريد الاستفسار عن ${title} (السعر: ${amount}). ${url}`
-          : `Hello, I'm interested in ${title} (Price: ${amount}). ${url}`;
+      let message;
+      if (lang === "ar") {
+        message = `مرحبا، أريد الاستفسار عن ${title} (السعر: ${amount}). ${url}`;
+      } else if (lang === "zh") {
+        message = `你好，我对${title}感兴趣（价格：${amount}）。${url}`;
+      } else {
+        message = `Hello, I'm interested in ${title} (Price: ${amount}). ${url}`;
+      }
       const phoneNumber = "+966547305060";
       const whatsappUrl = `https://wa.me/${encodeURIComponent(phoneNumber)}?text=${encodeURIComponent(
         message

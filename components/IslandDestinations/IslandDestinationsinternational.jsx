@@ -15,6 +15,19 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useUI } from "../../providers/UIProvider";
 import { API_URL } from "../../lib/api";
 
+// Fallback data if API fails
+const fallbackDestinations = [
+  {
+    id: 1,
+    slug: "island-1",
+    title_en: "International Destination",
+    title_ar: "وجهة دولية",
+    title_zh: "国际目的地",
+    image: "/placeholder.png",
+    rating: 4.5,
+  },
+];
+
 export default function IslandDestinationsinternational({ lang }) {
   const router = useRouter();
   const currentLang = lang || "en";
@@ -29,11 +42,11 @@ export default function IslandDestinationsinternational({ lang }) {
   // Respect reduced motion preference
   const prefersReducedMotion = (typeof window !== "undefined" && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || false;
 
-  // Static labels (fallback)
+  // Dynamic labels based on language
   const labels = {
     en: {
       title: "Discover the World",
-      subtitle: "Experience the perfect blend of luxury, nature, and adventure in world 's most stunning destinations",
+      subtitle: "Experience the perfect blend of luxury, nature, and adventure in world's most stunning destinations",
       viewDetails: "View Details",
       bookNow: "Book Now",
     },
@@ -44,42 +57,14 @@ export default function IslandDestinationsinternational({ lang }) {
       bookNow: "احجز الآن",
     },
     zh: {
-    title: "探索世界",
-    subtitle: "在世界最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
-    viewDetails: "查看详情",
-    bookNow: "立即预订",
-  },
+      title: "探索世界",
+      subtitle: "在世界最令人惊叹的目的地体验奢华、自然与冒险的完美融合",
+      viewDetails: "查看详情",
+      bookNow: "立即预订",
+    },
   };
 
   const t = labels[lang] || labels.en;
-
-  // Fallback data when backend is offline
-  const fallbackDestinations = [
-    {
-      id: 1,
-      slug: "maldives",
-      title_en: "Maldives",
-      title_ar: "المالديف",
-      title_zh: "马尔代夫",
-      description_en: "Paradise islands with turquoise waters",
-      description_ar: "جزر الجنة بمياه فيروزية",
-      description_zh: "天堂岛屿，有绿松石色的海水",
-      image: "/placeholder.png",
-      type: "international"
-    },
-    {
-      id: 2,
-      slug: "bali",
-      title_en: "Bali",
-      title_ar: "بالي",
-      title_zh: "巴厘岛",
-      description_en: "Exotic island with culture and nature",
-      description_ar: "جزيرة غريبة بالثقافة والطبيعة",
-      description_zh: "有文化和自然的异国岛屿",
-      image: "/placeholder.png",
-      type: "international"
-    }
-  ];
 
   // Safely parse JSON arrays from backend
   const parseList = (value) => {
@@ -173,17 +158,16 @@ export default function IslandDestinationsinternational({ lang }) {
             }))
           );
         } else {
-          // Use fallback if API returns empty
-          console.warn('[IslandDestinationsInternational] API returned empty data, using fallback');
+          // Use fallback data if API returns empty
+          console.warn('[IslandDestinationsInternational] API returned empty, using fallback');
           setDestinations(fallbackDestinations);
         }
         setLoading(false);
       } catch (err) {
         if (err.name !== 'AbortError') {
           console.error('[IslandDestinationsInternational] Fetch error:', err.message);
-          
-          // Use fallback data when backend is offline
-          console.warn('[IslandDestinationsInternational] Backend offline, using fallback destinations');
+          // Use fallback data on error instead of showing error state
+          console.warn('[IslandDestinationsInternational] Using fallback destinations due to API error');
           setDestinations(fallbackDestinations);
           setError(null); // Don't show error if we have fallback
           setLoading(false);
@@ -654,25 +638,7 @@ export default function IslandDestinationsinternational({ lang }) {
                         />
                         <div className="position-absolute bottom-0 start-0 end-0 p-4 text-white d-flex justify-content-center" style={{ background: 'linear-gradient(180deg, transparent, rgba(0,0,0,0.45))' }}>
                           <div className="d-flex gap-3 align-items-center"> 
-                        {/* CTA overlay - only buttons (image remains as background) */}
-                            {/* <motion.button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleBookNow(destination);
-                              }}
-                              className="btn btn-warning px-4 fw-bold"
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              style={{
-                                borderRadius: "25px",
-                                fontSize: "0.9rem",
-                                background: "#EFC8AE",
-                                color: "#000",
-                                border: "none",
-                              }}
-                            >
-                              {t.bookNow}
-                            </motion.button> */}
+                  
 
                             <motion.button
                               onClick={(e) => {
@@ -697,19 +663,7 @@ export default function IslandDestinationsinternational({ lang }) {
                               </span>
                             </motion.button>
 
-                            {/* <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleViewDetails(destination);
-                              }}
-                              className="btn btn-outline-light px-3"
-                              style={{
-                                borderRadius: "25px",
-                                fontSize: "0.9rem",
-                              }}
-                            >
-                              {t.viewDetails}
-                            </button> */}
+                     
                           </div>
                         </div>
                       </motion.div>
@@ -745,9 +699,7 @@ export default function IslandDestinationsinternational({ lang }) {
               ))}
             </div>
           </div>{" "}
-          {/* end slider container */}
         </div>{" "}
-        {/* end container */}
       </section>
     </>
   );
