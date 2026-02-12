@@ -456,10 +456,7 @@ export default function LocalIslandDetailPage() {
         </motion.div>
 
         {/* Features Section */}
-        {parseList(lang === "ar"
-          ? destination.features_ar || destination.features
-          : destination.features || destination.features_en
-        ).length > 0 && (
+        {parseList(getText(destination, "features")).length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -471,10 +468,7 @@ export default function LocalIslandDetailPage() {
                 {t.features}
               </h2>
               <div className="row">
-                {parseList(lang === "ar"
-                  ? destination.features_ar || destination.features
-                  : destination.features || destination.features_en
-                ).map((feature, idx) => (
+                {parseList(getText(destination, "features")).map((feature, idx) => (
                   <div key={idx} className="col-md-6 mb-3">
                     <div className="d-flex align-items-center gap-3">
                       <Waves size={20} className="text-warning flex-shrink-0" />
@@ -497,7 +491,7 @@ export default function LocalIslandDetailPage() {
           >
             <div className="col-lg-8">
               <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-                {lang === "ar" ? "برنامج الرحلة" : "Itinerary"}
+                {t.itinerary}
               </h2>
               <div
                 style={{
@@ -520,10 +514,7 @@ export default function LocalIslandDetailPage() {
         )}
 
         {/* Includes Section */}
-        {parseList(lang === "ar"
-          ? destination.includes_ar || destination.includes
-          : destination.includes || destination.includes_en
-        ).length > 0 && (
+{parseList(getText(destination, "includes")).length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -532,13 +523,10 @@ export default function LocalIslandDetailPage() {
           >
             <div className="col-lg-8">
               <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-                {lang === "ar" ? "يشمل البرنامج" : "What's Included"}
+                {t.whatsIncluded}
               </h2>
               <div className="row">
-                {parseList(lang === "ar"
-                  ? destination.includes_ar || destination.includes
-                  : destination.includes || destination.includes_en
-                ).map((item, idx) => (
+                {parseList(getText(destination, "includes")).map((item, idx) => (
                   <div key={idx} className="col-md-6 mb-3">
                     <div className="d-flex align-items-start gap-3">
                       <Star
