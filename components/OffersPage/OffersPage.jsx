@@ -57,6 +57,21 @@ export default function OffersPage({ lang }) {
   const [fetchError, setFetchError] = React.useState(null);
   const t = content[lang] || content.ar;
   const isRTL = lang === "ar";
+
+  // Minimal fallback offers used when the API is unavailable — prevents ReferenceError and keeps the UI functional.
+  const fallbackOffers = [
+    {
+      id: 'fallback-1',
+      title: lang === 'ar' ? 'عرض افتراضي' : lang === 'zh' ? '默认优惠' : 'Sample Offer',
+      description: lang === 'ar' ? 'وصف العرض الافتراضي.' : lang === 'zh' ? '示例优惠描述。' : 'This is a sample offer used as a fallback when the API is unavailable.',
+      image: '/offers/corporate-trips.jpg',
+      duration: '2 Days',
+      location: lang === 'ar' ? 'جدة' : lang === 'zh' ? '吉达' : 'Jeddah',
+      groupSize: 'Up to 20',
+      features: ['Transport', 'Meals', 'Guide'],
+      highlights: ['Popular', 'Family Friendly'],
+    },
+  ];
   
   // API base URL
   const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
@@ -214,15 +229,15 @@ export default function OffersPage({ lang }) {
 
             {/* Offers list */}
             {!loading && offers.length > 0 && offers.map((offer) => (
-              <div key={offer.id} className="col-lg-6">
+              <div key={offer.id} className="col-lg-4 col-md-6 col-sm-12">
                 <div className="offer-card">
                   <div className="offer-image">
                     <img 
                       src={offer.image} 
                       alt={offer.title}
                       className="img-fluid"
-                      width="820"
-                      height="1120"
+                      width="1200"
+                      height="700"
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       onError={(e) => {
                         e.target.src = '/offers/jeddah-sea.png';
@@ -372,6 +387,8 @@ export default function OffersPage({ lang }) {
           box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
           transition: all 0.3s ease;
           position: relative;
+          display: flex;
+          flex-direction: column;
           height: 100%;
           border: 1px solid #e9ecef;
           font-family: 'Tajawal', sans-serif;
@@ -382,11 +399,24 @@ export default function OffersPage({ lang }) {
           box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
 
+        /* Make the image area larger and visually prominent. Keep img.src bound to backend offer.image so updates show immediately. */
         .offer-image {
           width: 100%;
-          aspect-ratio: 820 / 1120;
+          height: 320px; /* reduced height for 3-up desktop layout */
           overflow: hidden;
           position: relative;
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+          flex: 0 0 auto;
+        }
+
+        @media (min-width: 1400px) {
+          /* slightly larger images on very wide screens */
+          .offer-image { height: 360px; }
+        }
+
+        @media (max-width: 576px) {
+          .offer-image { height: 220px; }
         }
 
         .offer-image img {
@@ -394,7 +424,13 @@ export default function OffersPage({ lang }) {
           height: 100%;
           object-fit: cover;
           object-position: center;
-          transition: transform 0.3s ease;
+          transition: transform 0.5s ease, filter 0.5s ease;
+          display: block;
+        }
+
+        /* subtle zoom on hover to emphasize imagery */
+        .offer-card:hover .offer-image img {
+          transform: scale(1.03);
         }
 
         .rtl .offer-title,
