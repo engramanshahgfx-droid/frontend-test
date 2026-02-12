@@ -115,11 +115,19 @@ export default function IslandDestinationslocal({ lang }) {
 
   // Build a full image URL for destination images
   const getImageUrl = (img) => {
-    if (!img) return "/placeholder.png";
-    // If already a full URL or starts with /, return as-is
-    if (/^https?:\/\//.test(img) || img.startsWith("/")) return img;
-    // Otherwise, prepend /
-    return "/" + img;
+    const placeholder = "/placeholder.png";
+    if (!img) return placeholder;
+    if (/^https?:\/\//.test(img)) return img;
+    const backendBase = API_URL.replace(/\/api\/?$/, "");
+
+    // If path starts with a leading slash, assume backend-rooted path and return absolute backend URL
+    if (img.startsWith("/")) return `${backendBase}${img}`;
+
+    // Support existing conventions: storage/..., islands/...
+    if (img.startsWith("storage/") || img.startsWith("islands/")) return `${backendBase}/${img}`;
+
+    // Fallback: assume it's a filename stored under storage/islands
+    return `${backendBase}/storage/islands/${img}`;
   }; 
 
   // Fetch local island destinations from backend

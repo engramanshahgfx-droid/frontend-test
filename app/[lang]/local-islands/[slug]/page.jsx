@@ -78,19 +78,16 @@ export default function LocalIslandDetailPage() {
   const getImageUrl = (img) => {
     const placeholder = "/placeholder.png";
     if (!img) return placeholder;
-
     if (/^https?:\/\//i.test(img)) return img;
-    if (img.startsWith("/")) return img;
-    if (img.startsWith("storage/")) {
-      const backendBase = API_URL.replace(/\/api\/?$/, "");
-      return `${backendBase}/${img}`;
-    }
-    if (img.startsWith("islands/")) {
-      const backendBase = API_URL.replace(/\/api\/?$/, "");
-      return `${backendBase}/storage/${img}`;
-    }
-
     const backendBase = API_URL.replace(/\/api\/?$/, "");
+
+    // If path starts with leading slash, treat it as backend-rooted path
+    if (img.startsWith("/")) return `${backendBase}${img}`;
+
+    // Support storage/ and islands/ conventions
+    if (img.startsWith("storage/") || img.startsWith("islands/")) return `${backendBase}/${img}`;
+
+    // Fallback to storage/islands
     return `${backendBase}/storage/islands/${img}`;
   };
 
