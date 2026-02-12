@@ -20,7 +20,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [devOtp, setDevOtp] = useState(null);
 
-  const translations = {
+const translations = {
     en: {
       title: "Forgot Password",
       step1Title: "Enter Phone Number",
@@ -47,7 +47,7 @@ export default function ForgotPassword() {
       step2Subtitle: "أدخل الرمز المرسل إلى جوالك",
       step3Title: "تعيين كلمة مرور جديدة",
       step3Subtitle: "أدخل كلمة المرور الجديدة",
-      phonePlaceholder: "رقم الجوال",
+      phonePlaceholder: "0501234567",
       otpPlaceholder: "أدخل رمز التحقق المكون من 6 أرقام",
       passwordPlaceholder: "كلمة المرور الجديدة",
       confirmPasswordPlaceholder: "تأكيد كلمة المرور الجديدة",
@@ -56,6 +56,24 @@ export default function ForgotPassword() {
       resetPassword: "تعيين كلمة المرور",
       success: "تم إعادة تعيين كلمة المرور بنجاح! جاري التحويل إلى تسجيل الدخول...",
       back: "رجوع",
+    },
+    zh: {
+      title: "忘记密码",
+      step1Title: "输入手机号码",
+      step1Subtitle: "输入您的手机号码以接收验证码",
+      step2Title: "验证验证码",
+      step2Subtitle: "输入发送到您手机的验证码",
+      step3Title: "设置新密码",
+      step3Subtitle: "输入您的新密码",
+      phonePlaceholder: "0501234567",
+      otpPlaceholder: "输入6位验证码",
+      passwordPlaceholder: "新密码",
+      confirmPasswordPlaceholder: "确认新密码",
+      sendOtp: "发送验证码",
+      verifyOtp: "验证验证码",
+      resetPassword: "重置密码",
+      success: "密码重置成功！正在跳转到登录页面...",
+      back: "返回",
     }
   };
 
@@ -157,7 +175,7 @@ export default function ForgotPassword() {
                   <input 
                     type="tel" 
                     className="form-control" 
-                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
+                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
                     placeholder={t.phonePlaceholder} 
                     value={phone} 
                     onChange={(e) => setPhone(e.target.value)} 
@@ -209,7 +227,7 @@ export default function ForgotPassword() {
                   <input 
                     type="password" 
                     className="form-control" 
-                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
+                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
                     placeholder={t.passwordPlaceholder} 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)} 

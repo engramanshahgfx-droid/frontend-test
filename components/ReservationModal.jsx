@@ -1133,14 +1133,14 @@ useEffect(() => {
           country: (() => {
             const country = availableCountries.find(c => c.id === selectedCountry);
             if (country) {
-              return lang === 'ar' ? country.name_ar : country.name_en;
+              return lang === 'ar' ? country.name_ar : (lang === 'zh' ? (country.name_zh || country.name_en) : country.name_en);
             }
             return destination?.country_en || null;
           })(),
           city: (() => {
             const city = availableCities.find(c => c.id === selectedCity);
             if (city) {
-              return lang === 'ar' ? city.name_ar : city.name_en;
+              return lang === 'ar' ? city.name_ar : (lang === 'zh' ? (city.name_zh || city.name_en) : city.name_en);
             }
             return destination?.city_en || null;
           })(),
@@ -1176,7 +1176,7 @@ useEffect(() => {
         }
         
         if (!preferredDate) {
-          setSubmitError(lang === 'ar' ? 'الرجاء اختيار التاريخ المفضل' : 'Please select a preferred date.');
+          setSubmitError(lang === 'ar' ? 'الرجاء اختيار التاريخ المفضل' : (lang === 'zh' ? '请选择首选日期。' : 'Please select a preferred date.'));
           setIsSubmitted(false);
           return;
         }
@@ -1187,7 +1187,7 @@ useEffect(() => {
         const pref = new Date(preferredDate + 'T00:00:00');
         pref.setHours(0,0,0,0);
         if (pref < today) {
-          setSubmitError(lang === 'ar' ? 'التاريخ يجب أن يكون اليوم أو بعد اليوم' : 'Preferred date must be today or later.');
+          setSubmitError(lang === 'ar' ? 'التاريخ يجب أن يكون اليوم أو بعد اليوم' : (lang === 'zh' ? '首选日期必须是今天或之后。' : 'Preferred date must be today or later.'));
           setIsSubmitted(false);
           return;
         }
@@ -1259,7 +1259,7 @@ useEffect(() => {
       } catch (error) {
         console.error("Booking submission error:", error);
         setIsSubmitted(false);
-        setSubmitError(error?.message || (lang === 'ar' ? 'حدث خطأ في إرسال الحجز' : 'Error submitting booking'));
+        setSubmitError(error?.message || (lang === 'ar' ? 'حدث خطأ في إرسال الحجز' : lang === 'zh' ? '发送预订时出错' : 'Error submitting booking'));
         alert(lang === "ar" ? "حدث خطأ في إرسال الحجز" : "Error submitting booking: " + (error?.message || ''));
       }
     } else {
@@ -1510,19 +1510,19 @@ useEffect(() => {
           <div className="bg-dark bg-opacity-25 rounded-3 p-3">
             <h6 className="text-warning mb-3 d-flex align-items-center gap-2">
               <MapPin size={18} />
-              {lang === 'ar' ? 'اختر الوجهة' : 'Select Destination'}
+              {lang === 'ar' ? 'اختر الوجهة' : lang === 'zh' ? '选择目的地' : 'Select Destination'}
             </h6>
 
             {/* Country Manual Input */}
             <div className="mb-3">
               <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
                 <Globe size={16} className="text-warning" />
-                <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{lang === 'ar' ? 'الدولة' : 'Country'}</span>
+                <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{lang === 'ar' ? 'الدولة' : lang === 'zh' ? '国家' : 'Country'}</span>
               </label>
               <input
                 type="text"
                 className="form-control"
-                placeholder={lang === 'ar' ? 'أدخل اسم الدولة' : 'Enter country name (e.g., Thailand)'}
+                placeholder={lang === 'ar' ? 'أدخل اسم الدولة' : lang === 'zh' ? '输入国家名称（例如：泰国）' : 'Enter country name (e.g., Thailand)'}
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
                 style={{
@@ -1541,12 +1541,12 @@ useEffect(() => {
               <div className="mb-3">
                 <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
                   <MapPin size={16} className="text-warning" />
-                  <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{lang === 'ar' ? 'المدينة' : 'City'}</span>
+                  <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{lang === 'ar' ? 'المدينة' : lang === 'zh' ? '城市' : 'City'}</span>
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder={lang === 'ar' ? 'أدخل اسم المدينة' : 'Enter city name (e.g., Bangkok)'}
+                  placeholder={lang === 'ar' ? 'أدخل اسم المدينة' : lang === 'zh' ? '输入城市名称（例如：曼谷）' : 'Enter city name (e.g., Bangkok)'}
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
                   style={{
@@ -2856,7 +2856,7 @@ useEffect(() => {
               <p className="mb-3" style={{ fontSize: "0.9rem", color: "rgba(255,255,255,0.9)" }}>{t.successMessage}</p>
               {reservationRef && (
                 <p className="small text-white-50 mb-2" style={{ fontSize: "0.85rem" }}>
-                  {lang === 'ar' ? 'مرجع الحجز' : 'Reservation ref'}: #{reservationRef}
+                  {lang === 'ar' ? 'مرجع الحجز' : lang === 'zh' ? '预订参考' : 'Reservation ref'}: #{reservationRef}
                 </p>
               )}
               <button
@@ -2937,10 +2937,10 @@ useEffect(() => {
                   >
                     <AlertCircle size={14} />
                     <div style={{flex:1}}>
-                      <strong>{lang === 'ar' ? 'خطأ في الواجهة' : 'UI error'}:</strong> {runtimeError}
-                      <div className="small mt-1" style={{opacity:0.85}}>{lang === 'ar' ? 'افتح وحدة تحكم المتصفح لمزيد من التفاصيل.' : 'Open browser console for more details.'}</div>
+                      <strong>{lang === 'ar' ? 'خطأ في الواجهة' : lang === 'zh' ? '界面错误' : 'UI error'}:</strong> {runtimeError}
+                      <div className="small mt-1" style={{opacity:0.85}}>{lang === 'ar' ? 'افتح وحدة تحكم المتصفح لمزيد من التفاصيل.' : lang === 'zh' ? '打开浏览器控制台以获取更多详细信息。' : 'Open browser console for more details.'}</div>
                     </div>
-                    <button type="button" className="btn btn-sm btn-outline-light" onClick={() => setRuntimeError(null)}>{lang === 'ar' ? 'إخفاء' : 'Dismiss'}</button>
+                    <button type="button" className="btn btn-sm btn-outline-light" onClick={() => setRuntimeError(null)}>{lang === 'ar' ? 'إخفاء' : lang === 'zh' ? '关闭' : 'Dismiss'}</button>
                   </motion.div>
                 )}
 
@@ -2959,9 +2959,9 @@ useEffect(() => {
                   >
                     <AlertCircle size={14} />
                     <div style={{flex:1}}>
-                      <strong>{lang === 'ar' ? 'خطأ' : 'Error'}:</strong> {submitError}
+                      <strong>{lang === 'ar' ? 'خطأ' : lang === 'zh' ? '错误' : 'Error'}:</strong> {submitError}
                     </div>
-                    <button type="button" className="btn btn-sm btn-outline-light" onClick={() => setSubmitError(null)}>{lang === 'ar' ? 'إخفاء' : 'Dismiss'}</button>
+                    <button type="button" className="btn btn-sm btn-outline-light" onClick={() => setSubmitError(null)}>{lang === 'ar' ? 'إخفاء' : lang === 'zh' ? '关闭' : 'Dismiss'}</button>
                   </motion.div>
                 )}
 

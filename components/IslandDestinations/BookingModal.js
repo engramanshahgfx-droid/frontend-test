@@ -1227,7 +1227,7 @@ export default function BookingModal({
         <div className="bg-dark bg-opacity-25 rounded-3 p-3">
           <h6 className="text-warning mb-3 d-flex align-items-center gap-2">
             <MapPin size={18} />
-            {lang === 'ar' ? 'الوجهة' : 'Destination'}
+            {lang === 'ar' ? 'الوجهة' : lang === 'zh' ? '目的地' : 'Destination'}
           </h6>
           
           {/* Country Input */}
@@ -1235,7 +1235,7 @@ export default function BookingModal({
             <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
               <Globe size={16} className="text-warning" />
               <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-                {lang === 'ar' ? 'الدولة' : 'Country'}
+                {lang === 'ar' ? 'الدولة' : lang === 'zh' ? '国家' : 'Country'}
               </span>
               <small className="text-warning ms-1">*</small>
             </label>
@@ -1245,7 +1245,7 @@ export default function BookingModal({
               value={formData.internationalCountry}
               onChange={handleInputChange}
               className="form-control"
-              placeholder={lang === 'ar' ? 'أدخل اسم الدولة (مثال: تايلاند)' : 'Enter country name (e.g., Thailand)'}
+              placeholder={lang === 'ar' ? 'أدخل اسم الدولة (مثال: تايلاند)' : lang === 'zh' ? '输入国家名称（例如：泰国）' : 'Enter country name (e.g., Thailand)'}
               required
               style={{
                 background: "rgba(255,255,255,0.1)",
@@ -1263,7 +1263,7 @@ export default function BookingModal({
             <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
               <MapPin size={16} className="text-warning" />
               <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-                {lang === 'ar' ? 'المدينة' : 'City'}
+                {lang === 'ar' ? 'المدينة' : lang === 'zh' ? '城市' : 'City'}
               </span>
               <small className="text-warning ms-1">*</small>
             </label>
@@ -1273,7 +1273,7 @@ export default function BookingModal({
               value={formData.internationalCity}
               onChange={handleInputChange}
               className="form-control"
-              placeholder={lang === 'ar' ? 'أدخل اسم المدينة (مثال: بانكوك)' : 'Enter city name (e.g., Bangkok)'}
+              placeholder={lang === 'ar' ? 'أدخل اسم المدينة (مثال: بانكوك)' : lang === 'zh' ? '输入城市名称（例如：曼谷）' : 'Enter city name (e.g., Bangkok)'}
               required
               style={{
                 background: "rgba(255,255,255,0.1)",
@@ -1960,7 +1960,7 @@ export default function BookingModal({
           value={formData.roomCount}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'أدخل عدد الغرف' : 'Enter number of rooms'}
+          placeholder={lang === 'ar' ? 'أدخل عدد الغرف' : lang === 'zh' ? '输入房间数量' : 'Enter number of rooms'}
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -2123,7 +2123,7 @@ export default function BookingModal({
           value={formData.flightFrom}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'من (رمز المطار أو المدينة)' : 'From (airport code or city)'}
+          placeholder={lang === 'ar' ? 'من (رمز المطار أو المدينة)' : lang === 'zh' ? '出发地（机场代码或城市）' : 'From (airport code or city)'}
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -2153,7 +2153,7 @@ export default function BookingModal({
           value={formData.flightTo}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'إلى (رمز المطار أو المدينة)' : 'To (airport code or city)'}
+          placeholder={lang === 'ar' ? 'إلى (رمز المطار أو المدينة)' : lang === 'zh' ? '目的地（机场代码或城市）' : 'To (airport code or city)'}
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -2173,7 +2173,7 @@ export default function BookingModal({
         >
           <Plane size={16} className="text-warning" />
           <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-            {lang === 'ar' ? 'نوع الرحلة' : 'Flight Type'}
+            {lang === 'ar' ? 'نوع الرحلة' : lang === 'zh' ? '航班类型' : 'Flight Type'}
           </span>
           <small className="text-warning ms-1">*</small>
         </label>
@@ -2194,8 +2194,8 @@ export default function BookingModal({
               }}
             >
               {type === 'oneway'
-                ? (lang === 'ar' ? 'ذهاب فقط' : 'One Way')
-                : (lang === 'ar' ? 'ذهاب وعودة' : 'Return')}
+                ? (lang === 'ar' ? 'ذهاب فقط' : lang === 'zh' ? '单程' : 'One Way')
+                : (lang === 'ar' ? 'ذهاب وعودة' : lang === 'zh' ? '往返' : 'Return')}
             </button>
           ))}
         </div>
@@ -2790,11 +2790,11 @@ export default function BookingModal({
 
             {bookingType === "flight" && (
               <>
-                <div className="col-6">{lang === 'ar' ? 'نوع الرحلة' : 'Flight Type'}:</div>
+                <div className="col-6">{lang === 'ar' ? 'نوع الرحلة' : lang === 'zh' ? '航班类型' : 'Flight Type'}:</div>
                 <div className="col-6 text-end">
                   {formData.flightType === 'oneway'
-                    ? (lang === 'ar' ? 'ذهاب فقط' : 'One Way')
-                    : (lang === 'ar' ? 'ذهاب وعودة' : 'Return')}
+                    ? (lang === 'ar' ? 'ذهاب فقط' : lang === 'zh' ? '单程' : 'One Way')
+                    : (lang === 'ar' ? 'ذهاب وعودة' : lang === 'zh' ? '往返' : 'Return')}
                 </div>
 
                 <div className="col-6">{t.departureDate}:</div>

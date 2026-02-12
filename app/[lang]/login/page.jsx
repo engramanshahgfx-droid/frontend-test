@@ -65,6 +65,24 @@ export default function LoginPage({ params }) {
       backToLogin: "العودة لتسجيل الدخول",
       codeSentTo: "تم إرسال الرمز إلى",
     },
+
+     zh: {
+    title: "登录您的账户",
+    subtitle: "欢迎回来！请输入您的详细信息",
+    phone: "电话号码（例如：+966501234567）",
+    password: "密码",
+    forgotPassword: "忘记密码？",
+    login: "登录",
+    newHere: "新用户？",
+    createAccount: "创建账户",
+    otpTitle: "验证您的手机",
+    otpSubtitle: "请输入发送到您手机的验证码",
+    otpPlaceholder: "输入6位数字验证码",
+    verify: "验证",
+    resendCode: "重新发送验证码",
+    backToLogin: "返回登录",
+    codeSentTo: "验证码已发送至",
+  },
   };
 
   const t = translations[lang] || translations.en;
@@ -346,30 +364,11 @@ export default function LoginPage({ params }) {
             </div>
             <form className="w-100" onSubmit={handleLogin}>
               <div className="mb-3 position-relative">
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    left: lang === "en" ? "8px" : "",
-                    right: lang === "ar" ? "8px" : "",
-                  }}
-                >
-                  <FiPhone
-                    style={{
-                      width: "19px",
-                      height: "19px",
-                      color: "rgba(135, 135, 135, 1)",
-                    }}
-                  />
-                </div>
                 <input
                   type="tel"
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "35px" : "",
-                    paddingRight: lang === "ar" ? "35px" : "",
                     height: "50px",
                   }}
                   placeholder={t.phone}
@@ -382,31 +381,12 @@ export default function LoginPage({ params }) {
               </div>
 
               <div className="mb-2 position-relative">
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    left: lang === "en" ? "8px" : "",
-                    right: lang === "ar" ? "8px" : "",
-                  }}
-                >
-                  <GoLock
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                      color: "rgba(135, 135, 135, 1)",
-                    }}
-                  />
-                </div>
                 <input
                   type={visible ? "text" : "password"}
                   className="form-control"
                   placeholder={t.password}
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "35px" : "",
-                    paddingRight: lang === "ar" ? "35px" : "",
                     height: "50px",
                   }}
                   id="userPassword"

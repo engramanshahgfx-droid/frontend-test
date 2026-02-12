@@ -44,11 +44,15 @@ export default function RegisterPage({ params }) {
       title: "Create Account",
       subtitle: "Join us today! Fill in your details to get started",
       name: "Full Name",
+      namePlaceholder: "Enter your full name",
       email: "Email (optional)",
+      emailPlaceholder: "you@example.com (optional)",
       phone: "Phone",
       phonePlaceholder: "+966xxxxxxxxx",
       password: "Password",
+      passwordPlaceholder: "Create a password (min 6 chars)",
       confirmPassword: "Confirm Password",
+      confirmPasswordPlaceholder: "Repeat your password",
       register: "Create Account",
       haveAccount: "Have an account?",
       login: "Login",
@@ -67,11 +71,15 @@ export default function RegisterPage({ params }) {
       title: "إنشاء حساب",
       subtitle: "انضم إلينا اليوم! أكمل بياناتك للبدء",
       name: "الاسم الكامل",
+      namePlaceholder: "أدخل اسمك الكامل",
       email: "البريد الإلكتروني (اختياري)",
+      emailPlaceholder: "you@example.com (اختياري)",
       phone: "رقم الجوال",
       phonePlaceholder: "+966xxxxxxxxx",
       password: "كلمة المرور",
+      passwordPlaceholder: "أنشئ كلمة مرور (6 أحرف على الأقل)",
       confirmPassword: "تأكيد كلمة المرور",
+      confirmPasswordPlaceholder: "أعد إدخال كلمة المرور",
       register: "إنشاء حساب",
       haveAccount: "لديك حساب؟",
       login: "تسجيل الدخول",
@@ -86,6 +94,34 @@ export default function RegisterPage({ params }) {
       emailTaken: "هذا البريد مسجل مسبقاً.",
       checkingEmail: "جاري التحقق من البريد...",
     },
+
+     zh: {
+    title: "创建账户",
+    subtitle: "立即加入我们！填写您的信息开始使用",
+    name: "全名",
+    namePlaceholder: "请输入您的全名",
+    email: "电子邮箱（选填）",
+    emailPlaceholder: "you@example.com（可选）",
+    phone: "电话号码",
+    phonePlaceholder: "+966xxxxxxxxx",
+    password: "密码",
+    passwordPlaceholder: "设置密码（至少6位）",
+    confirmPassword: "确认密码",
+    confirmPasswordPlaceholder: "再次输入密码",
+    register: "创建账户",
+    haveAccount: "已有账户？",
+    login: "登录",
+    otpTitle: "验证您的手机",
+    otpSubtitle: "请输入发送到您手机的验证码",
+    otpPlaceholder: "输入6位数字验证码",
+    verify: "验证",
+    resendCode: "重新发送验证码",
+    backToRegister: "返回注册",
+    codeSentTo: "验证码已发送至",
+    emailAvailable: "电子邮箱可用",
+    emailTaken: "该电子邮箱已被注册。",
+    checkingEmail: "正在检查电子邮箱...",
+  },
   };
 
   const t = translations[lang] || translations.en;
@@ -404,7 +440,7 @@ export default function RegisterPage({ params }) {
                     top: "50%",
                     transform: "translateY(-50%)",
                     marginTop: "12px",
-                    left: lang === "en" ? "12px" : "",
+                    left: lang === "ar" ? "" : "12px",
                     right: lang === "ar" ? "12px" : "",
                   }}
                 >
@@ -415,11 +451,12 @@ export default function RegisterPage({ params }) {
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingLeft: lang === "ar" ? "" : "40px",
                     paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
                   name="name"
+                  placeholder={t.namePlaceholder}
                   value={formData.name}
                   onChange={handleDataChange}
                   required
@@ -435,7 +472,7 @@ export default function RegisterPage({ params }) {
                     top: "50%",
                     transform: "translateY(-50%)",
                     marginTop: "12px",
-                    left: lang === "en" ? "12px" : "",
+                    left: lang === "ar" ? "" : "12px",
                     right: lang === "ar" ? "12px" : "",
                   }}
                 >
@@ -446,11 +483,12 @@ export default function RegisterPage({ params }) {
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingLeft: lang === "ar" ? "" : "40px",
                     paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
                   name="email"
+                  placeholder={t.emailPlaceholder}
                   value={formData.email}
                   onChange={handleDataChange}
                 />
@@ -474,7 +512,7 @@ export default function RegisterPage({ params }) {
                     top: "50%",
                     transform: "translateY(-50%)",
                     marginTop: "12px",
-                    left: lang === "en" ? "12px" : "",
+                    left: lang === "ar" ? "" : "12px",
                     right: lang === "ar" ? "12px" : "",
                   }}
                 >
@@ -485,7 +523,7 @@ export default function RegisterPage({ params }) {
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingLeft: lang === "ar" ? "" : "40px",
                     paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
@@ -506,7 +544,7 @@ export default function RegisterPage({ params }) {
                     top: "50%",
                     transform: "translateY(-50%)",
                     marginTop: "12px",
-                    left: lang === "en" ? "12px" : "",
+                    left: lang === "ar" ? "" : "12px",
                     right: lang === "ar" ? "12px" : "",
                   }}
                 >
@@ -517,11 +555,12 @@ export default function RegisterPage({ params }) {
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingLeft: lang === "ar" ? "" : "40px",
                     paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
                   name="password"
+                  placeholder={t.passwordPlaceholder}
                   value={formData.password}
                   onChange={handleDataChange}
                   minLength={6}
@@ -567,7 +606,7 @@ export default function RegisterPage({ params }) {
                     top: "50%",
                     transform: "translateY(-50%)",
                     marginTop: "12px",
-                    left: lang === "en" ? "12px" : "",
+                    left: lang === "ar" ? "" : "12px",
                     right: lang === "ar" ? "12px" : "",
                   }}
                 >
@@ -578,11 +617,12 @@ export default function RegisterPage({ params }) {
                   className="form-control"
                   style={{
                     borderRadius: "15px",
-                    paddingLeft: lang === "en" ? "40px" : "",
+                    paddingLeft: lang === "ar" ? "" : "40px",
                     paddingRight: lang === "ar" ? "40px" : "",
                     height: "50px",
                   }}
                   name="password_confirmation"
+                  placeholder={t.confirmPasswordPlaceholder}
                   value={formData.password_confirmation}
                   onChange={handleDataChange}
                   minLength={6}
