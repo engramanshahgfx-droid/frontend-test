@@ -19,7 +19,7 @@ export default function IslandDetailPage() {
   const [error, setError] = useState(null);
 
   // Static labels
-  const labels = {
+const labels = {
     en: {
       backButton: "Back",
       bookNow: "Book Now",
@@ -48,14 +48,28 @@ export default function IslandDetailPage() {
       whatsIncluded: "ما يشمله البرنامج",
       itinerary: "البرنامج الزمني",
     },
+    zh: {
+      backButton: "返回",
+      bookNow: "立即预订",
+      duration: "行程时长",
+      groupSize: "团队人数",
+      location: "地点",
+      price: "价格",
+      per_person: "每人",
+      features: "特色",
+      description: "描述",
+      highlights: "亮点",
+      whatsIncluded: "费用包含",
+      itinerary: "行程安排",
+    },
   };
-
   const t = labels[lang] || labels.en;
 
   // Get localized field
   const getText = (obj, field) => {
-    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || "";
+    // prefer explicit language field, then fall back to English, then raw field
+    const fieldKey = lang === "ar" ? `${field}_ar` : (lang === "zh" ? `${field}_zh` : `${field}_en`);
+    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
   // Build image URL

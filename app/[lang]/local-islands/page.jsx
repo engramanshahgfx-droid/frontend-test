@@ -8,7 +8,7 @@ export default function LocalIslandsPage() {
   const params = useParams();
   const lang = params?.lang || 'en';
 
-  const content = {
+const content = {
     en: {
       title: 'Local Island Destinations',
       description: 'Discover beautiful local islands and coastal destinations within Saudi Arabia',
@@ -16,6 +16,10 @@ export default function LocalIslandsPage() {
     ar: {
       title: 'وجهات الجزر المحلية',
       description: 'اكتشف الجزر المحلية والوجهات الساحلية الجميلة في المملكة العربية السعودية',
+    },
+    zh: {
+      title: '本地岛屿目的地',
+      description: '探索沙特阿拉伯境内美丽的本地岛屿和沿海目的地',
     },
   };
 
