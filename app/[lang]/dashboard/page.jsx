@@ -433,9 +433,17 @@ export default function DashboardPage() {
           box-sizing: border-box;
         }
 
+        /* ensure dashboard content clears the fixed header */
         .dashboard-wrapper {
           background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
           min-height: 100vh;
+          padding-top: 80px; /* space for fixed navbar */
+        }
+
+        @media (max-width: 768px) {
+          .dashboard-wrapper {
+            padding-top: 70px;
+          }
         }
 
         .dashboard-banner {

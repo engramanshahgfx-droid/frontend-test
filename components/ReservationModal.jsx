@@ -46,13 +46,287 @@ export default function ReservationModal() {
   const [selectedDestination, setSelectedDestination] = useState(null);
 
   // Saudi regions and local activities for local booking
-  const saudiRegions = [
-    { id: "west", name: { en: "Western Region", ar: "المنطقة الغربية" }, cities: ["Jeddah", "Mecca", "Medina", "Taif"] },
-    { id: "central", name: { en: "Central Region", ar: "المنطقة الوسطى" }, cities: ["Riyadh", "Al-Kharj", "Al-Majma'ah"] },
-    { id: "east", name: { en: "Eastern Region", ar: "المنطقة الشرقية" }, cities: ["Dammam", "Khobar", "Dhahran", "Jubail"] },
-    { id: "north", name: { en: "Northern Region", ar: "المنطقة الشمالية" }, cities: ["Hail", "Al-Jawf", "Tabuk"] },
-    { id: "south", name: { en: "Southern Region", ar: "المنطقة الجنوبية" }, cities: ["Abha", "Jizan", "Najran"] },
-  ];
+const saudiRegions = [
+  { 
+    id: "riyadh", 
+    name: { 
+      en: "Riyadh Region", 
+      ar: "منطقة الرياض",
+      zh: "利雅得地区"
+    },
+    capital: { en: "Riyadh", ar: "الرياض", zh: "利雅得" },
+    cities: [
+      { en: "Riyadh", ar: "الرياض", zh: "利雅得" },
+      { en: "Al-Kharj", ar: "الخرج", zh: "哈尔吉" },
+      { en: "Al-Majma'ah", ar: "المجمعة", zh: "迈季迈阿" },
+      { en: "Ad-Dilam", ar: "الدلم", zh: "迪拉姆" },
+      { en: "Dawadmi", ar: "الدوادمي", zh: "杜瓦迪米" },
+      { en: "Afif", ar: "عفيف", zh: "阿菲夫" },
+      { en: "Al-Zulfi", ar: "الزلفي", zh: "祖勒菲" },
+      { en: "Shaqra", ar: "شقراء", zh: "舍格拉" },
+      { en: "Hotat Bani Tamim", ar: "حوطة بني تميم", zh: "胡塔巴尼塔米姆" },
+      { en: "Al-Muzahmiyya", ar: "المزاحمية", zh: "穆扎希米耶" },
+      { en: "Thadiq", ar: "ثادق", zh: "萨迪格" },
+      { en: "Huraymila", ar: "حريملاء", zh: "胡赖米拉" },
+      { en: "Dhurma", ar: "ضرما", zh: "杜尔马" },
+      { en: "Al-Ghat", ar: "الغاط", zh: "加特" },
+      { en: "Wadi ad-Dawasir", ar: "وادي الدواسر", zh: "瓦迪达瓦西尔" },
+      { en: "Al Aflaj", ar: "الأفلاج", zh: "艾弗拉吉" },
+      { en: "As Sulayyil", ar: "السليل", zh: "苏莱伊勒" },
+      { en: "Rumah", ar: "رماح", zh: "鲁马" },
+      { en: "Al-Quway'iyah", ar: "القويعية", zh: "古韦伊耶" },
+      { en: "Al-Hareeq", ar: "الحريق", zh: "哈里格" },
+      { en: "Irqah", ar: "عرقة", zh: "伊尔卡" },
+      { en: "Diriyah", ar: "الدرعية", zh: "德拉伊耶" }
+    ]
+  },
+  { 
+    id: "makkah", 
+    name: { 
+      en: "Makkah Region", 
+      ar: "منطقة مكة المكرمة",
+      zh: "麦加地区"
+    },
+    capital: { en: "Mecca", ar: "مكة المكرمة", zh: "麦加" },
+    cities: [
+      { en: "Mecca", ar: "مكة المكرمة", zh: "麦加" },
+      { en: "Jeddah", ar: "جدة", zh: "吉达" },
+      { en: "Taif", ar: "الطائف", zh: "塔伊夫" },
+      { en: "Al Qunfudhah", ar: "القنفذة", zh: "贡富扎" },
+      { en: "Al Lith", ar: "الليث", zh: "利斯" },
+      { en: "Rabigh", ar: "رابغ", zh: "拉比格" },
+      { en: "Al Jumum", ar: "الجموم", zh: "朱穆姆" },
+      { en: "Khulays", ar: "خليص", zh: "胡莱斯" },
+      { en: "Al Kamil", ar: "الكامل", zh: "卡米勒" },
+      { en: "Al Khurmah", ar: "الخرمة", zh: "胡尔马" },
+      { en: "Ranyah", ar: "رنية", zh: "拉尼耶" },
+      { en: "Turubah", ar: "تربة", zh: "图尔巴" },
+      { en: "Az Zaimah", ar: "الزيمة", zh: "扎伊马" },
+      { en: "Mastoorah", ar: "مستورة", zh: "马斯图拉" },
+      { en: "Qadeimah", ar: "قديمة", zh: "古戴马" }
+    ]
+  },
+  { 
+    id: "madinah", 
+    name: { 
+      en: "Al Madinah Region", 
+      ar: "منطقة المدينة المنورة",
+      zh: "麦地那地区"
+    },
+    capital: { en: "Medina", ar: "المدينة المنورة", zh: "麦地那" },
+    cities: [
+      { en: "Medina", ar: "المدينة المنورة", zh: "麦地那" },
+      { en: "Yanbu", ar: "ينبع", zh: "延布" },
+      { en: "Al-'Ula", ar: "العلا", zh: "欧拉" },
+      { en: "Badr", ar: "بدر", zh: "巴德尔" },
+      { en: "Khaybar", ar: "خيبر", zh: "海巴尔" },
+      { en: "Mahd adh Dhahab", ar: "مهد الذهب", zh: "迈赫德宰海卜" },
+      { en: "Al Hinakiyah", ar: "الحناكية", zh: "希纳基耶" }
+    ]
+  },
+  { 
+    id: "eastern", 
+    name: { 
+      en: "Eastern Province", 
+      ar: "المنطقة الشرقية",
+      zh: "东部省"
+    },
+    capital: { en: "Dammam", ar: "الدمام", zh: "达曼" },
+    cities: [
+      { en: "Dammam", ar: "الدمام", zh: "达曼" },
+      { en: "Khobar", ar: "الخبر", zh: "胡拜尔" },
+      { en: "Dhahran", ar: "الظهران", zh: "宰赫兰" },
+      { en: "Jubail", ar: "الجبيل", zh: "朱拜勒" },
+      { en: "Qatif", ar: "القطيف", zh: "卡提夫" },
+      { en: "Al Ahsa (Hofuf)", ar: "الأحساء (الهفوف)", zh: "艾赫萨（胡富夫）" },
+      { en: "Hafar Al-Batin", ar: "حفر الباطن", zh: "哈费尔巴廷" },
+      { en: "Khafji", ar: "الخفجي", zh: "哈夫吉" },
+      { en: "Ras Tanura", ar: "رأس تنورة", zh: "拉斯塔努拉" },
+      { en: "Abqaiq", ar: "بقيق", zh: "布盖格" },
+      { en: "Al Nairyah", ar: "النعيرية", zh: "奈伊里耶" },
+      { en: "Qaryat al-Ulya", ar: "قرية العليا", zh: "欧莱雅村" },
+      { en: "Uqair", ar: "العقير", zh: "乌凯尔" },
+      { en: "Al-Oyoon", ar: "العيون", zh: "欧尤恩" }
+    ]
+  },
+  { 
+    id: "asir", 
+    name: { 
+      en: "Asir Region", 
+      ar: "منطقة عسير",
+      zh: "阿西尔地区"
+    },
+    capital: { en: "Abha", ar: "أبها", zh: "艾卜哈" },
+    cities: [
+      { en: "Abha", ar: "أبها", zh: "艾卜哈" },
+      { en: "Khamis Mushait", ar: "خميس مشيط", zh: "海米斯穆谢特" },
+      { en: "Bisha", ar: "بيشة", zh: "比沙" },
+      { en: "Al-Namas", ar: "النماص", zh: "奈马斯" },
+      { en: "Muhayil", ar: "محايل", zh: "穆哈伊勒" },
+      { en: "Bareq", ar: "بارق", zh: "巴里克" },
+      { en: "Sarat Abidah", ar: "سراة عبيدة", zh: "萨拉特阿比达" },
+      { en: "Tathlith", ar: "تثليث", zh: "萨斯利斯" },
+      { en: "Rijal Almaa", ar: "رجال ألمع", zh: "里贾勒阿尔马" },
+      { en: "Ahad Rafidah", ar: "أحد رفيدة", zh: "艾哈德拉菲达" },
+      { en: "Dhahran Al Janub", ar: "ظهران الجنوب", zh: "南宰赫兰" },
+      { en: "Balqarn", ar: "بلقرن", zh: "巴尔卡恩" },
+      { en: "Tanomah", ar: "تنومة", zh: "塔努马" },
+      { en: "Sabt Al Alaya", ar: "سبت العلاية", zh: "塞卜特阿拉亚" }
+    ]
+  },
+  { 
+    id: "qassim", 
+    name: { 
+      en: "Al-Qassim Region", 
+      ar: "منطقة القصيم",
+      zh: "卡西姆地区"
+    },
+    capital: { en: "Buraydah", ar: "بريدة", zh: "布赖代" },
+    cities: [
+      { en: "Buraydah", ar: "بريدة", zh: "布赖代" },
+      { en: "Unaizah", ar: "عنيزة", zh: "欧奈宰" },
+      { en: "Ar Rass", ar: "الرس", zh: "拉斯" },
+      { en: "Al Bukayriyah", ar: "البكيرية", zh: "布凯里耶" },
+      { en: "Al Mithnab", ar: "المذنب", zh: "米斯纳卜" },
+      { en: "Al Badayea", ar: "البدائع", zh: "巴达伊" },
+      { en: "Asyah", ar: "عسيلة", zh: "阿西拉" },
+      { en: "Al Nabhaniyah", ar: "النبهانية", zh: "纳卜哈尼耶" },
+      { en: "Uyun AlJiwa", ar: "عيون الجواء", zh: "朱瓦泉" },
+      { en: "Riyadh Al Khabra", ar: "رياض الخبراء", zh: "海卜拉利雅得" },
+      { en: "Al Shimasiyah", ar: "الشماسية", zh: "希马西耶" }
+    ]
+  },
+  { 
+    id: "tabuk", 
+    name: { 
+      en: "Tabuk Region", 
+      ar: "منطقة تبوك",
+      zh: "塔布克地区"
+    },
+    capital: { en: "Tabuk", ar: "تبوك", zh: "塔布克" },
+    cities: [
+      { en: "Tabuk", ar: "تبوك", zh: "塔布克" },
+      { en: "Duba", ar: "ضباء", zh: "杜巴" },
+      { en: "Al Wajh", ar: "الوجه", zh: "沃季赫" },
+      { en: "Haql", ar: "حقل", zh: "哈格勒" },
+      { en: "Tayma", ar: "تيماء", zh: "泰马" },
+      { en: "Umluj", ar: "أملج", zh: "乌姆卢吉" },
+      { en: "Neom", ar: "نيوم", zh: "尼尤姆" }
+    ]
+  },
+  { 
+    id: "hail", 
+    name: { 
+      en: "Ha'il Region", 
+      ar: "منطقة حائل",
+      zh: "哈伊勒地区"
+    },
+    capital: { en: "Hail", ar: "حائل", zh: "哈伊勒" },
+    cities: [
+      { en: "Hail", ar: "حائل", zh: "哈伊勒" },
+      { en: "Baqaa", ar: "بقعاء", zh: "巴卡" },
+      { en: "Al Khazaiah", ar: "الخزاعية", zh: "哈扎伊耶" },
+      { en: "Al Shinan", ar: "الشنان", zh: "希南" },
+      { en: "Al-Ghazalah", ar: "الغزالة", zh: "加扎拉" },
+      { en: "Al-Sulaymi", ar: "السليمي", zh: "苏莱米" }
+    ]
+  },
+  { 
+    id: "northern", 
+    name: { 
+      en: "Northern Borders Region", 
+      ar: "منطقة الحدود الشمالية",
+      zh: "北部边境地区"
+    },
+    capital: { en: "Arar", ar: "عرعر", zh: "阿尔阿尔" },
+    cities: [
+      { en: "Arar", ar: "عرعر", zh: "阿尔阿尔" },
+      { en: "Rafha", ar: "رفحاء", zh: "拉夫哈" },
+      { en: "Turaif", ar: "طريف", zh: "图赖夫" },
+      { en: "Hafar Al-Batin", ar: "حفر الباطن", zh: "哈费尔巴廷" }
+    ]
+  },
+  { 
+    id: "jizan", 
+    name: { 
+      en: "Jizan Region", 
+      ar: "منطقة جازان",
+      zh: "吉赞地区"
+    },
+    capital: { en: "Jizan", ar: "جازان", zh: "吉赞" },
+    cities: [
+      { en: "Jizan", ar: "جازان", zh: "吉赞" },
+      { en: "Sabya", ar: "صبياء", zh: "萨比亚" },
+      { en: "Abu Arish", ar: "أبو عريش", zh: "阿布阿里什" },
+      { en: "Samtah", ar: "صامطة", zh: "萨姆塔" },
+      { en: "Baish", ar: "بيش", zh: "拜什" },
+      { en: "Ahad al Masarihah", ar: "أحد المسارحة", zh: "艾哈德马萨里哈" },
+      { en: "Al Darb", ar: "الدرب", zh: "达尔布" },
+      { en: "Damad", ar: "ضمد", zh: "达马德" },
+      { en: "Farasan", ar: "فرسان", zh: "法拉桑群岛" },
+      { en: "Al Aridhah", ar: "العارضة", zh: "阿里达" },
+      { en: "Al Reeth", ar: "الريث", zh: "赖斯" },
+      { en: "Al Edabi", ar: "العداية", zh: "埃达比" },
+      { en: "Al Harth", ar: "الحارث", zh: "哈里斯" },
+      { en: "Al Dayer", ar: "الدائر", zh: "达耶尔" }
+    ]
+  },
+  { 
+    id: "najran", 
+    name: { 
+      en: "Najran Region", 
+      ar: "منطقة نجران",
+      zh: "奈季兰地区"
+    },
+    capital: { en: "Najran", ar: "نجران", zh: "奈季兰" },
+    cities: [
+      { en: "Najran", ar: "نجران", zh: "奈季兰" },
+      { en: "Sharurah", ar: "شرورة", zh: "舍鲁拉" },
+      { en: "Hubuna", ar: "حبونا", zh: "胡布纳" },
+      { en: "Badr Al Janub", ar: "بدر الجنوب", zh: "南巴德尔" },
+      { en: "Yadamah", ar: "يدمة", zh: "耶达马" },
+      { en: "Thar", ar: "ثار", zh: "萨尔" },
+      { en: "Khubash", ar: "خباش", zh: "胡巴什" },
+      { en: "Al Kharkhir", ar: "الخرخير", zh: "海尔希尔" }
+    ]
+  },
+  { 
+    id: "bahah", 
+    name: { 
+      en: "Al-Bahah Region", 
+      ar: "منطقة الباحة",
+      zh: "巴哈地区"
+    },
+    capital: { en: "Al Bahah", ar: "الباحة", zh: "巴哈" },
+    cities: [
+      { en: "Al Bahah", ar: "الباحة", zh: "巴哈" },
+      { en: "Baljurashi", ar: "بلجرشي", zh: "拜勒朱尔希" },
+      { en: "Al Mandaq", ar: "المندق", zh: "曼达克" },
+      { en: "Al Makhwah", ar: "المخواة", zh: "迈赫瓦" },
+      { en: "Al Aqiq", ar: "العقيق", zh: "阿基克" },
+      { en: "Qilwah", ar: "قلوة", zh: "吉尔瓦" },
+      { en: "Al Qara", ar: "القرى", zh: "卡拉" },
+      { en: "Al Atawelah", ar: "العطاولة", zh: "阿塔维拉" },
+      { en: "Raghadan", ar: "رغدان", zh: "拉格丹" }
+    ]
+  },
+  { 
+    id: "jawf", 
+    name: { 
+      en: "Al-Jawf Region", 
+      ar: "منطقة الجوف",
+      zh: "焦夫地区"
+    },
+    capital: { en: "Sakakah", ar: "سكاكا", zh: "塞卡卡" },
+    cities: [
+      { en: "Sakakah", ar: "سكاكا", zh: "塞卡卡" },
+      { en: "Qurayyat", ar: "القريات", zh: "古赖亚特" },
+      { en: "Dumat Al-Jandal", ar: "دومة الجندل", zh: "朱拜勒杜马" },
+      { en: "Tabarjal", ar: "طبرجل", zh: "泰拜尔杰勒" },
+      { en: "Al-Haditha", ar: "الحديثة", zh: "哈迪塞" }
+    ]
+  }
+];
 
   // Local activities configuration
   const localActivities = {
@@ -97,10 +371,6 @@ export default function ReservationModal() {
       { id: "karak", name: { en: "Karak Tea", ar: "شاي كرك" } },
     ]
   };
-
-  // International flight options
-
-  // Helper to get tomorrow's date as YYYY-MM-DD for default date fields
   const getDefaultDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -120,7 +390,7 @@ export default function ReservationModal() {
     name: "", // Added for local booking
     phoneNumber: "",
     userEmail: "",
-    numberOfGuests: "2",
+    numberOfGuests: 2,
 
     // Local Booking Specific
     region: "",
@@ -229,7 +499,7 @@ useEffect(() => {
         name: user?.name || "",
         phoneNumber: user?.phone || "",
         userEmail: user?.email || "",
-        numberOfGuests: "2",
+        numberOfGuests: 2,
 
         // Local Booking Specific
         region: "",
@@ -677,7 +947,10 @@ useEffect(() => {
   const t = content[lang] || content.en;
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value: rawValue, type, checked } = e.target;
+    // coerce numeric inputs to Number while allowing empty string during typing
+    const value = type === 'number' ? (rawValue === '' ? '' : Number(rawValue)) : rawValue;
+
     if (name.includes('.')) {
       const [section, field] = name.split('.');
       setFormData(prev => ({
@@ -696,7 +969,7 @@ useEffect(() => {
     if (showValidationError) {
       setShowValidationError(false);
     }
-  };
+  }; 
 
   const handleBookingTypeChange = (type) => {
     setBookingType(type);
@@ -1104,8 +1377,10 @@ useEffect(() => {
           <option value="">{lang === "ar" ? "اختر المدينة" : "Select City"}</option>
           {formData.region && saudiRegions
             .find(r => r.id === formData.region)
-            ?.cities.map(city => (
-              <option key={city} value={city}>{city}</option>
+            ?.cities.map((city) => (
+              <option key={city.en} value={city[lang] || city.en}>
+                {city[lang] || city.en}
+              </option>
             ))
           }
         </select>
@@ -1164,22 +1439,25 @@ useEffect(() => {
           <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{t.numberOfGuests}</span>
           <small className="text-warning ms-1">*</small>
         </label>
-        <div className="d-flex flex-wrap gap-2">
-          {t.guestOptions.map((num) => (
-            <button
-              key={num}
-              type="button"
-              onClick={() => setFormData(prev => ({ ...prev, numberOfGuests: num }))}
-              className={`btn px-3 py-2 ${formData.numberOfGuests === num ? 'btn-warning' : 'btn-outline-light'}`}
-              style={{ 
-                borderRadius: "10px", 
-                fontSize: "0.85rem",
-              }}
-            >
-              {num} {lang === "ar" ? "أشخاص" : "People"}
-            </button>
-          ))}
-        </div>
+        <input
+          type="number"
+          name="numberOfGuests"
+          min={1}
+          step={1}
+          value={formData.numberOfGuests}
+          onChange={handleInputChange}
+          className="form-control"
+          placeholder={lang === "ar" ? "أدخل عدد الأشخاص" : "Enter number of guests"}
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.3)",
+            color: "#fff",
+            borderRadius: "8px",
+            padding: "10px 12px",
+            fontSize: "0.9rem",
+            width: "140px"
+          }}
+        />
       </div>
     </motion.div>
   );
@@ -1633,22 +1911,25 @@ useEffect(() => {
           <span className="fw-bold" style={{ fontSize: "0.95rem" }}>{t.numberOfGuests}</span>
           <small className="text-warning ms-1">*</small>
         </label>
-        <div className="d-flex flex-wrap gap-2">
-          {t.guestOptions.map((num) => (
-            <button
-              key={num}
-              type="button"
-              onClick={() => setFormData(prev => ({ ...prev, numberOfGuests: num }))}
-              className={`btn px-3 py-2 ${formData.numberOfGuests === num ? 'btn-warning' : 'btn-outline-light'}`}
-              style={{ 
-                borderRadius: "10px", 
-                fontSize: "0.85rem",
-              }}
-            >
-              {num} {lang === "ar" ? "أشخاص" : "People"}
-            </button>
-          ))}
-        </div>
+        <input
+          type="number"
+          name="numberOfGuests"
+          min={1}
+          step={1}
+          value={formData.numberOfGuests}
+          onChange={handleInputChange}
+          className="form-control"
+          placeholder={lang === "ar" ? "أدخل عدد الأشخاص" : "Enter number of guests"}
+          style={{
+            background: "rgba(255,255,255,0.1)",
+            border: "1px solid rgba(255,255,255,0.3)",
+            color: "#fff",
+            borderRadius: "8px",
+            padding: "10px 12px",
+            fontSize: "0.9rem",
+            width: "140px"
+          }}
+        />
       </div>
 
       <div className="col-12 mb-2">

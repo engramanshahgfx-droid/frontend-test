@@ -72,33 +72,33 @@ export default function Testimonials({ lang = "en" }) {
     ],
     zh: [
       {
-        name: "righteous",
-        quote: "Our trip to the Hail Mountains was a wonderful experience! Everything was excellently organized, and the staff was very helpful.",
+        name: "正义之士",
+        quote: "我们前往哈伊勒山脉的旅行是一次美妙的体验！一切组织得井井有条，工作人员非常热心。",
         rating: 5,
       },
       {
-        name: "pleasant",
-        quote: "Tourism in Saudi Arabia with your team is different, like you've never seen it before. Thank you, Hills and Sands team.",
+        name: "愉悦之客",
+        quote: "与你们的团队一同游览沙特阿拉伯，体验与众不同，前所未见。感谢山丘与沙地团队。",
         rating: 5,
       },
       {
-        name: "immortal",
-        quote: "Special thanks to Omar for his attention to the smallest details of the adventure and to the cooperative team; a truly unique experience.",
+        name: "永恒回忆",
+        quote: "特别感谢奥马尔对冒险旅程每一个细节的关注，以及协作团队的努力；真正独一无二的体验。",
         rating: 5,
       },
       {
-        name: "satisfied",
-        quote: "Amazing service and unforgettable memories. The attention to detail and customer care was exceptional throughout our journey.",
+        name: "满意之宾",
+        quote: "卓越的服务，难忘的回忆。在整个旅途中，对细节的关注和对客户的关怀都无与伦比。",
         rating: 5,
       },
       {
-        name: "adventurer",
-        quote: "The desert safari experience was breathtaking! Professional guides and well-planned itinerary made our trip memorable.",
+        name: "冒险家",
+        quote: "沙漠探险之旅令人叹为观止！专业的向导和精心规划的行程让我们的旅行难以忘怀。",
         rating: 5,
       },
       {
-        name: "explorer",
-        quote: "From start to finish, everything was perfectly arranged. We felt safe and well taken care of during our entire Saudi adventure.",
+        name: "探索者",
+        quote: "从始至终，一切都安排得完美无瑕。在整个沙特冒险期间，我们感到安全且备受关照。",
         rating: 5,
       },
     ],
@@ -134,14 +134,22 @@ export default function Testimonials({ lang = "en" }) {
   return (
     <section className="testimonials-section" dir={lang === "ar" ? "rtl" : "ltr"}>
       <div className="container">
-        <div className="testimonials-header text-center mb-5">
-          <h2 className="section-title">
-            {lang === "ar" ? "آراء عملائنا" : "What Our Customers Say"}
-          </h2>
-          <p className="section-subtitle">
-            {lang === "ar" ? "تجارب حقيقية من مسافرينا السعداء" : "Real experiences from our happy travelers"}
-          </p>
-        </div>
+    <div className="testimonials-header text-center mb-5">
+  <h2 className="section-title">
+    {lang === "ar"
+      ? "آراء عملائنا"
+      : lang === "zh"
+      ? "客户评价"
+      : "What Our Customers Say"}
+  </h2>
+  <p className="section-subtitle">
+    {lang === "ar"
+      ? "تجارب حقيقية من مسافرينا السعداء"
+      : lang === "zh"
+      ? "来自我们快乐旅行者的真实体验"
+      : "Real experiences from our happy travelers"}
+  </p>
+</div>
 
         <div className="testimonials-slider">
           <div className="testimonials-container">

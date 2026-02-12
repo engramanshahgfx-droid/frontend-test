@@ -88,14 +88,22 @@ export default function TripsArchive({ lang }) {
   const fetchRef = React.useRef(() => {});
 
   // Static trips data with complete information and videos
-  const staticTrips = [
+const staticTrips = [
     {
       id: 1,
       type: 'event',
       title: 'Winter Hills and Sands',
-      title_trans: { en: 'Winter Hills and Sands', ar: 'شتوية التلال والرمال' },
+      title_trans: { 
+        en: 'Winter Hills and Sands', 
+        ar: 'شتوية التلال والرمال',
+        zh: '冬季山丘与沙地'
+      },
       description: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.',
-      description_trans: { en: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.', ar: 'عيش المتعة معنا في شتوية التلال والرمال. جلسات طربية، جلسات دافئة، متعة المشروبات، الاستمتاع بوجبة الشواء، تحدي الرماية في أجواء صحراوية فريدة.' },
+      description_trans: { 
+        en: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.', 
+        ar: 'عيش المتعة معنا في شتوية التلال والرمال. جلسات طربية، جلسات دافئة، متعة المشروبات، الاستمتاع بوجبة الشواء، تحدي الرماية في أجواء صحراوية فريدة.',
+        zh: '与我们一起享受冬季山丘与沙地的乐趣。体验派对环节、温馨聚会、饮品、烧烤餐以及在独特的沙漠氛围中的射箭挑战。'
+      },
       video: '/videos/jeddah.mp4',
       image: '/foundation-day.jpg',
       start_date: '2025-01-24',
@@ -103,13 +111,12 @@ export default function TripsArchive({ lang }) {
       city_name: 'Jeddah-AlUla',
       group_size: '20-50 Persons',
       duration: 1,
-      // badge: 'Winter Special',
       highlights: [
-        { en: 'Party Session', ar: 'جلسة طربية' },
-        { en: 'Warm Gatherings', ar: 'جلسات دافئة' },
-        { en: 'Beverages', ar: 'المشروبات' },
-        { en: 'BBQ', ar: 'الشواء' },
-        { en: 'Archery', ar: 'الرماية' }
+        { en: 'Party Session', ar: 'جلسة طربية', zh: '派对环节' },
+        { en: 'Warm Gatherings', ar: 'جلسات دافئة', zh: '温馨聚会' },
+        { en: 'Beverages', ar: 'المشروبات', zh: '饮品' },
+        { en: 'BBQ', ar: 'الشواء', zh: '烧烤' },
+        { en: 'Archery', ar: 'الرماية', zh: '射箭' }
       ],
       lang: 'en'
     },
@@ -117,9 +124,17 @@ export default function TripsArchive({ lang }) {
       id: 2,
       type: 'event',
       title: 'Egyptian Night at Winter Hills and Sands',
-      title_trans: { en: 'Egyptian Night at Winter Hills and Sands', ar: 'ليلة مصرية في شتوية التلال والرمال' },
+      title_trans: { 
+        en: 'Egyptian Night at Winter Hills and Sands', 
+        ar: 'ليلة مصرية في شتوية التلال والرمال',
+        zh: '冬季山丘与沙地的埃及之夜'
+      },
       description: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.',
-      description_trans: { en: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.', ar: 'عيش اجواء مختلفة والاستمتاع بفقرات الأمسية في اجواء الطبيعة. جلسة طربية على انغام العود بصوت العمده، وجبة عشاء مشاري واكلات مصرية، جلسة مع الانغام القديمة بصوت امثال.' },
+      description_trans: { 
+        en: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.', 
+        ar: 'عيش اجواء مختلفة والاستمتاع بفقرات الأمسية في اجواء الطبيعة. جلسة طربية على انغام العود بصوت العمده، وجبة عشاء مشاري واكلات مصرية، جلسة مع الانغام القديمة بصوت امثال.',
+        zh: '体验不同的氛围，在大自然中享受晚间表演。与"Al-Omda"一同聆听乌德琴演奏，享用正宗埃及晚餐，并伴随"Amathal"乐队的经典旋律。'
+      },
       video: '/videos/egyptian.mp4',
       image: '/alula-heritage.jpg',
       start_date: '2025-02-03',
@@ -129,11 +144,11 @@ export default function TripsArchive({ lang }) {
       duration: 1,
       badge: 'Popular',
       highlights: [
-        { en: 'Oud Music', ar: 'موسيقى العود' },
-        { en: 'Egyptian Food', ar: 'الطعام المصري' },
-        { en: 'Live Performance', ar: 'عرض حي' },
-        { en: 'Natural Ambiance', ar: 'أجواء طبيعية' },
-        { en: 'Classic Melodies', ar: 'الألحان الكلاسيكية' }
+        { en: 'Oud Music', ar: 'موسيقى العود', zh: '乌德琴音乐' },
+        { en: 'Egyptian Food', ar: 'الطعام المصري', zh: '埃及美食' },
+        { en: 'Live Performance', ar: 'عرض حي', zh: '现场表演' },
+        { en: 'Natural Ambiance', ar: 'أجواء طبيعية', zh: '自然氛围' },
+        { en: 'Classic Melodies', ar: 'الألحان الكلاسيكية', zh: '经典旋律' }
       ],
       lang: 'en'
     },
@@ -141,9 +156,17 @@ export default function TripsArchive({ lang }) {
       id: 3,
       type: 'event',
       title: 'Foundation Day at Winter Hills and Sands',
-      title_trans: { en: 'Foundation Day at Winter Hills and Sands', ar: 'يوم التأسيس في شتوية التلال والرمال' },
+      title_trans: { 
+        en: 'Foundation Day at Winter Hills and Sands', 
+        ar: 'يوم التأسيس في شتوية التلال والرمال',
+        zh: '冬季山丘与沙地的建国日庆典'
+      },
       description: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.',
-      description_trans: { en: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.', ar: 'يوم بدينا معنا، اعيش اجواء مختلفة. مسيرة يوم التأسيس، جلسة مع انغام العود بصوت الفنان العمده، فرقة شعبية وفلكلور، فرقة شعبية نسائية، الضيافة الشعبية، ركوب الخيول والجمال.' },
+      description_trans: { 
+        en: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.', 
+        ar: 'يوم بدينا معنا، اعيش اجواء مختلفة. مسيرة يوم التأسيس، جلسة مع انغام العود بصوت الفنان العمده، فرقة شعبية وفلكلور، فرقة شعبية نسائية، الضيافة الشعبية، ركوب الخيول والجمال.',
+        zh: '与我们一起庆祝建国日！体验建国日游行，艺术家"Al-Omda"的乌德琴演奏，民俗与民间乐团，女性民俗表演，传统待客之道，骑马和骑骆驼。'
+      },
       video: '/videos/saudifounday.mp4',
       image: '/red-sea-beach.jpg',
       start_date: '2025-02-23',
@@ -151,14 +174,13 @@ export default function TripsArchive({ lang }) {
       city_name: 'Jeddah-AlUla',
       group_size: '30-100 Persons',
       duration: 1,
-      // badge: 'Featured Event',
       highlights: [
-        { en: 'Foundation Day Procession', ar: 'مسيرة يوم التأسيس' },
-        { en: 'Oud Music', ar: 'موسيقى العود' },
-        { en: 'Folk Bands', ar: 'فرق شعبية' },
-        { en: 'Horse Riding', ar: 'ركوب الخيول' },
-        { en: 'Camel Rides', ar: 'ركوب الجمال' },
-        { en: 'Traditional Hospitality', ar: 'الضيافة الشعبية' }
+        { en: 'Foundation Day Procession', ar: 'مسيرة يوم التأسيس', zh: '建国日游行' },
+        { en: 'Oud Music', ar: 'موسيقى العود', zh: '乌德琴音乐' },
+        { en: 'Folk Bands', ar: 'فرق شعبية', zh: '民间乐队' },
+        { en: 'Horse Riding', ar: 'ركوب الخيول', zh: '骑马' },
+        { en: 'Camel Rides', ar: 'ركوب الجمال', zh: '骑骆驼' },
+        { en: 'Traditional Hospitality', ar: 'الضيافة الشعبية', zh: '传统待客之道' }
       ],
       lang: 'en'
     }
@@ -393,17 +415,6 @@ export default function TripsArchive({ lang }) {
                           </div>
                         </div>
 
-                        {/* CTA Button */}
-                        {/* <div className="trip-footer">
-                          <button className="trip-btn">
-                            {t.viewDetails}
-                            {isRTL ? (
-                              <FaArrowLeft className="ms-2" />
-                            ) : (
-                              <FaArrowRight className="ms-2" />
-                            )}
-                          </button>
-                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -439,10 +450,7 @@ export default function TripsArchive({ lang }) {
 
           {/* Load More Section */}
           <div className="text-center mt-5">
-            {/* <div className="load-more-section">
-              <p className="mb-4">{t.loadMoreQuestion}</p>
-              <button className="btn btn-load-more">{t.loadMoreText}</button>
-            </div> */}
+        
           </div>
         </div>
       </section>

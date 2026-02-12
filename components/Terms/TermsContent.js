@@ -28,6 +28,8 @@ export default function TermsContent({ lang }) {
       heroSubtitle: "لشركة التلال والرمال لتنظيم الرحلات السياحية",
       intro:
         'هذا الموقع الإلكتروني هو الموقع الرسمي لـ شركة التلال والرمال لتنظيم الرحلات السياحية (ويشار إليه لاحقًا بـ "الموقع"). تعود ملكية الموقع، ومحتوياته، ومسؤولية تشغيله وإدارته إلى شركة التلال والرمال لتنظيم الرحلات السياحية، وهي شركة مسجلة وتعمل وفق أنظمة وقوانين المملكة العربية السعودية، ويقع مقرها الرئيس في المملكة العربية السعودية.',
+      warning:
+        'يُرجى قراءة هذه الشروط والأحكام بعناية قبل إتمام أي حجز أو معاملة معنا. يُعد إتمام عملية الحجز أو سداد قيمة الخدمات موافقةً صريحةً وغير مشروطة من العميل على جميع البنود الواردة أدناه.',
 
       sections: [
         {
@@ -159,6 +161,8 @@ export default function TermsContent({ lang }) {
       heroSubtitle: "For Tilal Al Rimal Tourism Company",
       intro:
         'This website is the official website of Tilal Al Rimal Tourism Company (hereinafter referred to as the "Site"). The ownership of the Site, its contents, and the responsibility for its operation and management belong to Tilal Al Rimal Tourism Company, a company registered and operating under the laws and regulations of the Kingdom of Saudi Arabia, with its headquarters located in the Kingdom of Saudi Arabia.',
+      warning:
+        'Please read these Terms & Conditions carefully before completing any booking or transaction with us. Completing a booking or paying for services constitutes the customer\'s explicit and unconditional acceptance of all the terms below.',
 
       sections: [
         {
@@ -284,6 +288,148 @@ export default function TermsContent({ lang }) {
         },
       ],
     },
+    zh: {
+      heroTitle: "条款与条件",
+      heroSubtitle: "阿尔蒂拉尔·阿尔里马尔旅游公司",
+      intro:
+        '本网站是阿尔蒂拉尔·阿尔里马尔旅游公司（以下简称"本公司"）的官方网站。网站所有权、内容及运营管理责任均属于阿尔蒂拉尔·阿尔里马尔旅游公司。该公司根据沙特阿拉伯王国法律法规注册并运营，总部位于沙特阿拉伯王国。',
+      warning:
+        '在进行任何预订或交易前，请仔细阅读本条款与条件。完成预订或支付服务费用即表示客户明确且无条件接受以下所有条款。',
+
+      sections: [
+        {
+          id: 1,
+          title: "授权使用",
+          icon: <FaUserCheck size={28} />,
+          points: [
+            "用户必须年满18周岁并具备完全法律行为能力。",
+            "用户同意仅将本网站用于合法的个人目的。",
+            "禁止使用本网站从事任何违反法规或公共道德的活动，包括发布有害内容、发送垃圾邮件、上传病毒或恶意软件、侵犯知识产权等。",
+          ],
+        },
+        {
+          id: 2,
+          title: "总则与框架",
+          icon: <FaBalanceScale size={28} />,
+          points: [
+            "所有预订和交易均受沙特阿拉伯王国现行法律法规约束，包括旅游部及民航总局的相关规定。",
+            "本公司作为客户与服务提供商之间的中介，责任仅限于促进预订及确认流程。",
+            "所示价格为预估价格，在确认预订并签发正式文件（机票/酒店凭证）前，服务提供商可对其进行修改。",
+            "除各服务特定条款另有规定外，客户在完成预订后无权要求退款或反对所执行的条款。",
+          ],
+        },
+        {
+          id: 3,
+          title: "机票预订条款",
+          icon: <FaPlane size={28} />,
+          points: [
+            "所有机票均受承运航空公司（航空承运人）的政策和条件约束。",
+            "退款或改签需严格遵守航空公司的明确政策，并可能产生行政费用及票价差额。同理，不可退款或不可改签的机票均适用该航空公司的条款与条件。",
+            "若客户未在预定起飞时间出现（No-Show），将适用承运航空公司的全部罚则与条件。",
+            "客户全权负责确保机票上的姓名与官方旅行证件（护照或国民身份证）完全一致。",
+            "本公司对航班时刻变更、延误、取消、起降时间调整、行李丢失/损坏不承担任何责任。",
+            "满足旅行要求（包括必要签证、护照有效期、体检、目的地国家入境文件）的全部责任完全由客户自行承担。",
+          ],
+        },
+        {
+          id: 4,
+          title: "酒店预订条款",
+          icon: <FaHotel size={28} />,
+          points: [
+            "取消和修改政策因具体酒店、房型和预订时选择的费率而异。部分预订在确认后完全不可退款。",
+            "入住和退房时间受相关酒店政策的约束。",
+            "特殊要求（如双床/大床、景观偏好、提前入住等）仅为偏好性请求，不保证满足。能否实现取决于入住时酒店的实际可用情况。",
+          ],
+        },
+        {
+          id: 5,
+          title: "旅游行程与套餐",
+          icon: <FaUmbrellaBeach size={28} />,
+          points: [
+            "旅游行程可能根据运营条件、天气或目的地国家地方当局的决定进行调整，本公司承诺保持行程的实质和标准。",
+            "若因超出本公司控制的不可抗力因素取消行程，将适用主要服务提供商（酒店、航空公司和地接服务）的退款政策。",
+            "因客户原因导致的任何延误或未能遵守行程安排的时间，本公司不承担财务或后勤责任。",
+          ],
+        },
+        {
+          id: 6,
+          title: "价格与优惠",
+          icon: <FaTags size={28} />,
+          points: [
+            "价格可能因供应商政策、税费或汇率波动而变化。",
+            "促销优惠（如代金券、优惠券）不可兑换现金，并受公布时说明的使用条款约束。",
+            "必须在预订确认截止日期前全额支付服务费用。",
+            "向客户提供的报价将明确价格是否包含增值税及其他地方税费。",
+          ],
+        },
+        {
+          id: 7,
+          title: "付款政策",
+          icon: <FaCreditCard size={28} />,
+          points: [
+            "预订确认时需支付100%的预订费用，支付方式为银行卡（Visa/Mastercard/Mada）或银行转账。",
+            "本公司不在网站内提供任何电子钱包。",
+            "“先预订后付款”功能仅适用于特定行程。",
+          ],
+        },
+        {
+          id: 8,
+          title: "退款与取消政策",
+          icon: <FaUndoAlt size={28} />,
+          points: [
+            "取消的可能性取决于服务提供商（航空公司、酒店、旅游运营商）的政策，并将计算其施加的任何费用。",
+            "本公司的行政服务费及佣金在任何情况下均不予退还。",
+            "退款流程可能需要14至45个工作日，具体取决于银行程序及最终服务提供商。",
+            "退款将使用客户最初使用的相同付款方式进行。",
+            "若通过银行卡支付，退款将在48个工作小时内处理，银行可能需要额外7个工作日到账。",
+            "客户须通过电子邮件 info@altelal-walramal.sa 联系客服申请退款。",
+          ],
+        },
+        {
+          id: 9,
+          title: "责任限制与不可抗力",
+          icon: <FaShieldAlt size={28} />,
+          points: [
+            "本公司对因使用本网站而造成的损害或损失不承担任何责任，包括技术故障、数据泄露或服务中断。",
+            "本公司对与本网站链接的外部网站内容不承担责任。",
+            "本公司对不可抗力情况造成的任何后果不承担责任，包括但不限于：自然灾害、恶劣天气、政府决定、边境或机场关闭、流行病、战争或安全动乱。",
+            "本公司与客户之间可能产生的所有争议均受沙特阿拉伯王国法律法规管辖，王国主管法院为争议裁决的司法机构。",
+          ],
+        },
+        {
+          id: 10,
+          title: "隐私与保密",
+          icon: <FaUserLock size={28} />,
+          points: [
+            "本公司致力于使用现代技术保护客户数据，但不保证100%的安全性。",
+            "本网站可能使用Cookie以提升用户体验，用户可通过调整浏览器设置禁用Cookie。",
+            "客户的个人数据仅用于完成和执行所要求的预订及服务。",
+            "本公司承诺根据沙特阿拉伯王国现行数据保护法规保护客户数据的机密性。",
+            "除非为执行交易所必需，否则不会与第三方共享数据。",
+          ],
+        },
+        {
+          id: 11,
+          title: "确认与接受",
+          icon: <FaFileSignature size={28} />,
+          points: [
+            "通过完成预订流程或支付任何款项，客户确认其完全且不可撤销地接受上述所有条款、条件及政策。",
+            "本条款构成客户与本公司之间的完整协议，并取代任何先前的协议或声明。",
+            "若本条款任何规定不可执行，不影响其余规定的效力。",
+          ],
+        },
+      ],
+    },
+
+  };
+
+  // add a Chinese (zh) fallback that reuses English sections but provides Chinese strings
+  content.zh = content.zh || {
+    ...content.en,
+    heroTitle: "条款与条件",
+    heroSubtitle: "Tilal Al Rimal 公司的条款与条件",
+    intro: "本网站为 Tilal Al Rimal 旅游公司的官方网站。在完成任何预订或交易前，请仔细阅读这些条款与条件。完成预订或支付服务费用即表示客户明确且无条件地接受以下所有条款。",
+    warning: "请在完成任何预订或交易之前仔细阅读这些条款和条件。完成预订或付款即表示客户明确且无条件地接受以下所有条款。",
   };
 
   const t = content[lang] || content.ar;
@@ -314,11 +460,7 @@ export default function TermsContent({ lang }) {
             <p className="lead text-center m-0">{t.intro}</p>
             <div className="warning-note mt-4">
               <FaExclamationTriangle className="me-2" />
-              <strong>
-                يُرجى قراءة هذه الشروط والأحكام بعناية قبل إتمام أي حجز أو
-                معاملة معنا. يُعد إتمام عملية الحجز أو سداد قيمة الخدمات موافقةً
-                صريحةً وغير مشروطة من العميل على جميع البنود الواردة أدناه.
-              </strong>
+              <strong>{t.warning}</strong>
             </div>
           </div>
         </div>

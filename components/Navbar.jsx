@@ -134,39 +134,40 @@ export default function Navbar({ lang }) {
 
   ];
 
-  const basicData = [
+ const basicData = [
     {
-      title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية" },
+      title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية", zh: "关于沙特阿拉伯" },
       description: {
         en: "Culture, heritage and landmarks",
         ar: "الثقافة والتراث والمعالم",
+        zh: "文化、遗产与地标",
       },
       icon: "🏛️",
       href: "/about-saudi",
     },
     {
-      title: { en: "Visa Requirements ", ar: "   متطلبات التأشيرة" },
+      title: { en: "Visa Requirements", ar: "متطلبات التأشيرة", zh: "签证要求" },
       description: {
-        en: "  requirements and documents",
-        ar: "  متطلبات الدخول والمستندات",
+        en: "requirements and documents",
+        ar: "متطلبات الدخول والمستندات",
+        zh: "要求和文件",
       },
       icon: "🏛️",
       href: "/visa",
     },
     {
-      title: { en: "Travel Guide", ar: "دليل المسافر" },
+      title: { en: "Travel Guide", ar: "دليل المسافر", zh: "旅行指南" },
       description: {
-        en: "Transportation  ",
-        ar: "  المواصلات",
+        en: "Transportation",
+        ar: "المواصلات",
+        zh: "交通",
       },
       icon: "📋",
       href: "/transportation",
     },
-
   ];
-
-  // Hide the global Navbar on admin and dashboard pages
-  if (!pathname || pathname?.startsWith(`/${lang}/admin`) || pathname?.startsWith(`/${lang}/dashboard`)) return null;
+  // Hide the global Navbar on admin pages only
+  if (!pathname || pathname?.startsWith(`/${lang}/admin`)) return null;
 
   const whatsappNumber = "+966547305060";
 

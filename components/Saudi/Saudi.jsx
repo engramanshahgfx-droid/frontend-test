@@ -37,7 +37,7 @@ const Saudi = ({ lang = "ar" }) => {
       nameEn: "Arar",
       nameAr: "عرعر",
       nameZh: "阿尔阿尔",
-      img: "/cities/arar.jpeg",
+      img: "/cities/Arar.jpeg",
       top: 12,
       left: 38,
     },

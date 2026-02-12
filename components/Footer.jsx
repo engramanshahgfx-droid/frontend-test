@@ -6,11 +6,11 @@ import {
   FaTiktok,
   FaSnapchat,
   FaInstagram,
-  FaTwitter,
   FaMapMarkerAlt,
   FaPhone,
   FaEnvelope,
 } from "react-icons/fa";
+import { SiX } from "react-icons/si";
 import en from "@/public/locales/en/common.json";
 import ar from "@/public/locales/ar/common.json";
 import zh from "@/public/locales/zh/common.json";
@@ -327,7 +327,7 @@ export default function Footer({ lang }) {
                 <FaSnapchat size={16} />
               </a>
               <a
-                href="https://www.instagram.com/tilalr2030/"
+                href="https://www.instagram.com/tilall2030?igsh=c2wyaThvcmZpb3pz/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -340,9 +340,9 @@ export default function Footer({ lang }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon"
-                aria-label="Twitter"
+                aria-label="X"
               >
-                <FaTwitter size={16} />
+                <SiX size={16} />
               </a>
             </div>
           </div>
