@@ -155,17 +155,15 @@ export default function BookingModal({
   };
 
   // International flight options
-  const flightOptions = [
-    
-  ];
+  const flightOptions = [];
 
   // Helper to get tomorrow's date as YYYY-MM-DD for default date fields
   const getDefaultDate = () => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const year = tomorrow.getFullYear();
-    const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-    const day = String(tomorrow.getDate()).padStart(2, '0');
+    const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
+    const day = String(tomorrow.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -299,7 +297,8 @@ export default function BookingModal({
         customDinnerLocal: "",
 
         // International fields
-        internationalCountry: destination?.country_en || destination?.country || "",
+        internationalCountry:
+          destination?.country_en || destination?.country || "",
         internationalCity: destination?.city_en || destination?.city || "",
         checkInDate: "",
         checkOutDate: "",
@@ -521,97 +520,97 @@ export default function BookingModal({
       guestOptions: ["٢", "٤", "٦", "٨", "١٠+"],
       validationError: "يرجى ملء جميع الحقول المطلوبة",
     },
-     zh: {
-    title: "预订您的行程",
-    steps: ["类型", "详情", "联系信息"],
+    zh: {
+      title: "预订您的行程",
+      steps: ["类型", "详情", "联系信息"],
 
-    // Location selection
-    bookingLocation: "预订类型",
-    bookLocally: "活动",
-    bookInternationally: "国际旅行",
+      // Location selection
+      bookingLocation: "预订类型",
+      bookLocally: "活动",
+      bookInternationally: "国际旅行",
 
-    // Local booking specific
-    selectRegion: "选择地区",
-    selectCity: "选择城市",
-    name: "姓名",
-    date: "日期",
-    localDestination: "具体地点",
-    entertainmentOptions: "娱乐选项",
-    folkloreOptions: "民俗文化表演",
-    localActivities: "活动",
-    seaTrips: "海上旅行",
-    foodBeverages: "餐饮",
-    hotDrinksLocal: "热饮",
-    otherOption: "其他（请指定）",
+      // Local booking specific
+      selectRegion: "选择地区",
+      selectCity: "选择城市",
+      name: "姓名",
+      date: "日期",
+      localDestination: "具体地点",
+      entertainmentOptions: "娱乐选项",
+      folkloreOptions: "民俗文化表演",
+      localActivities: "活动",
+      seaTrips: "海上旅行",
+      foodBeverages: "餐饮",
+      hotDrinksLocal: "热饮",
+      otherOption: "其他（请指定）",
 
-    // International booking
-    bookingTypeTitle: "您想预订什么？",
-    bookActivity: "活动体验",
-    bookHotel: "酒店住宿",
-    bookFlight: "航班",
-    bookPackage: "完整套餐",
+      // International booking
+      bookingTypeTitle: "您想预订什么？",
+      bookActivity: "活动体验",
+      bookHotel: "酒店住宿",
+      bookFlight: "航班",
+      bookPackage: "完整套餐",
 
-    activityTitle: "活动体验",
-    numberOfGuests: "人数",
-    dates: "日期",
-    checkIn: "入住",
-    checkOut: "退房",
-    entertainment: "娱乐 🎶",
-    entertainmentPlaceholder: "偏好的娱乐（音乐、表演等）",
-    culturalShow: "传统文化表演",
-    activities: "活动 🌍",
-    sightseeing: "观光",
-    culturalTours: "文化游览",
-    shopping: "购物",
+      activityTitle: "活动体验",
+      numberOfGuests: "人数",
+      dates: "日期",
+      checkIn: "入住",
+      checkOut: "退房",
+      entertainment: "娱乐 🎶",
+      entertainmentPlaceholder: "偏好的娱乐（音乐、表演等）",
+      culturalShow: "传统文化表演",
+      activities: "活动 🌍",
+      sightseeing: "观光",
+      culturalTours: "文化游览",
+      shopping: "购物",
 
-    hotelTitle: "酒店住宿",
-    selectHotel: "选择酒店",
-    roomType: "房间类型",
-    roomCount: "房间数量",
-    roomsNearEachOther: "相邻房间",
-    roomsNearEachOtherCount: "相邻房间数量",
-    amenities: "设施",
-    breakfastIncluded: "含早餐",
-    freeWifi: "免费WiFi",
-    parking: "停车位",
-    swimmingPool: "游泳池",
+      hotelTitle: "酒店住宿",
+      selectHotel: "选择酒店",
+      roomType: "房间类型",
+      roomCount: "房间数量",
+      roomsNearEachOther: "相邻房间",
+      roomsNearEachOtherCount: "相邻房间数量",
+      amenities: "设施",
+      breakfastIncluded: "含早餐",
+      freeWifi: "免费WiFi",
+      parking: "停车位",
+      swimmingPool: "游泳池",
 
-    flightTitle: "航班预订",
-    flightFrom: "出发地",
-    flightTo: "目的地",
-    departureDate: "出发日期",
-    returnDate: "返回日期",
-    flightClass: "舱位等级",
-    economy: "经济舱",
-    business: "商务舱",
-    first: "头等舱",
-    passengers: "乘客",
-    selectFlight: "选择航班",
-    airline: "航空公司",
-    departure: "出发",
-    duration: "时长",
+      flightTitle: "航班预订",
+      flightFrom: "出发地",
+      flightTo: "目的地",
+      departureDate: "出发日期",
+      returnDate: "返回日期",
+      flightClass: "舱位等级",
+      economy: "经济舱",
+      business: "商务舱",
+      first: "头等舱",
+      passengers: "乘客",
+      selectFlight: "选择航班",
+      airline: "航空公司",
+      departure: "出发",
+      duration: "时长",
 
-    phoneNumber: "电话号码",
-    email: "电子邮件地址",
-    destination: "目的地",
-    foodDrinks: "餐饮 🍽",
-    hotDrinks: "热饮（咖啡、茶）",
-    customDinner: "定制晚餐",
-    otherPreferences: "其他饮食偏好",
-    otherPreferencesPlaceholder: "过敏、饮食限制等",
-    specialRequests: "特殊要求",
-    specialRequestsPlaceholder: "任何额外的要求或备注...",
-    back: "返回",
-    next: "下一步",
-    submit: "完成支付",
-    processing: "正在处理支付...",
-    success: "预订请求已发送！",
-    successMessage: "我们将在24小时内联系您确认您的预订。",
-    close: "关闭",
-    required: "* 必填字段",
-    guestOptions: ["2", "4", "6", "8", "10+"],
-    validationError: "请填写所有必填字段",
-  },
+      phoneNumber: "电话号码",
+      email: "电子邮件地址",
+      destination: "目的地",
+      foodDrinks: "餐饮 🍽",
+      hotDrinks: "热饮（咖啡、茶）",
+      customDinner: "定制晚餐",
+      otherPreferences: "其他饮食偏好",
+      otherPreferencesPlaceholder: "过敏、饮食限制等",
+      specialRequests: "特殊要求",
+      specialRequestsPlaceholder: "任何额外的要求或备注...",
+      back: "返回",
+      next: "下一步",
+      submit: "完成支付",
+      processing: "正在处理支付...",
+      success: "预订请求已发送！",
+      successMessage: "我们将在24小时内联系您确认您的预订。",
+      close: "关闭",
+      required: "* 必填字段",
+      guestOptions: ["2", "4", "6", "8", "10+"],
+      validationError: "请填写所有必填字段",
+    },
   };
 
   const t = content[lang] || content.en;
@@ -769,165 +768,167 @@ export default function BookingModal({
         return;
       }
 
-        setIsSubmitted(true);
+      setIsSubmitted(true);
 
-        const bookingData =
-          bookingLocation === "local"
-            ? {
-                source: "local",
-                bookingLocation: "local",
-                name: formData.name,
-                phoneNumber: formData.phoneNumber,
-                userEmail: formData.userEmail,
-                numberOfGuests: formData.numberOfGuests,
-                region: formData.region,
-                city: formData.city,
-                destination: formData.localDestination,
-                date: formData.date,
-                entertainment: formData.entertainment,
-                folkloreShow: formData.folkloreShow,
-                customEntertainment: formData.customEntertainment,
-                selectedActivities: formData.selectedActivities,
-                selectedSeaTrips: formData.selectedSeaTrips,
-                customActivity: formData.customActivity,
-                foodSelection: formData.foodSelection,
-                hotDrinks: formData.hotDrinksSelection,
-                customDinner: formData.customDinnerLocal,
-                specialRequests: formData.specialRequests,
-                lang: lang,
-              }
-            : {
-                source: "international",
-                bookingType: formData.bookingType,
-                destination: destination?.title,
-                country: formData.internationalCountry,
-                city: formData.internationalCity,
-                numberOfGuests: formData.numberOfGuests,
-                checkInDate: formData.checkInDate,
-                checkOutDate: formData.checkOutDate,
-                phoneNumber: formData.phoneNumber,
-                userEmail: formData.userEmail,
-                roomType: formData.roomType,
-                roomCount: formData.roomCount,
-                roomsNearEachOther: formData.roomsNearEachOther,
-                roomsNearEachOtherCount: Number(formData.roomsNearEachOtherCount) || 1,
-                hotelAmenities: formData.hotelAmenities,
-                flightFrom: formData.flightFrom,
-                flightTo: formData.flightTo,
-                flightType: formData.flightType,
-                departureDate: formData.departureDate,
-                returnDate: formData.returnDate,
-                flightClass: formData.flightClass,
-                passengers: formData.passengers,
-                entertainment: formData.entertainmentInt,
-                culturalShow: formData.folkloreShowInt,
-                activities: formData.activities,
-                foodPreferences: formData.foodPreferences,
-                specialRequests: formData.specialRequests,
-                lang: lang,
-                bookingLocation: "international",
-              };
+      const bookingData =
+        bookingLocation === "local"
+          ? {
+              source: "local",
+              bookingLocation: "local",
+              name: formData.name,
+              phoneNumber: formData.phoneNumber,
+              userEmail: formData.userEmail,
+              numberOfGuests: formData.numberOfGuests,
+              region: formData.region,
+              city: formData.city,
+              destination: formData.localDestination,
+              date: formData.date,
+              entertainment: formData.entertainment,
+              folkloreShow: formData.folkloreShow,
+              customEntertainment: formData.customEntertainment,
+              selectedActivities: formData.selectedActivities,
+              selectedSeaTrips: formData.selectedSeaTrips,
+              customActivity: formData.customActivity,
+              foodSelection: formData.foodSelection,
+              hotDrinks: formData.hotDrinksSelection,
+              customDinner: formData.customDinnerLocal,
+              specialRequests: formData.specialRequests,
+              lang: lang,
+            }
+          : {
+              source: "international",
+              bookingType: formData.bookingType,
+              destination: destination?.title,
+              country: formData.internationalCountry,
+              city: formData.internationalCity,
+              numberOfGuests: formData.numberOfGuests,
+              checkInDate: formData.checkInDate,
+              checkOutDate: formData.checkOutDate,
+              phoneNumber: formData.phoneNumber,
+              userEmail: formData.userEmail,
+              roomType: formData.roomType,
+              roomCount: formData.roomCount,
+              roomsNearEachOther: formData.roomsNearEachOther,
+              roomsNearEachOtherCount:
+                Number(formData.roomsNearEachOtherCount) || 1,
+              hotelAmenities: formData.hotelAmenities,
+              flightFrom: formData.flightFrom,
+              flightTo: formData.flightTo,
+              flightType: formData.flightType,
+              departureDate: formData.departureDate,
+              returnDate: formData.returnDate,
+              flightClass: formData.flightClass,
+              passengers: formData.passengers,
+              entertainment: formData.entertainmentInt,
+              culturalShow: formData.folkloreShowInt,
+              activities: formData.activities,
+              foodPreferences: formData.foodPreferences,
+              specialRequests: formData.specialRequests,
+              lang: lang,
+              bookingLocation: "international",
+            };
 
-        // Create a RESERVATION via backend API instead of booking directly
-        // Map our bookingData to the expected reservation fields
-        let payload = null;
-        try {
-          // Get preferred date with fallback to defaultDate
-          const preferredDate = bookingData.date || bookingData.checkInDate || defaultDate;
-          
-          payload = {
-            name: bookingData.name || bookingData.userEmail || "Guest",
-            email: bookingData.userEmail || null,
-            phone: bookingData.phoneNumber || null,
-            date: preferredDate,
-            guests: bookingData.numberOfGuests || bookingData.passengers || 1,
-            amount: bookingData.amount || null,
-            trip_slug:
-              bookingData.bookingLocation === "local"
-                ? bookingData.destination || ""
-                : bookingData.destination || "",
-            trip_title: bookingData.destination || "",
-            trip_type:
-              bookingData.bookingLocation === "local"
-                ? "activity"
-                : bookingData.bookingType || "package",
-            details: bookingData,
-          };
+      // Create a RESERVATION via backend API instead of booking directly
+      // Map our bookingData to the expected reservation fields
+      let payload = null;
+      try {
+        // Get preferred date with fallback to defaultDate
+        const preferredDate =
+          bookingData.date || bookingData.checkInDate || defaultDate;
 
-          console.log(
-            "📤 Sending reservation payload:",
-            JSON.stringify(payload, null, 2)
-          );
+        payload = {
+          name: bookingData.name || bookingData.userEmail || "Guest",
+          email: bookingData.userEmail || null,
+          phone: bookingData.phoneNumber || null,
+          date: preferredDate,
+          guests: bookingData.numberOfGuests || bookingData.passengers || 1,
+          amount: bookingData.amount || null,
+          trip_slug:
+            bookingData.bookingLocation === "local"
+              ? bookingData.destination || ""
+              : bookingData.destination || "",
+          trip_title: bookingData.destination || "",
+          trip_type:
+            bookingData.bookingLocation === "local"
+              ? "activity"
+              : bookingData.bookingType || "package",
+          details: bookingData,
+        };
 
-          const result = await bookingsAPI.createGuest(payload);
+        console.log(
+          "📤 Sending reservation payload:",
+          JSON.stringify(payload, null, 2),
+        );
 
-          console.log("✅ Reservation created successfully:", result);
+        const result = await bookingsAPI.createGuest(payload);
 
-          // Check for success in response
-          if (!result || (!result.reservation && !result.booking)) {
-            throw new Error(result?.message || "Failed to create booking");
-          }
+        console.log("✅ Reservation created successfully:", result);
 
-          // Redirect to the appropriate place: if user is authenticated, send to user dashboard reservations tab
-          let targetPath;
-          if (isAuthenticated) {
-            targetPath = `/${lang}/dashboard?tab=reservations`;
-          } else {
-            targetPath =
-              bookingData.bookingLocation === "international"
-                ? `/${lang}/bookings/international`
-                : `/${lang}/bookings/local`;
-          }
-
-          // Close modal then navigate
-          try {
-            triggerDashboardRefresh();
-          } catch (e) {
-            console.error('Failed to trigger dashboard refresh:', e);
-          }
-
-          onClose();
-          setTimeout(() => {
-            setIsSubmitted(false);
-            router.push(targetPath);
-          }, 250);
-        } catch (error) {
-          console.error("Booking submission error:", error);
-          if (payload) {
-            console.error("Payload sent:", payload);
-          }
-          setIsSubmitted(false);
-
-          // Prefer validation errors (if any) for user feedback
-          const validationErrors = error?.errors;
-          let userMessage =
-            error?.message ||
-            "Failed to submit booking. Please check your information and try again.";
-
-          if (validationErrors && typeof validationErrors === "object") {
-            // Flatten and join validation messages
-            const messages = Object.values(validationErrors)
-              .flat()
-              .map((m) => (Array.isArray(m) ? m.join(", ") : m))
-              .filter(Boolean);
-            if (messages.length) userMessage = messages.join("\n");
-            console.error(
-              "Validation errors returned from API:",
-              validationErrors
-            );
-          } else if (error?.original) {
-            console.error("Original API error payload:", error.original);
-          }
-
-          alert(
-            lang === "ar"
-              ? `خطأ في إرسال الحجز: ${userMessage}`
-              : `Error submitting booking: ${userMessage}`
-          );
+        // Check for success in response
+        if (!result || (!result.reservation && !result.booking)) {
+          throw new Error(result?.message || "Failed to create booking");
         }
-      } else {
-        nextStep();
+
+        // Redirect to the appropriate place: if user is authenticated, send to user dashboard reservations tab
+        let targetPath;
+        if (isAuthenticated) {
+          targetPath = `/${lang}/dashboard?tab=reservations`;
+        } else {
+          targetPath =
+            bookingData.bookingLocation === "international"
+              ? `/${lang}/bookings/international`
+              : `/${lang}/bookings/local`;
+        }
+
+        // Close modal then navigate
+        try {
+          triggerDashboardRefresh();
+        } catch (e) {
+          console.error("Failed to trigger dashboard refresh:", e);
+        }
+
+        onClose();
+        setTimeout(() => {
+          setIsSubmitted(false);
+          router.push(targetPath);
+        }, 250);
+      } catch (error) {
+        console.error("Booking submission error:", error);
+        if (payload) {
+          console.error("Payload sent:", payload);
+        }
+        setIsSubmitted(false);
+
+        // Prefer validation errors (if any) for user feedback
+        const validationErrors = error?.errors;
+        let userMessage =
+          error?.message ||
+          "Failed to submit booking. Please check your information and try again.";
+
+        if (validationErrors && typeof validationErrors === "object") {
+          // Flatten and join validation messages
+          const messages = Object.values(validationErrors)
+            .flat()
+            .map((m) => (Array.isArray(m) ? m.join(", ") : m))
+            .filter(Boolean);
+          if (messages.length) userMessage = messages.join("\n");
+          console.error(
+            "Validation errors returned from API:",
+            validationErrors,
+          );
+        } else if (error?.original) {
+          console.error("Original API error payload:", error.original);
+        }
+
+        alert(
+          lang === "ar"
+            ? `خطأ في إرسال الحجز: ${userMessage}`
+            : `Error submitting booking: ${userMessage}`,
+        );
       }
+    } else {
+      nextStep();
+    }
   };
 
   if (!isOpen) return null;
@@ -1213,10 +1214,10 @@ export default function BookingModal({
               {type === "activity"
                 ? t.bookActivity
                 : type === "hotel"
-                ? t.bookHotel
-                : type === "flight"
-                ? t.bookFlight
-                : t.bookPackage}
+                  ? t.bookHotel
+                  : type === "flight"
+                    ? t.bookFlight
+                    : t.bookPackage}
             </span>
           </button>
         </div>
@@ -1227,15 +1228,22 @@ export default function BookingModal({
         <div className="bg-dark bg-opacity-25 rounded-3 p-3">
           <h6 className="text-warning mb-3 d-flex align-items-center gap-2">
             <MapPin size={18} />
-            {lang === 'ar' ? 'الوجهة' : lang === 'zh' ? '目的地' : 'Destination'}
+            {lang === "ar"
+              ? "الوجهة"
+              : lang === "zh"
+                ? "目的地"
+                : "Destination"}
           </h6>
-          
+
           {/* Country Input */}
           <div className="mb-3">
-            <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
+            <label
+              className="form-label d-flex align-items-center gap-2 mb-1"
+              style={{ color: "#fff" }}
+            >
               <Globe size={16} className="text-warning" />
               <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-                {lang === 'ar' ? 'الدولة' : lang === 'zh' ? '国家' : 'Country'}
+                {lang === "ar" ? "الدولة" : lang === "zh" ? "国家" : "Country"}
               </span>
               <small className="text-warning ms-1">*</small>
             </label>
@@ -1245,7 +1253,13 @@ export default function BookingModal({
               value={formData.internationalCountry}
               onChange={handleInputChange}
               className="form-control"
-              placeholder={lang === 'ar' ? 'أدخل اسم الدولة (مثال: تايلاند)' : lang === 'zh' ? '输入国家名称（例如：泰国）' : 'Enter country name (e.g., Thailand)'}
+              placeholder={
+                lang === "ar"
+                  ? "أدخل اسم الدولة (مثال: تايلاند)"
+                  : lang === "zh"
+                    ? "输入国家名称（例如：泰国）"
+                    : "Enter country name (e.g., Thailand)"
+              }
               required
               style={{
                 background: "rgba(255,255,255,0.1)",
@@ -1260,10 +1274,13 @@ export default function BookingModal({
 
           {/* City Input */}
           <div className="mb-2">
-            <label className="form-label d-flex align-items-center gap-2 mb-1" style={{ color: "#fff" }}>
+            <label
+              className="form-label d-flex align-items-center gap-2 mb-1"
+              style={{ color: "#fff" }}
+            >
               <MapPin size={16} className="text-warning" />
               <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-                {lang === 'ar' ? 'المدينة' : lang === 'zh' ? '城市' : 'City'}
+                {lang === "ar" ? "المدينة" : lang === "zh" ? "城市" : "City"}
               </span>
               <small className="text-warning ms-1">*</small>
             </label>
@@ -1273,7 +1290,13 @@ export default function BookingModal({
               value={formData.internationalCity}
               onChange={handleInputChange}
               className="form-control"
-              placeholder={lang === 'ar' ? 'أدخل اسم المدينة (مثال: بانكوك)' : lang === 'zh' ? '输入城市名称（例如：曼谷）' : 'Enter city name (e.g., Bangkok)'}
+              placeholder={
+                lang === "ar"
+                  ? "أدخل اسم المدينة (مثال: بانكوك)"
+                  : lang === "zh"
+                    ? "输入城市名称（例如：曼谷）"
+                    : "Enter city name (e.g., Bangkok)"
+              }
               required
               style={{
                 background: "rgba(255,255,255,0.1)",
@@ -1960,7 +1983,13 @@ export default function BookingModal({
           value={formData.roomCount}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'أدخل عدد الغرف' : lang === 'zh' ? '输入房间数量' : 'Enter number of rooms'}
+          placeholder={
+            lang === "ar"
+              ? "أدخل عدد الغرف"
+              : lang === "zh"
+                ? "输入房间数量"
+                : "Enter number of rooms"
+          }
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -1984,7 +2013,9 @@ export default function BookingModal({
             checked={formData.roomsNearEachOther}
             onChange={handleInputChange}
             style={{
-              backgroundColor: formData.roomsNearEachOther ? "#dfa528" : "transparent",
+              backgroundColor: formData.roomsNearEachOther
+                ? "#dfa528"
+                : "transparent",
               borderColor: "#dfa528",
             }}
           />
@@ -1999,7 +2030,10 @@ export default function BookingModal({
 
         {formData.roomsNearEachOther && (
           <div className="mt-2" style={{ maxWidth: "200px" }}>
-            <label className="form-label small mb-1" style={{ color: "rgba(255,255,255,0.9)" }}>
+            <label
+              className="form-label small mb-1"
+              style={{ color: "rgba(255,255,255,0.9)" }}
+            >
               {t.roomsNearEachOtherCount}
             </label>
             <select
@@ -2016,9 +2050,13 @@ export default function BookingModal({
                 fontSize: "0.9rem",
               }}
             >
-              {Array.from({ length: formData.roomCount }, (_, i) => i + 1).map((n) => (
-                <option key={n} value={n}>{n}</option>
-              ))}
+              {Array.from({ length: formData.roomCount }, (_, i) => i + 1).map(
+                (n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ),
+              )}
             </select>
           </div>
         )}
@@ -2123,7 +2161,13 @@ export default function BookingModal({
           value={formData.flightFrom}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'من (رمز المطار أو المدينة)' : lang === 'zh' ? '出发地（机场代码或城市）' : 'From (airport code or city)'}
+          placeholder={
+            lang === "ar"
+              ? "من (رمز المطار أو المدينة)"
+              : lang === "zh"
+                ? "出发地（机场代码或城市）"
+                : "From (airport code or city)"
+          }
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -2153,7 +2197,13 @@ export default function BookingModal({
           value={formData.flightTo}
           onChange={handleInputChange}
           className="form-control"
-          placeholder={lang === 'ar' ? 'إلى (رمز المطار أو المدينة)' : lang === 'zh' ? '目的地（机场代码或城市）' : 'To (airport code or city)'}
+          placeholder={
+            lang === "ar"
+              ? "إلى (رمز المطار أو المدينة)"
+              : lang === "zh"
+                ? "目的地（机场代码或城市）"
+                : "To (airport code or city)"
+          }
           required
           style={{
             background: "rgba(255,255,255,0.1)",
@@ -2173,16 +2223,22 @@ export default function BookingModal({
         >
           <Plane size={16} className="text-warning" />
           <span className="fw-bold" style={{ fontSize: "0.95rem" }}>
-            {lang === 'ar' ? 'نوع الرحلة' : lang === 'zh' ? '航班类型' : 'Flight Type'}
+            {lang === "ar"
+              ? "نوع الرحلة"
+              : lang === "zh"
+                ? "航班类型"
+                : "Flight Type"}
           </span>
           <small className="text-warning ms-1">*</small>
         </label>
         <div className="d-flex flex-wrap gap-2">
-          {['oneway', 'return'].map((type) => (
+          {["oneway", "return"].map((type) => (
             <button
               key={type}
               type="button"
-              onClick={() => setFormData((prev) => ({ ...prev, flightType: type }))}
+              onClick={() =>
+                setFormData((prev) => ({ ...prev, flightType: type }))
+              }
               className={`btn px-3 py-2 ${
                 formData.flightType === type
                   ? "btn-warning"
@@ -2193,9 +2249,17 @@ export default function BookingModal({
                 fontSize: "0.85rem",
               }}
             >
-              {type === 'oneway'
-                ? (lang === 'ar' ? 'ذهاب فقط' : lang === 'zh' ? '单程' : 'One Way')
-                : (lang === 'ar' ? 'ذهاب وعودة' : lang === 'zh' ? '往返' : 'Return')}
+              {type === "oneway"
+                ? lang === "ar"
+                  ? "ذهاب فقط"
+                  : lang === "zh"
+                    ? "单程"
+                    : "One Way"
+                : lang === "ar"
+                  ? "ذهاب وعودة"
+                  : lang === "zh"
+                    ? "往返"
+                    : "Return"}
             </button>
           ))}
         </div>
@@ -2230,7 +2294,7 @@ export default function BookingModal({
         />
       </div>
 
-      {formData.flightType === 'return' && (
+      {formData.flightType === "return" && (
         <div className="col-12 mb-2">
           <label
             className="form-label d-flex align-items-center gap-2 mb-1"
@@ -2290,14 +2354,12 @@ export default function BookingModal({
               {flightClass === "economy"
                 ? t.economy
                 : flightClass === "business"
-                ? t.business
-                : t.first}
+                  ? t.business
+                  : t.first}
             </button>
           ))}
         </div>
       </div>
-
-
     </motion.div>
   );
 
@@ -2537,7 +2599,8 @@ export default function BookingModal({
 
             <div className="col-6">{t.numberOfGuests}:</div>
             <div className="col-6 text-end">
-              {formData.numberOfGuests} {lang === "ar" ? "أشخاص" : "People"}
+              {formData.numberOfGuests}{" "}
+              {lang === "ar" ? "أشخاص" : lang === "zh" ? "人" : "People"}{" "}
             </div>
 
             {formData.selectedActivities.length > 0 && (
@@ -2760,47 +2823,63 @@ export default function BookingModal({
             <div className="col-6 text-end">
               {formData.internationalCountry && formData.internationalCity
                 ? `${formData.internationalCountry} → ${formData.internationalCity}`
-                : formData.internationalCountry || formData.internationalCity || destination?.title}
+                : formData.internationalCountry ||
+                  formData.internationalCity ||
+                  destination?.title}
             </div>
 
             <div className="col-6">
               {bookingType === "activity"
                 ? t.bookActivity
                 : bookingType === "hotel"
-                ? t.bookHotel
-                : bookingType === "flight"
-                ? t.bookFlight
-                : t.bookPackage}
+                  ? t.bookHotel
+                  : bookingType === "flight"
+                    ? t.bookFlight
+                    : t.bookPackage}
               :
             </div>
             <div className="col-6 text-end">
               {bookingType === "activity"
                 ? t.bookActivity
                 : bookingType === "hotel"
-                ? t.bookHotel
-                : bookingType === "flight"
-                ? t.bookFlight
-                : t.bookPackage}
+                  ? t.bookHotel
+                  : bookingType === "flight"
+                    ? t.bookFlight
+                    : t.bookPackage}
             </div>
 
             <div className="col-6">{t.numberOfGuests}:</div>
             <div className="col-6 text-end">
-              {formData.numberOfGuests} {lang === "ar" ? "أشخاص" : "People"}
-            </div>
+{formData.numberOfGuests} {lang === "ar" ? "أشخاص" : lang === "zh" ? "人" : "People"}            </div>
 
             {bookingType === "flight" && (
               <>
-                <div className="col-6">{lang === 'ar' ? 'نوع الرحلة' : lang === 'zh' ? '航班类型' : 'Flight Type'}:</div>
+                <div className="col-6">
+                  {lang === "ar"
+                    ? "نوع الرحلة"
+                    : lang === "zh"
+                      ? "航班类型"
+                      : "Flight Type"}
+                  :
+                </div>
                 <div className="col-6 text-end">
-                  {formData.flightType === 'oneway'
-                    ? (lang === 'ar' ? 'ذهاب فقط' : lang === 'zh' ? '单程' : 'One Way')
-                    : (lang === 'ar' ? 'ذهاب وعودة' : lang === 'zh' ? '往返' : 'Return')}
+                  {formData.flightType === "oneway"
+                    ? lang === "ar"
+                      ? "ذهاب فقط"
+                      : lang === "zh"
+                        ? "单程"
+                        : "One Way"
+                    : lang === "ar"
+                      ? "ذهاب وعودة"
+                      : lang === "zh"
+                        ? "往返"
+                        : "Return"}
                 </div>
 
                 <div className="col-6">{t.departureDate}:</div>
                 <div className="col-6 text-end">{formData.departureDate}</div>
 
-                {formData.flightType === 'return' && (
+                {formData.flightType === "return" && (
                   <>
                     <div className="col-6">{t.returnDate}:</div>
                     <div className="col-6 text-end">{formData.returnDate}</div>
@@ -2812,8 +2891,8 @@ export default function BookingModal({
                   {formData.flightClass === "economy"
                     ? t.economy
                     : formData.flightClass === "business"
-                    ? t.business
-                    : t.first}
+                      ? t.business
+                      : t.first}
                 </div>
               </>
             )}
@@ -2972,8 +3051,8 @@ export default function BookingModal({
                   currentStep > index + 1
                     ? "bg-warning"
                     : currentStep === index + 1
-                    ? "bg-warning"
-                    : "bg-secondary"
+                      ? "bg-warning"
+                      : "bg-secondary"
                 }`}
                 style={{
                   width: "28px",

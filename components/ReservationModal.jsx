@@ -2508,8 +2508,9 @@ useEffect(() => {
             <div className="col-6 text-end">{formData.date}</div>
             
             <div className="col-6">{t.numberOfGuests}:</div>
-            <div className="col-6 text-end">{formData.numberOfGuests} {lang === "ar" ? "أشخاص" : "People"}</div>
-            
+          <div className="col-6 text-end">
+  {formData.numberOfGuests} {lang === "ar" ? "أشخاص" : lang === "zh" ? "人" : "People"}
+</div>
             {formData.selectedActivities.length > 0 && (
               <>
                 <div className="col-6">{t.localActivities}:</div>
@@ -2694,8 +2695,9 @@ useEffect(() => {
             </div>
             
             <div className="col-6">{t.numberOfGuests}:</div>
-            <div className="col-6 text-end">{formData.numberOfGuests} {lang === "ar" ? "أشخاص" : "People"}</div>
-            
+       <div className="col-6 text-end">
+  {formData.numberOfGuests} {lang === "ar" ? "أشخاص" : lang === "zh" ? "人" : "People"}
+</div>
             <div className="col-6">{t.checkIn}:</div>
             <div className="col-6 text-end">{formData.checkInDate}</div>
             

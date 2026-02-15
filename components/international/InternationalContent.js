@@ -61,6 +61,11 @@ export default function InternationalContent({ lang }) {
       flightTab: "Flights",
       hotelTab: "Hotels",
       offersTab: "Packages",
+      departure: "Departure",
+      arrival: "Arrival",
+      noFlights: "No flights available",
+      noHotels: "No hotels available",
+      noPackages: "No packages available",
       popularDestinationsTab: "Popular Destinations",
       popularDestinations: "Popular Destinations",
       featuredPackages: "Featured International Packages",
@@ -111,6 +116,11 @@ export default function InternationalContent({ lang }) {
       flightTab: "الطيران",
       hotelTab: "الفنادق",
       offersTab: "الباقات ",
+      departure: "المغادرة",
+      arrival: "الوصول",
+      noFlights: "لا توجد رحلات متاحة",
+      noHotels: "لا توجد فنادق متاحة",
+      noPackages: "لا توجد باقات متاحة",
       popularDestinationsTab: "الوجهات المفضلة",
       popularDestinations: "الوجهات المفضلة",
       featuredPackages: "الحزم الدولية المميزة",
@@ -163,6 +173,11 @@ export default function InternationalContent({ lang }) {
     popularDestinationsTab: "热门目的地",
     popularDestinations: "热门目的地",
     featuredPackages: "精选国际套餐",
+    departure: "出发",
+    arrival: "到达",
+    noFlights: "暂无航班",
+    noHotels: "暂无酒店",
+    noPackages: "暂无套餐",
     whyChooseUs: "为什么选择我们的国际服务",
     travelTips: "国际旅行提示",
     bookNow: "立即预订",
@@ -763,7 +778,7 @@ export default function InternationalContent({ lang }) {
                 </div>
                 <span className="tab-text">{t.flightTab}</span>
                 <p className="tab-description">
-                  {isRTL ? "ابحث عن أفضل عروض الطيران" : "Find the best flight deals"}
+                  {t.searchSubtitle}
                 </p>
               </button>
               
@@ -776,7 +791,7 @@ export default function InternationalContent({ lang }) {
                 </div>
                 <span className="tab-text">{t.hotelTab}</span>
                 <p className="tab-description">
-                  {isRTL ? "اختر من أفضل الفنادق العالمية" : "Choose from top international hotels"}
+                  {t.searchSubtitle}
                 </p>
               </button>
               
@@ -789,7 +804,7 @@ export default function InternationalContent({ lang }) {
                 </div>
                 <span className="tab-text">{t.offersTab}</span>
                 <p className="tab-description">
-                  {isRTL ? "عروض سفر حصرية" : "Exclusive travel packages & offers"}
+                  {t.searchSubtitle}
                 </p>
               </button>
 
@@ -802,7 +817,7 @@ export default function InternationalContent({ lang }) {
                 </div>
                 <span className="tab-text">{t.popularDestinationsTab}</span>
                 <p className="tab-description">
-                  {isRTL ? "اعرض الوجهات الشعبية" : "Browse our popular destinations"}
+                  {t.popularDestinations}
                 </p>
               </button>
             </div>
@@ -814,7 +829,7 @@ export default function InternationalContent({ lang }) {
       <section className="content-section py-5" ref={flightsSectionRef}>
         <div className="container">
           <div className="text-center mb-5">
-            <h2 className="section-title">{isRTL ? "الطيران" : "Flights"}</h2>
+            <h2 className="section-title">{t.flightTab}</h2>
             <div className="section-divider"></div>
           </div>
 
@@ -854,12 +869,12 @@ export default function InternationalContent({ lang }) {
                         <h4 className="destination-name">{getFlightText(flight, 'route')}</h4>
                         <div className="flight-times">
                           <div className="time-slot">
-                            <span className="time-label">{isRTL ? "المغادرة" : "Departure"}</span>
+                            <span className="time-label">{t.departure}</span>
                             <span className="time-value">{flight.departure_time}</span>
                           </div>
                           <div className="flight-arrow"><FaPlane /></div>
                           <div className="time-slot">
-                            <span className="time-label">{isRTL ? "الوصول" : "Arrival"}</span>
+                            <span className="time-label">{t.arrival}</span>
                             <span className="time-value">{flight.arrival_time}</span>
                           </div>
                         </div>
@@ -876,7 +891,7 @@ export default function InternationalContent({ lang }) {
                 ))
               ) : (
                 <div className="col-12 text-center" style={{color: '#5d6d7e'}}>
-                  <p>No flights available</p>
+                  <p>{t.noFlights}</p>
                 </div>
               )}
             </Swiper>
@@ -892,7 +907,7 @@ export default function InternationalContent({ lang }) {
       <section className="content-section py-5 bg-light" ref={hotelsSectionRef}>
         <div className="container">
           <div className="text-center mb-5">
-            <h2 className="section-title">{isRTL ? "الفنادق" : "Hotels"}</h2>
+            <h2 className="section-title">{t.hotelTab}</h2>
             <div className="section-divider"></div>
           </div>
 
@@ -931,14 +946,14 @@ export default function InternationalContent({ lang }) {
                       <div className="destination-content">
                         <h4 className="destination-name">{getHotelText(hotel, 'name')}</h4>
                         <p className="destination-description">{getHotelText(hotel, 'location')}</p>
-                        <div className="hotel-amenities">{parseList(lang === 'ar' ? hotel.amenities_ar : hotel.amenities_en).slice(0,3).map((amenity, index) => (<span key={index} className="amenity-tag">{amenity}</span>))}</div>
+                        <div className="hotel-amenities">{parseList(lang === 'zh' ? (hotel.amenities_zh || hotel.amenities_en) : (lang === 'ar' ? hotel.amenities_ar : hotel.amenities_en)).slice(0,3).map((amenity, index) => (<span key={index} className="amenity-tag">{amenity}</span>))}</div>
                         <div className="destination-footer"><button className="btn btn-outline-primary" onClick={() => handleHotelBooking(hotel)} style={{ background: '#EFC8AE', color: '#000', border: 'none' }}>{t.bookNow}</button></div>
                       </div>
                     </div>
                   </SwiperSlide>
                 ))
               ) : (
-                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>No hotels available</p></div>
+                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>{t.noHotels}</p></div>
               )}
             </Swiper>
 
@@ -953,7 +968,7 @@ export default function InternationalContent({ lang }) {
       <section className="content-section py-5" ref={offersSectionRef}>
         <div className="container">
           <div className="text-center mb-5">
-            <h2 className="section-title">{isRTL ? "الباقات" : "Packages"}</h2>
+            <h2 className="section-title">{t.offersTab}</h2>
             <div className="section-divider"></div>
           </div>
 
@@ -992,9 +1007,9 @@ export default function InternationalContent({ lang }) {
                       <div className="destination-content">
                         <h4 className="destination-name">{getPackageText(offer, 'title')}</h4>
                         <p className="destination-description">{getPackageText(offer, 'description')}</p>
-                        {offer.duration_en && (
+                        {(offer.duration_en || offer.duration_zh || offer.duration_ar) && (
                           <div className="package-duration">
-                            <FaClock className="duration-icon" /> {lang === 'ar' ? offer.duration_ar : offer.duration_en}
+                            <FaClock className="duration-icon" /> {lang === 'zh' ? (offer.duration_zh || offer.duration_en) : (lang === 'ar' ? offer.duration_ar : offer.duration_en)}
                           </div>
                         )}
                         <div className="destination-footer">
@@ -1005,7 +1020,7 @@ export default function InternationalContent({ lang }) {
                   </SwiperSlide>
                 ))
               ) : (
-                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>No packages available</p></div>
+                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>{t.noPackages}</p></div>
               )}
             </Swiper>
 
