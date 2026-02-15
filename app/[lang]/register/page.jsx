@@ -296,7 +296,7 @@ export default function RegisterPage({ params }) {
         className="d-flex align-items-center"
         style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}
       >
-        <div className="container py-5">
+      <div className="container py-5" style={{ paddingTop: "15rem" }}>
           <div className="d-flex flex-column align-items-center">
             <div
               className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`}
@@ -397,11 +397,12 @@ export default function RegisterPage({ params }) {
   // Registration Form
   return (
     <div
-      className="d-flex align-items-center"
-      style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#7b7b7b" }}
+      className="d-flex "
+      style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#7b7b7b", justifyContent: "center", alignItems: "flex-start", paddingTop: "2rem" }}
     >
-      <div className="container py-5">
-        <div className="d-flex flex-column align-items-center">
+      <div className="container py-5" style={{}}>
+
+        <div className="d-flex flex-column align-items-center" style={{ width: "100%" }}>
           <div
             className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`}
             style={{
