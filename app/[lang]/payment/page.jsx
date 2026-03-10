@@ -1,310 +1,491 @@
 'use client';
 
-import React, { useEffect, useState, Suspense, useRef } from 'react';
-import { useSearchParams, useRouter, useParams } from 'next/navigation';
-import { useAuth } from '../../../providers/AuthProvider';
-import { paymentsAPI, bookingsAPI } from '../../../lib/api';
-import Script from 'next/script';
+import { useState, useEffect } from 'react';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 
-function PaymentPageContent() {
-  const searchParams = useSearchParams();
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+
+const goldThemeStyles = `
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #faf8f4 0%, #f5f2ed 100%);
+    color: #0e0c0a;
+  }
+  
+  .pay-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  
+  .pay-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .pay-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  
+  .pay-logo span { color: #c9a84c; }
+  
+  .pay-crumb {
+    font-size: 11px;
+    color: #7a7469;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  
+  .pay-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  
+  @media (max-width: 768px) {
+    .pay-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+  
+  .pay-card {
+    background: white;
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    border-radius: 2px;
+    padding: 28px;
+    box-shadow: 0 4px 40px rgba(14, 12, 10, 0.08);
+  }
+  
+  .pay-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    color: #0e0c0a;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7a7469;
+    margin-bottom: 6px;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: #c9a84c;
+    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+  }
+  
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .form-row.full { grid-template-columns: 1fr; }
+  
+  .pay-btn {
+    width: 100%;
+    padding: 13px;
+    background: #c9a84c;
+    color: white;
+    border: none;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 12px;
+  }
+  
+  .pay-btn:hover:not(:disabled) { background: #b8953e; }
+  .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
+  
+  .pay-summary {
+    background: white;
+    border: 1px solid rgba(201, 168, 76, 0.2);
+    border-radius: 2px;
+    padding: 28px;
+    box-shadow: 0 4px 40px rgba(14, 12, 10, 0.08);
+    height: fit-content;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  }
+  
+  .summary-row.total {
+    border-top: 2px solid rgba(201, 168, 76, 0.2);
+    margin-top: 12px;
+    padding-top: 16px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #c9a84c;
+  }
+  
+  .summary-label { color: #7a7469; }
+  .summary-value { font-weight: 500; color: #0e0c0a; }
+  
+  .error-box {
+    background: rgba(220, 80, 80, 0.08);
+    border: 1px solid rgba(220, 80, 80, 0.25);
+    color: #b94040;
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .success-box {
+    background: rgba(80, 180, 80, 0.08);
+    border: 1px solid rgba(80, 180, 80, 0.25);
+    color: #2d8a2d;
+    padding: 12px 14px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(201, 168, 76, 0.2);
+    border-top-color: #c9a84c;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+  }
+  
+  @keyframes spin { to { transform: rotate(360deg); } }
+`;
+
+export default function PaymentPage() {
   const router = useRouter();
   const params = useParams();
-  const { isAuthenticated, loading } = useAuth();
-  const moyasarFormRef = useRef(null);
+  const searchParams = useSearchParams();
+  const lang = params?.lang || 'en';
   
-  const lang = params?.lang || 'ar';
-  const isRTL = lang === 'ar';
-
-  const [booking, setBooking] = useState(null);
-  const [paymentMethod, setPaymentMethod] = useState('credit_card');
-  // Force Moyasar gateway — UI will not display other options so Moyasar can present automatic methods
-  const [gateway, setGateway] = useState('moyasar');
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [paying, setPaying] = useState(false);
   const [error, setError] = useState(null);
-  const [moyasarConfig, setMoyasarConfig] = useState(null);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
+  
+  const [paymentData, setPaymentData] = useState(null);
+  const [formData, setFormData] = useState({
+    cardNumber: '',
+    cardHolder: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: '',
+  });
 
-  const bookingId = searchParams.get('booking_id');
-  const callbackStatus = searchParams.get('status');
-  const paymentId = searchParams.get('payment_id');
+  // Load payment data from URL params
+  useEffect(() => {
+    const booking_id = searchParams.get('booking_id');
+    const totalAmount = searchParams.get('total_amount');
+    
+    // Support both parameter names
+    const amount = totalAmount || searchParams.get('amount');
+    
+    if (!booking_id || !amount) {
+      setError('Missing payment details. Please go back and try again.');
+      setLoading(false);
+      return;
+    }
 
-  const t = {
-    title: isRTL ? 'إتمام الدفع' : 'Complete Your Payment',
-    bookingSummary: isRTL ? 'ملخص الحجز' : 'Booking Summary',
-    bookingId: isRTL ? 'رقم الحجز' : 'Booking ID',
-    date: isRTL ? 'التاريخ' : 'Date',
-    guests: isRTL ? 'عدد الضيوف' : 'Guests',
-    trip: isRTL ? 'الرحلة' : 'Trip',
-    total: isRTL ? 'المجموع' : 'Total Amount',
-    paymentGateway: isRTL ? 'بوابة الدفع' : 'Payment Gateway',
-    testMode: isRTL ? 'وضع الاختبار' : 'Test Mode',
-    moyasar: isRTL ? 'ميسر' : 'Moyasar',
-    testCards: isRTL ? 'بطاقات الاختبار' : 'Test Cards',
-    pay: isRTL ? 'ادفع' : 'Pay',
-    processing: isRTL ? 'جاري المعالجة...' : 'Processing...',
-    loading: isRTL ? 'جاري التحميل...' : 'Loading...',
-    securePayment: isRTL ? '🔒 دفع آمن' : '🔒 Secure Payment',
-    paymentSuccessTitle: isRTL ? 'تم الدفع بنجاح!' : 'Payment Successful!',
-    paymentSuccessMsg: isRTL ? 'شكراً لك! تم تأكيد حجزك.' : 'Thank you! Your booking has been confirmed.',
-    goToDashboard: isRTL ? 'الذهاب للوحة التحكم' : 'Go to Dashboard',
-    paymentFailed: isRTL ? 'فشل الدفع' : 'Payment Failed',
-    sar: isRTL ? 'ريال' : 'SAR',
-    enterCard: isRTL ? 'أدخل بيانات البطاقة للدفع:' : 'Enter your card details to pay:',
-    back: isRTL ? '← رجوع' : '← Back',
+    setPaymentData({
+      bookingId: booking_id,
+      amount: parseFloat(amount),
+      email: searchParams.get('email') || 'customer@example.com',
+      name: searchParams.get('name') || 'Customer',
+    });
+    
+    setLoading(false);
+  }, [searchParams]);
+
+  // Handle form input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    let cleanValue = value;
+
+    if (name === 'cardNumber') {
+      cleanValue = value.replace(/\D/g, '').slice(0, 16);
+    } else if (name === 'cvv') {
+      cleanValue = value.replace(/\D/g, '').slice(0, 4);
+    }
+
+    setFormData(prev => ({
+      ...prev,
+      [name]: cleanValue
+    }));
   };
 
-  useEffect(() => {
-    if (callbackStatus && paymentId) {
-      if (callbackStatus === 'success' || callbackStatus === 'paid') {
-        setPaymentSuccess(true);
-      } else if (callbackStatus === 'failed' || callbackStatus === 'declined') {
-        setError(t.paymentFailed);
-      }
-    }
-  }, [callbackStatus, paymentId]);
-
-  useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push(`/${lang}`);
-    }
-  }, [isAuthenticated, loading, router, lang]);
-
-  useEffect(() => {
-    if (bookingId && isAuthenticated) {
-      loadBooking();
-    }
-  }, [bookingId, isAuthenticated]);
-
-  const loadBooking = async () => {
-    try {
-      const response = await bookingsAPI.getById(bookingId);
-      setBooking(response.booking);
-    } catch (error) {
-      console.error('Failed to load booking:', error);
-      setError(isRTL ? 'فشل تحميل تفاصيل الحجز' : 'Failed to load booking details');
-    }
-  };
-
-  const initializeMoyasar = () => {
-    console.log('Initializing Moyasar with config:', moyasarConfig);
-    if (window.Moyasar && moyasarConfig && moyasarFormRef.current) {
-      try {
-        moyasarFormRef.current.innerHTML = '';
-        console.log('Moyasar library loaded, creating form...');
-        
-        // Moyasar init expects element as a DOM reference, not selector
-        const configToUse = {
-          ...moyasarConfig,
-          element: moyasarFormRef.current, // Use actual DOM element, not selector
-        };
-        
-        // Remove element from config if it's a string selector
-        if (typeof configToUse.element === 'string') {
-          delete configToUse.element;
-        }
-        
-        window.Moyasar.init({
-          ...configToUse,
-          test_mode: true,
-          on_completed: function(payment) {
-            console.log('Moyasar payment completed:', payment);
-            setPaymentSuccess(true);
-          },
-          on_failure: function(error) {
-            console.error('Moyasar payment failed:', error);
-            setError(error.message || t.paymentFailed);
-            setIsProcessing(false);
-          },
-        });
-        console.log('Moyasar form initialized successfully');
-      } catch (err) {
-        console.error('Failed to initialize Moyasar:', err);
-        setError(err.message);
-      }
-    } else {
-      console.log('Cannot initialize Moyasar:', {
-        hasMoyasar: !!window.Moyasar,
-        hasMoyasarConfig: !!moyasarConfig,
-        hasRef: !!moyasarFormRef.current
-      });
-    }
-  };
-
-  useEffect(() => {
-    const checkAndInit = () => {
-      if (window.Moyasar && moyasarConfig && moyasarFormRef.current) {
-        initializeMoyasar();
-      } else if (!window.Moyasar && moyasarConfig) {
-        // Script might still be loading, retry after delay
-        setTimeout(checkAndInit, 500);
-      }
-    };
-    checkAndInit();
-  }, [moyasarConfig]);
-
+  // Handle payment submission
   const handlePayment = async (e) => {
     e.preventDefault();
-    setIsProcessing(true);
+    setPaying(true);
     setError(null);
 
+    // Validate form
+    if (!formData.cardNumber || !formData.cardHolder || !formData.expiryMonth || !formData.expiryYear || !formData.cvv) {
+      setError('Please fill in all payment details');
+      setPaying(false);
+      return;
+    }
+
+    if (formData.cardNumber.length !== 16) {
+      setError('Card number must be 16 digits');
+      setPaying(false);
+      return;
+    }
+
+    if (formData.cvv.length < 3) {
+      setError('CVV must be at least 3 digits');
+      setPaying(false);
+      return;
+    }
+
     try {
-      const amount = booking.details?.amount || 1000;
-      
-      console.log('Initiating payment with gateway:', gateway);
-      const response = await paymentsAPI.initiate({
-        booking_id: bookingId,
-        amount: amount,
-        method: paymentMethod,
-        gateway: gateway,
+      console.log('Processing payment:', {
+        bookingId: paymentData.bookingId,
+        amount: paymentData.amount,
+        card: formData.cardNumber.slice(-4).padStart(16, '*'),
       });
 
-      if (gateway === 'moyasar') {
-        console.log('Payment response:', response);
-        let config = response.moyasar_config;
-        
-        if (!config) {
-          throw new Error(isRTL ? 'لم يتم استلام إعدادات الدفع' : 'Payment configuration not received from server');
+      // Call backend to confirm payment
+      const response = await fetch(
+        `${API_BASE}/bookings/${paymentData.bookingId}/confirm-payment`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            payment_method: 'credit_card',
+            amount: paymentData.amount,
+            currency: 'SAR',
+            card_last_4: formData.cardNumber.slice(-4),
+          }),
         }
-        console.log('Final Moyasar config:', config);
-        setMoyasarConfig(config);
-        setIsProcessing(false);
-      } else if (gateway === 'test') {
-        setPaymentSuccess(true);
-      } else if (response.payment_url) {
-        window.location.href = response.payment_url;
-      } else {
-        throw new Error(isRTL ? 'لم يتم استلام رابط الدفع' : 'No payment URL received');
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Payment confirmation failed');
       }
-    } catch (error) {
-      console.error('Payment initiation failed:', error);
-      setError(error.message || (isRTL ? 'فشل بدء الدفع' : 'Failed to initiate payment'));
-      setIsProcessing(false);
+
+      setSuccess(true);
+      setFormData({
+        cardNumber: '',
+        cardHolder: '',
+        expiryMonth: '',
+        expiryYear: '',
+        cvv: '',
+      });
+
+      // Redirect to confirmation after 2 seconds
+      setTimeout(() => {
+        router.push(
+          `/${lang}/payment-callback?booking_id=${paymentData.bookingId}&status=success`
+        );
+      }, 2000);
+
+    } catch (err) {
+      console.error('Payment error:', err);
+      setError(err.message || 'Payment processing failed. Please try again.');
+    } finally {
+      setPaying(false);
     }
   };
 
-  if (paymentSuccess) {
+  if (loading) {
     return (
-      <div className="payment-page" dir={isRTL ? 'rtl' : 'ltr'}>
-        <div className="payment-container">
-          <div className="payment-card success-card">
-            <div className="success-icon">✓</div>
-            <h1>{t.paymentSuccessTitle}</h1>
-            <p>{t.paymentSuccessMsg}</p>
-            <button className="btn-dashboard" onClick={() => router.push(`/${lang}/dashboard`)}>
-              {t.goToDashboard}
-            </button>
-          </div>
+      <>
+        <style dangerouslySetInnerHTML={{ __html: goldThemeStyles }} />
+        <div className="pay-wrapper" style={{ textAlign: 'center', paddingTop: '100px' }}>
+          <div className="loading-spinner" />
+          <p style={{ color: '#7a7469', marginTop: '20px' }}>Loading payment...</p>
         </div>
-        <style jsx>{`
-          .payment-page { min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); padding-top: 120px; }
-          .payment-container { max-width: 500px; margin: 0 auto; padding: 1rem; }
-          .success-card { background: white; border-radius: 16px; padding: 3rem; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-          .success-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #28a745, #20c997); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; margin: 0 auto 1.5rem; }
-          h1 { color: #28a745; margin-bottom: 1rem; }
-          p { color: #666; margin-bottom: 2rem; }
-          .btn-dashboard { background: linear-gradient(135deg, #8a7779, #a89294); color: white; border: none; padding: 1rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
-        `}</style>
-      </div>
+      </>
     );
   }
 
-  if (loading || !booking) {
-    return <div className="loading" style={{ textAlign: 'center', padding: '4rem', paddingTop: '150px' }}>{t.loading}</div>;
-  }
-
   return (
-    <div className="payment-page" dir={isRTL ? 'rtl' : 'ltr'}>
-      <Script 
-        src="https://cdn.moyasar.com/mpf/1.14.0/moyasar.js"
-        strategy="lazyOnload"
-        onLoad={() => {
-          console.log('Moyasar.js script loaded');
-          if (moyasarConfig && moyasarFormRef.current) {
-            setTimeout(() => initializeMoyasar(), 300);
-          }
-        }}
-      />
-      <link rel="stylesheet" href="https://cdn.moyasar.com/mpf/1.14.0/moyasar.css" />
-
-      <div className="payment-container">
-        <div className="payment-card">
-          <h1>{t.title}</h1>
-          
-          <div className="booking-summary">
-            <h2>{t.bookingSummary}</h2>
-            <div className="summary-item"><span>{t.bookingId}:</span><span>#{booking.id + 1000}</span></div>
-            <div className="summary-item"><span>{t.date}:</span><span>{new Date(booking.date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</span></div>
-            <div className="summary-item"><span>{t.guests}:</span><span>{booking.guests}</span></div>
-            {booking.details?.trip_title && <div className="summary-item"><span>{t.trip}:</span><span>{booking.details.trip_title}</span></div>}
-            <div className="summary-total"><span>{t.total}:</span><span className="amount">{booking.details?.amount || 1000} {t.sar}</span></div>
+    <>
+      <style dangerouslySetInnerHTML={{ __html: goldThemeStyles }} />
+      <div className="pay-wrapper">
+        {/* Header */}
+        <div className="pay-header">
+          <div className="pay-logo">
+            Tilal<span>Rimal</span>
           </div>
+          <div className="pay-crumb">Secure Payment</div>
+        </div>
 
-          {!moyasarConfig && (
+        {/* Main Content */}
+        <div className="pay-grid">
+          {/* Payment Form */}
+          <div className="pay-card">
+            <h2 className="pay-title">Card Details</h2>
+
+            {error && <div className="error-box">{error}</div>}
+            {success && <div className="success-box">Payment successful! Redirecting...</div>}
+
             <form onSubmit={handlePayment}>
-              {/* Hidden gateway (always Moyasar) */}
-              <input type="hidden" name="gateway" value="moyasar" />
+              <div className="form-group">
+                <label>Cardholder Name</label>
+                <input
+                  type="text"
+                  name="cardHolder"
+                  value={formData.cardHolder}
+                  onChange={handleInputChange}
+                  placeholder="John Doe"
+                  disabled={paying}
+                />
+              </div>
 
-              {error && <div className="error-message">{error}</div>}
+              <div className="form-group">
+                <label>Card Number</label>
+                <input
+                  type="text"
+                  name="cardNumber"
+                  value={formData.cardNumber.replace(/(.{4})/g, '$1 ').trim()}
+                  onChange={handleInputChange}
+                  placeholder="4111 1111 1111 1111"
+                  disabled={paying}
+                  maxLength="19"
+                />
+              </div>
 
-              <button type="submit" className="btn-pay" disabled={isProcessing}>
-                {isProcessing ? t.processing : `${t.pay} ${booking.details?.amount || 1000} ${t.sar}`}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Expiry Month</label>
+                  <select
+                    name="expiryMonth"
+                    value={formData.expiryMonth}
+                    onChange={handleInputChange}
+                    disabled={paying}
+                  >
+                    <option value="">MM</option>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i + 1} value={String(i + 1).padStart(2, '0')}>
+                        {String(i + 1).padStart(2, '0')}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Expiry Year</label>
+                  <select
+                    name="expiryYear"
+                    value={formData.expiryYear}
+                    onChange={handleInputChange}
+                    disabled={paying}
+                  >
+                    <option value="">YY</option>
+                    {Array.from({ length: 10 }, (_, i) => {
+                      const year = new Date().getFullYear() + i;
+                      return (
+                        <option key={year} value={String(year).slice(-2)}>
+                          {String(year).slice(-2)}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>CVV</label>
+                <input
+                  type="text"
+                  name="cvv"
+                  value={formData.cvv}
+                  onChange={handleInputChange}
+                  placeholder="123"
+                  disabled={paying}
+                  maxLength="4"
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                className="pay-btn" 
+                disabled={paying || success}
+              >
+                {paying ? 'Processing...' : `Pay ${paymentData?.amount?.toLocaleString()} SAR`}
               </button>
             </form>
-          )} 
 
-          {moyasarConfig && (
-            <div className="moyasar-section">
-              <p className="moyasar-info">{t.enterCard}</p>
-              <div id="moyasar-form" ref={moyasarFormRef} className="mysr-form" style={{ minHeight: '450px', border: '2px solid #e0e0e0', borderRadius: '8px', padding: '1.5rem', background: '#fafafa' }} />
-              <p style={{ color: '#999', textAlign: 'center', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-                {!window.Moyasar ? 'Loading payment form...' : 'Enter your card details'}
-              </p>
-              {error && <div className="error-message">{error}</div>}
-              <button type="button" className="btn-back" onClick={() => { setMoyasarConfig(null); setError(null); }}>{t.back}</button>
+            <p style={{ fontSize: '11px', color: '#7a7469', marginTop: '20px', textAlign: 'center' }}>
+              🔒 256-bit Secure Encryption
+            </p>
+          </div>
+
+          {/* Summary Sidebar */}
+          <div className="pay-summary">
+            <h3 className="pay-title">Payment Summary</h3>
+
+            <div className="summary-row">
+              <span className="summary-label">Booking ID</span>
+              <span className="summary-value">{paymentData?.bookingId}</span>
             </div>
-          )}
 
-          <div className="secure-badge"><span>{t.securePayment}</span></div>
+            <div className="summary-row">
+              <span className="summary-label">Customer</span>
+              <span className="summary-value">{paymentData?.name}</span>
+            </div>
+
+            <div className="summary-row">
+              <span className="summary-label">Email</span>
+              <span className="summary-value" style={{ fontSize: '12px' }}>
+                {paymentData?.email}
+              </span>
+            </div>
+
+            <div className="summary-row total">
+              <span>Total Due</span>
+              <span>{paymentData?.amount?.toLocaleString()} SAR</span>
+            </div>
+          </div>
         </div>
       </div>
-      <style jsx>{`
-        .payment-page { min-height: 100vh; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); padding-top: 100px; padding-bottom: 2rem; }
-        .payment-container { max-width: 500px; margin: 0 auto; padding: 1rem; }
-        .payment-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; margin-bottom: 1.5rem; font-size: 1.5rem; }
-        .booking-summary { background: #f8f9fa; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
-        .booking-summary h2 { margin: 0 0 1rem; color: #333; font-size: 1.1rem; font-weight: 600; }
-        .summary-item { display: flex; justify-content: space-between; padding: 0.5rem 0; color: #666; font-size: 0.95rem; }
-        .summary-total { display: flex; justify-content: space-between; padding: 1rem 0 0; margin-top: 0.5rem; border-top: 2px solid #dee2e6; font-weight: 700; font-size: 1.2rem; }
-        .amount { color: #28a745; }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
-        select { width: 100%; padding: 0.875rem; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; background: white; cursor: pointer; }
-        select:focus { outline: none; border-color: #8a7779; }
-        .test-info { background: linear-gradient(135deg, #e7f3ff, #f0f7ff); border: 1px solid #b3d9ff; border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
-        .test-info h3 { margin: 0 0 0.75rem; color: #0056b3; font-size: 0.95rem; }
-        .test-info ul { margin: 0; padding-left: 1.5rem; color: #0056b3; }
-        .test-info li { margin: 0.35rem 0; font-size: 0.9rem; font-family: monospace; }
-        .moyasar-section { margin-top: 1rem; }
-        .moyasar-info { text-align: center; margin-bottom: 1rem; color: #666; }
-        .mysr-form { margin-bottom: 1rem; min-height: 400px; border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; background: #fff; }
-        .btn-back { background: transparent; border: 2px solid #8a7779; color: #8a7779; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 1rem; width: 100%; }
-        .error-message { background: #f8d7da; color: #721c24; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; }
-        .btn-pay { width: 100%; padding: 1rem; background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(40,167,69,0.3); }
-        .btn-pay:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(40,167,69,0.4); }
-        .btn-pay:disabled { opacity: 0.6; cursor: not-allowed; }
-        .secure-badge { text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee; }
-        .secure-badge span { color: #28a745; font-weight: 600; }
-      `}</style>
-    </div>
-  );
-}
-
-export default function PaymentPage() {
-  return (
-    <Suspense fallback={<div style={{ textAlign: 'center', padding: '4rem', paddingTop: '150px' }}>Loading payment...</div>}>
-      <PaymentPageContent />
-    </Suspense>
+    </>
   );
 }

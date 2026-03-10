@@ -66,6 +66,15 @@ export default function BookingModal() {
     return Number.isFinite(n) ? n : 0;
   };
 
+  // Helper to get localized text from object
+  const getLocalizedText = (obj, baseField, fallbackField = 'title') => {
+    if (!obj) return '';
+    let fieldKey = `${baseField}_en`;
+    if (lang === 'zh') fieldKey = `${baseField}_zh`;
+    else if (lang === 'ar') fieldKey = `${baseField}_ar`;
+    return obj[fieldKey] || obj[`${baseField}_en`] || obj[fallbackField] || '';
+  };
+
   const basePrice = useMemo(() => {
     const current = selectedTrip || trip;
     return parsePrice(current.amount) || parsePrice(current.price) || parsePrice(current.price_en) || parsePrice(current.price_ar) || 0;
@@ -552,6 +561,18 @@ export default function BookingModal() {
     textAlign: isRTL ? "right" : "left",
   };
 
+  const selectStyle = {
+    ...inputStyle,
+    appearance: "none",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 10 13 14 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: isRTL ? "left 0.75rem center" : "right 0.75rem center",
+    backgroundSize: "20px",
+    paddingRight: isRTL ? "0.75rem" : "2.5rem",
+    paddingLeft: isRTL ? "2.5rem" : "0.75rem",
+    cursor: "pointer",
+  };
+
   const textareaStyle = {
     ...inputStyle,
     resize: "vertical",
@@ -665,7 +686,7 @@ export default function BookingModal() {
               {/* If we fetched a trips list, allow the user to select a trip; otherwise show the passed trip */}
               {tripsList && tripsList.length > 0 ? (
                 <select
-                  style={{ ...inputStyle, appearance: 'none' }}
+                  style={selectStyle}
                   value={selectedTrip?.slug || selectedTrip?.title || ''}
                   onChange={async (e) => {
                     const selectedValue = e.target.value;
@@ -708,25 +729,27 @@ export default function BookingModal() {
                     String(t.title) === String(selectedTrip.title)
                   ) && (
                     <option value={selectedTrip.slug || selectedTrip.title}>
-                      {selectedTrip.title} {selectedTrip.amount ? `- ${selectedTrip.amount} SAR` : ''}
+                      {getLocalizedText(selectedTrip, 'title')} {selectedTrip.amount ? `- ${selectedTrip.amount} SAR` : ''}
                     </option>
                   )}
-                  <option value="">{isRTL ? 'اختر رحلة أخرى' : 'Select a different trip'}</option>
+                  <option value="">{isRTL ? 'اختر رحلة أخرى' : lang === 'zh' ? '选择另一个行程' : 'Select a different trip'}</option>
                   {tripsList.map((t) => (
                     <option key={t.slug || t.id || t.title} value={t.slug || t.title}>
-                      {t.title || t.name || t.slug} {t.price || t.amount ? `- ${t.price || t.amount} SAR` : ''}
+                      {getLocalizedText(t, 'title')} {t.price || t.amount ? `- ${t.price || t.amount} SAR` : ''}
                     </option>
                   ))}
                 </select>
               ) : (
                 <div style={{ 
-                  ...inputStyle, 
+                  ...selectStyle, 
+                  appearance: 'none',
                   background: "#f8f9fa", 
                   border: "2px solid #0b63f6",
                   fontWeight: 600,
-                  color: "#333"
+                  color: "#333",
+                  cursor: 'default'
                 }}>
-                  {selectedTrip?.title || trip.title || (isRTL ? 'لم يتم اختيار رحلة' : 'No trip selected')}
+                  {getLocalizedText(selectedTrip || trip, 'title') || (isRTL ? 'لم يتم اختيار رحلة' : lang === 'zh' ? '未选择行程' : 'No trip selected')}
                 </div>
               )}
               

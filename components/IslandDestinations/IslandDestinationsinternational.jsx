@@ -105,15 +105,23 @@ export default function IslandDestinationsinternational({ lang }) {
     return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
-  // Build a full image URL for destination images
+  // Build a full image URL for destination images with cache busting
   const getImageUrl = (img) => {
-    if (!img) return "/placeholder.png";
-    // If already a full URL, return as-is
+    const placeholder = "/placeholder.png";
+    if (!img) return placeholder;
+    // If already a full URL (includes http), return as-is
     if (/^https?:\/\//.test(img)) return img;
-    // If starts with /, return as-is
-    if (img.startsWith("/")) return img;
-    // Otherwise, prepend /
-    return "/" + img;
+    const backendBase = API_URL.replace(/\/api\/?$/, "");
+
+    // If starts with /, it's already a path
+    if (img.startsWith("/")) return `${backendBase}${img}?t=${Date.now()}`;
+
+    // Support existing conventions: storage/... or islands/... (both under /storage/ symlink)
+    if (img.startsWith("storage/")) return `${backendBase}/${img}?t=${Date.now()}`;
+    if (img.startsWith("islands/") || img.startsWith("international/")) return `${backendBase}/storage/${img}?t=${Date.now()}`;
+
+    // Fallback: assume it's a relative path
+    return `${backendBase}/storage/islands/${img}?t=${Date.now()}`;
   };
 
   // Fetch international island destinations from backend

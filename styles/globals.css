@@ -5,6 +5,14 @@
   --light-color: #FFFFFF;      /* White */
   --accent-color: #dfa528;     /* Gold accent */
   --whatsapp-green: #25D366;
+
+  /* New text color tokens — use these for improved contrast on dark/light backgrounds */
+  --text-primary: #ffffff;                 /* main text */
+  --text-strong: rgba(255,255,255,0.95);   /* emphasized */
+  --text-regular: rgba(255,255,255,0.85);  /* headings */
+  --text-muted: rgba(255,255,255,0.65);    /* supportive text */
+  --text-dim: rgba(255,255,255,0.45);      /* secondary/micro text */
+  --text-faint: rgba(255,255,255,0.28);    /* very subtle */
 }
 
 /* Your existing CSS remains the same, just update color variables */

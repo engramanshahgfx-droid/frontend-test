@@ -18,6 +18,7 @@ import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 
 import Loading from "@/components/Loading";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -51,6 +52,7 @@ export default function AdminAccount({ params, children }) {
       articles: "Articles",
       contacts: "Contacts",
       admins: "Admins",
+      ndcBookings: "NDC Bookings",
       settings: "Settings",
       profile: "Profile",
       password: "Password",
@@ -63,6 +65,7 @@ export default function AdminAccount({ params, children }) {
       articles: "مقالات",
       contacts: "جهات الاتصال",
       admins: "المسؤولون",
+      ndcBookings: "حجوزات الرحلات",
       settings: "الإعدادات",
       profile: "الملف الشخصي",
       password: "كلمة المرور",
@@ -229,6 +232,21 @@ export default function AdminAccount({ params, children }) {
                   <SupervisorAccountIcon />
                   <h5 className={`m-0 ${lang === "en" ? "ms-3" : "me-3"}`}>
                     {t.admins}
+                  </h5>
+                </Link>
+              </div>
+              <div data-bs-dismiss="offcanvas" data-bs-target="#offcanvasMenu">
+                <Link
+                  className={`${styles["account-nav-item"]} mb-1 mb-xl-2 ${
+                    pathName === `/${lang}/admin/ndc-bookings`
+                      ? styles["active-route"]
+                      : ""
+                  }`}
+                  href={`/${lang}/admin/ndc-bookings`}
+                >
+                  <FlightTakeoffIcon />
+                  <h5 className={`m-0 ${lang === "en" ? "ms-3" : "me-3"}`}>
+                    {t.ndcBookings}
                   </h5>
                 </Link>
               </div>

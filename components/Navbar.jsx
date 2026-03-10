@@ -106,6 +106,7 @@ export default function Navbar({ lang }) {
   const menuItems = [
     { href: "/", label: t('nav.home') },
     { href: "/about-us", label: t('nav.about') },
+        { href: "/ndc-flights", label: t('nav.flightBookings') },
     { href: "/international", label: t('nav.international'), dropdown: false, type: "international" },
     { href: "/offers", label: t('nav.offers') },
     { href: "/trips-archive", label: t('nav.trips') },
@@ -354,12 +355,7 @@ export default function Navbar({ lang }) {
                 lang={lang}
                 showFlagOnly
               />
-              {/* <button
-                className="btn btn-book d-flex align-items-center gap-2"
-                onClick={handleBookCTA}
-              >
-                <FaWhatsapp /> {t('buttons.bookNow')
-              </button> */}
+             
 
               {isAuthenticated ? (
                 <div className="user-menu" ref={userMenuRef}>
@@ -556,10 +552,10 @@ export default function Navbar({ lang }) {
           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
         }
         .navbar.scrolled {
-          background: linear-gradient(135deg, #000000ff, #2c3e50) !important;
+          background: linear-gradient(135deg, #2c3e50) !important;
 
           padding: 0.7rem 0;
-          box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 20px rgba(24, 15, 15, 0.1);
         }
 
         .navbar-logo {

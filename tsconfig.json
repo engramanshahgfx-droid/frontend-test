@@ -38,7 +38,7 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx"
-  ],
+, "app/api/create-admin/route.js.disabled"  ],
   "exclude": [
     "node_modules"
   ]

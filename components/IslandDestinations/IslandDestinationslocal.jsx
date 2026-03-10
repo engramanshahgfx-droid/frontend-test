@@ -113,7 +113,7 @@ export default function IslandDestinationslocal({ lang }) {
     return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
-  // Build a full image URL for destination images
+  // Build a full image URL for destination images with cache busting
   const getImageUrl = (img) => {
     const placeholder = "/placeholder.png";
     if (!img) return placeholder;
@@ -121,13 +121,14 @@ export default function IslandDestinationslocal({ lang }) {
     const backendBase = API_URL.replace(/\/api\/?$/, "");
 
     // If path starts with a leading slash, assume backend-rooted path and return absolute backend URL
-    if (img.startsWith("/")) return `${backendBase}${img}`;
+    if (img.startsWith("/")) return `${backendBase}${img}?t=${Date.now()}`;
 
-    // Support existing conventions: storage/..., islands/...
-    if (img.startsWith("storage/") || img.startsWith("islands/")) return `${backendBase}/${img}`;
+    // Support existing conventions: storage/... or islands/... (both under /storage/ symlink)
+    if (img.startsWith("storage/")) return `${backendBase}/${img}?t=${Date.now()}`;
+    if (img.startsWith("islands/")) return `${backendBase}/storage/${img}?t=${Date.now()}`;
 
     // Fallback: assume it's a filename stored under storage/islands
-    return `${backendBase}/storage/islands/${img}`;
+    return `${backendBase}/storage/islands/${img}?t=${Date.now()}`;
   }; 
 
   // Fetch local island destinations from backend
