@@ -1,9 +1,9 @@
-import { Tajawal } from "next/font/google";
+// app/[lang]/layout.jsx
 import "@/styles/globals.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "font-awesome/css/font-awesome.css";
+
 import { ToastContainer } from "react-toastify";
 import ContextProvider from "@/providers/ContextProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
@@ -16,12 +16,6 @@ import AuthModal from "@/components/AuthModal";
 import BookingModal from "@/components/BookingModal";
 import ReservationModal from "@/components/ReservationModal";
 
-const tajawal = Tajawal({
-  weight: ["400", "700"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-tajawal",
-});
-
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "ar" }, { lang: "zh" }];
 }
@@ -30,25 +24,21 @@ export async function generateMetadata({ params }) {
   const resolvedParams = await params;
   const { lang } = resolvedParams;
 
-
   const metas = {
-  ar: {
-    title: "التلال والرمال - تنظيم الرحلات السياحية",
-    description: "نقدم رحلات سياحية فريدة تجمع بين المتعة والمغامرة والقيمة المفيدة في ربوع المملكة العربية السعودية. رحلات العوائل، المدارس، الشركات والمجموعات الخاصة.",
-  },
-  en: {
-    title: "Tilal Rimal - Tourism Trips Organization",
-    description: "We offer unique tourism trips that combine fun, adventure, and meaningful value throughout Saudi Arabia. Family trips, school trips, corporate trips, and private groups.",
-  },
-  zh: {
-      title: "Tilal Rimal - 旅游行程组织",
-      description: "我们提供结合乐趣、冒险和有意义的独特旅游行程，遍及沙特阿拉伯各地。家庭旅行、学校旅行、企业旅行和私人团体旅行。",
-    }
-};
+    ar: {
+      title: "التلال والرمال - تنظيم الرحلات السياحية",
+      description:
+        "نقدم رحلات سياحية فريدة تجمع بين المتعة والمغامرة والقيمة المفيدة في ربوع المملكة العربية السعودية. رحلات العوائل، المدارس، الشركات والمجموعات الخاصة.",
+    },
+    en: {
+      title: "Tilal Rimal - Tourism Trips Organization",
+      description:
+        "We offer unique tourism trips that combine fun, adventure, and meaningful value throughout Saudi Arabia. Family trips, school trips, corporate trips, and private groups.",
+    },
+  };
 
   const baseUrl = "";
   const canonicalUrl = `${baseUrl}/${lang}`;
-
   const meta = metas[lang] || metas.en;
 
   return {
@@ -67,19 +57,11 @@ export async function generateMetadata({ params }) {
       description: meta.description,
       type: "website",
       url: canonicalUrl,
-      //  images: [
-      //    {
-      //      url: image,
-      //      width: 1200,
-      //      height: 630,
-      //    },
-      //  ],
     },
     twitter: {
       card: "summary_large_image",
       title: meta.title,
       description: meta.description,
-      //  images: [image],
     },
   };
 }
@@ -93,12 +75,37 @@ export default async function RootLayout({ children, params }) {
       lang={lang}
       dir={lang === "ar" ? "rtl" : "ltr"}
       data-scroll-behavior="smooth"
-      className={tajawal.className}
     >
       <head>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+        {/* Google Fonts - Tajawal CDN */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        {/* Font Awesome 6 - Only ONE CDN link */}
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+        {/* Bootstrap CSS */}
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+          crossOrigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+          defer
+        ></script>
       </head>
-      <body suppressHydrationWarning>
+      <body
+        suppressHydrationWarning
+        style={{ fontFamily: "'Tajawal', sans-serif" }}
+      >
         <AuthProvider>
           <UIProvider>
             <ContextProvider>

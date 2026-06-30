@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import Script from 'next/script';
 import styles from './page.module.css';
+import { formatCurrency, amountWithVAT } from '@/lib/localization';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
@@ -224,7 +225,7 @@ export default function CustomPaymentPage() {
           <h2>Already Paid</h2>
           <p>This payment offer has already been completed.</p>
           <p className={styles.successDescription}>
-            Amount: <strong>{offerData?.amount} SAR</strong>
+            Amount: <strong>{formatCurrency(amountWithVAT(offerData?.amount), 'SAR', lang)}</strong>
           </p>
           <a href="/" className={styles.homeLink}>
             Return to Home
@@ -241,7 +242,7 @@ export default function CustomPaymentPage() {
         <div className={styles.successCard}>
           <div className={styles.successIcon}>✓</div>
           <h2>Payment Successful!</h2>
-          <p>Thank you for your payment of <strong>{offerData?.amount} SAR</strong></p>
+          <p>Thank you for your payment of <strong>{formatCurrency(amountWithVAT(offerData?.amount), 'SAR', lang)}</strong></p>
           <p className={styles.successDescription}>{offerData?.description}</p>
           
           {/* Token Number */}
@@ -342,9 +343,7 @@ export default function CustomPaymentPage() {
               <div className={styles.amountBox}>
                 <span className={styles.amountLabel}>Total Amount</span>
                 <span className={styles.amountValue}>
-                  {Number(offerData?.amount).toLocaleString('en-SA', { 
-                    minimumFractionDigits: 2 
-                  })} SAR
+                  {formatCurrency(amountWithVAT(offerData?.amount), 'SAR', lang)}
                 </span>
               </div>
             </div>

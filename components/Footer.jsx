@@ -9,6 +9,7 @@ import {
   FaMapMarkerAlt,
   FaPhone,
   FaEnvelope,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { SiX } from "react-icons/si";
 import en from "@/public/locales/en/common.json";
@@ -28,15 +29,15 @@ export default function Footer({ lang }) {
     description:
       "لتنظيم الرحلات السياحية - نقدم رحلات فريدة تجمع بين المتعة والمغامرة والقيمة المفيدة في ربوع المملكة.",
     companyTitle: "الشركة",
-    contactTitle: "اتصل بنا",
+    contactTitle: "تواصل معنا",
     legalTitle: "القانونية",
     links: {
       home: "الرئيسية",
       about: "من نحن",
-      international: "العروض الدولية",
-      offers: "العروض المحلية",
+      international: "الباقات الدولية ",
+      offers: "الباقات الداخلية  ",
       archive: "أرشيف الرحلات",
-      basics: "متطلبات السفر",
+      basics: "معلومات تهمك ",
     },
     legal: {
       terms: "الشروط والأحكام",
@@ -45,8 +46,8 @@ export default function Footer({ lang }) {
     },
     rightsReserved: "جميع الحقوق محفوظة.",
     address: "جده, المملكة العربية السعودية",
-    phone: "966547305060",
-    email: "Info@tilalr.com",
+    // phone: "966547305060",
+    // email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
@@ -61,8 +62,8 @@ export default function Footer({ lang }) {
     links: {
       home: "Home",
       about: "About Us",
-      international: "International offers",
-      offers: "Domestic offers",
+      international: "International Packages",
+      offers: "Domestic Packages",
       archive: "Trips Archive",
       basics: "Travel Requirements",
     },
@@ -72,7 +73,7 @@ export default function Footer({ lang }) {
     rightsReserved: "All Rights Reserved.",
     address: "Jeddah, Saudi Arabia",
     phone: "966547305060",
-    email: "Info@tilalr.com",
+    // email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
@@ -98,7 +99,7 @@ export default function Footer({ lang }) {
     rightsReserved: "保留所有权利。",
     address: "吉达，沙特阿拉伯",
     phone: "966547305060",
-    email: "Info@tilalr.com",
+    // email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
@@ -158,6 +159,9 @@ export default function Footer({ lang }) {
                   width: "140px",
                   height: "auto",
                   marginBottom: "0.5rem",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  padding: "6px",
+                  borderRadius: "10px",
                 }}
               />
             </Link>
@@ -172,7 +176,7 @@ export default function Footer({ lang }) {
             </p>
             <div className="mt-2">
               <div
-                className={`d-flex align-items-center mb-1 ${
+                className={`d-flex align-items-center mb-1 gap-2 ${
                   isRTL ? "flex-row-reverse justify-content-start" : ""
                 }`}
               >
@@ -218,93 +222,19 @@ export default function Footer({ lang }) {
               </div>
 
               <div
-                className={`d-flex align-items-center mb-1 ${
+                className={`d-flex align-items-center mb-1 gap-2 ${
                   isRTL ? "flex-row-reverse justify-content-start" : ""
                 }`}
               >
-                {isRTL ? (
-                  <>
-                    <a
-                      href={`tel:${localeText.phone}`}
-                      className="text-decoration-none ms-1"
-                      style={{
-                        fontSize: "12px",
-                        color: "#e0e0e0",
-                        textAlign: "right",
-                        flex: 1,
-                      }}
-                    >
-                      {localeText.phone}
-                    </a>
-                    <FaPhone
-                      size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <FaPhone
-                      className="me-1"
-                      size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
-                    />
-                    <a
-                      href={`tel:${localeText.phone}`}
-                      className="text-decoration-none"
-                      style={{ fontSize: "12px", color: "#e0e0e0" }}
-                    >
-                      {localeText.phone}
-                    </a>
-                  </>
-                )}
+            
               </div>
 
-              <div
-                className={`d-flex align-items-center mb-1 ${
-                  isRTL ? "flex-row-reverse justify-content-start" : ""
-                }`}
-              >
-                {isRTL ? (
-                  <>
-                    <a
-                      href={`mailto:${localeText.email}`}
-                      className="text-decoration-none ms-1"
-                      style={{
-                        fontSize: "12px",
-                        color: "#e0e0e0",
-                        textAlign: "right",
-                        flex: 1,
-                      }}
-                    >
-                      {localeText.email}
-                    </a>
-                    <FaEnvelope
-                      size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <FaEnvelope
-                      className="me-1"
-                      size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
-                    />
-                    <a
-                      href={`mailto:${localeText.email}`}
-                      className="text-decoration-none"
-                      style={{ fontSize: "12px", color: "#e0e0e0" }}
-                    >
-                      {localeText.email}
-                    </a>
-                  </>
-                )}
-              </div>
+        
             </div>
 
             {/* Social Media Icons */}
             <div
-              className={`d-flex gap-1 mt-2 ${
+              className={`d-flex gap-2 mt-2 ${
                 isRTL ? "justify-content-md-end" : "justify-content-md-start"
               } justify-content-center`}
             >
@@ -384,14 +314,14 @@ export default function Footer({ lang }) {
                   {localeText.links.international}
                 </Link>
               </div>
-              <div className="mb-1">
+              {/* <div className="mb-1">
                 <Link
                   href={`/${lang}/offers`}
                   className="text-decoration-none footer-link"
                 >
                   {localeText.links.offers}
                 </Link>
-              </div>
+              </div> */}
               <div className="mb-1">
                 <Link
                   href={`/${lang}/trips-archive`}
@@ -443,6 +373,30 @@ export default function Footer({ lang }) {
                       {localeText.legal.privacy}
                     </Link>
                   </div>
+                  <div className="mb-1">
+                    <Link
+                      href={`/${lang}/refund-policy`}
+                      className="text-decoration-none footer-link"
+                    >
+                      {isRTL ? 'سياسة الاسترجاع' : 'Refund Policy'}
+                    </Link>
+                  </div>
+                  <div className="mb-1">
+                    <Link
+                      href={`/${lang}/cancellation-policy`}
+                      className="text-decoration-none footer-link"
+                    >
+                      {isRTL ? 'سياسة الإلغاء/التعديل' : 'Cancellation & Modification'}
+                    </Link>
+                  </div>
+                  <div className="mb-1">
+                    <Link
+                      href={`/${lang}/insurance-deposit`}
+                      className="text-decoration-none footer-link"
+                    >
+                      {isRTL ? 'قواعد التأمين/الوديعة' : 'Insurance & Deposit Rules'}
+                    </Link>
+                  </div>
                   <div>
                     <Link
                       href={`/${lang}/contact-us`}
@@ -456,41 +410,35 @@ export default function Footer({ lang }) {
 
               {/* Quick Contact */}
               <div className="col-sm-6">
-                <h6
-                  className="mb-1"
-                  style={{
-                    fontWeight: "600",
-                    color: "#dfa528",
-                    fontSize: "0.95rem",
-                  }}
-                >
-                  {localeText.contactTitle}
-                </h6>
+              
+
                 <div className="d-flex flex-column">
-                  <div className="mb-1">
-                    <a
-                      href="tel:966547305060"
-                      className="text-decoration-none footer-link"
-                    >
+                  {/* Phone */}
+                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                    <FaPhone className="icon" />
+                    <a href={`tel:${localeText.phone}`} className="footer-link">
                       {localeText.phone}
                     </a>
                   </div>
-                  <div className="mb-1">
+
+                  {/* WhatsApp - with Arabic label */}
+                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                    <FaWhatsapp className="icon whatsapp" />
                     <a
-                      href="https://wa.me/966547305060"
+                      href={`https://wa.me/${localeText.phone}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-decoration-none footer-link"
+                      className="footer-link"
                     >
-                      {tr('footer.bookViaWhatsApp')}
+                      {isRTL ? "احجز عبر واتساب" : tr("footer.bookViaWhatsApp")}
                     </a>
                   </div>
-                  <div>
-                    <a
-                      href="mailto:Info@tilalr.com"
-                      className="text-decoration-none footer-link"
-                    >
-                      {tr('footer.emailUs')}
+
+                  {/* Email - with Arabic label */}
+                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                    <FaEnvelope className="icon" />
+                    <a href={`mailto:${localeText.email}`} className="footer-link">
+                      {isRTL ? "راسلنا عبر البريد" : tr("footer.emailUs")}
                     </a>
                   </div>
                 </div>
@@ -510,14 +458,16 @@ export default function Footer({ lang }) {
               {/* License Line */}
               <div style={{ fontSize: "12px" }}>
                 <span style={{ color: "#dfa528", fontWeight: "600" }}>
-                  {tr('footer.license')}
+                  {isRTL
+                    ? 'رقم الترخيص: 73106935 | التلال والرمال لتنظيم الرحلات السياحية | منظم رحلات سياحية / وكالة سفر وسياحة  '
+                    : 'License No: 73106935 | Tilal Rimal Tourism Company | Tourism Agent / Travel Agency | © 2026 Tilal R | All Rights Reserved'}
                 </span>
               </div>
 
               {/* Copyright and Rights Line */}
               <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-1">
                 <span style={{ fontSize: "12px" }}>
-                  &copy; 2025{" "}
+                  &copy; 2026{" "}
                   <span style={{ color: "#dfa528" }}>{localeText.companyName}</span>
                 </span>
                 <span
@@ -545,7 +495,26 @@ export default function Footer({ lang }) {
           display: block;
           padding: 0.1rem 0;
         }
-
+        .contact-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 6px;
+        }
+        .contact-item.rtl {
+          flex-direction: row-reverse;
+          justify-content: flex-end;
+          text-align: right;
+          gap: 10px;
+        }
+        .icon {
+          font-size: 12px;
+          color: #dfa528;
+          flex-shrink: 0;
+        }
+        .icon.whatsapp {
+          color: #25D366;
+        }
         .footer-link:hover {
           color: #ffffff !important;
           background: none !important;
@@ -553,7 +522,6 @@ export default function Footer({ lang }) {
           transform: none !important;
           text-decoration: none !important;
         }
-
         .social-icon {
           transition: all 0.3s ease;
           background: rgba(223, 165, 40, 0.1);
@@ -566,13 +534,11 @@ export default function Footer({ lang }) {
           justify-content: center;
           color: #dfa528;
         }
-
         .social-icon:hover {
           color: #ffffff !important;
           background: rgba(223, 165, 40, 0.3);
           transform: translateY(-1px);
         }
-
         @media (max-width: 768px) {
           .social-icon {
             width: 26px;
@@ -580,13 +546,11 @@ export default function Footer({ lang }) {
             padding: 3px;
           }
         }
-
         @media (max-width: 576px) {
           .container {
             padding-left: 12px;
             padding-right: 12px;
           }
-
           .footer-link {
             font-size: 0.8rem;
           }

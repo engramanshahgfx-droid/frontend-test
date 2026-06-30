@@ -1,10 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./Saudi.module.css";
 
 const Saudi = ({ lang = "ar" }) => {
   const [hoveredCity, setHoveredCity] = useState(null);
+  const [showEidPopup, setShowEidPopup] = useState(true);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Check if Eid popup has been closed before
+  // useEffect(() => {
+  //   const hasClosedEidPopup = localStorage.getItem('eidPopupClosed');
+  //   if (hasClosedEidPopup) {
+  //     setShowEidPopup(false);
+  //   }
+  // }, []);
+
+  // Auto-hide popup after 15 seconds
+  useEffect(() => {
+    if (showEidPopup && !isClosing) {
+      const timer = setTimeout(() => {
+        handleClosePopup();
+      }, 15000); // 15 seconds
+
+      return () => clearTimeout(timer);
+    }
+  }, [showEidPopup, isClosing]);
+
+  const handleClosePopup = () => {
+    setIsClosing(true);
+    // Add fade out animation
+    setTimeout(() => {
+      setShowEidPopup(false);
+      localStorage.setItem('eidPopupClosed', 'true');
+    }, 300); // Match animation duration
+  };
 
   // 1. Text Content
   const content = {
@@ -188,6 +219,8 @@ const Saudi = ({ lang = "ar" }) => {
         </video>
         <div className={styles.overlay}></div>
       </div>
+
+    
 
       {/* Main Content Wrapper */}
       <div

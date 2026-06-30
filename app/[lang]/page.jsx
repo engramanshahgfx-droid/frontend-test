@@ -10,8 +10,12 @@ import StartProject from "@/components/StartProject/StartProject";
 import ValueSlider from "@/components/ValueSlider";
 import TeamSection from '@/components/workteam/team';
 import Saudi from '@/components/Saudi/Saudi';
-import IslandDestinations from "@/components/IslandDestinations/IslandDestinationsinternational";
-import IslandDestinationslocal from "@/components/IslandDestinations/IslandDestinationslocal";
+import TourismDestinations from "@/components/TourismDestinations";
+import TourismOffers from "@/components/TourismOffers";
+import SpecialOffers from "@/components/SpecialOffer/SpecialOffers";
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function Home({ params }) {
   const resolvedParams = await params;
@@ -210,7 +214,7 @@ const content = {
       }
     };
 
-    const res = await fetchWithTimeout(`${apiUrl}/services`, { next: { revalidate: 3600 } }, 3000, 0);
+    const res = await fetchWithTimeout(`${apiUrl}/services?lang=${encodeURIComponent(lang)}`, { cache: 'no-store' }, 3000, 0);
 
     console.log('📡 API response status:', res?.status ?? '<no response>');
 
@@ -261,18 +265,20 @@ const content = {
   return (
     <>
          <Saudi lang={lang} />
-       <StartProject lang={lang} />
+       {/* <StartProject lang={lang} /> */}
 
        {/* local cities  */}
-        <NewServices
+        {/* <NewServices
         lang={lang}
         servicesData={services}
         sectionTitle={discoverTitle}
         sectionDescription={discoverDescription}
-      />
-     <IslandDestinationslocal lang={lang} />
+      /> */}
+
+      {/* <SpecialOffers lang={lang} /> */}
+     <TourismOffers lang={lang} />
      
-    <IslandDestinations lang={lang} />
+    <TourismDestinations lang={lang} />
   
      
     </>

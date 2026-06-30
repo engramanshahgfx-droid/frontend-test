@@ -10,22 +10,26 @@
     "admin": "管理员面板",
     "aboutSaudi": "关于沙特阿拉伯",
     "visa": "签证",
-    "bookings": "我的预订",    "flightBookings": "航班预订",    "offers": "特别优惠",
+    "bookings": "我的预订",
+    "offers": "特别优惠",
     "payment": "支付",
     "trips": "旅行",
+    "ourTrips": "我们的旅行",
     "faq": "常见问题",
     "terms": "条款和条件",
     "international": "国际优惠",
+    "specialServices": "特别服务",
     "travelRequirements": "旅行要求"
   },
+  "international": "国际优惠",
   "navbar": {
     "basic": {
       "title": "旅行基础",
       "subtitle": "为您的旅程做准备"
     },
-    "international": {
-      "title": "国际优惠",
-      "subtitle": "全球旅行服务"
+    "specialServices": {
+      "title": "特别服务",
+      "subtitle": "国际旅游和优质服务"
     }
   },
   "buttons": {

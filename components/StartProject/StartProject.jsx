@@ -165,7 +165,7 @@ const handleReservation = (type = "domestic") => {
           </motion.p> 
 
           <motion.div
-            className="d-flex flex-column flex-sm-row justify-content-center gap-3"
+            className="d-flex flex-column flex-sm-row justify-content-center gap-3 w-100"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.9 }}
@@ -173,7 +173,7 @@ const handleReservation = (type = "domestic") => {
             <button
               type="button"
               onClick={() => handleReservation('domestic')}
-              className="btn btn-lg d-flex align-items-center justify-content-center gap-2 px-4 py-3 shadow"
+              className="btn btn-lg d-flex align-items-center justify-content-center gap-2 px-4 py-3 shadow w-100 w-sm-auto"
               style={{
                 background: activeReservation === 'domestic' ? '#bb8002ff' : '#EFC8AE',
                 color: activeReservation === 'domestic' ? '#ffffff' : '#000000',
@@ -197,7 +197,7 @@ const handleReservation = (type = "domestic") => {
             <button
               type="button"
               onClick={() => handleReservation('international')}
-              className="btn btn-lg d-flex align-items-center gap-2 px-4 py-3"
+              className="btn btn-lg d-flex align-items-center justify-content-center gap-2 px-4 py-3 w-100 w-sm-auto"
               style={{
                 background: activeReservation === 'international' ? '#bb8002ff' : '#EFC8AE',
                 color: activeReservation === 'international' ? '#ffffff' : '#000000',

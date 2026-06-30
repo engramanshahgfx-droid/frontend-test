@@ -1,13 +1,8 @@
-// app/visa/page.js
-import VisaComponent from "@/components/visa/visa";
+import SchengenVisaPage from "@/components/visa/schengen/SchengenVisaPage";
 
-export default async function VisaPage({ params }) {
-  try {
-    const { lang } = await params;
-    const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
-    return <VisaComponent lang={validLang} />;
-  } catch (error) {
-    console.error('Error in VisaPage:', error);
-    return <VisaComponent lang="ar" />;
-  }
+export default async function SchengenPage({ params }) {
+  const resolvedParams = await params;
+  const lang = resolvedParams?.lang || "ar";
+  
+  return <SchengenVisaPage lang={lang} />;
 }

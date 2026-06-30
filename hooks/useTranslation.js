@@ -7,19 +7,33 @@ import zh from "@/public/locales/zh/common.json";
 const LOCALE_MAP = { en, ar, zh };
 
 export function useTranslation() {
+  const router = useRouter();
+  const [translations, setTranslations] = useState({});
   const [language, setLanguage] = useState("en");
-  const [translations, setTranslations] = useState(() => LOCALE_MAP.en || {});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get language from URL on client side
-    const pathname = typeof window !== "undefined" ? window.location.pathname : "";
-    const lang = pathname.split("/")[1] || "en";
-    
-    if (lang !== language) {
-      setLanguage(lang);
-      setTranslations(LOCALE_MAP[lang] || LOCALE_MAP.en || {});
-    }
-  }, [language]);
+    const loadTranslations = () => {
+      try {
+        setIsLoading(true);
+        // Get language from URL
+        const pathname = window.location.pathname;
+        const lang = pathname.split("/")[1] || "en";
+        setLanguage(lang);
+
+        // Use static imports to avoid dynamic import issues in production
+        const loaded = LOCALE_MAP[lang] || LOCALE_MAP.en;
+        setTranslations(loaded || {});
+      } catch (error) {
+        console.error("Failed to load translations:", error);
+        setTranslations({});
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadTranslations();
+  }, [router]);
 
   const t = (key, interpolationObj = {}) => {
     const keys = key.split(".");
@@ -29,7 +43,6 @@ export function useTranslation() {
       if (value && typeof value === "object" && k in value) {
         value = value[k];
       } else {
-        // Return key name for debugging when not found
         return key;
       }
     }
@@ -49,6 +62,7 @@ export function useTranslation() {
   return {
     t,
     language,
+    isLoading,
     isRTL: language === "ar",
   };
 }

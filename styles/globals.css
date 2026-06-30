@@ -1,21 +1,13 @@
+/* app/globals.css - Remove the @import line */
 :root {
-  --primary-color: #8A7779;    /* Dusty Rose */
-  --secondary-color: #EFC8AE;  /* Cream */
-  --dark-color: #1E1E1E;       /* Dark Gray */
-  --light-color: #FFFFFF;      /* White */
-  --accent-color: #dfa528;     /* Gold accent */
+  --primary-color: #8A7779;
+  --secondary-color: #EFC8AE;
+  --dark-color: #1E1E1E;
+  --light-color: #FFFFFF;
+  --accent-color: #dfa528;
   --whatsapp-green: #25D366;
-
-  /* New text color tokens — use these for improved contrast on dark/light backgrounds */
-  --text-primary: #ffffff;                 /* main text */
-  --text-strong: rgba(255,255,255,0.95);   /* emphasized */
-  --text-regular: rgba(255,255,255,0.85);  /* headings */
-  --text-muted: rgba(255,255,255,0.65);    /* supportive text */
-  --text-dim: rgba(255,255,255,0.45);      /* secondary/micro text */
-  --text-faint: rgba(255,255,255,0.28);    /* very subtle */
 }
 
-/* Your existing CSS remains the same, just update color variables */
 @media (prefers-color-scheme: light) {
   :root {
     --background: #ffffff;
@@ -23,8 +15,6 @@
   }
 }
 
-/* Using Google Tajawal via next/font; no local Somar fonts */
-/* Force Tajawal font on ALL elements globally */
 *,
 *::before,
 *::after {
@@ -45,7 +35,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 * {
   box-sizing: border-box;
   padding: 0;
@@ -65,7 +54,6 @@ a {
 }
 
 /* Colors */
-
 .primary-color {
   color: var(--primary-color);
 }
@@ -79,7 +67,6 @@ a {
 }
 
 /* Utils */
-
 .clamp-3 {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,7 +146,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 /* Navbar */
-
 #navbar a {
   font-weight: 500;
 }
@@ -170,7 +156,6 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 
 /* Buttons */
-
 .primaryButton {
   background-color: var(--primary-color);
   color: white;
@@ -185,21 +170,6 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .primaryButton:hover {
   background-color: var(--primary-hover-color);
-}
-
-.primaryButton {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 100px;
-  cursor: pointer;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color 0.3s ease;
 }
 
 .secondaryButton {
@@ -217,6 +187,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .secondaryButton:hover {
   background-color: var(--secondary-hover-color);
 }
+
 /* Remove default link styles for footer links */
 a.footer-link,
 a.footer-link:visited,
@@ -225,11 +196,13 @@ a.footer-link:hover {
   text-decoration: none !important;
   color: inherit !important;
 }
+
 /* Additional dark mode adjustments */
 .footer {
   background-color: #1a1a1a !important;
   color: #ffffff !important;
 }
+
 select.form-select,
 select.form-control {
   background-color: rgba(255,255,255,0.1) !important;

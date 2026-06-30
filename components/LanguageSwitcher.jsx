@@ -4,9 +4,8 @@ import { usePathname, useRouter } from "next/navigation";
 import styles from "./LanguageSwitcher.module.css";
 
 const LANGUAGES = [
-  { code: "en", name: "English", flagSrc: "/flags/us.svg", nativeName: "English" },
-  { code: "ar", name: "العربية", flagSrc: "/flags/sa.svg", nativeName: "العربية" },
-  { code: "zh", name: "中文", flagSrc: "/flags/cn.svg", nativeName: "中文" },
+  { code: "en", name: "English", nativeName: "English" },
+  { code: "ar", name: "العربية", nativeName: "العربية" },
 ];
 
 export default function LanguageSwitcher({ lang, className = "", displayText = null, showFlagOnly = false }) {
@@ -15,13 +14,11 @@ export default function LanguageSwitcher({ lang, className = "", displayText = n
   const [isOpen, setIsOpen] = useState(false);
 
   const switchLanguage = (newLang) => {
-    // Normalize pathname: remove any leading language segments (en/ar/zh)
-    // This guards against cases where pathname might be '/en' or '/en/zh/en'
-    const supported = ['en', 'ar', 'zh'];
+    // Normalize pathname: remove any leading language segments (en/ar)
+    const supported = ['en', 'ar'];
     let path = pathname || '';
 
     // Remove leading /lang segments repeatedly if present
-    // e.g. '/en/zh/en' -> ''
     while (path.match(new RegExp(`^/(${supported.join('|')})(?=/|$)`))) {
       path = path.replace(new RegExp(`^/(${supported.join('|')})(?=/|$)`), '');
     }
@@ -32,8 +29,6 @@ export default function LanguageSwitcher({ lang, className = "", displayText = n
     // Build the new path with the desired language
     const newPath = path === '' ? `/${newLang}` : `/${newLang}${path}`;
 
-    console.log('Language switch:', { currentLang: lang, newLang, originalPathname: pathname, cleanedPath: path, newPath });
-    // Use replace: true to avoid adding to browser history for smoother UX
     router.push(newPath, { scroll: false });
     setIsOpen(false);
   };
@@ -41,6 +36,30 @@ export default function LanguageSwitcher({ lang, className = "", displayText = n
   const currentLang = LANGUAGES.find((l) => l.code === lang) || LANGUAGES[0];
   const otherLanguages = LANGUAGES.filter((l) => l.code !== lang);
 
+  // If showFlagOnly is true, show simple EN/AR text buttons
+  if (showFlagOnly) {
+    return (
+      <div className={`${styles.languageSwitcher} ${className}`}>
+        <button
+          onClick={() => switchLanguage('en')}
+          className={`${styles.textButton} ${lang === 'en' ? styles.activeText : ''}`}
+          aria-label="Switch to English"
+        >
+          EN
+        </button>
+        <span className={styles.textDivider}>|</span>
+        <button
+          onClick={() => switchLanguage('ar')}
+          className={`${styles.textButton} ${lang === 'ar' ? styles.activeText : ''}`}
+          aria-label="Switch to Arabic"
+        >
+          AR
+        </button>
+      </div>
+    );
+  }
+
+  // Original dropdown version
   return (
     <div className={`${styles.languageSwitcher} ${className}`}>
       <button
@@ -50,14 +69,7 @@ export default function LanguageSwitcher({ lang, className = "", displayText = n
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <span className={styles.flag}>
-          <img src={currentLang.flagSrc} alt={`${currentLang.code} flag`} className={styles.flagImg} />
-        </span>
-        {showFlagOnly ? (
-          <span className={styles.langCodeButton} aria-hidden="true">{currentLang.code.toUpperCase()}</span>
-        ) : (
-          <span className={styles.languageName}>{displayText || currentLang.nativeName}</span>
-        )}
+        <span className={styles.languageName}>{displayText || currentLang.nativeName}</span>
         <svg
           className={`${styles.chevron} ${isOpen ? styles.open : ""}`}
           width="16"
@@ -86,10 +98,8 @@ export default function LanguageSwitcher({ lang, className = "", displayText = n
                 role="menuitem"
                 aria-label={`Switch to ${lang.name}`}
               >
-                <span className={styles.flag}>
-                  <img src={lang.flagSrc} alt={`${lang.code} flag`} className={styles.flagImg} />
-                </span>
                 <span className={styles.langCode}>{lang.code.toUpperCase()}</span>
+                <span className={styles.langName}>{lang.name}</span>
               </button>
             ))}
           </div>

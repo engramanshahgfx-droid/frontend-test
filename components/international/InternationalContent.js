@@ -20,7 +20,13 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function InternationalContent({ lang }) {
+export default function InternationalContent({ 
+  lang,
+  initialFlights = [],
+  initialHotels = [],
+  initialPackages = [],
+  initialDestinations = []
+}) {
   const [activeTab, setActiveTab] = useState("flights");
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [selectedBookingData, setSelectedBookingData] = useState({
@@ -28,12 +34,12 @@ export default function InternationalContent({ lang }) {
     destination: null,
   });
 
-  // State for dynamic data from API
-  const [flights, setFlights] = useState([]);
-  const [hotels, setHotels] = useState([]);
-  const [packages, setPackages] = useState([]);
-  const [destinations, setDestinations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // State for dynamic data from API - initialize with SSR data
+  const [flights, setFlights] = useState(initialFlights || []);
+  const [hotels, setHotels] = useState(initialHotels || []);
+  const [packages, setPackages] = useState(initialPackages || []);
+  const [destinations, setDestinations] = useState(initialDestinations || []);
+  const [loading, setLoading] = useState(false); // Start with false since we have initial data
   const [error, setError] = useState(null);
 
   // Transparent 1x1 data URI used to avoid 404 when image is invalid/missing
@@ -42,7 +48,6 @@ export default function InternationalContent({ lang }) {
   // Refs for scrolling to sections
   const flightsSectionRef = useRef(null);
   const hotelsSectionRef = useRef(null);
-  const offersSectionRef = useRef(null);
   const destinationsSectionRef = useRef(null);
 
   // Swiper instances (used to control slides programmatically)
@@ -155,7 +160,7 @@ export default function InternationalContent({ lang }) {
       ],
       tips: [
         "تحقق من صلاحية الجواز (الحد الأدنى ٦ أشهر)",
-        "ابحث عن متطلبات التأشيرة لوجهتك",
+        "ابحث عن متطلبات التأشيرات لوجهتك",
         "اشترِ تأمين سفر شامل",
         "أبلغ بنكك عن السفر الدولي",
         "حمّل خرائط وتطبيقات ترجمة دون اتصال",
@@ -220,6 +225,34 @@ export default function InternationalContent({ lang }) {
 
   const t = content[lang] || content.ar;
   const isRTL = lang === "ar";
+  const flightCount = flights.length;
+  const hotelCount = hotels.length;
+  const packageCount = packages.length;
+  const destinationCount = destinations.length;
+  const flightBreakpoints = {
+    576: { slidesPerView: 1 },
+    768: { slidesPerView: Math.min(2, Math.max(flightCount, 1)) },
+    992: { slidesPerView: Math.min(3, Math.max(flightCount, 1)) },
+    1200: { slidesPerView: Math.min(4, Math.max(flightCount, 1)) },
+  };
+  const hotelBreakpoints = {
+    576: { slidesPerView: 1 },
+    768: { slidesPerView: Math.min(2, Math.max(hotelCount, 1)) },
+    992: { slidesPerView: Math.min(3, Math.max(hotelCount, 1)) },
+    1200: { slidesPerView: Math.min(4, Math.max(hotelCount, 1)) },
+  };
+  const packageBreakpoints = {
+    576: { slidesPerView: 1 },
+    768: { slidesPerView: Math.min(2, Math.max(packageCount, 1)) },
+    992: { slidesPerView: Math.min(3, Math.max(packageCount, 1)) },
+    1200: { slidesPerView: Math.min(4, Math.max(packageCount, 1)) },
+  };
+  const destinationBreakpoints = {
+    576: { slidesPerView: 1 },
+    768: { slidesPerView: Math.min(2, Math.max(destinationCount, 1)) },
+    992: { slidesPerView: Math.min(3, Math.max(destinationCount, 1)) },
+    1200: { slidesPerView: Math.min(4, Math.max(destinationCount, 1)) },
+  };
 
   // Slider state
   const [currentFlightIndex, setCurrentFlightIndex] = useState(0);
@@ -416,75 +449,75 @@ export default function InternationalContent({ lang }) {
         if (flightsRes && flightsRes.ok) {
           const flightsData = await flightsRes.json();
           const apiFlights = flightsData.data || flightsData;
-          if (Array.isArray(apiFlights) && apiFlights.length > 0) {
+          if (Array.isArray(apiFlights)) {
             console.log('[InternationalContent] ✓ Flights from API:', apiFlights.length, 'items');
             setFlights(apiFlights);
           } else {
-            console.log('[InternationalContent] Using static flights data (API returned empty)');
-            setFlights(staticFlights);
+            console.log('[InternationalContent] Flights API returned non-array payload; keeping SSR data');
+            setFlights(Array.isArray(initialFlights) ? initialFlights : []);
           }
         } else {
-          console.log('[InternationalContent] Using static flights data (API unavailable)');
-          setFlights(staticFlights);
+          console.log('[InternationalContent] Flights API unavailable; keeping SSR data');
+          setFlights(Array.isArray(initialFlights) ? initialFlights : []);
         }
 
         // Process hotels response
         if (hotelsRes && hotelsRes.ok) {
           const hotelsData = await hotelsRes.json();
           const apiHotels = hotelsData.data || hotelsData;
-          if (Array.isArray(apiHotels) && apiHotels.length > 0) {
+          if (Array.isArray(apiHotels)) {
             console.log('[InternationalContent] ✓ Hotels from API:', apiHotels.length, 'items');
             setHotels(apiHotels);
           } else {
-            console.log('[InternationalContent] Using static hotels data (API returned empty)');
-            setHotels(staticHotels);
+            console.log('[InternationalContent] Hotels API returned non-array payload; keeping SSR data');
+            setHotels(Array.isArray(initialHotels) ? initialHotels : []);
           }
         } else {
-          console.log('[InternationalContent] Using static hotels data (API unavailable)');
-          setHotels(staticHotels);
+          console.log('[InternationalContent] Hotels API unavailable; keeping SSR data');
+          setHotels(Array.isArray(initialHotels) ? initialHotels : []);
         }
 
         // Process packages response
         if (packagesRes && packagesRes.ok) {
           const packagesData = await packagesRes.json();
           const apiPackages = packagesData.data || packagesData;
-          if (Array.isArray(apiPackages) && apiPackages.length > 0) {
+          if (Array.isArray(apiPackages)) {
             console.log('[InternationalContent] ✓ Packages from API:', apiPackages.length, 'items');
             setPackages(apiPackages);
           } else {
-            console.log('[InternationalContent] Using static packages data (API returned empty)');
-            setPackages(staticPackages);
+            console.log('[InternationalContent] Packages API returned non-array payload; keeping SSR data');
+            setPackages(Array.isArray(initialPackages) ? initialPackages : []);
           }
         } else {
-          console.log('[InternationalContent] Using static packages data (API unavailable)');
-          setPackages(staticPackages);
+          console.log('[InternationalContent] Packages API unavailable; keeping SSR data');
+          setPackages(Array.isArray(initialPackages) ? initialPackages : []);
         }
 
         // Process destinations response
         if (destinationsRes && destinationsRes.ok) {
           const destinationsData = await destinationsRes.json();
           const apiDestinations = destinationsData.data || destinationsData;
-          if (Array.isArray(apiDestinations) && apiDestinations.length > 0) {
+          if (Array.isArray(apiDestinations)) {
             console.log('[InternationalContent] ✓ Destinations from API:', apiDestinations.length, 'items');
             setDestinations(apiDestinations);
           } else {
-            console.log('[InternationalContent] Using static destinations data (API returned empty)');
-            setDestinations(staticDestinations);
+            console.log('[InternationalContent] Destinations API returned non-array payload; keeping SSR data');
+            setDestinations(Array.isArray(initialDestinations) ? initialDestinations : []);
           }
         } else {
-          console.log('[InternationalContent] Using static destinations data (API unavailable)');
-          setDestinations(staticDestinations);
+          console.log('[InternationalContent] Destinations API unavailable; keeping SSR data');
+          setDestinations(Array.isArray(initialDestinations) ? initialDestinations : []);
         }
 
         setError(null);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching international data:', err);
-        // Fallback to static data on error
-        setFlights(staticFlights);
-        setHotels(staticHotels);
-        setPackages(staticPackages);
-        setDestinations(staticDestinations);
+        // Keep SSR data on client fetch errors.
+        setFlights(Array.isArray(initialFlights) ? initialFlights : []);
+        setHotels(Array.isArray(initialHotels) ? initialHotels : []);
+        setPackages(Array.isArray(initialPackages) ? initialPackages : []);
+        setDestinations(Array.isArray(initialDestinations) ? initialDestinations : []);
         setError(null);
         setLoading(false);
       }
@@ -618,6 +651,24 @@ export default function InternationalContent({ lang }) {
     return [];
   };
 
+  const normalizeImageUrl = (rawUrl) => {
+    if (!rawUrl || typeof rawUrl !== 'string') return TRANSPARENT_IMAGE;
+    const trimmed = rawUrl.trim();
+    if (!trimmed) return TRANSPARENT_IMAGE;
+
+    // Encode spaces and other unsafe characters while preserving the URL structure.
+    if (/^https?:\/\//i.test(trimmed)) {
+      return encodeURI(trimmed);
+    }
+
+    const base = (process.env.NEXT_PUBLIC_BACKEND_URL || '').trim().replace(/\/$/, '');
+    if (base) {
+      return encodeURI(`${base}/${trimmed.replace(/^\/+/, '')}`);
+    }
+
+    return encodeURI(trimmed);
+  };
+
   // Handle tab click with scroll
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -628,8 +679,6 @@ export default function InternationalContent({ lang }) {
         flightsSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (tab === "hotels" && hotelsSectionRef.current) {
         hotelsSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else if (tab === "offers" && offersSectionRef.current) {
-        offersSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       } else if (tab === "popular" && destinationsSectionRef.current) {
         destinationsSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -795,31 +844,10 @@ export default function InternationalContent({ lang }) {
                 </p>
               </button>
               
-              <button
-                className={`tab-button ${activeTab === "offers" ? "active" : ""}`}
-                onClick={() => handleTabClick("offers")}
-              >
-                <div className="tab-icon-wrapper">
-                  <FaTag className="tab-icon-main" />
-                </div>
-                <span className="tab-text">{t.offersTab}</span>
-                <p className="tab-description">
-                  {t.searchSubtitle}
-                </p>
-              </button>
+              
+           
 
-              <button
-                className={`tab-button ${activeTab === "popular" ? "active" : ""}`}
-                onClick={() => handleTabClick("popular")}
-              >
-                <div className="tab-icon-wrapper">
-                  <FaGlobe className="tab-icon-main" />
-                </div>
-                <span className="tab-text">{t.popularDestinationsTab}</span>
-                <p className="tab-description">
-                  {t.popularDestinations}
-                </p>
-              </button>
+         
             </div>
           </div>
         </div>
@@ -843,15 +871,10 @@ export default function InternationalContent({ lang }) {
               modules={[Autoplay, Pagination]}
               spaceBetween={16}
               slidesPerView={1}
-              breakpoints={{
-                576: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 3 },
-                1200: { slidesPerView: 4 }
-              }}
-              autoplay={{ delay: 3500, disableOnInteraction: false }}
+              breakpoints={flightBreakpoints}
+              autoplay={flightCount > 1 ? { delay: 3500, disableOnInteraction: false } : false}
               pagination={{ clickable: true, dynamicBullets: true }}
-              loop={true}
+              loop={flightCount > 1}
               speed={600}
               className="swiper-flights"
             >
@@ -921,15 +944,10 @@ export default function InternationalContent({ lang }) {
               modules={[Autoplay, Pagination]}
               spaceBetween={16}
               slidesPerView={1}
-              breakpoints={{
-                576: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 3 },
-                1200: { slidesPerView: 4 }
-              }}
-              autoplay={{ delay: 3500, disableOnInteraction: false }}
+              breakpoints={hotelBreakpoints}
+              autoplay={hotelCount > 1 ? { delay: 3500, disableOnInteraction: false } : false}
               pagination={{ clickable: true, dynamicBullets: true }}
-              loop={true}
+              loop={hotelCount > 1}
               speed={600}
               className="swiper-hotels"
             >
@@ -965,122 +983,9 @@ export default function InternationalContent({ lang }) {
       </section>
 
       {/* Offers Section */}
-      <section className="content-section py-5" ref={offersSectionRef}>
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="section-title">{t.offersTab}</h2>
-            <div className="section-divider"></div>
-          </div>
+   
 
-          <div className="slider-wrapper">
-            <button className="slider-nav left" onClick={() => packagesSwiperRef.current?.slidePrev()} aria-label="Previous">
-              <FaChevronLeft />
-            </button>
-
-            <Swiper
-              onSwiper={(sw) => (packagesSwiperRef.current = sw)}
-              modules={[Autoplay, Pagination]}
-              spaceBetween={16}
-              slidesPerView={1}
-              breakpoints={{
-                576: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 3 },
-                1200: { slidesPerView: 4 }
-              }}
-              autoplay={{ delay: 3500, disableOnInteraction: false }}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              loop={true}
-              loopAdditionalSlides={2}
-              watchSlidesProgress={true}
-              speed={600}
-              className="swiper-packages"
-            >
-              {packages.length > 0 ? (
-                packages.map((offer) => (
-                  <SwiperSlide key={offer.id}>
-                    <div className="destination-card package-card">
-                      <div className="package-image">
-                        <img src={offer.image || TRANSPARENT_IMAGE} alt={getPackageText(offer, 'title')} className="img-fluid" />
-                        <div className="package-badge">{getPackageText(offer, 'type')}</div>
-                      </div>
-                      <div className="destination-content">
-                        <h4 className="destination-name">{getPackageText(offer, 'title')}</h4>
-                        <p className="destination-description">{getPackageText(offer, 'description')}</p>
-                        {(offer.duration_en || offer.duration_zh || offer.duration_ar) && (
-                          <div className="package-duration">
-                            <FaClock className="duration-icon" /> {lang === 'zh' ? (offer.duration_zh || offer.duration_en) : (lang === 'ar' ? offer.duration_ar : offer.duration_en)}
-                          </div>
-                        )}
-                        <div className="destination-footer">
-                          <button className="btn btn-outline-primary" onClick={() => handlePackageBooking(offer)} style={{ background: '#EFC8AE', color: '#000', border: 'none' }}>{t.bookNow}</button>
-                        </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>{t.noPackages}</p></div>
-              )}
-            </Swiper>
-
-            <button className="slider-nav right" onClick={() => packagesSwiperRef.current?.slideNext()} aria-label="Next">
-              <FaChevronRight />
-            </button>
-          </div> 
-        </div>
-      </section>
-
-      {/* Popular Destinations */}
-      <section className="destinations-section py-5 bg-light" ref={destinationsSectionRef}>
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="section-title">{t.popularDestinations}</h2>
-            <div className="section-divider"></div>
-          </div>
-
-          <div className="slider-wrapper">
-            <button className="slider-nav left" onClick={() => destinationsSwiperRef.current?.slidePrev()} aria-label="Previous">
-              <FaChevronLeft />
-            </button>
-
-            <Swiper
-              onSwiper={(sw) => (destinationsSwiperRef.current = sw)}
-              modules={[Autoplay, Pagination]}
-              spaceBetween={16}
-              slidesPerView={1}
-              breakpoints={{
-                576: { slidesPerView: 1 },
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 3 },
-                1200: { slidesPerView: 4 }
-              }}
-              autoplay={{ delay: 3500, disableOnInteraction: false }}
-              pagination={{ clickable: true, dynamicBullets: true }}
-              loop={true}
-              speed={600}
-              className="swiper-destinations"
-            >
-              {destinations.length > 0 ? (
-                destinations.map((destination) => (
-                  <SwiperSlide key={destination.id}>
-                    <div className="destination-card">
-                      <div className="destination-image"><img src={destination.image || destination.featured_image || TRANSPARENT_IMAGE} alt={getDestinationText(destination, 'name')} className="img-fluid" /></div>
-                      <div className="destination-content"><h4 className="destination-name">{getDestinationText(destination, 'name')}</h4><p className="destination-description">{getDestinationText(destination, 'description')}</p><div className="destination-footer"><button className="btn btn-outline-primary" onClick={() => handleDestinationBooking(destination)} style={{ background: '#EFC8AE', color: '#000', border: 'none' }}>{t.bookNow}</button></div></div>
-                    </div>
-                  </SwiperSlide>
-                ))
-              ) : (
-                <div className="col-12 text-center" style={{color: '#5d6d7e'}}><p>No destinations available</p></div>
-              )}
-            </Swiper>
-
-            <button className="slider-nav right" onClick={() => destinationsSwiperRef.current?.slideNext()} aria-label="Next">
-              <FaChevronRight />
-            </button>
-          </div>
-        </div>
-      </section>
+    
 
 
    

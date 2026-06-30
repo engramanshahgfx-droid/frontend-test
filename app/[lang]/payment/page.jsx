@@ -1,491 +1,354 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { useEffect, useState, Suspense } from 'react';
+import { useSearchParams, useRouter, useParams } from 'next/navigation';
+import { API_URL } from '@/lib/api';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-
-const goldThemeStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500&display=swap');
-  
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: linear-gradient(135deg, #faf8f4 0%, #f5f2ed 100%);
-    color: #0e0c0a;
-  }
-  
-  .pay-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    min-height: 100vh;
-  }
-  
-  .pay-header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  
-  .pay-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-  }
-  
-  .pay-logo span { color: #c9a84c; }
-  
-  .pay-crumb {
-    font-size: 11px;
-    color: #7a7469;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  
-  .pay-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-  
-  @media (max-width: 768px) {
-    .pay-grid { grid-template-columns: 1fr; gap: 20px; }
-  }
-  
-  .pay-card {
-    background: white;
-    border: 1px solid rgba(201, 168, 76, 0.2);
-    border-radius: 2px;
-    padding: 28px;
-    box-shadow: 0 4px 40px rgba(14, 12, 10, 0.08);
-  }
-  
-  .pay-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    color: #0e0c0a;
-  }
-  
-  .form-group {
-    margin-bottom: 16px;
-  }
-  
-  label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #7a7469;
-    margin-bottom: 6px;
-  }
-  
-  input, select {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid rgba(201, 168, 76, 0.2);
-    border-radius: 2px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    transition: all 0.2s;
-  }
-  
-  input:focus, select:focus {
-    outline: none;
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
-  }
-  
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  
-  .form-row.full { grid-template-columns: 1fr; }
-  
-  .pay-btn {
-    width: 100%;
-    padding: 13px;
-    background: #c9a84c;
-    color: white;
-    border: none;
-    border-radius: 2px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-top: 12px;
-  }
-  
-  .pay-btn:hover:not(:disabled) { background: #b8953e; }
-  .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
-  
-  .pay-summary {
-    background: white;
-    border: 1px solid rgba(201, 168, 76, 0.2);
-    border-radius: 2px;
-    padding: 28px;
-    box-shadow: 0 4px 40px rgba(14, 12, 10, 0.08);
-    height: fit-content;
-  }
-  
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    font-size: 13px;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
-  }
-  
-  .summary-row.total {
-    border-top: 2px solid rgba(201, 168, 76, 0.2);
-    margin-top: 12px;
-    padding-top: 16px;
-    font-weight: 600;
-    font-size: 18px;
-    color: #c9a84c;
-  }
-  
-  .summary-label { color: #7a7469; }
-  .summary-value { font-weight: 500; color: #0e0c0a; }
-  
-  .error-box {
-    background: rgba(220, 80, 80, 0.08);
-    border: 1px solid rgba(220, 80, 80, 0.25);
-    color: #b94040;
-    padding: 12px 14px;
-    border-radius: 2px;
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-  
-  .success-box {
-    background: rgba(80, 180, 80, 0.08);
-    border: 1px solid rgba(80, 180, 80, 0.25);
-    color: #2d8a2d;
-    padding: 12px 14px;
-    border-radius: 2px;
-    font-size: 12px;
-    margin-bottom: 16px;
-  }
-  
-  .loading-spinner {
-    width: 32px;
-    height: 32px;
-    border: 2px solid rgba(201, 168, 76, 0.2);
-    border-top-color: #c9a84c;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 20px auto;
-  }
-  
-  @keyframes spin { to { transform: rotate(360deg); } }
-`;
-
-export default function PaymentPage() {
+function PaymentPageContent() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
+  
   const lang = params?.lang || 'en';
+  const isRTL = lang === 'ar';
   
+  const bookingNumber = searchParams.get('booking');
+  const status = searchParams.get('status');
+  const errorType = searchParams.get('error');
+  
+  const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [paying, setPaying] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  
-  const [paymentData, setPaymentData] = useState(null);
-  const [formData, setFormData] = useState({
-    cardNumber: '',
-    cardHolder: '',
-    expiryMonth: '',
-    expiryYear: '',
-    cvv: '',
-  });
+  const [paymentStatus, setPaymentStatus] = useState('pending');
 
-  // Load payment data from URL params
+  const t = {
+    title: isRTL ? 'حالة الدفع' : 'Payment Status',
+    success: isRTL ? 'تم الدفع بنجاح! 🎉' : 'Payment Successful! 🎉',
+    failed: isRTL ? 'فشل الدفع' : 'Payment Failed',
+    pending: isRTL ? 'جاري المعالجة...' : 'Processing...',
+    bookingNumber: isRTL ? 'رقم الحجز' : 'Booking Number',
+    amount: isRTL ? 'المبلغ' : 'Amount',
+    status: isRTL ? 'الحالة' : 'Status',
+    confirmed: isRTL ? 'تم التأكيد' : 'Confirmed',
+    pendingStatus: isRTL ? 'قيد الانتظار' : 'Pending',
+    goHome: isRTL ? 'الذهاب للرئيسية' : 'Go Home',
+    viewBookings: isRTL ? 'عرض الحجوزات' : 'View My Bookings',
+    tryAgain: isRTL ? 'حاول مرة أخرى' : 'Try Again',
+    backToBooking: isRTL ? 'العودة للحجز' : 'Back to Booking',
+    sar: isRTL ? 'ريال' : 'SAR',
+    loadingText: isRTL ? 'جاري التحميل...' : 'Loading...',
+  };
+
   useEffect(() => {
-    const booking_id = searchParams.get('booking_id');
-    const totalAmount = searchParams.get('total_amount');
-    
-    // Support both parameter names
-    const amount = totalAmount || searchParams.get('amount');
-    
-    if (!booking_id || !amount) {
-      setError('Missing payment details. Please go back and try again.');
+    if (bookingNumber) {
+      fetchBooking();
+    } else if (errorType) {
       setLoading(false);
-      return;
+      setPaymentStatus('failed');
+    } else {
+      setLoading(false);
     }
+  }, [bookingNumber, errorType]);
 
-    setPaymentData({
-      bookingId: booking_id,
-      amount: parseFloat(amount),
-      email: searchParams.get('email') || 'customer@example.com',
-      name: searchParams.get('name') || 'Customer',
-    });
-    
-    setLoading(false);
-  }, [searchParams]);
-
-  // Handle form input
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    let cleanValue = value;
-
-    if (name === 'cardNumber') {
-      cleanValue = value.replace(/\D/g, '').slice(0, 16);
-    } else if (name === 'cvv') {
-      cleanValue = value.replace(/\D/g, '').slice(0, 4);
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: cleanValue
-    }));
-  };
-
-  // Handle payment submission
-  const handlePayment = async (e) => {
-    e.preventDefault();
-    setPaying(true);
-    setError(null);
-
-    // Validate form
-    if (!formData.cardNumber || !formData.cardHolder || !formData.expiryMonth || !formData.expiryYear || !formData.cvv) {
-      setError('Please fill in all payment details');
-      setPaying(false);
-      return;
-    }
-
-    if (formData.cardNumber.length !== 16) {
-      setError('Card number must be 16 digits');
-      setPaying(false);
-      return;
-    }
-
-    if (formData.cvv.length < 3) {
-      setError('CVV must be at least 3 digits');
-      setPaying(false);
-      return;
-    }
-
+  const fetchBooking = async () => {
     try {
-      console.log('Processing payment:', {
-        bookingId: paymentData.bookingId,
-        amount: paymentData.amount,
-        card: formData.cardNumber.slice(-4).padStart(16, '*'),
-      });
-
-      // Call backend to confirm payment
-      const response = await fetch(
-        `${API_BASE}/bookings/${paymentData.bookingId}/confirm-payment`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify({
-            payment_method: 'credit_card',
-            amount: paymentData.amount,
-            currency: 'SAR',
-            card_last_4: formData.cardNumber.slice(-4),
-          }),
-        }
-      );
-
+      const response = await fetch(`${API_URL}/bookings/${bookingNumber}/status`);
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Payment confirmation failed');
+      if (data.success) {
+        setBooking(data.data);
+        setPaymentStatus(data.data.payment_status || data.data.status || 'pending');
       }
-
-      setSuccess(true);
-      setFormData({
-        cardNumber: '',
-        cardHolder: '',
-        expiryMonth: '',
-        expiryYear: '',
-        cvv: '',
-      });
-
-      // Redirect to confirmation after 2 seconds
-      setTimeout(() => {
-        router.push(
-          `/${lang}/payment-callback?booking_id=${paymentData.bookingId}&status=success`
-        );
-      }, 2000);
-
-    } catch (err) {
-      console.error('Payment error:', err);
-      setError(err.message || 'Payment processing failed. Please try again.');
+    } catch (error) {
+      console.error('Error fetching booking:', error);
     } finally {
-      setPaying(false);
+      setLoading(false);
     }
   };
+
+  // Handle payment status from callback
+  useEffect(() => {
+    if (status === 'success' || status === 'paid') {
+      setPaymentStatus('paid');
+    } else if (status === 'failed' || status === 'error') {
+      setPaymentStatus('failed');
+    }
+  }, [status]);
 
   if (loading) {
     return (
-      <>
-        <style dangerouslySetInnerHTML={{ __html: goldThemeStyles }} />
-        <div className="pay-wrapper" style={{ textAlign: 'center', paddingTop: '100px' }}>
-          <div className="loading-spinner" />
-          <p style={{ color: '#7a7469', marginTop: '20px' }}>Loading payment...</p>
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <div style={styles.spinner}></div>
+          <h2>{t.loadingText}</h2>
+          <p style={styles.subText}>{t.pending}</p>
         </div>
-      </>
+      </div>
     );
   }
 
-  return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: goldThemeStyles }} />
-      <div className="pay-wrapper">
-        {/* Header */}
-        <div className="pay-header">
-          <div className="pay-logo">
-            Tilal<span>Rimal</span>
+  // Success state
+  if (paymentStatus === 'paid' || paymentStatus === 'confirmed') {
+    return (
+      <div style={styles.container}>
+        <div style={{...styles.card, borderTop: `4px solid #28a745`}}>
+          <div style={styles.successIcon}>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="3">
+              <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
-          <div className="pay-crumb">Secure Payment</div>
-        </div>
-
-        {/* Main Content */}
-        <div className="pay-grid">
-          {/* Payment Form */}
-          <div className="pay-card">
-            <h2 className="pay-title">Card Details</h2>
-
-            {error && <div className="error-box">{error}</div>}
-            {success && <div className="success-box">Payment successful! Redirecting...</div>}
-
-            <form onSubmit={handlePayment}>
-              <div className="form-group">
-                <label>Cardholder Name</label>
-                <input
-                  type="text"
-                  name="cardHolder"
-                  value={formData.cardHolder}
-                  onChange={handleInputChange}
-                  placeholder="John Doe"
-                  disabled={paying}
-                />
+          <h2 style={styles.successTitle}>{t.success}</h2>
+          <p style={styles.message}>{isRTL ? 'تم تأكيد حجزك بنجاح.' : 'Your booking has been confirmed successfully.'}</p>
+          
+          {booking && (
+            <div style={styles.bookingDetails}>
+              <div style={styles.detailRow}>
+                <span style={styles.detailLabel}>{t.bookingNumber}:</span>
+                <span style={styles.detailValue}>{booking.booking_number}</span>
               </div>
-
-              <div className="form-group">
-                <label>Card Number</label>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  value={formData.cardNumber.replace(/(.{4})/g, '$1 ').trim()}
-                  onChange={handleInputChange}
-                  placeholder="4111 1111 1111 1111"
-                  disabled={paying}
-                  maxLength="19"
-                />
+              <div style={styles.detailRow}>
+                <span style={styles.detailLabel}>{t.amount}:</span>
+                <span style={{...styles.detailValue, color: '#28a745', fontWeight: 'bold'}}>
+                  {booking.price} {t.sar}
+                </span>
               </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Expiry Month</label>
-                  <select
-                    name="expiryMonth"
-                    value={formData.expiryMonth}
-                    onChange={handleInputChange}
-                    disabled={paying}
-                  >
-                    <option value="">MM</option>
-                    {Array.from({ length: 12 }, (_, i) => (
-                      <option key={i + 1} value={String(i + 1).padStart(2, '0')}>
-                        {String(i + 1).padStart(2, '0')}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Expiry Year</label>
-                  <select
-                    name="expiryYear"
-                    value={formData.expiryYear}
-                    onChange={handleInputChange}
-                    disabled={paying}
-                  >
-                    <option value="">YY</option>
-                    {Array.from({ length: 10 }, (_, i) => {
-                      const year = new Date().getFullYear() + i;
-                      return (
-                        <option key={year} value={String(year).slice(-2)}>
-                          {String(year).slice(-2)}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
+              <div style={styles.detailRow}>
+                <span style={styles.detailLabel}>{t.status}:</span>
+                <span style={{...styles.detailValue, color: '#28a745'}}>{t.confirmed}</span>
               </div>
-
-              <div className="form-group">
-                <label>CVV</label>
-                <input
-                  type="text"
-                  name="cvv"
-                  value={formData.cvv}
-                  onChange={handleInputChange}
-                  placeholder="123"
-                  disabled={paying}
-                  maxLength="4"
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className="pay-btn" 
-                disabled={paying || success}
-              >
-                {paying ? 'Processing...' : `Pay ${paymentData?.amount?.toLocaleString()} SAR`}
-              </button>
-            </form>
-
-            <p style={{ fontSize: '11px', color: '#7a7469', marginTop: '20px', textAlign: 'center' }}>
-              🔒 256-bit Secure Encryption
-            </p>
-          </div>
-
-          {/* Summary Sidebar */}
-          <div className="pay-summary">
-            <h3 className="pay-title">Payment Summary</h3>
-
-            <div className="summary-row">
-              <span className="summary-label">Booking ID</span>
-              <span className="summary-value">{paymentData?.bookingId}</span>
             </div>
+          )}
 
-            <div className="summary-row">
-              <span className="summary-label">Customer</span>
-              <span className="summary-value">{paymentData?.name}</span>
-            </div>
-
-            <div className="summary-row">
-              <span className="summary-label">Email</span>
-              <span className="summary-value" style={{ fontSize: '12px' }}>
-                {paymentData?.email}
-              </span>
-            </div>
-
-            <div className="summary-row total">
-              <span>Total Due</span>
-              <span>{paymentData?.amount?.toLocaleString()} SAR</span>
-            </div>
+          <div style={styles.buttonGroup}>
+            <button 
+              onClick={() => router.push(`/${lang}`)}
+              style={{...styles.button, background: '#dfa528'}}
+            >
+              {t.goHome}
+            </button>
+            <button 
+              onClick={() => router.push(`/${lang}/bookings`)}
+              style={{...styles.button, background: '#28a745'}}
+            >
+              {t.viewBookings}
+            </button>
           </div>
         </div>
       </div>
-    </>
+    );
+  }
+
+  // Failed state
+  if (paymentStatus === 'failed') {
+    return (
+      <div style={styles.container}>
+        <div style={{...styles.card, borderTop: `4px solid #dc3545`}}>
+          <div style={styles.errorIcon}>✕</div>
+          <h2 style={styles.errorTitle}>{t.failed}</h2>
+          <p style={styles.message}>
+            {errorType === 'missing_payment_id' 
+              ? (isRTL ? 'معرف الدفع مفقود. يرجى المحاولة مرة أخرى.' : 'Payment ID missing. Please try again.')
+              : errorType === 'booking_not_found'
+              ? (isRTL ? 'لم يتم العثور على الحجز.' : 'Booking not found.')
+              : (isRTL ? 'حدث خطأ أثناء معالجة الدفع. يرجى المحاولة مرة أخرى أو الاتصال بالدعم.' : 'There was an issue processing your payment. Please try again or contact support.')
+            }
+          </p>
+          <div style={styles.buttonGroup}>
+            <button 
+              onClick={() => router.push(`/${lang}`)}
+              style={{...styles.button, background: '#dfa528'}}
+            >
+              {t.goHome}
+            </button>
+            <button 
+              onClick={() => router.back()}
+              style={{...styles.button, background: '#6c757d'}}
+            >
+              {t.tryAgain}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Pending state (waiting for payment)
+  return (
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <div style={styles.pendingIcon}>⏳</div>
+        <h2>{t.pending}</h2>
+        <p style={styles.message}>
+          {isRTL ? 'جاري معالجة دفعتك. يرجى الانتظار...' : 'Your payment is being processed. Please wait...'}
+        </p>
+        <div style={styles.buttonGroup}>
+          <button 
+            onClick={() => router.push(`/${lang}`)}
+            style={{...styles.button, background: '#dfa528'}}
+          >
+            {t.goHome}
+          </button>
+          <button 
+            onClick={() => router.push(`/${lang}/destinations`)}
+            style={{...styles.button, background: '#17a2b8'}}
+          >
+            {isRTL ? 'العودة للوجهات' : 'Back to Destinations'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const styles = {
+  container: {
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%)',
+    padding: '20px',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  },
+  card: {
+    background: 'white',
+    borderRadius: '20px',
+    padding: '40px',
+    maxWidth: '500px',
+    width: '100%',
+    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+    textAlign: 'center',
+    borderTop: '4px solid #dfa528',
+  },
+  spinner: {
+    width: '50px',
+    height: '50px',
+    border: '4px solid #f3f3f3',
+    borderTop: '4px solid #dfa528',
+    borderRadius: '50%',
+    margin: '0 auto 20px',
+    animation: 'spin 1s linear infinite',
+  },
+  successIcon: {
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    background: '#d4edda',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto 20px',
+  },
+  errorIcon: {
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    background: '#f8d7da',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '0 auto 20px',
+    fontSize: '40px',
+    color: '#dc3545',
+  },
+  pendingIcon: {
+    fontSize: '60px',
+    marginBottom: '20px',
+  },
+  successTitle: {
+    color: '#28a745',
+    margin: '0 0 10px',
+    fontSize: '28px',
+  },
+  errorTitle: {
+    color: '#dc3545',
+    margin: '0 0 10px',
+    fontSize: '28px',
+  },
+  message: {
+    color: '#666',
+    fontSize: '16px',
+    lineHeight: '1.6',
+    marginBottom: '20px',
+  },
+  subText: {
+    color: '#999',
+    fontSize: '14px',
+  },
+  bookingDetails: {
+    background: '#f8f9fa',
+    borderRadius: '12px',
+    padding: '16px',
+    marginBottom: '24px',
+    textAlign: 'left',
+  },
+  detailRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '8px 0',
+    borderBottom: '1px solid #e9ecef',
+  },
+  detailLabel: {
+    color: '#666',
+    fontSize: '14px',
+  },
+  detailValue: {
+    color: '#333',
+    fontSize: '14px',
+    fontWeight: '500',
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: '12px',
+    flexWrap: 'wrap',
+  },
+  button: {
+    flex: '1',
+    minWidth: '120px',
+    padding: '12px 24px',
+    border: 'none',
+    borderRadius: '10px',
+    color: 'white',
+    fontSize: '15px',
+    fontWeight: '600',
+    cursor: 'pointer',
+    transition: 'all 0.3s ease',
+  },
+};
+
+// Add animation styles
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(styleSheet);
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: '#f5f7fa'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            border: '4px solid #f3f3f3',
+            borderTop: '4px solid #dfa528',
+            borderRadius: '50%',
+            margin: '0 auto 20px',
+            animation: 'spin 1s linear infinite',
+          }}></div>
+          <p>Loading payment...</p>
+        </div>
+      </div>
+    }>
+      <PaymentPageContent />
+    </Suspense>
   );
 }

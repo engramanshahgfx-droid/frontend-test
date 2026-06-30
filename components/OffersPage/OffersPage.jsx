@@ -1,22 +1,62 @@
 "use client";
 
-import React from "react";
-import Link from 'next/link';
+import React, { useEffect, useState } from "react";
 import { FaStar, FaClock, FaMapMarkerAlt, FaWhatsapp, FaUsers } from "react-icons/fa";
 
-export default function OffersPage({ lang }) {
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+const PLACEHOLDER_IMAGE = 'https://placehold.co/600x400/f0f0f0/999?text=No+Image+Available';
+
+function normalizeOfferFields(item, lang) {
+  const getField = (field) => {
+    // Try to get the field with language suffix first
+    if (item[`${field}_${lang}`]) return item[`${field}_${lang}`];
+    if (item[field]) return item[field];
+    return '';
+  };
+  
+  const parseArrayField = (value) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (e) {
+        return value.split(',').map(s => s.trim()).filter(Boolean);
+      }
+    }
+    return [];
+  };
+  
+  // Handle image URL
+  let imageUrl = item.image;
+  if (!imageUrl || imageUrl === 'null' || imageUrl === 'undefined' || imageUrl.includes('placeholder')) {
+    imageUrl = PLACEHOLDER_IMAGE;
+  }
+  
+  return {
+    id: item.id,
+    title: getField('title'),
+    description: getField('description'),
+    image: imageUrl,
+    duration: getField('duration'),
+    location: getField('location'),
+    groupSize: getField('groupSize') || getField('group_size'),
+    badge: getField('badge'),
+    features: parseArrayField(getField('features')),
+    highlights: parseArrayField(getField('highlights')),
+    price: item.price || item.price_en || item.price_ar || "",
+  };
+}
+
+export default function OffersPage({ lang = 'en', initialOffers = [] }) {
   const content = {
     en: {
       heroTitle: "Exclusive Offers Not to Be Missed",
       heroSubtitle: "Take advantage of the best tourism opportunities we offer, and enjoy unique experiences at attractive prices!",
       featuredOffers: "Featured Offers",
       contactUs: "Contact Us",
-      days: "Days",
-      nights: "Nights",
-      persons: "Persons",
       included: "What's Included",
-      mostPopular: "Most Popular",
-      viewDetails: "View Details",
       loading: "Loading offers...",
       noOffers: "No offers available at the moment.",
       error: "Failed to load offers. Please try again later.",
@@ -26,12 +66,7 @@ export default function OffersPage({ lang }) {
       heroSubtitle: "استفيدوا من أفضل الفرص السياحية التي نقدمها، وستمتعوا بتجارب مميزة بأسعار مغرية!",
       featuredOffers: "العروض المميزة",
       contactUs: "تواصل معنا",
-      days: "أيام",
-      nights: "ليالي",
-      persons: "أشخاص",
       included: "ما المضمن",
-      mostPopular: "الأكثر شيوعاً",
-      viewDetails: "عرض التفاصيل",
       loading: "جاري تحميل العروض...",
       noOffers: "لا توجد عروض متاحة حالياً.",
       error: "فشل تحميل العروض. يرجى المحاولة لاحقاً.",
@@ -41,149 +76,101 @@ export default function OffersPage({ lang }) {
       heroSubtitle: "利用我们提供的最佳旅游机会，以诱人价格享受独特体验！",
       featuredOffers: "精选优惠",
       contactUs: "联系我们",
-      days: "天",
-      nights: "晚",
-      persons: "人",
       included: "包含项目",
-      mostPopular: "最受欢迎",
-      viewDetails: "查看详情",
       loading: "正在加载优惠...",
       noOffers: "目前暂无可用优惠。",
       error: "加载优惠失败。请稍后重试。",
     },
   };
-  const [offers, setOffers] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [fetchError, setFetchError] = React.useState(null);
-  const t = content[lang] || content.ar;
+  
+  const [offers, setOffers] = useState(initialOffers || []);
+  const [loading, setLoading] = useState(initialOffers?.length === 0);
+  const [fetchError, setFetchError] = useState(null);
+  const t = content[lang] || content.en;
   const isRTL = lang === "ar";
 
-  // Minimal fallback offers used when the API is unavailable — prevents ReferenceError and keeps the UI functional.
-  const fallbackOffers = [
-    {
-      id: 'fallback-1',
-      title: lang === 'ar' ? 'عرض افتراضي' : lang === 'zh' ? '默认优惠' : 'Sample Offer',
-      description: lang === 'ar' ? 'وصف العرض الافتراضي.' : lang === 'zh' ? '示例优惠描述。' : 'This is a sample offer used as a fallback when the API is unavailable.',
-      image: '/offers/corporate-trips.jpg',
-      duration: '2 Days',
-      location: lang === 'ar' ? 'جدة' : lang === 'zh' ? '吉达' : 'Jeddah',
-      groupSize: 'Up to 20',
-      features: ['Transport', 'Meals', 'Guide'],
-      highlights: ['Popular', 'Family Friendly'],
-    },
-  ];
-  
-  // API base URL
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        setFetchError(null);
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/api/offers`);
+        if (!response.ok) {
+          throw new Error(`${response.status} ${response.statusText}`);
+        }
+        const data = await response.json();
+        const rawItems = Array.isArray(data) ? data : Array.isArray(data.data) ? data.data : [];
+        const normalized = rawItems.map((item) => normalizeOfferFields(item, lang));
+        setOffers(normalized);
+      } catch (error) {
+        console.error('Error fetching offers:', error);
+        setFetchError(t.error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (initialOffers.length === 0) {
+      fetchOffers();
+    } else {
+      setOffers(initialOffers.map(item => normalizeOfferFields(item, lang)));
+    }
+  }, [lang, initialOffers, t.error]);
 
   const getSummary = (text, maxChars = 220) => {
     if (!text) return "";
     const normalized = String(text).replace(/\r\n/g, "\n").trim();
-    const parts = normalized.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    const parts = normalized.split(/\n\s*\n/).filter(p => p.trim());
     const first = parts.length > 0 ? parts[0] : normalized;
     const oneLine = first.replace(/\s+/g, " ").trim();
     return oneLine.length > maxChars ? oneLine.slice(0, maxChars).trim() + "..." : oneLine;
   };
 
-  const fetchOffers = React.useCallback(async () => {
-    setLoading(true);
-    setFetchError(null);
-    
-    const normalizeArray = (v) => {
-      if (Array.isArray(v)) return v;
-      if (!v) return [];
-      if (typeof v === 'string') {
-        try {
-          const parsed = JSON.parse(v);
-          if (Array.isArray(parsed)) return parsed;
-        } catch (e) {
-          // ignore
-        }
-        return v.split('|').map((s) => s.trim()).filter(Boolean);
-      }
-      return [];
-    };
+  if (loading) {
+    return (
+      <div className="offers-page">
+        <div className="container py-5">
+          <div className="text-center">
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">{t.loading}</span>
+            </div>
+            <p className="mt-3">{t.loading}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-    try {
-      const apiUrl = `${apiBase}/offers`;
-      console.log('[OffersPage] Fetching from API:', apiUrl);
-      
-      const res = await fetch(apiUrl);
-      console.log('[OffersPage] Response status:', res.status);
-      const data = await res.json();
-      console.log('[OffersPage] API Response data:', data);
-      
-      if (res.ok) {
-        let items = [];
-        if (Array.isArray(data)) items = data;
-        else if (data && Array.isArray(data.data)) items = data.data;
-        else if (data && Array.isArray(data.offers)) items = data.offers;
+  if (fetchError) {
+    return (
+      <div className="offers-page">
+        <div className="container py-5">
+          <div className="alert alert-danger text-center">{fetchError}</div>
+        </div>
+      </div>
+    );
+  }
 
-        if (items.length > 0) {
-          const parsed = items.map((o) => {
-            // Helper to get localized text
-            const getLocalized = (field) => {
-              if (lang === 'zh') return o[`${field}_zh`] || o[`${field}_en`];
-              if (lang === 'ar') return o[`${field}_ar`] || o[`${field}_en`];
-              return o[`${field}_en`] || o[field];
-            };
-            
-            return {
-              id: o.id,
-              title: getLocalized('title'),
-              description: getLocalized('description'),
-              image: o.image || '/offers/corporate-trips.jpg',
-              duration: getLocalized('duration'),
-              location: getLocalized('location'),
-              groupSize: getLocalized('group_size') || o.group_size,
-              badge: getLocalized('badge'),
-              features: normalizeArray(getLocalized('features')),
-              highlights: normalizeArray(getLocalized('highlights')),
-            };
-          });
-
-          setOffers(parsed);
-          setLoading(false);
-          return;
-        }
-      }
-      
-      // No data from API - use fallback
-      console.warn('[OffersPage] No data from API, using fallback offers');
-      setOffers(fallbackOffers);
-      setLoading(false);
-    } catch (err) {
-      console.error('API fetch failed:', err.message);
-      // Use fallback offers on error
-      console.warn('[OffersPage] Using fallback offers due to API error');
-      setOffers(fallbackOffers);
-      setFetchError(null); // Don't show error if we have fallback
-      setLoading(false);
-    }
-  }, [lang, isRTL, apiBase]);
-
-  React.useEffect(() => {
-    fetchOffers();
-  }, [lang, fetchOffers]);
+  if (offers.length === 0) {
+    return (
+      <div className="offers-page">
+        <div className="container py-5">
+          <div className="alert alert-info text-center">{t.noOffers}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className={`offers-page ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Hero Section with Video Background */}
+      {/* Hero Section */}
       <section className="offers-hero">
         <div className="video-background">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            className="background-video"
-          >
+          <video autoPlay muted loop playsInline className="background-video">
             <source src="/desert.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
           </video>
           <div className="video-overlay"></div>
         </div>
-        
         <div className="container">
           <div className="row align-items-center min-vh-100">
             <div className="col-lg-8 mx-auto text-center text-white">
@@ -205,104 +192,84 @@ export default function OffersPage({ lang }) {
           </div>
 
           <div className="row g-4 justify-content-center">
-            {/* Loading state */}
-            {loading && (
-              <div className="col-12 text-center py-5">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                <p className="mt-3">{t.loading}</p>
-              </div>
-            )}
-
-            {/* Error state */}
-            {!loading && fetchError && (
-              <div className="alert alert-danger text-center mb-3">{fetchError}</div>
-            )}
-
-            {/* Empty state */}
-            {!loading && !fetchError && offers.length === 0 && (
-              <div className="alert alert-info text-center mb-3">
-                {t.noOffers}
-              </div>
-            )}
-
-            {/* Offers list */}
-            {!loading && offers.length > 0 && offers.map((offer) => (
+            {offers.map((offer) => (
               <div key={offer.id} className="col-lg-4 col-md-6 col-sm-12">
                 <div className="offer-card">
                   <div className="offer-image">
                     <img 
-                      src={offer.image} 
-                      alt={offer.title}
-                      className="img-fluid"
-                      width="1200"
-                      height="700"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      src={offer.image || PLACEHOLDER_IMAGE} 
+                      alt={offer.title || 'Offer'}
                       onError={(e) => {
-                        e.target.src = '/offers/jeddah-sea.png';
+                        e.target.src = PLACEHOLDER_IMAGE;
+                        e.target.onerror = null;
                       }}
                     />
                   </div>
-
                   <div className="offer-content">
-                    <h3 className="offer-title">{offer.title}</h3>
+                    <h3 className="offer-title">{offer.title || 'Untitled'}</h3>
                     <p className="offer-description">{getSummary(offer.description)}</p>
-
-                    <div className="offer-highlights">
-                      {offer.highlights.map((highlight, index) => (
-                        <span key={index} className="highlight-tag">
-                          {highlight}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Offer Details */}
-                    <div className="offer-details">
-                      <div className="detail-item">
-                        <FaClock className="detail-icon" />
-                        <span>{offer.duration}</span>
-                      </div>
-                      <div className="detail-item">
-                        <FaMapMarkerAlt className="detail-icon" />
-                        <span>{offer.location}</span>
-                      </div>
-                      <div className="detail-item">
-                        <FaUsers className="detail-icon" />
-                        <span>{offer.groupSize}</span>
-                      </div>
-                    </div>
-
-                    {/* Features List */}
-                    <div className="features-list">
-                      <h6>{t.included}:</h6>
-                      <div className="features-grid">
-                        {offer.features.map((feature, index) => (
-                          <div key={index} className="feature-item">
-                            <FaStar className="feature-icon" />
-                            <span>{feature}</span>
-                          </div>
+                    
+                    {offer.highlights && offer.highlights.length > 0 && (
+                      <div className="offer-highlights">
+                        {offer.highlights.slice(0, 3).map((highlight, idx) => (
+                          <span key={idx} className="highlight-tag">{highlight}</span>
                         ))}
                       </div>
+                    )}
+                    
+                    <div className="offer-details">
+                      {offer.duration && (
+                        <div className="detail-item">
+                          <FaClock className="detail-icon" />
+                          <span>{offer.duration}</span>
+                        </div>
+                      )}
+                      {offer.location && (
+                        <div className="detail-item">
+                          <FaMapMarkerAlt className="detail-icon" />
+                          <span>{offer.location}</span>
+                        </div>
+                      )}
+                      {offer.groupSize && (
+                        <div className="detail-item">
+                          <FaUsers className="detail-icon" />
+                          <span>{offer.groupSize}</span>
+                        </div>
+                      )}
                     </div>
-
-                    {/* CTA Button */}
-                    <div className="offer-footer">
-                      <div className="cta-buttons">
-                        <a
-                          href={`https://wa.me/+966547305060?text=${encodeURIComponent(
-                            isRTL 
-                              ? `أرغب في الحصول على معلومات عن: ${offer.title}`
-                              : `I'm interested in: ${offer.title}`
-                          )}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn btn-primary btn-book"
-                        >
-                          <FaWhatsapp className={isRTL ? "ms-2" : "me-2"} />
-                          {t.contactUs}
-                        </a>
+                    
+                    {offer.features && offer.features.length > 0 && (
+                      <div className="features-list">
+                        <h6>{t.included}:</h6>
+                        <div className="features-grid">
+                          {offer.features.slice(0, 4).map((feature, idx) => (
+                            <div key={idx} className="feature-item">
+                              <FaStar className="feature-icon" />
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
+                    )}
+                    
+                    {offer.price && (
+                      <div className="offer-price mb-3">
+                        {isRTL ? 'يبدأ من' : 'Starts from'} {offer.price} {isRTL ? 'ريال' : 'SAR'}
+                      </div>
+                    )}
+                    
+                    <div className="offer-footer">
+                      <a
+                        href={`https://wa.me/+966547305060?text=${encodeURIComponent(
+                          isRTL ? `أرغب في الحصول على معلومات عن: ${offer.title}` : `I'm interested in: ${offer.title}`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary btn-book"
+                      >
+                        <FaWhatsapp className={isRTL ? "ms-2" : "me-2"} />
+                        {t.contactUs}
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -348,11 +315,7 @@ export default function OffersPage({ lang }) {
           left: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(
-            135deg, 
-            rgba(138, 119, 121, 0.4) 0%, 
-            rgba(239, 200, 174, 0.85) 100%
-          );
+          background: linear-gradient(135deg, rgba(138, 119, 121, 0.4) 0%, rgba(239, 200, 174, 0.85) 100%);
           z-index: 2;
         }
 
@@ -370,88 +333,55 @@ export default function OffersPage({ lang }) {
           font-weight: 800;
           text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
           line-height: 1.3;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .hero-content .lead {
           font-size: 1.3rem;
           text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
           line-height: 1.6;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-card {
           background: white;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 15px 35px rgba(0,0,0,0.1);
           transition: all 0.3s ease;
-          position: relative;
-          display: flex;
-          flex-direction: column;
           height: 100%;
-          border: 1px solid #e9ecef;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-card:hover {
           transform: translateY(-10px);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
 
-        /* Make the image area larger and visually prominent. Keep img.src bound to backend offer.image so updates show immediately. */
         .offer-image {
           width: 100%;
-          height: 320px; /* reduced height for 3-up desktop layout */
+          height: 320px;
           overflow: hidden;
           position: relative;
-          border-top-left-radius: 20px;
-          border-top-right-radius: 20px;
-          flex: 0 0 auto;
+          background: #f5f5f5;
         }
 
-        @media (min-width: 1400px) {
-          /* slightly larger images on very wide screens */
-          .offer-image { height: 360px; }
-        }
-
-        @media (max-width: 576px) {
-          .offer-image { height: 220px; }
+        @media (max-width: 768px) {
+          .offer-image {
+            height: 240px;
+          }
         }
 
         .offer-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center;
-          transition: transform 0.5s ease, filter 0.5s ease;
-          display: block;
+          transition: transform 0.5s ease;
         }
 
-        /* subtle zoom on hover to emphasize imagery */
         .offer-card:hover .offer-image img {
-          transform: scale(1.03);
-        }
-
-        .rtl .offer-title,
-        .rtl .offer-description {
-          text-align: right;
-          direction: rtl;
-        }
-
-        .ltr .offer-title,
-        .ltr .offer-description {
-          text-align: left;
-          direction: ltr;
-        }
-
-        .offer-description {
-          white-space: pre-wrap;
+          transform: scale(1.05);
         }
 
         .offer-content {
           padding: 30px;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-title {
@@ -459,16 +389,12 @@ export default function OffersPage({ lang }) {
           font-weight: 800;
           color: #2c3e50;
           margin-bottom: 15px;
-          line-height: 1.3;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-description {
           color: #5d6d7e;
           margin-bottom: 20px;
           line-height: 1.7;
-          font-size: 1.05rem;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-highlights {
@@ -485,8 +411,6 @@ export default function OffersPage({ lang }) {
           border-radius: 20px;
           font-size: 0.8rem;
           font-weight: 600;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-details {
@@ -505,22 +429,16 @@ export default function OffersPage({ lang }) {
           align-items: center;
           gap: 10px;
           color: #7f8c8d;
-          font-size: 0.95rem;
-          font-weight: 500;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .detail-icon {
           color: #8a7779;
-          font-size: 1.1rem;
         }
 
         .features-list h6 {
           color: #2c3e50;
           margin-bottom: 15px;
           font-weight: 700;
-          font-size: 1.1rem;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .features-grid {
@@ -536,27 +454,28 @@ export default function OffersPage({ lang }) {
           gap: 10px;
           font-size: 0.9rem;
           color: #5d6d7e;
-          font-weight: 500;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .feature-icon {
           color: #f39c12;
           font-size: 0.8rem;
-          flex-shrink: 0;
         }
 
         .offer-footer {
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          text-align: center;
           padding-top: 25px;
           border-top: 2px solid #ecf0f1;
         }
 
-        .cta-buttons {
-          display: flex;
-          gap: 12px;
+        .offer-price {
+          font-size: 1rem;
+          font-weight: 700;
+          color: #25d366;
+          margin-bottom: 15px;
+          display: inline-block;
+          background: rgba(37,211,102,0.1);
+          padding: 8px 16px;
+          border-radius: 20px;
         }
 
         .btn-book {
@@ -567,17 +486,15 @@ export default function OffersPage({ lang }) {
           font-weight: 700;
           color: white;
           text-decoration: none;
-          display: flex;
+          display: inline-flex;
           align-items: center;
+          gap: 8px;
           transition: all 0.3s ease;
-          font-size: 1rem;
-          box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-          font-family: 'Tajawal', sans-serif;
         }
 
         .btn-book:hover {
           transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+          box-shadow: 0 8px 25px rgba(37,211,102,0.5);
           color: white;
         }
 
@@ -585,9 +502,7 @@ export default function OffersPage({ lang }) {
           color: #5a4606ff;
           font-weight: 800;
           font-size: 2.5rem;
-          position: relative;
           margin-bottom: 1rem;
-          font-family: 'Tajawal', sans-serif;
         }
 
         .section-divider {
@@ -599,55 +514,14 @@ export default function OffersPage({ lang }) {
         }
 
         @media (max-width: 768px) {
-          .offers-hero {
-            padding: 120px 0 80px;
-            min-height: 60vh;
-          }
-
           .hero-content h1 {
-            font-size: 2.2rem;
-          }
-
-          .hero-content .lead {
-            font-size: 1.1rem;
-          }
-
-          .offer-footer {
-            flex-direction: column;
-            text-align: center;
-          }
-
-          .cta-buttons {
-            width: 100%;
-            justify-content: center;
-          }
-
-          .features-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .offer-details {
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .section-title {
             font-size: 2rem;
           }
-        }
-
-        @media (max-width: 576px) {
-          .offer-content {
-            padding: 20px;
-          }
-
           .offer-title {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
           }
-
-          .btn-book {
-            padding: 10px 20px;
-            font-size: 0.9rem;
+          .features-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

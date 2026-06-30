@@ -1,16 +1,21 @@
 
+import {
+  getInternationalFlightsStatic,
+  getInternationalHotelsStatic,
+  getInternationalPackagesStatic,
+  getInternationalDestinationsStatic,
+} from '@/lib/server-api';
 import InternationalContent from "@/components/international/InternationalContent";
 
-export default async function International({ params }) {
-  try {
-    const { lang } = await params;
-    const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
-    return <InternationalContent lang={validLang} />;
-  } catch (error) {
-    console.error('Error in International page:', error);
-    return <InternationalContent lang="ar" />;
-  }
-}
+/**
+ * Dynamic rendering - fetches fresh data on each request
+ * Data is server-rendered (embedded in HTML) so Google sees all content
+ * Content always current (no stale data)
+ * Trade-off: Per-request API call instead of cached build
+ */
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -18,37 +23,19 @@ export async function generateMetadata({ params }) {
   
   const metadata = {
     en: {
-      title: "Special Offers & Travel Packages | Your Travel Company",
-      description: "Discover amazing travel offers and packages with incredible discounts. Limited-time special deals for your next adventure.",
-      keywords: "travel offers, packages, discounts, Saudi Arabia tourism, special deals",
-      openGraph: {
-        title: "Special Offers & Travel Packages",
-        description: "Limited-time offers with incredible discounts on travel packages",
-        type: "website",
-        images: ["/og-international.jpg"]
-      }
+      title: "International Travel & Packages | Tilal Rimal",
+      description: "Explore world-class international travel packages with flights, hotels, and guided tours. Plan your dream vacation today.",
+      keywords: "international travel, travel packages, flights, hotels, world tourism",
     },
     ar: {
-      title: "عروض وحزم سفر خاصة | شركة السفر الخاصة بك",
-      description: "اكتشف عروض سفر مذهلة وحزم مع خصومات لا تصدق. عروض خاصة محدودة الوقت لمغامرتك القادمة.",
-      keywords: "عروض سفر, حزم, خصومات, سياحة السعودية, عروض خاصة",
-      openGraph: {
-        title: "عروض وحزم سفر خاصة",
-        description: "عروض محدودة الوقت مع خصومات مذهلة على حزم السفر",
-        type: "website",
-        images: ["/og-international.jpg"]
-      }
+      title: "السفر الدولي والحزم | التلال والرمال",
+      description: "استكشف حزم سفر دولية فئة عالمية مع رحلات طيران، فنادق، وجولات موجهة. خطط لإجازة أحلامك اليوم.",
+      keywords: "السفر الدولي, حزم السفر, الرحلات الجوية, الفنادق, السياحة العالمية",
     },
     zh: {
-      title: "特别优惠与旅行套餐 | 旅行公司",
-      description: "发现令人惊叹的旅行优惠和套餐，享受难以置信的折扣。为您的下一次探险提供限时特别优惠。",
-      keywords: "旅行优惠, 套餐, 折扣, 沙特阿拉伯旅游, 特别优惠",
-      openGraph: {
-        title: "特别优惠与旅行套餐",
-        description: "对旅行套餐提供限时惊人折扣的特别优惠",
-        type: "website",
-        images: ["/og-international.jpg"]
-      }
+      title: "国际旅行套餐 | Tilal Rimal",
+      description: "探索世界级国际旅行套餐，包括航班、酒店和导游旅游。今天计划您梦想中的假期。",
+      keywords: "国际旅行, 旅行套餐, 航班, 酒店, 世界旅游",
     }
   };
   
@@ -62,4 +49,44 @@ export async function generateMetadata({ params }) {
       }
     }
   };
+}
+
+export default async function International({ params }) {
+  const { lang } = await params;
+  const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
+
+  let initialFlights = [];
+  let initialHotels = [];
+  let initialPackages = [];
+  let initialDestinations = [];
+
+  try {
+    // Fetch all international data on each request (fresh data)
+    [initialFlights, initialHotels, initialPackages, initialDestinations] = await Promise.all([
+      getInternationalFlightsStatic(),
+      getInternationalHotelsStatic(),
+      getInternationalPackagesStatic(),
+      getInternationalDestinationsStatic(),
+    ]);
+
+    console.log('[International Page] Data loaded (dynamic):', {
+      flights: initialFlights.length,
+      hotels: initialHotels.length,
+      packages: initialPackages.length,
+      destinations: initialDestinations.length,
+    });
+  } catch (error) {
+    console.error('[International Page] Error fetching data:', error.message);
+    // Component handles empty data gracefully
+  }
+
+  return (
+    <InternationalContent
+      lang={validLang}
+      initialFlights={initialFlights}
+      initialHotels={initialHotels}
+      initialPackages={initialPackages}
+      initialDestinations={initialDestinations}
+    />
+  );
 }

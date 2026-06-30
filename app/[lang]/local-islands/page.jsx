@@ -1,11 +1,7 @@
-'use client';
-
 import React from 'react';
-import { useParams } from 'next/navigation';
-import IslandDestinationslocal from '@/components/IslandDestinations/IslandDestinationslocal';
+import TourismOffers from '@/components/TourismOffers';
 
-export default function LocalIslandsPage() {
-  const params = useParams();
+export default function LocalIslandsPage({ params }) {
   const lang = params?.lang || 'en';
 
 const content = {
@@ -26,19 +22,21 @@ const content = {
   const pageContent = content[lang] || content.en;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{pageContent.title}</h1>
-          <p className="text-xl text-blue-100">{pageContent.description}</p>
+    <div className="relative min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <main className="pt-[60px]">
+        {/* Hero Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">{pageContent.title}</h1>
+            <p className="text-xl text-blue-100">{pageContent.description}</p>
+          </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        <IslandDestinationslocal lang={lang} />
-      </div>
+        {/* Main Content */}
+        <div className="w-full py-12">
+          <TourismOffers lang={lang} />
+        </div>
+      </main>
     </div>
   );
 }

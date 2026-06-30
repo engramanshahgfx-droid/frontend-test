@@ -3,12 +3,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useAuth } from "../providers/AuthProvider";
 import { useUI } from "../providers/UIProvider";
 import en from "@/public/locales/en/common.json";
 import ar from "@/public/locales/ar/common.json";
-import zh from "@/public/locales/zh/common.json";
+import { ChevronDown, ChevronRight, Globe, Menu, X, Phone } from "lucide-react";
+import { API_URL } from "@/lib/api";
+
 import {
   FaWhatsapp,
   FaTimes,
@@ -17,48 +20,106 @@ import {
   FaUserCircle,
   FaSignOutAlt,
   FaUser,
+  FaPhone,
+  FaTiktok,
+  FaSnapchat,
+  FaInstagram,
 } from "react-icons/fa";
+import { SiX } from "react-icons/si";
 
 export default function Navbar({ lang }) {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuth();
   const { openBookingOrAuth } = useUI();
-  const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null); // 'services' or 'basic' or 'international'
+  const [openMobileDropdown, setOpenMobileDropdown] = useState(null);
+  const [openDesktopDropdown, setOpenDesktopDropdown] = useState(null);
+  const [openSubDropdown, setOpenSubDropdown] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  // State for dynamic destinations from API
+  const [tourismDestinations, setTourismDestinations] = useState(null);
+  const [loadingDestinations, setLoadingDestinations] = useState(true);
+
   const mobileMenuRef = useRef(null);
-  const servicesRef = useRef(null);
-  const basicRef = useRef(null);
-  const internationalRef = useRef(null);
+  const desktopPackagesRef = useRef(null);
+  const desktopServicesRef = useRef(null);
+  const desktopBasicRef = useRef(null);
   const userMenuRef = useRef(null);
+  const dropdownTimeoutRef = useRef(null);
+
+  // Fetch tourism destinations from backend API
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const response = await fetch(`${API_URL}/tourism-destinations/navbar`);
+        const data = await response.json();
+        if (data.success && Object.keys(data.data).length > 0) {
+          setTourismDestinations(data.data);
+        } else {
+          // If API returns empty, use static fallback
+          setTourismDestinations(getFallbackDestinations());
+        }
+      } catch (error) {
+        console.error("Failed to fetch destinations:", error);
+        // If API fails, use static fallback
+        setTourismDestinations(getFallbackDestinations());
+      } finally {
+        setLoadingDestinations(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  // Fallback static data (used when API fails or is empty)
+  const getFallbackDestinations = () => {
+    return {
+      Europe: {
+        icon: "🌍",
+        ar: "أوروبا",
+        countries: [
+          {
+            en: "Britain & Ireland",
+            ar: "بريطانيا وأيرلندا",
+            slug: "britain-ireland-tour",
+          },
+          { en: "Poland", ar: "بولندا", slug: "poland-discovery" },
+        ],
+      },
+      Asia: {
+        icon: "🌏",
+        ar: "آسيا",
+        countries: [
+          { en: "Thailand", ar: "تايلاند", slug: "thailand-getaway" },
+        ],
+      },
+    };
+  };
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
 
-    // Close menus when clicking outside
     const handleClickOutside = (event) => {
-      if (servicesRef.current && !servicesRef.current.contains(event.target)) {
-        setOpenDropdown(null);
-      }
-      if (basicRef.current && !basicRef.current.contains(event.target)) {
-        setOpenDropdown(null);
-      }
-      if (internationalRef.current && !internationalRef.current.contains(event.target)) {
-        setOpenDropdown(null);
+      if (
+        desktopPackagesRef.current &&
+        !desktopPackagesRef.current.contains(event.target)
+      ) {
+        setOpenDesktopDropdown((prev) => (prev === "packages" ? null : prev));
       }
       if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        !event.target.closest(".navbar-toggler")
+        desktopServicesRef.current &&
+        !desktopServicesRef.current.contains(event.target)
       ) {
-        setMobileMenuOpen(false);
+        setOpenDesktopDropdown((prev) => (prev === "services" ? null : prev));
       }
-
+      if (
+        desktopBasicRef.current &&
+        !desktopBasicRef.current.contains(event.target)
+      ) {
+        setOpenDesktopDropdown((prev) => (prev === "basic" ? null : prev));
+      }
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
@@ -68,130 +129,212 @@ export default function Navbar({ lang }) {
     document.addEventListener("touchstart", handleClickOutside);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
+      if (dropdownTimeoutRef.current) {
+        clearTimeout(dropdownTimeoutRef.current);
+      }
     };
   }, []);
 
   useEffect(() => {
     setMobileMenuOpen(false);
-    setOpenDropdown(null);
+    setOpenMobileDropdown(null);
+    setOpenDesktopDropdown(null);
     setUserMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   const isActive = (href) => {
     if (href === "/") return pathname === `/${lang}` || pathname === "/";
     return pathname === `/${lang}${href}`;
   };
 
-  // Simple translation helper using locale JSONs
-  const translations = { en, ar, zh };
+  const translations = { en, ar };
   const t = (key) => {
-    const keys = key.split('.');
+    const keys = key.split(".");
     let v = translations[lang] || translations.en;
     for (const k of keys) {
-      if (v && typeof v === 'object' && k in v) v = v[k];
+      if (v && typeof v === "object" && k in v) v = v[k];
       else return key;
     }
-    return typeof v === 'string' ? v : key;
+    return typeof v === "string" ? v : key;
   };
 
-  // Fallback helper for dropdown data objects that may not include all locales (e.g., zh)
   const localize = (obj) => {
     if (!obj) return "";
     return obj[lang] || obj.en || obj.ar || Object.values(obj)[0] || "";
   };
 
+  // Use dynamic data or fallback
+  const displayDestinations = tourismDestinations || getFallbackDestinations();
+
+  // Get localized region name
+  const getRegionName = (region, data) => {
+    if (lang === "ar") {
+      return data.ar;
+    }
+    return (
+      data.display_name || region.charAt(0).toUpperCase() + region.slice(1)
+    );
+  };
+
+  // Get localized country name
+  const getCountryName = (country) => {
+    return lang === "ar" ? country.ar : country.en;
+  };
+
   const menuItems = [
-    { href: "/", label: t('nav.home') },
-    { href: "/about-us", label: t('nav.about') },
-        { href: "/ndc-flights", label: t('nav.flightBookings') },
-    { href: "/international", label: t('nav.international'), dropdown: false, type: "international" },
-    { href: "/offers", label: t('nav.offers') },
-    { href: "/trips-archive", label: t('nav.trips') },
-    { href: "/basic", label: t('nav.travelRequirements'), dropdown: true, type: "basic" },
+    {
+      href: "#",
+      label: lang === "ar" ? "الوجهات السياحية" : "Tourism Destinations",
+      dropdown: true,
+      type: "packages",
+    },
+    {
+      href: "/tousimoffers",
+      label: lang === "ar" ? "العروض السياحية" : "Tourism Offers",
+    },
+    {
+      href: "#",
+      label: lang === "ar" ? "الخدمات الخاصة" : "Special Services",
+      dropdown: true,
+      type: "services",
+    },
+    { href: "/trips-archive", label: t("nav.ourTrips") },
+    {
+      href: "/visa",
+      label: lang === "ar" ? "التأشيرات" : "Visa Services",
+      dropdown: true,
+      type: "visa",
+    },
+    {
+      href: "/basic",
+      label: lang === "ar" ? "متطلبات السفر" : "Travel Requirements",
+      dropdown: true,
+      type: "basic",
+    },
   ];
 
-  const internationalData = [
+  const visaData = [
     {
-      title: { en: "Flights Booking", ar: "حجز الطيران" },
-      description: { en: "International flights", ar: "رحلات طيران دولية" },
-      icon: "✈️",
-      href: "/international/flights",
+      title: { en: "Schengen visa", ar: "تأشيرة الشنغن" },
+      description: {
+        en: "Requirements and documents",
+        ar: "متطلبات الدخول والمستندات",
+      },
+      icon: "🏛️",
+      href: "/visa",
     },
-    {
-      title: { en: "Hotel Reservations", ar: "حجز الفنادق" },
-      description: { en: "Worldwide hotels", ar: "فنادق حول العالم" },
-      icon: "🏨",
-      href: "/international/hotels",
-    },
-    {
-      title: { en: " Offers & Packages", ar: "عروض خاصة" },
-      description: { en: " Best Offers All Over the World", ar: "باقات حصرية" },
-      icon: "🎁",
-      href: "/international/offers",
-    },
-
   ];
 
- const basicData = [
+  const basicData = [
     {
-      title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية", zh: "关于沙特阿拉伯" },
+      title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية" },
       description: {
         en: "Culture, heritage and landmarks",
         ar: "الثقافة والتراث والمعالم",
-        zh: "文化、遗产与地标",
       },
       icon: "🏛️",
       href: "/about-saudi",
     },
     {
-      title: { en: "Visa Requirements", ar: "متطلبات التأشيرة", zh: "签证要求" },
-      description: {
-        en: "requirements and documents",
-        ar: "متطلبات الدخول والمستندات",
-        zh: "要求和文件",
-      },
-      icon: "🏛️",
-      href: "/visa",
-    },
-    {
-      title: { en: "Travel Guide", ar: "دليل المسافر", zh: "旅行指南" },
-      description: {
-        en: "Transportation",
-        ar: "المواصلات",
-        zh: "交通",
-      },
+      title: { en: "Travel Guide", ar: "دليل المسافر" },
+      description: { en: "Transportation", ar: "المواصلات" },
       icon: "📋",
       href: "/transportation",
     },
   ];
-  // Hide the global Navbar on admin pages only
-  if (!pathname || pathname?.startsWith(`/${lang}/admin`)) return null;
 
-  const whatsappNumber = "+966547305060";
+  const servicesData = [
+    {
+      title: { en: "Private Jet Booking", ar: "طلب استئجار طائرة خاصة" },
+      description: {
+        en: "Request private jet services",
+        ar: "طلب خدمات الطيران الخاص",
+      },
+      icon: "✈️",
+      href: "/international/private-jet",
+    },
+    {
+      title: { en: "Internet Packages", ar: "باقات الإنترنت" },
+      description: {
+        en: "Global internet solutions",
+        ar: "حلول الإنترنت العالمية",
+      },
+      icon: "🌐",
+      href: "/international/internet-packages",
+    },
+  ];
+
+  if (!pathname || pathname?.startsWith(`/${lang}/admin`)) return null;
 
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
+    if (!isMobileMenuOpen) {
+      setOpenMobileDropdown(null);
+    }
   };
 
-  const handleDropdownToggle = (type, e) => {
-    // Avoid calling preventDefault/stopPropagation here to keep touch behavior stable on mobile devices.
-    // Just toggle state using a functional update to avoid stale closures.
-    setOpenDropdown((prev) => (prev === type ? null : type));
+  const handleMobileDropdownToggle = (type, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenMobileDropdown((prev) => (prev === type ? null : type));
+  };
+
+  const handleDesktopDropdownToggle = (type, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenDesktopDropdown((prev) => (prev === type ? null : type));
+  };
+
+  const handleDropdownMouseEnter = (type) => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+      dropdownTimeoutRef.current = null;
+    }
+    setOpenDesktopDropdown(type);
+  };
+
+  const handleDropdownMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setOpenDesktopDropdown(null);
+    }, 200);
   };
 
   const handleNonDropdownLinkClick = () => {
     setMobileMenuOpen(false);
+    setOpenMobileDropdown(null);
+  };
+
+  const handlePackageDestinationClick = (country) => {
+    setOpenDesktopDropdown(null);
+    setMobileMenuOpen(false);
+    setOpenMobileDropdown(null);
+    const slug = country.slug;
+    router.push(`/${lang}/destinations/${slug}`);
   };
 
   const getDropdownData = (type) => {
     switch (type) {
       case "basic":
         return basicData;
-      case "international":
-        return internationalData;
+      case "services":
+        return servicesData;
+      case "visa":
+        return visaData;
+      case "packages":
+        return displayDestinations;
       default:
         return [];
     }
@@ -201,22 +344,39 @@ export default function Navbar({ lang }) {
     switch (type) {
       case "basic":
         return {
-          title: t('navbar.basic.title'),
-          subtitle: t('navbar.basic.subtitle'),
+          title: lang === "ar" ? "متطلبات السفر" : "Travel Requirements",
+          subtitle:
+            lang === "ar"
+              ? "معلومات أساسية للمسافرين"
+              : "Essential information for travelers",
         };
-      case "international":
+      case "services":
         return {
-          title: t('navbar.international.title'),
-          subtitle: t('navbar.international.subtitle'),
+          title: lang === "ar" ? "الخدمات الخاصة" : "Special Services",
+          subtitle:
+            lang === "ar"
+              ? "الباقات الدولية والخدمات الإضافية"
+              : "International tours and premium services",
+        };
+      case "visa":
+        return {
+          title: lang === "ar" ? "خدمات التأشيرات" : "Visa Services",
+          subtitle:
+            lang === "ar"
+              ? "بوابتك للسفر الدولي"
+              : "Your gateway to international travel",
+        };
+      case "packages":
+        return {
+          title: lang === "ar" ? "الوجهات السياحية" : "Tourism Destinations",
+          subtitle:
+            lang === "ar"
+              ? "اختر وجهتك المثالية"
+              : "Choose your perfect destination",
         };
       default:
         return { title: "", subtitle: "" };
     }
-  };
-
-  const handleBookCTA = () => {
-    // alert("clicked"); // uncomment for manual click test
-    openBookingOrAuth({ title: t('buttons.bookNow'), amount: 0 });
   };
 
   const handleLogout = async () => {
@@ -225,573 +385,832 @@ export default function Navbar({ lang }) {
     router.push(`/${lang}`);
   };
 
+  const handleSubDropdownToggle = (region) => {
+    setOpenSubDropdown(openSubDropdown === region ? null : region);
+  };
+
   return (
     <>
-      <nav
-        className={`navbar navbar-expand-lg fixed-top ${
-          scrolled ? "scrolled" : ""
-        }`}
-        dir={lang === "ar" ? "rtl" : "ltr"}
-      >
-        <div className="container">
+      {/* Top Bar */}
+      <div className="top-bar">
+        <div className="top-bar-container">
+          <div className="top-bar-left">
+            <Phone className="top-bar-icon" />
+            <span className="top-bar-phone">+966547305060</span>
+          </div>
+          <div className="top-bar-right">
+            <div className="social-icons">
+              <a
+                href="https://www.tiktok.com/@tilalr2030"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon"
+                aria-label="TikTok"
+              >
+                <FaTiktok size={16} />
+              </a>
+              <a
+                href="https://www.snapchat.com/@tilalr2030"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon"
+                aria-label="Snapchat"
+              >
+                <FaSnapchat size={16} />
+              </a>
+              <a
+                href="https://www.instagram.com/tilall2030?igsh=c2wyaThvcmZpb3pz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={16} />
+              </a>
+              <a
+                href="https://x.com/tilalr2030"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon"
+                aria-label="X"
+              >
+                <SiX size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Header */}
+      <header className="main-header" dir={lang === "ar" ? "rtl" : "ltr"}>
+        <div className="header-container">
           {/* Logo */}
           <Link
             href={`/${lang}`}
-            className="navbar-brand"
+            className="logo-wrapper"
             onClick={handleNonDropdownLinkClick}
           >
             <img
               src="/logo.png"
               alt="التلال والرمال - Tilal R"
-              className="navbar-logo"
+              className="logo-image"
             />
+            <div className="logo-text">
+              <div className="logo-title">
+                {lang === "ar" ? "التلال والرمال" : "Tilal Rimal"}
+              </div>
+              <div className="logo-subtitle">
+                {lang === "ar" ? "للسياحة والسفر" : "Tourism"}
+              </div>
+            </div>
           </Link>
 
-          <div className="d-lg-none d-flex align-items-center gap-3">
-            <LanguageSwitcher
-              lang={lang}
-              showFlagOnly
-            />
+          {/* Desktop Navigation */}
+          <nav className="desktop-nav">
+            {menuItems.map((item, index) => (
+              <div
+                key={index}
+                className={`nav-item-wrapper ${item.dropdown ? "dropdown-wrapper" : ""}`}
+                ref={item.dropdown ? desktopPackagesRef : null}
+                onMouseEnter={
+                  item.dropdown
+                    ? () => handleDropdownMouseEnter(item.type)
+                    : undefined
+                }
+                onMouseLeave={
+                  item.dropdown ? handleDropdownMouseLeave : undefined
+                }
+              >
+                {item.dropdown ? (
+                  <div className="dropdown-container">
+                    <button
+                      type="button"
+                      className={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                      onClick={(e) => {
+                        if (window.innerWidth < 768) {
+                          handleDesktopDropdownToggle(item.type, e);
+                        }
+                      }}
+                    >
+                      {item.label}
+                      {openDesktopDropdown === item.type ? (
+                        <FaChevronUp size={12} className="nav-icon" />
+                      ) : (
+                        <FaChevronDown size={12} className="nav-icon" />
+                      )}
+                    </button>
 
-            {/* Mobile Toggler */}
+                    <AnimatePresence>
+                      {openDesktopDropdown === item.type && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="dropdown-menu-wrapper"
+                        >
+                          <div className="dropdown-content">
+                            {item.type === "packages" ? (
+                              <div className="dropdown-packages">
+                                {Object.entries(displayDestinations).map(
+                                  ([region, data]) => (
+                                    <div
+                                      key={region}
+                                      className="dropdown-region-wrapper"
+                                      onMouseEnter={() =>
+                                        handleSubDropdownToggle(region)
+                                      }
+                                      onMouseLeave={() =>
+                                        setOpenSubDropdown(null)
+                                      }
+                                    >
+                                      <div className="dropdown-region-header">
+                                        <span className="service-icon">
+                                          {data.icon}
+                                        </span>
+                                        <span className="region-name">
+                                          {getRegionName(region, data)}
+                                        </span>
+                                        <ChevronRight
+                                          size={14}
+                                          className="region-arrow"
+                                        />
+                                      </div>
+                                      <AnimatePresence>
+                                        {openSubDropdown === region && (
+                                          <motion.ul
+                                            className="dropdown-sub-menu"
+                                            initial={{
+                                              opacity: 0,
+                                              x: lang === "ar" ? 10 : -10,
+                                            }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{
+                                              opacity: 0,
+                                              x: lang === "ar" ? 10 : -10,
+                                            }}
+                                            transition={{ duration: 0.2 }}
+                                          >
+                                            {data.countries.map((country) => (
+                                              <li
+                                                key={country.slug || country.en}
+                                                className="dropdown-sub-item"
+                                                onClick={() =>
+                                                  handlePackageDestinationClick(
+                                                    country,
+                                                  )
+                                                }
+                                              >
+                                                {getCountryName(country)}
+                                              </li>
+                                            ))}
+                                          </motion.ul>
+                                        )}
+                                      </AnimatePresence>
+                                    </div>
+                                  ),
+                                )}
+                              </div>
+                            ) : (
+                              <div className="dropdown-list">
+                                {getDropdownData(item.type).map(
+                                  (data, dataIndex) => (
+                                    <Link
+                                      key={dataIndex}
+                                      href={`/${lang}${data.href}`}
+                                      className="dropdown-item"
+                                      onClick={() =>
+                                        setOpenDesktopDropdown(null)
+                                      }
+                                    >
+                                      <span className="service-icon">
+                                        {data.icon}
+                                      </span>
+                                      <div className="service-content">
+                                        <h6>{localize(data.title)}</h6>
+                                        <p>{localize(data.description)}</p>
+                                      </div>
+                                    </Link>
+                                  ),
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    href={`/${lang}${item.href === "/" ? "" : item.href}`}
+                    className={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                    onClick={handleNonDropdownLinkClick}
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </nav>
+
+          {/* Right Actions */}
+          <div className="header-actions">
+            <LanguageSwitcher lang={lang} showFlagOnly />
+
+            {isAuthenticated ? (
+              <div className="user-menu" ref={userMenuRef}>
+                <button
+                  className="user-trigger"
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  aria-haspopup="true"
+                  aria-expanded={userMenuOpen}
+                >
+                  <FaUserCircle size={20} />
+                  <span className="user-name">
+                    {user?.name || t("general.account")}
+                  </span>
+                  {userMenuOpen ? (
+                    <FaChevronUp size={12} />
+                  ) : (
+                    <FaChevronDown size={12} />
+                  )}
+                </button>
+                {userMenuOpen && (
+                  <div className="user-dropdown">
+                    <Link
+                      href={`/${lang}/dashboard`}
+                      className="user-link"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <FaUser size={14} /> {t("nav.dashboard") || "Dashboard"}
+                    </Link>
+                    <Link
+                      href={`/${lang}/dashboard?tab=bookings`}
+                      className="user-link"
+                      onClick={() => setUserMenuOpen(false)}
+                    >
+                      <FaWhatsapp size={14} />{" "}
+                      {t("nav.bookings") || "My Bookings"}
+                    </Link>
+                    <button className="user-link logout" onClick={handleLogout}>
+                      <FaSignOutAlt size={14} />{" "}
+                      {t("buttons.logout") || "Logout"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {/* Mobile Menu Toggle */}
             <button
-              className="navbar-toggler"
-              type="button"
+              className="mobile-toggle"
               onClick={handleMobileMenuToggle}
-              aria-label="Toggle navigation"
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
-                <FaTimes />
+                <X className="toggle-icon" />
               ) : (
-                <span className="navbar-toggler-icon"></span>
+                <Menu className="toggle-icon" />
               )}
             </button>
           </div>
+        </div>
+      </header>
 
-          {/* Desktop Navbar Links */}
-          <div className="d-none d-lg-flex align-items-center">
-            <ul className="navbar-nav mx-auto align-items-center">
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="mobile-overlay"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            ref={mobileMenuRef}
+            initial={{ x: lang === "ar" ? "-100%" : "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: lang === "ar" ? "-100%" : "100%" }}
+            transition={{ duration: 0.3 }}
+            className="mobile-sidebar"
+            dir={lang === "ar" ? "rtl" : "ltr"}
+          >
+            <div className="mobile-sidebar-header">
+              <Link
+                href={`/${lang}`}
+                className="navbar-brand"
+                onClick={handleNonDropdownLinkClick}
+              >
+                <img
+                  src="/logo.png"
+                  alt="التلال والرمال - Tilal R"
+                  className="mobile-logo"
+                />
+              </Link>
+              <button
+                className="close-btn"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="mobile-sidebar-content">
               {menuItems.map((item, index) => (
-                <li
-                  key={index}
-                  className={`nav-item mx-2 ${item.dropdown ? "dropdown" : ""}`}
-                  ref={
-                    item.dropdown
-                      ? item.type === "basic"
-                        ? basicRef
-                        : item.type === "international"
-                        ? internationalRef
-                        : null
-                      : null
-                  }
-                >
+                <div key={index} className="mobile-menu-item">
                   {item.dropdown ? (
-                    <div className="dropdown-container">
+                    <div className="mobile-dropdown">
                       <button
                         type="button"
-                        className={`nav-link dropdown-toggle ${
-                          isActive(item.href) ? "active" : ""
-                        }`}
-                        onClick={(e) => handleDropdownToggle(item.type, e)}
+                        className="mobile-menu-link dropdown-toggle"
+                        onClick={(e) =>
+                          handleMobileDropdownToggle(item.type, e)
+                        }
                       >
-                        {item.label}
-                        {lang === "ar" ? (
-                          <FaChevronUp size={12} className="ms-1" />
+                        <span>{item.label}</span>
+                        {openMobileDropdown === item.type ? (
+                          <FaChevronUp size={12} />
                         ) : (
-                          <FaChevronDown size={12} className="ms-1" />
+                          <FaChevronDown size={12} />
                         )}
                       </button>
-
-                      {/* Dropdown Menu */}
-                      {openDropdown === item.type && (
-                        <div className="dropdown-menu show">
-                          <div className="dropdown-content">
-                            <div className="dropdown-header">
-                              <h6>{getDropdownTitle(item.type).title}</h6>
-                              <p>{getDropdownTitle(item.type).subtitle}</p>
-                            </div>
-                            <div className="dropdown-grid">
-                              {getDropdownData(item.type).map(
+                      {openMobileDropdown === item.type && (
+                        <div className="mobile-dropdown-menu">
+                          {item.type === "packages"
+                            ? Object.entries(displayDestinations).map(
+                                ([region, data]) => (
+                                  <div
+                                    key={region}
+                                    className="mobile-destination-region"
+                                  >
+                                    <div className="mobile-destination-region-header">
+                                      <span className="service-icon-mobile">
+                                        {data.icon}
+                                      </span>
+                                      <div className="mobile-destination-region-title">
+                                        {getRegionName(region, data)}
+                                      </div>
+                                    </div>
+                                    <div className="mobile-destination-countries">
+                                      {data.countries.map((country) => (
+                                        <Link
+                                          key={country.en}
+                                          href={`/${lang}/destinations/${country.slug}`}
+                                          className="mobile-dropdown-item"
+                                          onClick={handleNonDropdownLinkClick}
+                                        >
+                                          {getCountryName(country)}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ),
+                              )
+                            : getDropdownData(item.type).map(
                                 (data, dataIndex) => (
                                   <Link
                                     key={dataIndex}
                                     href={`/${lang}${data.href}`}
-                                    className="dropdown-item"
-                                    data-testid={`dropdown-link-${dataIndex}`}
+                                    className="mobile-dropdown-item"
+                                    onClick={handleNonDropdownLinkClick}
                                   >
-                                    <div className="service-icon">
+                                    <span className="service-icon-mobile">
                                       {data.icon}
-                                    </div>
-                                    <div className="service-content">
-                                      <h6>{localize(data.title)}</h6>
-                                      <p>{localize(data.description)}</p>
+                                    </span>
+                                    <div>
+                                      <div className="service-title">
+                                        {localize(data.title)}
+                                      </div>
+                                      <div className="service-desc">
+                                        {localize(data.description)}
+                                      </div>
                                     </div>
                                   </Link>
-                                )
+                                ),
                               )}
-                            </div>
-                          </div>
                         </div>
                       )}
                     </div>
                   ) : (
                     <Link
                       href={`/${lang}${item.href === "/" ? "" : item.href}`}
-                      className={`nav-link ${
-                        isActive(item.href) ? "active" : ""
-                      }`}
+                      className="mobile-menu-link"
                       onClick={handleNonDropdownLinkClick}
                     >
                       {item.label}
                     </Link>
                   )}
-                </li>
+                </div>
               ))}
-            </ul>
 
-            {/* Desktop Language & Buttons */}
-            <div className="d-flex align-items-center ms-4 gap-3">
-              <LanguageSwitcher
-                lang={lang}
-                showFlagOnly
-              />
-             
-
-              {isAuthenticated ? (
-                <div className="user-menu" ref={userMenuRef}>
-                  <button
-                    className="user-trigger"
-                    onClick={() => setUserMenuOpen((v) => !v)}
-                    aria-haspopup="true"
-                    aria-expanded={userMenuOpen}
-                  >
-                    <FaUserCircle size={20} />
-                    <span className="user-name">{user?.name || t('general.account')}</span>
-                    {userMenuOpen ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
-                  </button>
-                  {userMenuOpen && (
-                    <div className="user-dropdown">
-                      <Link href={`/${lang}/dashboard`} className="user-link" onClick={() => setUserMenuOpen(false)}>
-                        <FaUser size={14} /> {t('nav.dashboard')}
-                      </Link>
-                      <Link href={`/${lang}/dashboard?tab=bookings`} className="user-link" onClick={() => setUserMenuOpen(false)}>
-                        <FaWhatsapp size={14} /> {t('nav.bookings')}
-                      </Link>
-                      <button className="user-link logout" onClick={handleLogout}>
-                        <FaSignOutAlt size={14} /> {t('buttons.logout')}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div
-          className="mobile-menu-overlay"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Menu Sidebar */}
-      <div
-        ref={mobileMenuRef}
-        className={`mobile-sidebar ${isMobileMenuOpen ? "show" : ""}`}
-        dir={lang === "ar" ? "rtl" : "ltr"}
-      >
-        <div className="mobile-sidebar-header">
-          <Link
-            href={`/${lang}`}
-            className="navbar-brand"
-            onClick={handleNonDropdownLinkClick}
-          >
-            <img
-              src="/logo.png"
-              alt="التلال والرمال - Tilal R"
-              className="navbar-logo"
-            />
-          </Link>
-          <button
-            className="close-btn"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <FaTimes />
-          </button>
-        </div>
-
-        <div className="mobile-sidebar-content">
-          {menuItems.map((item, index) => (
-            <div key={index} className="mobile-menu-item">
-              {item.dropdown ? (
-                <div className="mobile-dropdown">
-                  <button
-                    type="button"
-                    className="mobile-menu-link dropdown-toggle"
-                    onClick={(e) => handleDropdownToggle(item.type, e)}
-                    onTouchStart={(e) => handleDropdownToggle(item.type, e)}
-                  >
-                    <span>{item.label}</span>
-                    {openDropdown === item.type ? (
-                      <FaChevronUp size={12} />
-                    ) : (
-                      <FaChevronDown size={12} />
-                    )}
-                  </button>
-                  {openDropdown === item.type && (
-                    <div className="mobile-dropdown-menu" onClick={(e) => e.stopPropagation()}>
-                      {getDropdownData(item.type).map((data, dataIndex) => (
-                        <Link
-                          key={dataIndex}
-                          href={`/${lang || 'ar'}${data.href}`}
-                          className="mobile-dropdown-item"
-                          prefetch={false}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMobileMenuOpen(false);
-                            setOpenDropdown(null);
-                          }}
-                        >
-                          <span className="service-icon-mobile">
-                            {data.icon}
-                          </span>
-                          <div>
-                            <div className="service-title">
-                              {localize(data.title)}
-                            </div>
-                            <div className="service-desc">
-                              {localize(data.description)}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  href={`/${lang}${item.href === "/" ? "" : item.href}`}
-                  className="mobile-menu-link"
-                  onClick={handleNonDropdownLinkClick}
-                >
-                  {item.label}
-                </Link>
-              )}
-            </div>
-          ))}
-
-          {/* Mobile Buttons */}
-          <div className="mobile-buttons">
-            {/* <button
-              className="btn btn-whatsapp d-flex align-items-center gap-2 w-100 justify-content-center mb-3"
-              onClick={handleBookCTA}
-            >
-              <FaWhatsapp /> {lang === "ar" ? "احجز رحلتك" : "Book Now"}
-            </button> */}
-
-            {isAuthenticated ? (
-              <div className="mobile-user-actions">
-                <Link href={`/${lang}/dashboard`} className="mobile-user-link" onClick={() => setMobileMenuOpen(false)}>
-                  <FaUser size={14} /> {lang === "ar" ? "لوحة التحكم" : "Dashboard"}
-                </Link>
-                <Link href={`/${lang}/dashboard?tab=bookings`} className="mobile-user-link" onClick={() => setMobileMenuOpen(false)}>
-                  <FaWhatsapp size={14} /> {lang === "ar" ? "حجوزاتي" : "My Bookings"}
-                </Link>
-                <button className="mobile-user-link logout" onClick={handleLogout}>
-                  <FaSignOutAlt size={14} /> {lang === "ar" ? "تسجيل الخروج" : "Logout"}
-                </button>
+              <div className="mobile-buttons">
+                {isAuthenticated ? (
+                  <div className="mobile-user-actions">
+                    <Link
+                      href={`/${lang}/dashboard`}
+                      className="mobile-user-link"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <FaUser size={14} />{" "}
+                      {lang === "ar" ? "لوحة التحكم" : "Dashboard"}
+                    </Link>
+                    <Link
+                      href={`/${lang}/dashboard?tab=bookings`}
+                      className="mobile-user-link"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <FaWhatsapp size={14} />{" "}
+                      {lang === "ar" ? "حجوزاتي" : "My Bookings"}
+                    </Link>
+                    <button
+                      className="mobile-user-link logout"
+                      onClick={handleLogout}
+                    >
+                      <FaSignOutAlt size={14} />{" "}
+                      {lang === "ar" ? "تسجيل الخروج" : "Logout"}
+                    </button>
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
-        </div>
-      </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Styles */}
       <style jsx global>{`
+        /* ===== CSS Variables ===== */
         :root {
-          --primary-color: #8a7779;
-          --secondary-color: #efc8ae;
-          --dark-color: #1e1e1e;
-          --light-color: #ffffff;
-          --accent-color: #dfa528;
-          --whatsapp-green: #25d366;
+          --gold: #dfa528;
+          --gold-hover: #c48d1a;
+          --navy: #1a1a2e;
+          --white: #ffffff;
+          --off-white: #f8f6f2;
+          --border: #e8e6e1;
+          --text-primary: #1a1a2e;
+          --text-secondary: #4a4a5a;
+          --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+          --radius: 12px;
+          --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .navbar {
-          padding: 0.7rem 0; /* reduced so items have more room by default */
-          z-index: 1030;
-          transition: all 0.3s ease;
-          background: rgba(255, 255, 255, 0) !important;
-          border-bottom: 1px solid rgba(138, 119, 121, 0.1);
+        /* ===== Top Bar ===== */
+        .top-bar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          background: #1a1a2e;
+          color: white;
+          padding: 0.5rem 0;
+          font-size: 0.75rem;
+          border-bottom: 1px solid rgba(223, 165, 40, 0.2);
+          z-index: 1031;
         }
 
-        /* Keep the header compact and prevent wrapping of menu items */
-        .navbar .container {
+        .top-bar-container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .top-bar-left {
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          gap: 0.5rem;
+        }
+
+        .top-bar-icon {
+          width: 0.875rem;
+          height: 0.875rem;
+          color: var(--gold);
+        }
+
+        .top-bar-phone {
+          color: var(--gold);
+          font-weight: 600;
+        }
+
+        .top-bar-right {
+          display: flex;
+          align-items: center;
           gap: 1rem;
         }
 
-        .navbar-nav {
+        .social-icons {
           display: flex;
-          gap: 0.5rem;
-          flex-wrap: nowrap; /* prevent wrapping */
-          white-space: nowrap;
           align-items: center;
+          gap: 0.75rem;
         }
 
-        .navbar-nav .nav-item {
-          flex: 0 0 auto;
+        .social-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: rgba(255, 255, 255, 0.6);
+          transition: var(--transition);
+          text-decoration: none;
+          padding: 2px;
         }
 
-        .navbar-toggler-icon {
-          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-        }
-        .navbar.scrolled {
-          background: linear-gradient(135deg, #2c3e50) !important;
-
-          padding: 0.7rem 0;
-          box-shadow: 0 2px 20px rgba(24, 15, 15, 0.1);
+        .social-icon:hover {
+          color: var(--gold);
+          transform: translateY(-1px);
         }
 
-        .navbar-logo {
-          height: 45px; /* slightly smaller to avoid wrapping before scroll */
+        /* ===== Main Header ===== */
+        .main-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1030;
+          background: var(--white);
+          border-bottom: 1px solid var(--border);
+          margin-top: 34px;
+        }
+
+        .header-container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 68px;
+        }
+
+        /* ===== Logo ===== */
+        .logo-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          text-decoration: none;
+          flex-shrink: 0;
+        }
+
+        .logo-image {
+          height: 44px;
           width: auto;
-          transition: all 0.3s ease;
+          border-radius: 10px;
+          background: rgba(26, 26, 46, 0.05);
+          padding: 4px;
         }
 
-        .navbar.scrolled .navbar-logo {
-          height: 40px;
+        .logo-text {
+          display: flex;
+          flex-direction: column;
+          line-height: 1.2;
         }
 
-        .navbar-toggler {
-          border: none;
-          background: transparent;
-          color: white;
-          font-size: 1.2rem;
-          padding: 0.5rem;
+        .logo-title {
+          font-weight: 700;
+          color: var(--navy);
+          font-size: 1.05rem;
+          letter-spacing: -0.02em;
         }
 
-        .navbar.scrolled .navbar-toggler {
-          color: white;
-        }
-
-        .navbar-nav .nav-link {
+        .logo-subtitle {
+          font-size: 0.6rem;
+          color: var(--gold);
           font-weight: 600;
-          color: white !important;
-          transition: all 0.3s ease;
-          padding: 0.35rem 0.7rem; /* tighter padding */
-          border-radius: 6px;
-          font-size: 0.93rem;
-          border: none;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+        }
+
+        [dir="rtl"] .logo-text {
+          text-align: right;
+        }
+
+        /* ===== Desktop Navigation ===== */
+        .desktop-nav {
+          display: none;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        @media (min-width: 768px) {
+          .desktop-nav {
+            display: flex;
+          }
+        }
+
+        .nav-item-wrapper {
+          position: relative;
+        }
+
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.5rem 0.875rem;
+          border-radius: 8px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: var(--text-secondary);
+          text-decoration: none;
           background: none;
+          border: none;
           cursor: pointer;
+          transition: var(--transition);
           white-space: nowrap;
         }
 
-        .navbar-nav .nav-link:hover,
-        .navbar-nav .nav-link.active {
-          color: var(--light-color) !important;
-          background-color: rgba(255, 255, 255, 0.2);
+        .nav-link:hover {
+          color: var(--gold);
+          background: rgba(223, 165, 40, 0.06);
         }
 
-        .navbar.scrolled .navbar-nav .nav-link {
-          color: var(--light-color) !important;
+        .nav-link.active {
+          color: var(--gold);
+          background: rgba(223, 165, 40, 0.08);
+          border-bottom: 2px solid var(--gold);
         }
 
-        .navbar.scrolled .navbar-nav .nav-link:hover,
-        .navbar.scrolled .navbar-nav .nav-link.active {
-          color: var(--light-color) !important;
-          background-color: rgba(66, 64, 64, 1);
+        .nav-icon {
+          opacity: 0.6;
         }
 
-        /* Dropdown Styles */
+        /* ===== Dropdown - Tourism Destinations Style ===== */
         .dropdown-container {
           position: relative;
         }
 
-        .dropdown-menu {
+        .dropdown-menu-wrapper {
           position: absolute;
-          top: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 600px;
-          background: var(--light-color);
-          border-radius: 12px;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-          border: 1px solid rgba(138, 119, 121, 0.1);
-          padding: 0;
-          margin-top: 10px;
+          top: calc(100% + 8px);
+          left: 0;
+          right: auto;
+          min-width: 280px;
+          background: var(--white);
+          border-radius: var(--radius);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+          border: 1px solid var(--border);
+          padding: 0.5rem;
           z-index: 1000;
         }
 
-        [dir="rtl"] .dropdown-menu {
+        [dir="rtl"] .dropdown-menu-wrapper {
           left: auto;
-          right: 50%;
-          transform: translateX(50%);
+          right: 0;
         }
 
         .dropdown-content {
-          padding: 1.5rem;
+          padding: 0;
         }
 
-        .dropdown-header {
-          text-align: center;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1rem;
-          border-bottom: 2px solid var(--secondary-color);
+        .dropdown-packages {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
         }
 
-        .dropdown-header h6 {
-          color: var(--primary-color);
-          font-weight: 700;
-          margin-bottom: 0.5rem;
+        .dropdown-region-wrapper {
+          position: relative;
+          border-radius: 8px;
+          transition: var(--transition);
         }
 
-        .dropdown-header p {
-          color: var(--dark-color);
-          opacity: 0.8;
-          margin: 0;
+        .dropdown-region-wrapper:hover {
+          background: rgba(223, 165, 40, 0.06);
+        }
+
+        .dropdown-region-header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.65rem 0.75rem;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: var(--transition);
+        }
+
+        .dropdown-region-header:hover .region-name {
+          color: var(--gold);
+        }
+
+        .region-name {
+          flex: 1;
+          font-weight: 500;
           font-size: 0.9rem;
+          color: var(--text-primary);
+          transition: var(--transition);
         }
 
-        .dropdown-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
+        .region-arrow {
+          color: var(--text-secondary);
+          opacity: 0.5;
+          transition: var(--transition);
+        }
+
+        .dropdown-region-wrapper:hover .region-arrow {
+          opacity: 1;
+          color: var(--gold);
+          transform: ${lang === "ar" ? "translateX(-3px)" : "translateX(3px)"};
+        }
+
+        .service-icon {
+          font-size: 1.1rem;
+          flex-shrink: 0;
+          width: 24px;
+          text-align: center;
+        }
+
+        /* Sub Menu - Appears on Hover */
+        .dropdown-sub-menu {
+          position: absolute;
+          top: 0;
+          ${lang === "ar"
+            ? "right: calc(100% + 4px);"
+            : "left: calc(100% + 4px);"}
+          min-width: 220px;
+          max-height: 400px;
+          overflow-y: auto;
+          background: var(--white);
+          border-radius: var(--radius);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+          border: 1px solid var(--border);
+          padding: 0.4rem;
+          list-style: none;
+          z-index: 1001;
+        }
+
+        .dropdown-sub-item {
+          padding: 0.5rem 0.75rem;
+          border-radius: 6px;
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          cursor: pointer;
+          transition: var(--transition);
+          text-align: ${lang === "ar" ? "right" : "left"};
+        }
+
+        .dropdown-sub-item:hover {
+          color: var(--gold);
+          background: rgba(223, 165, 40, 0.08);
+        }
+
+        /* ===== Other Dropdown Items ===== */
+        .dropdown-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0.1rem;
+          padding: 0.25rem;
         }
 
         .dropdown-item {
           display: flex;
-          align-items: flex-start;
-          padding: 1rem;
-          border-radius: 8px;
-          transition: all 0.3s ease;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.6rem 0.875rem;
+          border-radius: 6px;
           text-decoration: none;
-          border: 1px solid transparent;
+          transition: var(--transition);
+          cursor: pointer;
+          border: none;
+          background: transparent;
         }
 
         .dropdown-item:hover {
-          background: rgba(138, 119, 121, 0.05);
-          border-color: var(--secondary-color);
-          transform: translateY(-2px);
+          background: rgba(223, 165, 40, 0.06);
         }
 
-        /* When navbar is scrolled (dark header) make dropdown dark to match */
-        .navbar.scrolled .dropdown-menu {
-          background: linear-gradient(180deg, rgba(12,12,12,0.96), rgba(28,28,36,0.96));
-          border-color: rgba(255,255,255,0.06);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        .dropdown-item:hover .service-content h6 {
+          color: var(--gold);
         }
 
-        .navbar.scrolled .dropdown-header h6 {
-          color: var(--light-color);
-        }
-
-        .navbar.scrolled .dropdown-header p {
-          color: rgba(255,255,255,0.85);
-        }
-
-        .navbar.scrolled .service-content h6 {
-          color: var(--light-color);
-        }
-
-        .navbar.scrolled .service-content p {
-          color: rgba(255,255,255,0.75);
-        }
-
-        .navbar.scrolled .dropdown-item:hover {
-          background: rgba(255,255,255,0.03);
-          border-color: rgba(255,255,255,0.06);
-          transform: translateY(-2px);
-        }
-
-        .service-icon {
-          font-size: 1.5rem;
-          margin-right: 1rem;
-          margin-top: 0.25rem;
-        }
-
-        [dir="rtl"] .service-icon {
-          margin-right: 0;
-          margin-left: 1rem;
+        .service-content {
+          flex: 1;
+          min-width: 0;
         }
 
         .service-content h6 {
-          color: var(--dark-color);
-          font-weight: 600;
-          margin-bottom: 0.25rem;
+          color: var(--navy);
+          font-weight: 500;
+          font-size: 0.85rem;
+          margin-bottom: 0.05rem;
+          transition: var(--transition);
         }
 
         .service-content p {
-          color: var(--dark-color);
-          opacity: 0.7;
-          font-size: 0.85rem;
+          color: var(--text-secondary);
+          font-size: 0.7rem;
           margin: 0;
+          opacity: 0.6;
         }
 
-        /* WhatsApp / Mobile Book Button */
-        .btn-whatsapp {
-          background: #EFC8AE;
-          color: #000 !important;
-          border: none;
-          padding: 0.45rem 1rem; /* slightly smaller */
-          border-radius: 22px;
-          font-weight: 600;
-          text-decoration: none;
-          transition: all 0.2s ease;
-          box-shadow: 0 3px 10px rgba(223, 165, 40, 0.25);
-        }
-
-        .btn-whatsapp:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 14px rgba(223, 165, 40, 0.32);
-          color: #000 !important;
-        }
-
-        .btn-book {
-          background: #EFC8AE;
-          color: #000 !important;
-          border: none;
-          padding: 0.45rem 1rem; /* reduced size */
-          min-width: 120px; /* slightly smaller minimum width */
-          border-radius: 22px;
-          font-weight: 700;
-          font-size: 0.95rem;
-          text-decoration: none;
-          transition: all 0.18s ease;
-          box-shadow: 0 4px 12px rgba(223, 165, 40, 0.22);
-          display: inline-flex;
+        /* ===== Header Actions ===== */
+        .header-actions {
+          display: flex;
           align-items: center;
-          gap: 0.4rem;
-          justify-content: center;
-          flex: 0 0 auto; /* prevent shrinking */
+          gap: 0.5rem;
         }
 
-        .btn-book:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(223, 165, 40, 0.28);
-          color: #000 !important;
-        }
-
-        /* Override warning buttons used in booking flows */
-        .btn-warning {
-          background: #EFC8AE !important;
-          color: #000 !important;
-          border: none !important;
-          box-shadow: 0 6px 22px rgba(223, 165, 40, 0.28) !important;
-        }
-
-        .btn-warning:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(223, 165, 40, 0.35) !important;
-          color: #000 !important;
-        }
-
+        /* ===== User Menu ===== */
         .user-menu {
           position: relative;
         }
@@ -800,13 +1219,27 @@ export default function Navbar({ lang }) {
           display: flex;
           align-items: center;
           gap: 0.4rem;
-          background: rgba(255,255,255,0.1);
-          border: 1px solid rgba(255,255,255,0.2);
-          color: #fff;
-          padding: 0.55rem 0.85rem;
-          border-radius: 14px;
-          font-weight: 700;
+          padding: 0.4rem 0.75rem;
+          background: rgba(26, 26, 46, 0.05);
+          border: 1px solid var(--border);
+          border-radius: 50px;
+          color: var(--navy);
+          font-weight: 500;
+          font-size: 0.8rem;
           cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .user-trigger:hover {
+          background: rgba(223, 165, 40, 0.08);
+          border-color: var(--gold);
+        }
+
+        .user-name {
+          max-width: 80px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .user-dropdown {
@@ -814,13 +1247,12 @@ export default function Navbar({ lang }) {
           top: calc(100% + 8px);
           right: 0;
           min-width: 200px;
-          background: linear-gradient(180deg, rgba(16,16,24,0.95), rgba(28,28,36,0.95));
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          box-shadow: var(--shadow);
           padding: 0.4rem;
           z-index: 1100;
-          color: var(--light-color);
         }
 
         [dir="rtl"] .user-dropdown {
@@ -833,21 +1265,223 @@ export default function Navbar({ lang }) {
           align-items: center;
           gap: 0.5rem;
           width: 100%;
-          padding: 0.65rem 0.75rem;
-          color: var(--light-color) !important;
-          border-radius: 10px;
+          padding: 0.6rem 0.75rem;
+          color: var(--text-primary);
+          border-radius: 8px;
           border: none;
           background: transparent;
           text-decoration: none;
           cursor: pointer;
+          font-size: 0.85rem;
+          transition: var(--transition);
         }
 
         .user-link:hover {
-          background: rgba(255,255,255,0.04);
+          background: rgba(223, 165, 40, 0.06);
         }
 
         .user-link.logout {
-          color: #ff7675 !important; /* lighter red on dark background */
+          color: #dc2626;
+        }
+
+        .user-link.logout:hover {
+          background: rgba(220, 38, 38, 0.06);
+        }
+
+        /* ===== Mobile Toggle ===== */
+        .mobile-toggle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem;
+          background: transparent;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          color: var(--navy);
+          transition: var(--transition);
+        }
+
+        .mobile-toggle:hover {
+          background: rgba(26, 26, 46, 0.05);
+        }
+
+        .toggle-icon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+
+        @media (min-width: 768px) {
+          .mobile-toggle {
+            display: none;
+          }
+        }
+
+        /* ===== Mobile Overlay ===== */
+        .mobile-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.4);
+          z-index: 1040;
+          backdrop-filter: blur(4px);
+        }
+
+        /* ===== Mobile Sidebar ===== */
+        .mobile-sidebar {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 85%;
+          max-width: 360px;
+          height: 100vh;
+          background: var(--white);
+          box-shadow: -4px 0 40px rgba(0, 0, 0, 0.1);
+          z-index: 1050;
+          overflow-y: auto;
+        }
+
+        [dir="rtl"] .mobile-sidebar {
+          right: auto;
+          left: 0;
+        }
+
+        .mobile-sidebar-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 1.25rem;
+          border-bottom: 1px solid var(--border);
+          background: var(--white);
+          position: sticky;
+          top: 0;
+          z-index: 10;
+        }
+
+        .mobile-logo {
+          height: 40px;
+          width: auto;
+          border-radius: 8px;
+          background: rgba(26, 26, 46, 0.05);
+          padding: 4px;
+        }
+
+        .close-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.5rem;
+          background: transparent;
+          border: none;
+          font-size: 1.2rem;
+          color: var(--text-secondary);
+          cursor: pointer;
+          border-radius: 8px;
+          transition: var(--transition);
+        }
+
+        .close-btn:hover {
+          background: rgba(26, 26, 46, 0.05);
+        }
+
+        .mobile-sidebar-content {
+          padding: 1rem 1.25rem 2rem;
+        }
+
+        .mobile-menu-item {
+          border-bottom: 1px solid rgba(26, 26, 46, 0.05);
+        }
+
+        .mobile-menu-link {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.875rem 0;
+          color: var(--text-primary);
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 0.95rem;
+          border: none;
+          background: none;
+          width: 100%;
+          text-align: ${lang === "ar" ? "right" : "left"};
+          cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .mobile-menu-link:hover {
+          color: var(--gold);
+        }
+
+        .mobile-dropdown-menu {
+          padding: ${lang === "ar"
+            ? "0.25rem 1rem 0.5rem 0"
+            : "0.25rem 0 0.5rem 1rem"};
+          background: rgba(26, 26, 46, 0.02);
+          border-radius: 8px;
+          margin-bottom: 0.5rem;
+        }
+
+        .mobile-dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 0.65rem 0.75rem;
+          text-decoration: none;
+          border-radius: 8px;
+          transition: var(--transition);
+          cursor: pointer;
+        }
+
+        .mobile-dropdown-item:active {
+          background: rgba(223, 165, 40, 0.06);
+        }
+
+        .service-icon-mobile {
+          font-size: 1.2rem;
+          ${lang === "ar" ? "margin-left: 0.75rem;" : "margin-right: 0.75rem;"}
+          flex-shrink: 0;
+        }
+
+        .service-title {
+          font-weight: 600;
+          color: var(--text-primary);
+          font-size: 0.85rem;
+        }
+
+        .service-desc {
+          color: var(--text-secondary);
+          font-size: 0.75rem;
+          opacity: 0.7;
+        }
+
+        .mobile-destination-region {
+          margin-bottom: 0.5rem;
+        }
+
+        .mobile-destination-region-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-destination-region-title {
+          font-size: 0.9rem;
+        }
+
+        .mobile-destination-countries {
+          padding: 0.25rem 0;
+        }
+
+        .mobile-buttons {
+          padding: 1.5rem 0;
+          border-top: 1px solid var(--border);
+          margin-top: 1rem;
         }
 
         .mobile-user-actions {
@@ -861,274 +1495,63 @@ export default function Navbar({ lang }) {
           gap: 0.5rem;
           width: 100%;
           padding: 0.75rem;
-          border-radius: 10px;
-          border: 1px solid #eef1f4;
-          background: #f7f8fa;
-          color: #111 !important;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          background: var(--off-white);
+          color: var(--text-primary);
           text-decoration: none;
+          font-size: 0.9rem;
+          transition: var(--transition);
+        }
+
+        .mobile-user-link:hover {
+          border-color: var(--gold);
         }
 
         .mobile-user-link.logout {
-          color: #b91c1c !important;
+          color: #dc2626;
+          border-color: rgba(220, 38, 38, 0.2);
         }
 
-        /* Mobile Menu Styles */
-        .mobile-menu-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(30, 30, 30, 0.7);
-          z-index: 1040;
-        }
-
-        .mobile-sidebar {
-          position: fixed;
-          top: 0;
-          right: -100%;
-          width: 320px;
-          height: 100vh;
-          background: var(--light-color) !important;
-          box-shadow: -2px 0 20px rgba(0, 0, 0, 0.1);
-          transition: right 0.3s ease;
-          z-index: 1050;
-          overflow-y: auto;
-        }
-
-        [dir="rtl"] .mobile-sidebar {
-          right: auto;
-          left: -100%;
-        }
-
-        .mobile-sidebar.show {
-          right: 0;
-        }
-
-        [dir="rtl"] .mobile-sidebar.show {
-          left: 0;
-          right: auto;
-        }
-
-        .mobile-sidebar-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1.5rem;
-          border-bottom: 2px solid var(--secondary-color);
-          background: var(--light-color);
-        }
-
-        .close-btn {
-          background: none;
-          border: none;
-          font-size: 1.3rem;
-          color: var(--primary-color) !important;
-          padding: 0.5rem;
-          cursor: pointer;
-          transition: color 0.3s ease;
-        }
-
-        .close-btn:hover {
-          color: var(--accent-color) !important;
-        }
-
-        .mobile-sidebar-content {
-          padding: 1.5rem;
-        }
-
-        .mobile-menu-item {
-          border-bottom: 1px solid rgba(239, 200, 174, 0.3);
-        }
-
-        .mobile-menu-link {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1rem 0;
-          color: var(--dark-color) !important;
-          text-decoration: none;
-          font-weight: 600;
-          transition: all 0.3s ease;
-          font-size: 1rem;
-          border: none;
-          background: none;
-          width: 100%;
-          text-align: left;
-          cursor: pointer;
-        }
-
-        [dir="rtl"] .mobile-menu-link {
-          text-align: right;
-        }
-
-        .mobile-menu-link:hover {
-          color: var(--primary-color) !important;
-        }
-
-        /* Mobile Dropdown */
-        .mobile-dropdown-menu {
-          padding: 0.5rem 0 0.5rem 1rem;
-          background: rgba(138, 119, 121, 0.05);
-          border-radius: 8px;
-          margin: 0.5rem 0;
-          position: relative;
-          z-index: 5;
-        }
-
-        [dir="rtl"] .mobile-dropdown-menu {
-          padding: 0.5rem 1rem 0.5rem 0;
-        }
-
-        .mobile-dropdown-item {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem;
-          text-decoration: none;
-          border-radius: 6px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-          position: relative;
-          z-index: 10;
-          -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-dropdown-item:hover,
-        .mobile-dropdown-item:active {
-          background: rgba(138, 119, 121, 0.1);
-        }
-
-        .service-icon-mobile {
-          font-size: 1.25rem;
-          margin-right: 0.75rem;
-        }
-
-        [dir="rtl"] .service-icon-mobile {
-          margin-right: 0;
-          margin-left: 0.75rem;
-        }
-
-        .service-title {
-          font-weight: 600;
-          color: var(--dark-color);
-          font-size: 0.9rem;
-        }
-
-        .service-desc {
-          color: var(--dark-color);
-          opacity: 0.7;
-          font-size: 0.8rem;
-        }
-
-        .mobile-buttons {
-          padding: 1.5rem 0;
-          border-top: 2px solid var(--secondary-color);
-          margin-top: 1rem;
-        }
-
-        /* Language Switcher */
-        .language-switcher-btn {
-          background: transparent;
-          border: 2px solid var(--dark-color);
-          color: var(--dark-color);
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          min-width: 60px;
-          text-align: center;
-          text-decoration: none;
-          display: inline-block;
-        }
-
-        .language-switcher-btn:hover {
-          background: var(--dark-color);
-          color: var(--light-color) !important;
-          text-decoration: none;
-          transform: translateY(-2px);
-        }
-
-        /* Arabic variant (switches TO Arabic) */
-        .language-switcher-btn.language--arabic {
-          background: var(--accent-color);
-          border-color: var(--accent-color);
-          color: var(--light-color) !important;
-        }
-
-        .language-switcher-btn.language--arabic:hover {
-          filter: brightness(0.95);
-          transform: translateY(-2px);
-        }
-
-        /* Default / English-target variant */
-        .language-switcher-btn.language--default {
-          background: transparent;
-          border-color: var(--dark-color);
-          color: var(--dark-color);
-        }
-
-        .navbar.scrolled .language-switcher-btn.language--default {
-          border-color: var(--light-color);
-          color: var(#fffff) !important;
-          background: var(--light-color);
-          box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-        }
-
-        .navbar.scrolled .language-switcher-btn.language--default:hover {
-          filter: brightness(0.98);
-          color: var(--dark-color) !important;
-          transform: translateY(-2px);
-        }
-
-        /* RTL Support */
-        [dir="rtl"] .ms-4 {
-          margin-left: 0 !important;
-          margin-right: 1.5rem !important;
-        }
-
-        [dir="rtl"] .ms-1 {
-          margin-left: 0 !important;
-          margin-right: 0.25rem !important;
-        }
-
-        /* Responsive */
+        /* ===== Responsive ===== */
         @media (max-width: 768px) {
-          .dropdown-menu {
+          .dropdown-menu-wrapper {
+            min-width: auto;
             width: 90vw;
             left: 5vw;
             transform: none;
+            max-width: 90vw;
           }
-
-          [dir="rtl"] .dropdown-menu {
+          [dir="rtl"] .dropdown-menu-wrapper {
             right: 5vw;
             left: auto;
             transform: none;
           }
-
-          .dropdown-grid {
-            grid-template-columns: 1fr;
+          .logo-title {
+            font-size: 0.9rem;
           }
-
-          /* Make the book CTA easier to tap on mobile */
-          .btn-book {
-            padding: 0.6rem 1rem;
-            min-width: 140px;
-            font-size: 1rem;
+          .logo-subtitle {
+            font-size: 0.5rem;
           }
         }
 
-        @media (max-width: 575px) {
-          .mobile-sidebar {
-            width: 320px; /* make slightly wider for better tap targets */
+        @media (max-width: 480px) {
+          .social-icons {
+            gap: 0.5rem;
           }
-
-          .navbar-logo {
-            height: 45px;
+          .social-icon svg {
+            width: 14px;
+            height: 14px;
           }
-
-          .navbar.scrolled .navbar-logo {
-            height: 40px;
+          .logo-image {
+            height: 36px;
+          }
+          .logo-title {
+            font-size: 0.8rem;
+          }
+          .header-container {
+            height: 60px;
+            padding: 0 1rem;
           }
         }
       `}</style>

@@ -1,0 +1,355 @@
+
+> happy-face@0.1.0 build
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local
+
+ ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+ Γ£ô Compiled successfully in 10.9s
+   Running TypeScript ...
+   Collecting page data using 7 workers ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[generateStaticParams] Generated paths for 9 local islands
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[generateStaticParams] Generated paths for 9 local islands
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[generateStaticParams] Generated paths for 9 local islands
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+   Generating static pages using 7 workers (0/180) ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+   Generating static pages using 7 workers (45/180) 
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+[serverApiCall] Fetching: http://localhost:8000/api/offers
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/offers
+   Generating static pages using 7 workers (90/180) 
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+   Generating static pages using 7 workers (135/180) 
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Fetching: http://localhost:8000/api/island-destinations/local
+[serverApiCall] Response status: 200 URL: http://localhost:8000/api/island-destinations/local
+ Γ£ô Generating static pages using 7 workers (180/180) in 8.1s
+   Finalizing page optimization ...
+
+Route (app)                                                  Revalidate  Expire
+Γöî ╞Æ /
+Γö£ Γùï /_not-found
+Γö£ ╞Æ /[lang]
+Γö£ ΓùÅ /[lang]/about-saudi
+Γöé Γö£ /en/about-saudi
+Γöé Γö£ /ar/about-saudi
+Γöé Γöö /zh/about-saudi
+Γö£ ΓùÅ /[lang]/about-us
+Γöé Γö£ /en/about-us
+Γöé Γö£ /ar/about-us
+Γöé Γöö /zh/about-us
+Γö£ ΓùÅ /[lang]/admin/add-admin
+Γöé Γö£ /en/admin/add-admin
+Γöé Γö£ /ar/admin/add-admin
+Γöé Γöö /zh/admin/add-admin
+Γö£ ΓùÅ /[lang]/admin/add-article
+Γöé Γö£ /en/admin/add-article
+Γöé Γö£ /ar/admin/add-article
+Γöé Γöö /zh/admin/add-article
+Γö£ ΓùÅ /[lang]/admin/add-product
+Γöé Γö£ /en/admin/add-product
+Γöé Γö£ /ar/admin/add-product
+Γöé Γöö /zh/admin/add-product
+Γö£ ΓùÅ /[lang]/admin/admins
+Γöé Γö£ /en/admin/admins
+Γöé Γö£ /ar/admin/admins
+Γöé Γöö /zh/admin/admins
+Γö£ ΓùÅ /[lang]/admin/articles
+Γöé Γö£ /en/admin/articles
+Γöé Γö£ /ar/admin/articles
+Γöé Γöö /zh/admin/articles
+Γö£ ΓùÅ /[lang]/admin/categories
+Γöé Γö£ /en/admin/categories
+Γöé Γö£ /ar/admin/categories
+Γöé Γöö /zh/admin/categories
+Γö£ ΓùÅ /[lang]/admin/change-email
+Γöé Γö£ /en/admin/change-email
+Γöé Γö£ /ar/admin/change-email
+Γöé Γöö /zh/admin/change-email
+Γö£ ΓùÅ /[lang]/admin/change-password
+Γöé Γö£ /en/admin/change-password
+Γöé Γö£ /ar/admin/change-password
+Γöé Γöö /zh/admin/change-password
+Γö£ ΓùÅ /[lang]/admin/contacts
+Γöé Γö£ /en/admin/contacts
+Γöé Γö£ /ar/admin/contacts
+Γöé Γöö /zh/admin/contacts
+Γö£ ╞Æ /[lang]/admin/edit-article/[id]
+Γö£ ╞Æ /[lang]/admin/edit-product/[id]
+Γö£ ΓùÅ /[lang]/admin/edit-profile
+Γöé Γö£ /en/admin/edit-profile
+Γöé Γö£ /ar/admin/edit-profile
+Γöé Γöö /zh/admin/edit-profile
+Γö£ ΓùÅ /[lang]/admin/products
+Γöé Γö£ /en/admin/products
+Γöé Γö£ /ar/admin/products
+Γöé Γöö /zh/admin/products
+Γö£ ΓùÅ /[lang]/admin/profile
+Γöé Γö£ /en/admin/profile
+Γöé Γö£ /ar/admin/profile
+Γöé Γöö /zh/admin/profile
+Γö£ ΓùÅ /[lang]/article
+Γöé Γö£ /en/article
+Γöé Γö£ /ar/article
+Γöé Γöö /zh/article
+Γö£ ╞Æ /[lang]/article/[slug]
+Γö£ ΓùÅ /[lang]/basic
+Γöé Γö£ /en/basic
+Γöé Γö£ /ar/basic
+Γöé Γöö /zh/basic
+Γö£ ΓùÅ /[lang]/blog
+Γöé Γö£ /en/blog
+Γöé Γö£ /ar/blog
+Γöé Γöö /zh/blog
+Γö£ ΓùÅ /[lang]/bookings/international
+Γöé Γö£ /en/bookings/international
+Γöé Γö£ /ar/bookings/international
+Γöé Γöö /zh/bookings/international
+Γö£ ΓùÅ /[lang]/bookings/local
+Γöé Γö£ /en/bookings/local
+Γöé Γö£ /ar/bookings/local
+Γöé Γöö /zh/bookings/local
+Γö£ ΓùÅ /[lang]/cancellation-policy
+Γöé Γö£ /en/cancellation-policy
+Γöé Γö£ /ar/cancellation-policy
+Γöé Γöö /zh/cancellation-policy
+Γö£ ΓùÅ /[lang]/contact-us
+Γöé Γö£ /en/contact-us
+Γöé Γö£ /ar/contact-us
+Γöé Γöö /zh/contact-us
+Γö£ ΓùÅ /[lang]/dashboard
+Γöé Γö£ /en/dashboard
+Γöé Γö£ /ar/dashboard
+Γöé Γöö /zh/dashboard
+Γö£ ╞Æ /[lang]/E-visa
+Γö£ ╞Æ /[lang]/E-visa/[countrySlug]
+Γö£ ΓùÅ /[lang]/faq
+Γöé Γö£ /en/faq
+Γöé Γö£ /ar/faq
+Γöé Γöö /zh/faq
+Γö£ ΓùÅ /[lang]/forgot-password
+Γöé Γö£ /en/forgot-password
+Γöé Γö£ /ar/forgot-password
+Γöé Γöö /zh/forgot-password
+Γö£ ΓùÅ /[lang]/insurance-deposit
+Γöé Γö£ /en/insurance-deposit
+Γöé Γö£ /ar/insurance-deposit
+Γöé Γöö /zh/insurance-deposit
+Γö£ ╞Æ /[lang]/international
+Γö£ ╞Æ /[lang]/international/internet-packages
+Γö£ ╞Æ /[lang]/international/private-jet
+Γö£ ╞Æ /[lang]/islands/[slug]
+Γö£ ΓùÅ /[lang]/local-islands
+Γöé Γö£ /en/local-islands
+Γöé Γö£ /ar/local-islands
+Γöé Γöö /zh/local-islands
+Γö£ ΓùÅ /[lang]/local-islands/[slug]                                     1h      1y
+Γöé Γö£ /ar/local-islands/trip-to-alula                                  1h      1y
+Γöé Γö£ /en/local-islands/trip-to-alula                                  1h      1y
+Γöé Γö£ /zh/local-islands/trip-to-alula                                  1h      1y
+Γöé Γöö [+6 more paths]
+Γö£ ΓùÅ /[lang]/login
+Γöé Γö£ /en/login
+Γöé Γö£ /ar/login
+Γöé Γöö /zh/login
+Γö£ ╞Æ /[lang]/offers
+Γö£ ΓùÅ /[lang]/offers/[slug]
+Γöé Γö£ /ar/offers/alula-day-trip
+Γöé Γö£ /en/offers/alula-day-trip
+Γöé Γö£ /zh/offers/alula-day-trip
+Γöé Γöö [+12 more paths]
+Γö£ ╞Æ /[lang]/pay-custom-offer/[uniqueLink]
+Γö£ ΓùÅ /[lang]/payment
+Γöé Γö£ /en/payment
+Γöé Γö£ /ar/payment
+Γöé Γöö /zh/payment
+Γö£ ΓùÅ /[lang]/payment-callback
+Γöé Γö£ /en/payment-callback
+Γöé Γö£ /ar/payment-callback
+Γöé Γöö /zh/payment-callback
+Γö£ ΓùÅ /[lang]/privacy
+Γöé Γö£ /en/privacy
+Γöé Γö£ /ar/privacy
+Γöé Γöö /zh/privacy
+Γö£ ╞Æ /[lang]/product-details/[title]
+Γö£ ╞Æ /[lang]/products
+Γö£ ΓùÅ /[lang]/refund-policy
+Γöé Γö£ /en/refund-policy
+Γöé Γö£ /ar/refund-policy
+Γöé Γöö /zh/refund-policy
+Γö£ ΓùÅ /[lang]/register
+Γöé Γö£ /en/register
+Γöé Γö£ /ar/register
+Γöé Γöö /zh/register
+Γö£ ╞Æ /[lang]/saudi-visa
+Γö£ ╞Æ /[lang]/saudi-visa/[countrySlug]
+Γö£ ΓùÅ /[lang]/terms
+Γöé Γö£ /en/terms
+Γöé Γö£ /ar/terms
+Γöé Γöö /zh/terms
+Γö£ ΓùÅ /[lang]/transportation
+Γöé Γö£ /en/transportation
+Γöé Γö£ /ar/transportation
+Γöé Γöö /zh/transportation
+Γö£ ΓùÅ /[lang]/Travel-Basics
+Γöé Γö£ /en/Travel-Basics
+Γöé Γö£ /ar/Travel-Basics
+Γöé Γöö /zh/Travel-Basics
+Γö£ ΓùÅ /[lang]/travel-info
+Γöé Γö£ /en/travel-info
+Γöé Γö£ /ar/travel-info
+Γöé Γöö /zh/travel-info
+Γö£ ΓùÅ /[lang]/trips-archive
+Γöé Γö£ /en/trips-archive
+Γöé Γö£ /ar/trips-archive
+Γöé Γöö /zh/trips-archive
+Γö£ ΓùÅ /[lang]/visa
+Γöé Γö£ /en/visa
+Γöé Γö£ /ar/visa
+Γöé Γöö /zh/visa
+Γö£ ΓùÅ /[lang]/visas
+Γöé Γö£ /en/visas
+Γöé Γö£ /ar/visas
+Γöé Γöö /zh/visas
+Γö£ ╞Æ /[lang]/visas/[countrySlug]
+Γö£ ╞Æ /api/create-booking
+Γö£ ╞Æ /api/custom-payment-offers/[uniqueLink]
+Γö£ ╞Æ /api/custom-payment-offers/[uniqueLink]/payment-failed
+Γö£ ╞Æ /api/custom-payment-offers/[uniqueLink]/payment-success
+Γö£ ╞Æ /api/delete
+Γö£ ╞Æ /api/health
+Γö£ ╞Æ /api/process-payment
+Γö£ ╞Æ /api/send-booking
+Γö£ ╞Æ /api/upload
+Γöö ╞Æ /pay-custom-offer/[uniqueLink]
+
+Route (pages)
+Γöî Γùï /admin (1183 ms)
+Γö£ Γùï /admin/bookings (1154 ms)
+Γö£ Γùï /admin/contacts (1183 ms)
+Γöö Γùï /admin/island-destinations (1182 ms)
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+

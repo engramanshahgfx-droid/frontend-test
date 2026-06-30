@@ -1,0 +1,383 @@
+.page {
+  background: #eef0fb;
+  color: #1f1f33;
+  min-height: 100vh;
+  padding: 0 24px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pageTopBar {
+  position: fixed;
+  
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  height: 80px;
+  background: #000;
+}
+
+.pageContent {
+  padding-top: 104px !important;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border-radius: 999px;
+  border: 1px solid #e7e6f8;
+  padding: 12px 18px;
+  min-width: 170px;
+}
+
+.step.active {
+  border-color: #5e4bff;
+  background: linear-gradient(180deg, #ffffff 0%, #f4efff 100%);
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 999px;
+  background: #ede9ff;
+  color: #4a39ff;
+  font-weight: 700;
+}
+
+.sectionCard {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 30px;
+  margin-bottom: 28px;
+  box-shadow: 0 20px 48px rgba(31, 32, 75, 0.08);
+}
+
+.sectionHeader {
+  margin-bottom: 24px;
+}
+
+.sectionTitle {
+  font-size: clamp(1.8rem, 2vw, 2.6rem);
+  margin: 0;
+  color: #22234f;
+  line-height: 1.05;
+}
+
+.sectionSubtitle {
+  margin: 12px 0 0;
+  color: #5a5b77;
+  max-width: 750px;
+  line-height: 1.7;
+}
+
+.searchRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 240px;
+  padding: 16px 20px;
+  border-radius: 999px;
+  border: 1px solid #d6d5e9;
+  outline: none;
+  font-size: 1rem;
+  background: #fbfbff;
+  color: #23243d;
+}
+
+.searchInput::placeholder {
+  color: #8c8daa;
+}
+.countryGrid {
+  display: grid;
+  align-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.countryCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 190px;
+  border-radius: 24px;
+  padding: 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8f7ff 100%);
+  border: 1px solid #eef0ff;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.countryCard:hover {
+  transform: translateY(-4px);
+  background: #fcfbff;
+  border-color: #d9d7ff;
+  box-shadow: 0 22px 45px rgba(54, 55, 131, 0.08);
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 30px;
+  border-radius: 24px;
+  border: 1px dashed #c7c5e8;
+  background: #faf9ff;
+  color: #4f4f7c;
+}
+
+.emptyState h2 {
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+}
+
+.emptyState p {
+  margin: 0;
+  color: #6e6e91;
+}
+
+.countryCard.active {
+  border-color: #ccc7ff;
+  box-shadow: 0 18px 42px rgba(22, 22, 70, 0.08);
+}
+
+.countryFlag {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: grid;
+  place-items: center;
+  margin-bottom: 18px;
+  box-shadow: 0 14px 28px rgba(82, 62, 215, 0.12);
+  font-size: 1.3rem;
+}
+
+.countryFlag img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.countryName {
+  font-weight: 700;
+  color: #1f1f33;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+}
+
+.countryLabel {
+  color: #6f6f88;
+  font-size: 0.95rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-weight: 600;
+  color: #3b3664;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid #dfdff2;
+  background: #fafaff;
+  outline: none;
+  color: #23243d;
+  box-shadow: inset 0 1px 2px rgba(28, 28, 69, 0.05);
+}
+
+.field textarea {
+  min-height: 140px;
+  resize: vertical;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid #dfdff2;
+  background: #fafaff;
+  color: #23243d;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.infoBox {
+  padding: 18px 20px;
+  border-radius: 20px;
+  background: #f7f2ff;
+  border: 1px solid #ede7ff;
+}
+
+.infoBox strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #4f2dd7;
+}
+
+.listBlock {
+  margin-top: 20px;
+}
+
+.listBlock ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #564f77;
+}
+
+.listBlock li {
+  margin-bottom: 10px;
+}
+
+.primaryButton,
+.secondaryButton,
+.textButton {
+  border: none;
+  border-radius: 999px;
+  padding: 14px 28px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.primaryButton {
+  background: #4d3bff;
+  color: white;
+  box-shadow: 0 16px 32px rgba(77, 59, 255, 0.24);
+}
+
+.secondaryButton {
+  background: #f3f2ff;
+  color: #3e3dc1;
+}
+
+.textButton {
+  background: transparent;
+  color: #6d61a8;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.summaryCard {
+  padding: 22px;
+  border-radius: 22px;
+  background: #fbfbff;
+  border: 1px solid #eae9ff;
+}
+
+.summaryCard h3 {
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  color: #4b39ff;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  color: #4f4e71;
+}
+
+.summaryItem:last-child {
+  margin-bottom: 0;
+}
+
+.highlight {
+  color: #2f1e88;
+  font-weight: 700;
+}
+
+.alertBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff6ed;
+  border: 1px solid #ffe5c8;
+  color: #714500;
+  margin-top: 20px;
+}
+
+.loginPanel {
+  margin-top: 24px;
+  padding: 22px;
+  border-radius: 24px;
+  background: #f1f5ff;
+  border: 1px solid #d4daf6;
+}
+
+.loginPanel h4 {
+  margin: 0 0 10px;
+}
+
+.loginPanel p {
+  margin: 0 0 16px;
+  color: #58597a;
+}
+
+.loginButtons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footerNote {
+  margin-top: 30px;
+  text-align: center;
+  color: #7f7d92;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 900px) {
+  .formGrid,
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .sectionCard {
+    padding: 20px;
+  }
+  .countryGrid {
+    gap: 12px;
+  }
+}

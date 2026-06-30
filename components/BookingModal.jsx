@@ -1,944 +1,1519 @@
 "use client";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  X,
+  CreditCard,
+  Calendar,
+  User,
+  Lock,
+  Luggage,
+  Check,
+  ArrowRight,
+  Mail,
+  Phone,
+  Bed,
+  Users,
+} from "lucide-react";
+import { API_URL } from "@/lib/api";
 
-import { useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
-import { useRouter, useParams } from "next/navigation";
-import { useUI } from "../providers/UIProvider";
-import { useAuth } from "../providers/AuthProvider";
-import { bookingsAPI, paymentsAPI, API_URL } from "../lib/api";
+export default function BookingModal({ isOpen, onClose, packageData, lang }) {
+  const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    mobile: "",
+    travel_date: "",
+    room_type: "DoubleRoom",
+    package_id: "",
+    package_code: "",
+    notes: "",
+    payment_method: "bank_transfer",
+    card_number: "",
+    card_holder: "",
+    card_expiry: "",
+    card_cvv: "",
+    guests: 1,
+    special_requests: "",
+    booking_type: "destination",
+  });
+  const [errors, setErrors] = useState({});
+  const [cardFocused, setCardFocused] = useState("");
 
-const defaultTrip = { title: "Trip", slug: "", amount: 0 };
-
-export default function BookingModal() {
-  const router = useRouter();
-  const params = useParams();
-  const lang = params?.lang;
+  // Define isRTL
   const isRTL = lang === "ar";
 
-  const { bookingModal, closeBookingModal, openAuthModal, setBookingModal } = useUI();
-  const { user, isAuthenticated } = useAuth();
-
-  // Use the trip data passed from the clicked offer
-  const trip = useMemo(() => {
-    return { ...defaultTrip, ...(bookingModal.trip || {}) };
-  }, [bookingModal.trip]);
-
-  const [step, setStep] = useState(1);
-  const [bookingId, setBookingId] = useState(null);
-  // Initialize date with tomorrow's date (not today, as per validation 'after_or_equal:yesterday')
-  const getDefaultDate = () => {
-    const today = new Date();
-    today.setDate(today.getDate() + 1);
-    return today.toISOString().split("T")[0];
-  };
-  const [form, setForm] = useState({
-    date: getDefaultDate(),
-    guests: 1,
-    notes: "",
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const [paymentMethod, setPaymentMethod] = useState("credit_card");
-  const [status, setStatus] = useState({ state: "idle", message: "" });
-  const [mounted, setMounted] = useState(false);
-
-  // Trips list & selection (allow choosing a different trip inside the modal)
-  const [tripsList, setTripsList] = useState([]);
-  const [selectedTrip, setSelectedTrip] = useState(trip);
-  const [blockedDates, setBlockedDates] = useState([]);
-
   useEffect(() => {
-    // When bookingModal.trip changes (user clicked a new item), always sync selectedTrip
-    // This ensures the clicked destination/trip is shown, not something from the dropdown
-    if (trip && (trip.title || trip.slug || trip.amount)) {
-      console.debug('[BookingModal] Syncing selectedTrip from bookingModal.trip:', trip);
-      setSelectedTrip(trip);
+    if (packageData) {
+      const packageCode =
+        packageData.basic_info?.trip_code ||
+        packageData.trip_code ||
+        packageData.code ||
+        packageData.package_code ||
+        `PKG-${packageData.id}`;
+
+      setFormData((prev) => ({
+        ...prev,
+        package_id: String(packageData.id || packageData.slug || ""),
+        package_code: String(packageCode),
+      }));
     }
-  }, [trip]);
+  }, [packageData]);
 
+  if (!isOpen) return null;
 
-  // Calculate total price based on number of guests
-  // Price parsing helper (handles strings like 'From 799 SAR per person')
-  const parsePrice = (v) => {
-    if (v === null || v === undefined) return 0;
-    const n = parseFloat(String(v).replace(/,/g, ""));
-    return Number.isFinite(n) ? n : 0;
-  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-  // Helper to get localized text from object
-  const getLocalizedText = (obj, baseField, fallbackField = 'title') => {
-    if (!obj) return '';
-    let fieldKey = `${baseField}_en`;
-    if (lang === 'zh') fieldKey = `${baseField}_zh`;
-    else if (lang === 'ar') fieldKey = `${baseField}_ar`;
-    return obj[fieldKey] || obj[`${baseField}_en`] || obj[fallbackField] || '';
-  };
-
-  const basePrice = useMemo(() => {
-    const current = selectedTrip || trip;
-    return parsePrice(current.amount) || parsePrice(current.price) || parsePrice(current.price_en) || parsePrice(current.price_ar) || 0;
-  }, [selectedTrip, trip]);
-
-  const totalAmount = useMemo(() => {
-    const guestCount = Number(form.guests) || 1;
-    return basePrice * guestCount;
-  }, [basePrice, form.guests]);
-
-  const t = useMemo(
-    () => {
-      // Determine language-specific text
-      const tripTitle = selectedTrip.title || trip.title || "";
-      
-      if (lang === "ar") {
-        return {
-          title: `حجز ${tripTitle || "رحلة"}`,
-          steps: [
-            "تفاصيل الرحلة",
-            "بيانات المستخدم",
-            "مراجعة",
-            "الدفع",
-          ],
-          trip: "الرحلة",
-          date: "التاريخ",
-          guests: "عدد الأشخاص",
-          notes: "ملاحظات",
-          name: "الاسم",
-          email: "البريد الإلكتروني",
-          phone: "الجوال",
-          review: "مراجعة",
-          total: "الإجمالي",
-          payment: "الدفع",
-          redirect: "سيتم تحويلك لصفحة الدفع الآمنة.",
-          payConfirm: "ادفع وأكّد",
-          continue: "متابعة",
-          back: "رجوع",
-          personsPlaceholder: "أدخل عدد الأشخاص",
-          notesPlaceholder: "أدخل ملاحظاتك",
-          processing: "جاري المعالجة...",
-        };
-      } else if (lang === "zh") {
-        return {
-          title: `预订${tripTitle || "行程"}`,
-          steps: [
-            "行程详情",
-            "用户信息",
-            "审核",
-            "支付",
-          ],
-          trip: "行程",
-          date: "日期",
-          guests: "人数",
-          notes: "备注",
-          name: "姓名",
-          email: "电子邮件",
-          phone: "手机号码",
-          review: "审核",
-          total: "总计",
-          payment: "支付",
-          redirect: "我们将把您重定向到安全支付页面。",
-          payConfirm: "支付并确认",
-          continue: "继续",
-          back: "返回",
-          personsPlaceholder: "输入人数",
-          notesPlaceholder: "添加任何备注",
-          processing: "处理中...",
-        };
-      } else {
-        // English (default)
-        return {
-          title: `Book ${tripTitle || "Trip"}`,
-          steps: [
-            "Trip Details",
-            "User Info",
-            "Review",
-            "Payment",
-          ],
-          trip: "Trip",
-          date: "Date",
-          guests: "Persons",
-          notes: "Notes",
-          name: "Name",
-          email: "Email",
-          phone: "Phone",
-          review: "Review",
-          total: "Total",
-          payment: "Payment",
-          redirect: "We will redirect you to the secure payment page.",
-          payConfirm: "Pay & Confirm",
-          continue: "Continue",
-          back: "Back",
-          personsPlaceholder: "Enter number of persons",
-          notesPlaceholder: "Add any notes",
-          processing: "Processing...",
-        };
-      }
-    },
-    [lang, trip.title, selectedTrip.title]
-  );
-
-  const canContinue = useMemo(() => {
-    if (step === 1) {
-      const hasValidDate = Boolean(form.date) && !blockedDates.includes(form.date);
-      const hasValidGuests = Number(form.guests) > 0;
-      return hasValidDate && hasValidGuests;
-    }
-    if (step === 2) return Boolean(form.name) && Boolean(form.email);
-    return true;
-  }, [step, form, blockedDates]);
-
-  useEffect(() => {
-    if (user) {
-      setForm((f) => ({ ...f, name: user.name || "", email: user.email || "", phone: user.phone || "" }));
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (!bookingModal.open) {
-      setStep(1);
-      setBookingId(null);
-      setStatus({ state: "idle", message: "" });
-      setPaymentMethod("credit_card");
-    }
-  }, [bookingModal.open]);
-
-  // If modal opens while user is unauthenticated, redirect to login
-  useEffect(() => {
-    if (bookingModal.open && !isAuthenticated) {
-      closeBookingModal();
-      openAuthModal("login");
+    if (name === "card_number") {
+      const cleaned = value.replace(/\D/g, "");
+      const formatted = cleaned.replace(/(\d{4})/g, "$1 ").trim();
+      setFormData((prev) => ({ ...prev, [name]: formatted }));
       return;
     }
 
-    // When modal opens, optionally fetch trips list so user can change selection
-    const loadTripsAndLatestData = async () => {
-      if (!bookingModal.open) return;
-
-      const base = API_URL.replace(/\/$/, "");
-
-      // Fetch from BOTH trips AND island-destinations to get all bookable items
-      try {
-        // Fetch trips
-        const tripsPromise = fetch(`${base}/trips?per_page=200`).then(r => r.ok ? r.json() : { data: [] }).catch(() => ({ data: [] }));
-        
-        // Fetch local island destinations (this is where IslandDestinationslocal data comes from)
-        const islandsPromise = fetch(`${base}/island-destinations/local`).then(r => r.ok ? r.json() : { data: [] }).catch(() => ({ data: [] }));
-        
-        const [tripsJson, islandsJson] = await Promise.all([tripsPromise, islandsPromise]);
-        
-        const tripsList = Array.isArray(tripsJson.data) ? tripsJson.data : (Array.isArray(tripsJson) ? tripsJson : []);
-        const islandsList = Array.isArray(islandsJson.data) ? islandsJson.data : [];
-        
-        // Normalize island destinations to have same structure as trips
-        const normalizedIslands = islandsList.map(island => ({
-          ...island,
-          title: island.title_en || island.title_ar || island.title || island.name || '',
-          name: island.name || island.title_en || island.title || '',
-          slug: island.slug || String(island.id) || '',
-          amount: island.price || island.price_en || island.amount || 0,
-          price: island.price || island.price_en || island.amount || 0,
-          _source: 'island-destination', // Mark source for debugging
-        }));
-        
-        // Normalize trips
-        const normalizedTrips = tripsList.map(trip => ({
-          ...trip,
-          title: trip.title || trip.name || '',
-          name: trip.name || trip.title || '',
-          slug: trip.slug || String(trip.id) || '',
-          amount: trip.amount || trip.price || trip.price_en || 0,
-          price: trip.price || trip.amount || 0,
-          _source: 'trip',
-        }));
-        
-        // Only show local island destinations in the dropdown (these are the "local" trips seeded)
-        // This ensures the modal shows only local trips (e.g. the three AlUla trips) and excludes other generic trips.
-        const allItems = normalizedIslands; // don't include normalizedTrips here
-        console.debug('[BookingModal] Loaded local island items only:', { islands: normalizedIslands.length, tripsChecked: normalizedTrips.length, total: allItems.length });
-        
-        setTripsList(allItems);
-
-        // If the modal was opened with a trip, ensure it's in the list for matching
-        // Also pre-select the initial trip by matching slug or title
-        const initialSlug = bookingModal.trip?.slug;
-        const initialTitle = bookingModal.trip?.title;
-        const initialAmount = bookingModal.trip?.amount;
-        
-        console.debug('[BookingModal] Looking for initial trip:', { initialSlug, initialTitle, initialAmount });
-        
-        if (initialSlug || initialTitle) {
-          const matched = allItems.find(t => 
-            (initialSlug && (String(t.slug) === String(initialSlug) || String(t.id) === String(initialSlug))) ||
-            (initialTitle && (t.title === initialTitle || t.name === initialTitle))
-          );
-          
-          if (matched) {
-            console.debug('[BookingModal] Found matching item:', matched);
-            const matchedTrip = {
-              ...matched,
-              title: matched.title || matched.name || '',
-              slug: matched.slug || String(matched.id) || '',
-              amount: matched.amount || matched.price || matched.price_en || 0
-            };
-            setSelectedTrip(matchedTrip);
-          } else {
-            // If no match found, use the passed trip data directly (user clicked from slider)
-            console.debug('[BookingModal] No match found, using passed trip data directly');
-            if (initialTitle && initialAmount) {
-              setSelectedTrip({
-                title: initialTitle,
-                slug: initialSlug || '',
-                amount: initialAmount,
-              });
-            }
-          }
-        }
-      } catch (err) {
-        console.warn('[BookingModal] failed to fetch trips list', err);
+    if (name === "card_expiry") {
+      const cleaned = value.replace(/\D/g, "");
+      if (cleaned.length >= 2) {
+        const formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2, 4);
+        setFormData((prev) => ({ ...prev, [name]: formatted }));
+        return;
       }
-
-      // Fetch blocked dates for the selected trip
-      const tripSlug = bookingModal.trip?.slug;
-      if (tripSlug) {
-        try {
-          const blockedRes = await fetch(`${base}/trips/${encodeURIComponent(tripSlug)}/blocked-dates`);
-          if (blockedRes.ok) {
-            const blockedJson = await blockedRes.json();
-            const dates = blockedJson.data || blockedJson.blocked_dates || blockedJson;
-            setBlockedDates(Array.isArray(dates) ? dates : []);
-          }
-        } catch (err) {
-          console.warn('[BookingModal] failed to fetch blocked dates', err);
-        }
-      }
-
-      const slug = bookingModal.trip?.slug;
-      if (!slug) return;
-
-      try {
-        let price = 0;
-
-        // Try direct endpoint by slug/id
-        try {
-          const res = await fetch(`${base}/island-destinations/${encodeURIComponent(slug)}`);
-          if (res.ok) {
-            const json = await res.json();
-            const data = json.data || json;
-            price = parseFloat(data?.price) || parseFloat(data?.price_en) || parseFloat(data?.amount) || 0;
-          } else {
-            // Fallback: query list endpoint with slug filter
-            const fallbackRes = await fetch(`${base}/island-destinations?slug=${encodeURIComponent(slug)}`);
-            if (fallbackRes.ok) {
-              const listJson = await fallbackRes.json();
-              const list = listJson.data || listJson;
-              const dest = Array.isArray(list) ? list.find(i => String(i.slug) === String(slug)) : list;
-              if (dest) price = parseFloat(dest.price) || parseFloat(dest.price_en) || parseFloat(dest.amount) || 0;
-            }
-          }
-        } catch (err) {
-          console.warn('Failed to fetch island destination by slug, trying list endpoint', err);
-          const listRes2 = await fetch(`${API_URL.replace(/\/$/, '')}/island-destinations`);
-          if (listRes2.ok) {
-            const listJson = await listRes2.json();
-            const list = listJson.data || listJson;
-            const dest = Array.isArray(list) ? list.find(i => String(i.slug) === String(slug)) : list;
-            if (dest) price = parseFloat(dest.price) || parseFloat(dest.price_en) || parseFloat(dest.amount) || 0;
-          }
-        }
-
-        // Update shared booking state with authoritative price if it differs
-        if (typeof price === 'number' && price > 0) {
-          console.debug('[BookingModal] updating booking trip amount from backend ->', { slug, price });
-          setBookingModal((s) => ({ ...s, trip: { ...s.trip, amount: price } }));
-        }
-      } catch (err) {
-        console.warn('[BookingModal] could not fetch latest trip data', err);
-      }
-    };
-
-    loadTripsAndLatestData();
-  }, [bookingModal.open, isAuthenticated, closeBookingModal, openAuthModal, setBookingModal]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (bookingModal.open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [bookingModal.open]);
 
-  const disabled = status.state === "loading";
+    if (name === "card_cvv") {
+      const cleaned = value.replace(/\D/g, "");
+      if (cleaned.length <= 4) {
+        setFormData((prev) => ({ ...prev, [name]: cleaned }));
+      }
+      return;
+    }
 
-  const next = () => {
-    if (!canContinue) return;
-    setStep((s) => Math.min(4, s + 1));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
-  const back = () => setStep((s) => Math.max(1, s - 1));
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.first_name) newErrors.first_name = "First Name is Required";
+    if (!formData.last_name) newErrors.last_name = "Last Name is Required";
+    if (!formData.email) {
+      newErrors.email = "Email is Required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "The Email field is not a valid e-mail address.";
+    }
+    if (!formData.mobile) newErrors.mobile = "Mobile is Required";
+    if (!formData.travel_date)
+      newErrors.travel_date = "The Travel Date field is required.";
+    if (!formData.guests || formData.guests < 1)
+      newErrors.guests = "Please select at least 1 guest";
 
-  const handleSubmit = async () => {
-    const currentTrip = selectedTrip || trip;
+    if (formData.payment_method === "credit_card") {
+      const cardNumberClean = formData.card_number.replace(/\s/g, "");
+      if (cardNumberClean.length < 16) {
+        newErrors.card_number = "Please enter a valid 16-digit card number";
+      }
+      if (!formData.card_holder) {
+        newErrors.card_holder = "Card holder name is required";
+      }
+      if (!formData.card_expiry || formData.card_expiry.length < 5) {
+        newErrors.card_expiry = "Please enter a valid expiry date (MM/YY)";
+      }
+      if (!formData.card_cvv || formData.card_cvv.length < 3) {
+        newErrors.card_cvv = "Please enter a valid CVV";
+      }
+    }
 
-    const payload = {
-      trip_slug: currentTrip.slug,
-      date: form.date,
-      guests: Number(form.guests),
-      details: {
-        notes: form.notes,
-        trip_title: currentTrip.title || currentTrip.name || '',
-        price_per_person: basePrice,
-        total_amount: totalAmount,
-        user_phone: form.phone,
-      },
-      amount: totalAmount,
-      payment_method: paymentMethod,
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      console.log("Validation failed:", errors);
+      return;
+    }
+
+    const packageId = formData.package_id || String(packageData?.id || "");
+    const packageCode =
+      formData.package_code ||
+      packageData?.basic_info?.trip_code ||
+      packageData?.trip_code ||
+      `PKG-${packageData?.id || "1"}`;
+
+    const bookingData = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      mobile: formData.mobile,
+      travel_date: formData.travel_date,
+      room_type: formData.room_type,
+      package_id: packageId,
+      package_code: packageCode,
+      notes: formData.notes || "",
+      payment_method: formData.payment_method || "bank_transfer",
+      booking_type: "destination",
+      guests: formData.guests || 1,
+      special_requests: formData.special_requests || "",
     };
 
-    setStatus({ state: "loading", message: "Processing booking..." });
+    console.log("Submitting booking with data:", bookingData);
+
+    // For credit card, validate card details
+    if (formData.payment_method === "credit_card") {
+      const cardNumberClean = formData.card_number.replace(/\s/g, "");
+      if (cardNumberClean.length < 16) {
+        setErrors({ card_number: "Please enter a valid 16-digit card number" });
+        return;
+      }
+      if (!formData.card_holder) {
+        setErrors({ card_holder: "Card holder name is required" });
+        return;
+      }
+      if (!formData.card_expiry || formData.card_expiry.length < 5) {
+        setErrors({ card_expiry: "Please enter a valid expiry date (MM/YY)" });
+        return;
+      }
+      if (!formData.card_cvv || formData.card_cvv.length < 3) {
+        setErrors({ card_cvv: "Please enter a valid CVV" });
+        return;
+      }
+    }
+
+    setLoading(true);
+    setErrors({});
 
     try {
-      let id = bookingId;
-      if (!id) {
-        const res = await bookingsAPI.create(payload);
-        id = res?.booking?.id || res?.id;
-        setBookingId(id);
-      }
-
-      setStatus({ state: "loading", message: "Redirecting to payment..." });
-      const gateway = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY || "moyasar";
-      
-      const payRes = await paymentsAPI.initiate({
-        booking_id: id,
-        amount: totalAmount,
-        method: paymentMethod,
-        gateway: gateway,
+      const response = await fetch(`${API_URL}/bookings/guest`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(bookingData),
       });
 
-      // For Moyasar and embedded payment forms, redirect to our payment page
-      if (gateway === 'moyasar' || payRes.moyasar_config) {
-        closeBookingModal();
-        router.push(`/${lang || 'ar'}/payment?booking_id=${id}`);
-        return;
-      }
+      const data = await response.json();
+      console.log("Booking response:", data);
 
-      // For external payment gateways with redirect URL
-      if (payRes.payment_url) {
-        window.location.href = payRes.payment_url;
-        return;
-      }
+      if (response.ok && data.success) {
+        // If credit card payment, initiate payment
+        if (formData.payment_method === "credit_card") {
+          const bookingId = data.data.id;
+          const price = data.data.price || 100;
 
-      setStatus({ state: "success", message: isRTL ? "تم الحجز بنجاح!" : "Booking confirmed!" });
-      setTimeout(() => {
-        closeBookingModal();
-        const target = `${lang ? `/${lang}` : ""}/dashboard?tab=bookings`;
-        router.push(target);
-        router.refresh?.();
-      }, 1500);
-    } catch (err) {
-      // Language-specific error messages
-      let errorMessage;
-      if (lang === "ar") {
-        errorMessage = err?.message || "حدث خطأ";
-      } else if (lang === "zh") {
-        errorMessage = err?.message || "出现错误";
+          const moyasarResponse = await fetch(
+            `${API_URL}/payments/moyasar/initiate`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+              body: JSON.stringify({
+                booking_id: bookingId,
+                amount: price,
+                payment_method: "credit_card",
+                card_number: formData.card_number.replace(/\s/g, ""),
+                card_cvv: formData.card_cvv,
+                card_expiry: formData.card_expiry,
+                card_holder: formData.card_holder,
+              }),
+            }
+          );
+
+          const paymentData = await moyasarResponse.json();
+          console.log("Payment response:", paymentData);
+
+          if (paymentData.success && paymentData.payment_url) {
+            window.location.href = paymentData.payment_url;
+            return;
+          } else {
+            setErrors({
+              submit: paymentData.message || "Payment initiation failed",
+            });
+            setLoading(false);
+            return;
+          }
+        }
+
+        // For bank transfer, show success
+        setStep(3);
+        setTimeout(() => {
+          onClose();
+          setStep(1);
+          setFormData({
+            first_name: "",
+            last_name: "",
+            email: "",
+            mobile: "",
+            travel_date: "",
+            room_type: "DoubleRoom",
+            package_id: "",
+            package_code: "",
+            notes: "",
+            payment_method: "bank_transfer",
+            card_number: "",
+            card_holder: "",
+            card_expiry: "",
+            card_cvv: "",
+            guests: 1,
+            special_requests: "",
+            booking_type: "destination",
+          });
+        }, 3000);
       } else {
-        errorMessage = err?.message || "Something went wrong";
+        if (data.errors) {
+          console.log("Validation errors:", data.errors);
+          setErrors(data.errors);
+        } else {
+          setErrors({ submit: data.message || "Something went wrong" });
+        }
       }
-      setStatus({ state: "error", message: errorMessage });
+    } catch (error) {
+      console.error("Booking error:", error);
+      setErrors({ submit: "Failed to create booking. Please try again." });
+    } finally {
+      setLoading(false);
     }
   };
-  if (!mounted || !bookingModal.open || !isAuthenticated) return null;
 
-  // Styles
-  const overlayStyle = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "rgba(0,0,0,0.6)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 99999,
-    padding: "1rem",
+  const handleClose = () => {
+    setFormData({
+      first_name: "",
+      last_name: "",
+      email: "",
+      mobile: "",
+      travel_date: "",
+      room_type: "DoubleRoom",
+      package_id: "",
+      package_code: "",
+      notes: "",
+      payment_method: "bank_transfer",
+      card_number: "",
+      card_holder: "",
+      card_expiry: "",
+      card_cvv: "",
+      guests: 1,
+      special_requests: "",
+      booking_type: "destination",
+    });
+    setErrors({});
+    setStep(1);
+    onClose();
   };
 
-  const shellStyle = {
-    background: "#fff",
-    width: "100%",
-    maxWidth: "700px",
-    borderRadius: "14px",
-    position: "relative",
-    boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-    display: "flex",
-    flexDirection: "column",
-    maxHeight: "90vh",
-    overflow: "hidden",
-    direction: isRTL ? "rtl" : "ltr",
+  const labels = {
+    en: {
+      title: "Complete Your Data",
+      firstName: "First Name",
+      lastName: "Last Name",
+      email: "E-mail",
+      mobile: "Mobile Number",
+      travelDate: "Travel Date",
+      roomType: "Room Type",
+      doubleRoom: "Double Room",
+      singleRoom: "Single Room",
+      notes: "Notes",
+      paymentMethod: "Payment Method",
+      bankTransfer: "Bank Transfer",
+      creditCard: "Credit Card",
+      confirm: "Confirm Reservation",
+      cancel: "Cancel",
+      selectPackage: "Select Package",
+      data: "Data",
+      completed: "Completed",
+      bookingSuccess: "Booking Confirmed!",
+      bookingNumber: "Booking Number",
+      thankYou: "Thank you for your booking. We will contact you shortly.",
+      cardNumber: "Card Number",
+      cardHolder: "Card Holder Name",
+      cardExpiry: "Expiry Date (MM/YY)",
+      cardCVV: "CVV",
+      cardDetails: "Card Details",
+      guests: "Number of Guests",
+      specialRequests: "Special Requests",
+    },
+    ar: {
+      title: "أكمل بياناتك",
+      firstName: "الاسم الأول",
+      lastName: "اسم العائلة",
+      email: "البريد الإلكتروني",
+      mobile: "رقم الجوال",
+      travelDate: "تاريخ السفر",
+      roomType: "نوع الغرفة",
+      doubleRoom: "غرفة مزدوجة",
+      singleRoom: "غرفة فردية",
+      notes: "ملاحظات",
+      paymentMethod: "طريقة الدفع",
+      bankTransfer: "تحويل بنكي",
+      creditCard: "بطاقة ائتمان",
+      confirm: "تأكيد الحجز",
+      cancel: "إلغاء",
+      selectPackage: "اختر الباقة",
+      data: "البيانات",
+      completed: "مكتمل",
+      bookingSuccess: "تم تأكيد الحجز!",
+      bookingNumber: "رقم الحجز",
+      thankYou: "شكراً لحجزك. سنتواصل معك قريباً.",
+      cardNumber: "رقم البطاقة",
+      cardHolder: "اسم حامل البطاقة",
+      cardExpiry: "تاريخ الانتهاء (MM/YY)",
+      cardCVV: "رمز CVV",
+      cardDetails: "تفاصيل البطاقة",
+      guests: "عدد الضيوف",
+      specialRequests: "طلبات خاصة",
+    },
   };
 
-  const closeStyle = {
-    position: "absolute",
-    top: "12px",
-    right: isRTL ? "auto" : "12px",
-    left: isRTL ? "12px" : "auto",
-    border: "none",
-    background: "none",
-    fontSize: "28px",
-    color: "#666",
-    cursor: "pointer",
-    zIndex: 10,
-    width: "36px",
-    height: "36px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "50%",
-  };
+  const t = labels[lang] || labels.en;
 
-  const headerStyle = {
-    padding: "1.25rem 1.5rem 0.75rem",
-    borderBottom: "1px solid #eee",
-  };
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div
+          className="booking-modal-overlay"
+          onClick={handleClose}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.7)",
+            backdropFilter: "blur(4px)",
+            zIndex: 99999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+            overflow: "auto",
+          }}
+        >
+          <motion.div
+            className="booking-modal"
+            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 30 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "#fff",
+              borderRadius: "12px",
+              maxWidth: "650px",
+              width: "100%",
+              maxHeight: "90vh",
+              overflowY: "auto",
+              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={handleClose}
+              style={{
+                position: "absolute",
+                top: "15px",
+                right: "20px",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "24px",
+                color: "#999",
+                zIndex: 10,
+                padding: "5px",
+              }}
+            >
+              <X size={24} />
+            </button>
 
-  const stepsStyle = {
-    display: "flex",
-    gap: "0.5rem",
-    marginBottom: "0.5rem",
-    flexDirection: isRTL ? "row-reverse" : "row",
-    flexWrap: "wrap",
-  };
-
-  const stepStyle = (isActive) => ({
-    padding: "0.4rem 0.75rem",
-    borderRadius: "999px",
-    background: isActive ? "#e0ecff" : "#f1f3f5",
-    color: isActive ? "#0b63f6" : "#555",
-    fontSize: "0.85rem",
-    fontWeight: isActive ? 700 : 400,
-  });
-
-  const bodyStyle = {
-    padding: "1.25rem 1.5rem",
-    display: "grid",
-    gap: "1rem",
-    overflowY: "auto",
-    flex: 1,
-  };
-
-  const panelStyle = {
-    background: "#f9fafb",
-    border: "1px solid #eef1f4",
-    borderRadius: "12px",
-    padding: "1rem",
-    display: "grid",
-    gap: "0.75rem",
-  };
-
-  const labelStyle = {
-    fontWeight: 600,
-    color: "#222",
-    fontSize: "0.95rem",
-  };
-
-  const inputStyle = {
-    width: "100%",
-    padding: "0.75rem",
-    borderRadius: "10px",
-    border: "1px solid #d9dde3",
-    fontSize: "1rem",
-    fontFamily: '"Tajawal", sans-serif',
-    boxSizing: "border-box",
-    textAlign: isRTL ? "right" : "left",
-  };
-
-  const selectStyle = {
-    ...inputStyle,
-    appearance: "none",
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 10 13 14 9'%3E%3C/polyline%3E%3C/svg%3E")`,
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: isRTL ? "left 0.75rem center" : "right 0.75rem center",
-    backgroundSize: "20px",
-    paddingRight: isRTL ? "0.75rem" : "2.5rem",
-    paddingLeft: isRTL ? "2.5rem" : "0.75rem",
-    cursor: "pointer",
-  };
-
-  const textareaStyle = {
-    ...inputStyle,
-    resize: "vertical",
-    minHeight: "80px",
-  };
-
-  const reviewStyle = {
-    listStyle: "none",
-    margin: 0,
-    padding: 0,
-    display: "grid",
-    gap: "0.5rem",
-  };
-
-  const reviewItemStyle = {
-    display: "flex",
-    justifyContent: "space-between",
-    color: "#333",
-    background: "#fff",
-    padding: "0.65rem 0.75rem",
-    borderRadius: "10px",
-    border: "1px solid #eef1f4",
-  };
-
-  const paymentGridStyle = {
-    display: "grid",
-    gap: "0.5rem",
-    gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-  };
-
-  const paymentOptionStyle = (isActive, isDisabled) => ({
-    border: `1px solid ${isActive ? "#0b63f6" : "#d9dde3"}`,
-    borderRadius: "10px",
-    padding: "0.85rem",
-    display: "flex",
-    gap: "0.5rem",
-    alignItems: "center",
-    cursor: isDisabled ? "not-allowed" : "pointer",
-    background: isActive ? "#eaf2ff" : "#fff",
-    opacity: isDisabled ? 0.5 : 1,
-  });
-
-  const alertStyle = (type) => ({
-    margin: "0 1.5rem 0.75rem",
-    padding: "0.75rem",
-    borderRadius: "8px",
-    border: "1px solid",
-    background: type === "error" ? "#fdecea" : "#e6f4ea",
-    borderColor: type === "error" ? "#f5c2c7" : "#b7e0c2",
-    color: type === "error" ? "#b91c1c" : "#166534",
-  });
-
-  const footerStyle = {
-    padding: "1rem 1.5rem 1.25rem",
-    borderTop: "1px solid #eee",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: "0.75rem",
-    flexWrap: "wrap",
-  };
-
-  const primaryBtnStyle = {
-    background: "#0b63f6",
-    color: "#fff",
-    border: "none",
-    padding: "0.85rem 1.2rem",
-    borderRadius: "10px",
-    fontWeight: 700,
-    cursor: disabled ? "not-allowed" : "pointer",
-    opacity: disabled || !canContinue ? 0.6 : 1,
-    fontSize: "1rem",
-  };
-
-  const ghostBtnStyle = {
-    background: "#fff",
-    color: "#0b63f6",
-    border: "1px solid #0b63f6",
-    padding: "0.85rem 1.2rem",
-    borderRadius: "10px",
-    fontWeight: 700,
-    cursor: disabled ? "not-allowed" : "pointer",
-    opacity: disabled ? 0.6 : 1,
-    fontSize: "1rem",
-  };
-
-  const modal = (
-    <div style={overlayStyle} onClick={closeBookingModal}>
-      <div style={shellStyle} onClick={(e) => e.stopPropagation()}>
-        <button style={closeStyle} onClick={closeBookingModal} aria-label="Close">
-          ×
-        </button>
-
-        <header style={headerStyle}>
-          <div style={stepsStyle}>
-            {[1, 2, 3, 4].map((s) => (
-              <div key={s} style={stepStyle(step >= s)}>
-                {t.steps[s - 1]}
-              </div>
-            ))}
-          </div>
-          <h3 style={{ margin: 0, color: "#111" }}>{t.title}</h3>
-        </header>
-
-        <section style={bodyStyle}>
-          {step === 1 && (
-            <div style={panelStyle}>
-              <h4 style={{ margin: 0 }}>{t.steps[0]}</h4>
-              <label style={labelStyle}>{t.trip}</label>
-
-              {/* If we fetched a trips list, allow the user to select a trip; otherwise show the passed trip */}
-              {tripsList && tripsList.length > 0 ? (
-                <select
-                  style={selectStyle}
-                  value={selectedTrip?.slug || selectedTrip?.title || ''}
-                  onChange={async (e) => {
-                    const selectedValue = e.target.value;
-                    // Find by slug first, then by title (for items without slug)
-                    const found = tripsList.find(t => 
-                      String(t.slug) === String(selectedValue) || 
-                      String(t.title) === String(selectedValue)
-                    );
-                    if (found) {
-                      setSelectedTrip(found);
-                      // Update global booking state so other parts of the app can use it
-                      setBookingModal(s => ({ ...s, trip: { ...s.trip, title: found.title || found.name || '', slug: found.slug || '', amount: found.amount || found.price || found.price_en || 0 } }));
-                      
-                      // Fetch blocked dates for the newly selected trip
-                      try {
-                        const base = API_URL.replace(/\/$/, "");
-                        const blockedRes = await fetch(`${base}/trips/${encodeURIComponent(found.slug)}/blocked-dates`);
-                        if (blockedRes.ok) {
-                          const blockedJson = await blockedRes.json();
-                          const dates = blockedJson.data || blockedJson.blocked_dates || blockedJson;
-                          setBlockedDates(Array.isArray(dates) ? dates : []);
-                        } else {
-                          setBlockedDates([]);
-                        }
-                      } catch (err) {
-                        console.warn('[BookingModal] failed to fetch blocked dates for trip', found.slug, err);
-                        setBlockedDates([]);
-                      }
-                      
-                      // Clear any blocked date error if date was previously selected
-                      if (form.date) {
-                        setStatus({ state: 'idle', message: '' });
-                      }
-                    }
+            <div
+              style={{
+                padding: "20px 30px",
+                borderBottom: "1px solid #e8e8e8",
+                background: "#f8f9fa",
+                borderRadius: "12px 12px 0 0",
+              }}
+            >
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "10px" }}
+              >
+                <User size={20} color="#dfa528" />
+                <span
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: "600",
+                    color: "#2c2c2c",
                   }}
                 >
-                  {/* Add the currently selected trip as first option if it's not in the list */}
-                  {selectedTrip && selectedTrip.title && !tripsList.find(t => 
-                    String(t.slug) === String(selectedTrip.slug) || 
-                    String(t.title) === String(selectedTrip.title)
-                  ) && (
-                    <option value={selectedTrip.slug || selectedTrip.title}>
-                      {getLocalizedText(selectedTrip, 'title')} {selectedTrip.amount ? `- ${selectedTrip.amount} SAR` : ''}
-                    </option>
-                  )}
-                  <option value="">{isRTL ? 'اختر رحلة أخرى' : lang === 'zh' ? '选择另一个行程' : 'Select a different trip'}</option>
-                  {tripsList.map((t) => (
-                    <option key={t.slug || t.id || t.title} value={t.slug || t.title}>
-                      {getLocalizedText(t, 'title')} {t.price || t.amount ? `- ${t.price || t.amount} SAR` : ''}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <div style={{ 
-                  ...selectStyle, 
-                  appearance: 'none',
-                  background: "#f8f9fa", 
-                  border: "2px solid #0b63f6",
-                  fontWeight: 600,
-                  color: "#333",
-                  cursor: 'default'
-                }}>
-                  {getLocalizedText(selectedTrip || trip, 'title') || (isRTL ? 'لم يتم اختيار رحلة' : lang === 'zh' ? '未选择行程' : 'No trip selected')}
-                </div>
-              )}
-              
-              {/* Show selected trip price if available */}
-              {basePrice > 0 && (
-                <div style={{ 
-                  background: '#e8f5e9', 
-                  padding: '0.75rem', 
-                  borderRadius: '8px', 
-                  marginTop: '0.5rem',
-                }}>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '0.5rem'
-                  }}>
-                    <span style={{ color: '#2e7d32', fontWeight: 600 }}>
-                      {isRTL ? 'السعر للشخص:' : 'Price per person:'}
-                    </span>
-                    <strong style={{ color: '#2e7d32', fontSize: '1rem' }}>
-                      {basePrice} SAR
-                    </strong>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    borderTop: '1px solid #c8e6c9',
-                    paddingTop: '0.5rem'
-                  }}>
-                    <span style={{ color: '#1b5e20', fontWeight: 700 }}>
-                      {isRTL ? `الإجمالي (${form.guests} ${Number(form.guests) === 1 ? 'شخص' : 'أشخاص'}):` : `Total (${form.guests} ${Number(form.guests) === 1 ? 'person' : 'persons'}):`}
-                    </span>
-                    <strong style={{ color: '#1b5e20', fontSize: '1.2rem' }}>
-                      {totalAmount} SAR
-                    </strong>
-                  </div>
-                </div>
-              )}
-              
-              <label style={labelStyle}>{t.date}</label>
-              <input
+                  {t.title}
+                </span>
+              </div>
+            </div>
+
+            <div style={{ padding: "20px 30px 0" }}>
+              <ul
                 style={{
-                  ...inputStyle,
-                  ...(blockedDates.includes(form.date) ? { borderColor: '#dc3545', backgroundColor: '#fff5f5' } : {})
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  position: "relative",
                 }}
-                type="date"
-                value={form.date}
-                onChange={(e) => {
-                  const selectedDate = e.target.value;
-                  if (blockedDates.includes(selectedDate)) {
-                    // Show warning but allow selection (we'll block on submit)
-                    setStatus({ 
-                      state: 'error', 
-                      message: isRTL 
-                        ? 'هذا التاريخ غير متاح للحجز. يرجى اختيار تاريخ آخر.' 
-                        : 'This date is not available for booking. Please select another date.' 
-                    });
-                  } else {
-                    setStatus({ state: 'idle', message: '' });
-                  }
-                  setForm({ ...form, date: selectedDate });
-                }}
-                min={new Date().toISOString().split("T")[0]}
-                required
-              />
-              {blockedDates.length > 0 && (
-                <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>
-                  {isRTL 
-                    ? `التواريخ غير المتاحة: ${blockedDates.slice(0, 5).join(', ')}${blockedDates.length > 5 ? '...' : ''}`
-                    : `Unavailable dates: ${blockedDates.slice(0, 5).join(', ')}${blockedDates.length > 5 ? '...' : ''}`
-                  }
-                </p>
-              )}
-              <label style={labelStyle}>{t.guests}</label>
-              <input
-                style={inputStyle}
-                type="number"
-                min={1}
-                value={form.guests}
-                onChange={(e) => setForm({ ...form, guests: e.target.value })}
-                placeholder={t.personsPlaceholder}
-              />
-              <label style={labelStyle}>{t.notes}</label>
-              <textarea
-                style={textareaStyle}
-                value={form.notes}
-                onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                rows={3}
-                placeholder={t.notesPlaceholder}
-              />
-            </div>
-          )}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "15px",
+                    left: "15%",
+                    right: "15%",
+                    height: "2px",
+                    background: "#e0e0e0",
+                    zIndex: 0,
+                  }}
+                ></div>
 
-          {step === 2 && (
-            <div style={panelStyle}>
-              <h4 style={{ margin: 0 }}>{t.steps[1]}</h4>
-              <label style={labelStyle}>{t.name}</label>
-              <input
-                style={inputStyle}
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-              <label style={labelStyle}>{t.email}</label>
-              <input
-                style={inputStyle}
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-              />
-              <label style={labelStyle}>{t.phone}</label>
-              <input
-                style={inputStyle}
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-            </div>
-          )}
-
-          {step === 3 && (
-            <div style={panelStyle}>
-              <h4 style={{ margin: 0 }}>{t.review}</h4>
-              <ul style={reviewStyle}>
-                <li style={reviewItemStyle}>
-                  <span>{t.trip}</span>
-                  <strong>{selectedTrip?.title || trip.title}</strong>
-                </li>
-                <li style={reviewItemStyle}>
-                  <span>{t.date}</span>
-                  <strong>{form.date || "-"}</strong>
-                </li>
-                <li style={reviewItemStyle}>
-                  <span>{t.guests}</span>
-                  <strong>{form.guests}</strong>
-                </li>
-                {basePrice > 0 && (
-                  <li style={reviewItemStyle}>
-                    <span>{isRTL ? 'السعر للشخص' : 'Price per person'}</span>
-                    <strong>{basePrice} SAR</strong>
+                {[
+                  {
+                    id: 1,
+                    icon: <Luggage size={16} />,
+                    label: t.selectPackage,
+                  },
+                  { id: 2, icon: <User size={16} />, label: t.data },
+                  { id: 3, icon: <Check size={16} />, label: t.completed },
+                ].map((s) => (
+                  <li
+                    key={s.id}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      position: "relative",
+                      zIndex: 1,
+                      flex: 1,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "36px",
+                        height: "36px",
+                        borderRadius: "50%",
+                        background: step >= s.id ? "#dfa528" : "#e0e0e0",
+                        color: step >= s.id ? "#fff" : "#999",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "14px",
+                        transition: "all 0.3s",
+                        border: step === s.id ? "3px solid #c98c1e" : "none",
+                      }}
+                    >
+                      {step > s.id ? <Check size={16} color="#fff" /> : s.icon}
+                    </div>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        color: step >= s.id ? "#dfa528" : "#999",
+                        marginTop: "6px",
+                        fontWeight: step >= s.id ? "600" : "400",
+                        textAlign: "center",
+                      }}
+                    >
+                      {s.label}
+                    </span>
                   </li>
-                )}
-                <li style={{ ...reviewItemStyle, background: '#e8f5e9', border: '2px solid #4caf50' }}>
-                  <span style={{ fontWeight: 700 }}>{t.total}</span>
-                  <strong style={{ color: '#1b5e20', fontSize: '1.1rem' }}>{totalAmount} SAR</strong>
-                </li>
+                ))}
               </ul>
             </div>
-          )}
 
-          {step === 4 && (
-            <div style={panelStyle}>
-              <h4 style={{ margin: 0 }}>{t.payment}</h4>
-              {/* Simplified payment step: no manual method selection. User will be redirected to the payment gateway. */}
-              <p style={{ color: "#666", margin: "0.25rem 0 0", fontSize: "0.9rem" }}>{isRTL ? 'سيتم توجيهك إلى بوابة الدفع لإتمام العملية' : 'You will be redirected to the payment gateway to complete your payment.'}</p>
+            <div style={{ padding: "20px 30px 30px" }}>
+              {step === 1 && (
+                <div>
+                  <div
+                    style={{
+                      background: "#f8f9fa",
+                      padding: "20px",
+                      borderRadius: "8px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <h4 style={{ margin: "0 0 8px 0", color: "#2c2c2c" }}>
+                      {packageData?.title_en || packageData?.title}
+                    </h4>
+                    {packageData?.basic_info && (
+                      <div style={{ fontSize: "14px", color: "#666" }}>
+                        <span>
+                          Trip Code: {packageData.basic_info.trip_code}
+                        </span>
+                        <span style={{ marginLeft: "20px" }}>
+                          Days: {packageData.basic_info.days_num}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => setStep(2)}
+                    style={{
+                      width: "100%",
+                      padding: "12px",
+                      background: "#dfa528",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "8px",
+                      fontSize: "16px",
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      transition: "all 0.3s",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.background = "#c98c1e")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.background = "#dfa528")
+                    }
+                  >
+                    Continue →{" "}
+                    <ArrowRight size={16} style={{ marginLeft: "8px" }} />
+                  </button>
+                </div>
+              )}
+
+              {step === 2 && (
+                <form onSubmit={handleSubmit}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: "15px",
+                    }}
+                  >
+                    {/* First Name */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.firstName}{" "}
+                        <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <User
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="text"
+                          name="first_name"
+                          placeholder={t.firstName}
+                          value={formData.first_name}
+                          onChange={handleChange}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.first_name
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            transition: "all 0.2s",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                      {errors.first_name && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "13px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.first_name}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Last Name */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.lastName}{" "}
+                        <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <User
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="text"
+                          name="last_name"
+                          placeholder={t.lastName}
+                          value={formData.last_name}
+                          onChange={handleChange}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.last_name
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                      {errors.last_name && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "13px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.last_name}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Email */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.email} <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <Mail
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder={t.email}
+                          value={formData.email}
+                          onChange={handleChange}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.email
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                      {errors.email && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "13px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.email}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Mobile */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.mobile} <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <Phone
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="tel"
+                          name="mobile"
+                          placeholder={t.mobile}
+                          value={formData.mobile}
+                          onChange={handleChange}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.mobile
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                      {errors.mobile && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "13px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.mobile}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Travel Date */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.travelDate}{" "}
+                        <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <Calendar
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="date"
+                          name="travel_date"
+                          value={formData.travel_date}
+                          onChange={handleChange}
+                          min={new Date().toISOString().split("T")[0]}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.travel_date
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                          }}
+                        />
+                      </div>
+                      {errors.travel_date && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "13px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.travel_date}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Room Type */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.roomType} <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <Bed
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <select
+                          name="room_type"
+                          value={formData.room_type}
+                          onChange={handleChange}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                            background: "#fff",
+                          }}
+                        >
+                          <option value="DoubleRoom">{t.doubleRoom}</option>
+                          <option value="SingleRoom">{t.singleRoom}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Guests Input */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.guests} <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <Users
+                          size={18}
+                          style={{
+                            position: "absolute",
+                            left: "12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                            color: "#999",
+                          }}
+                        />
+                        <input
+                          type="number"
+                          name="guests"
+                          value={formData.guests}
+                          onChange={handleChange}
+                          min="1"
+                          max="20"
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px 10px 40px",
+                            border: errors.guests
+                              ? "2px solid #dc3545"
+                              : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                            transition: "all 0.2s",
+                          }}
+                        />
+                      </div>
+                      {errors.guests && (
+                        <span
+                          style={{
+                            color: "#dc3545",
+                            fontSize: "12px",
+                            marginTop: "4px",
+                            display: "block",
+                          }}
+                        >
+                          {errors.guests}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Special Requests */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.specialRequests}
+                      </label>
+                      <div style={{ position: "relative" }}>
+                        <textarea
+                          name="special_requests"
+                          placeholder={t.specialRequests}
+                          value={formData.special_requests}
+                          onChange={handleChange}
+                          rows="2"
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px",
+                            border: "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                            resize: "vertical",
+                            fontFamily: "inherit",
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Payment Method */}
+                    <div style={{ gridColumn: "1 / -1", marginTop: "10px" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {t.paymentMethod}{" "}
+                        <span style={{ color: "#dc3545" }}>*</span>
+                      </label>
+                      <div style={{ display: "flex", gap: "12px" }}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleChange({
+                              target: {
+                                name: "payment_method",
+                                value: "bank_transfer",
+                              },
+                            })
+                          }
+                          style={{
+                            flex: 1,
+                            padding: "12px",
+                            border:
+                              formData.payment_method === "bank_transfer"
+                                ? "2px solid #dfa528"
+                                : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            background:
+                              formData.payment_method === "bank_transfer"
+                                ? "rgba(223, 165, 40, 0.05)"
+                                : "#fff",
+                            cursor: "pointer",
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            transition: "all 0.2s",
+                          }}
+                        >
+                          🏦 {t.bankTransfer}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleChange({
+                              target: {
+                                name: "payment_method",
+                                value: "credit_card",
+                              },
+                            })
+                          }
+                          style={{
+                            flex: 1,
+                            padding: "12px",
+                            border:
+                              formData.payment_method === "credit_card"
+                                ? "2px solid #dfa528"
+                                : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            background:
+                              formData.payment_method === "credit_card"
+                                ? "rgba(223, 165, 40, 0.05)"
+                                : "#fff",
+                            cursor: "pointer",
+                            fontWeight: "500",
+                            fontSize: "14px",
+                            transition: "all 0.2s",
+                          }}
+                        >
+                          💳 {t.creditCard}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Credit Card Fields */}
+                    {formData.payment_method === "credit_card" && (
+                      <div
+                        style={{
+                          gridColumn: "1 / -1",
+                          marginTop: "10px",
+                          borderTop: "2px solid #e8e8e8",
+                          paddingTop: "15px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            marginBottom: "15px",
+                          }}
+                        >
+                          <CreditCard size={18} color="#dfa528" />
+                          <span
+                            style={{
+                              fontWeight: "600",
+                              color: "#333",
+                              fontSize: "14px",
+                            }}
+                          >
+                            {t.cardDetails}
+                          </span>
+                        </div>
+
+                        {/* Card Number */}
+                        <div style={{ marginBottom: "15px" }}>
+                          <label
+                            style={{
+                              display: "block",
+                              fontSize: "13px",
+                              fontWeight: "600",
+                              marginBottom: "4px",
+                              color: "#333",
+                            }}
+                          >
+                            {t.cardNumber}{" "}
+                            <span style={{ color: "#dc3545" }}>*</span>
+                          </label>
+                          <div style={{ position: "relative" }}>
+                            <CreditCard
+                              size={16}
+                              style={{
+                                position: "absolute",
+                                left: "12px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "#999",
+                              }}
+                            />
+                            <input
+                              type="text"
+                              name="card_number"
+                              placeholder="1234 5678 9012 3456"
+                              value={formData.card_number}
+                              onChange={handleChange}
+                              maxLength="19"
+                              onFocus={() => setCardFocused("card_number")}
+                              onBlur={() => setCardFocused("")}
+                              style={{
+                                width: "100%",
+                                padding: "10px 12px 10px 40px",
+                                border: errors.card_number
+                                  ? "2px solid #dc3545"
+                                  : cardFocused === "card_number"
+                                    ? "2px solid #dfa528"
+                                    : "2px solid #e0e0e0",
+                                borderRadius: "8px",
+                                fontSize: "14px",
+                                outline: "none",
+                                transition: "all 0.2s",
+                              }}
+                            />
+                          </div>
+                          {errors.card_number && (
+                            <span
+                              style={{
+                                color: "#dc3545",
+                                fontSize: "12px",
+                                marginTop: "4px",
+                                display: "block",
+                              }}
+                            >
+                              {errors.card_number}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Card Holder */}
+                        <div style={{ marginBottom: "15px" }}>
+                          <label
+                            style={{
+                              display: "block",
+                              fontSize: "13px",
+                              fontWeight: "600",
+                              marginBottom: "4px",
+                              color: "#333",
+                            }}
+                          >
+                            {t.cardHolder}{" "}
+                            <span style={{ color: "#dc3545" }}>*</span>
+                          </label>
+                          <div style={{ position: "relative" }}>
+                            <User
+                              size={16}
+                              style={{
+                                position: "absolute",
+                                left: "12px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "#999",
+                              }}
+                            />
+                            <input
+                              type="text"
+                              name="card_holder"
+                              placeholder="John Doe"
+                              value={formData.card_holder}
+                              onChange={handleChange}
+                              onFocus={() => setCardFocused("card_holder")}
+                              onBlur={() => setCardFocused("")}
+                              style={{
+                                width: "100%",
+                                padding: "10px 12px 10px 40px",
+                                border: errors.card_holder
+                                  ? "2px solid #dc3545"
+                                  : cardFocused === "card_holder"
+                                    ? "2px solid #dfa528"
+                                    : "2px solid #e0e0e0",
+                                borderRadius: "8px",
+                                fontSize: "14px",
+                                outline: "none",
+                                transition: "all 0.2s",
+                              }}
+                            />
+                          </div>
+                          {errors.card_holder && (
+                            <span
+                              style={{
+                                color: "#dc3545",
+                                fontSize: "12px",
+                                marginTop: "4px",
+                                display: "block",
+                              }}
+                            >
+                              {errors.card_holder}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Expiry and CVV */}
+                        <div
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gap: "15px",
+                          }}
+                        >
+                          <div>
+                            <label
+                              style={{
+                                display: "block",
+                                fontSize: "13px",
+                                fontWeight: "600",
+                                marginBottom: "4px",
+                                color: "#333",
+                              }}
+                            >
+                              {t.cardExpiry}{" "}
+                              <span style={{ color: "#dc3545" }}>*</span>
+                            </label>
+                            <div style={{ position: "relative" }}>
+                              <Calendar
+                                size={16}
+                                style={{
+                                  position: "absolute",
+                                  left: "12px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  color: "#999",
+                                }}
+                              />
+                              <input
+                                type="text"
+                                name="card_expiry"
+                                placeholder="MM/YY"
+                                value={formData.card_expiry}
+                                onChange={handleChange}
+                                maxLength="5"
+                                onFocus={() => setCardFocused("card_expiry")}
+                                onBlur={() => setCardFocused("")}
+                                style={{
+                                  width: "100%",
+                                  padding: "10px 12px 10px 40px",
+                                  border: errors.card_expiry
+                                    ? "2px solid #dc3545"
+                                    : cardFocused === "card_expiry"
+                                      ? "2px solid #dfa528"
+                                      : "2px solid #e0e0e0",
+                                  borderRadius: "8px",
+                                  fontSize: "14px",
+                                  outline: "none",
+                                  transition: "all 0.2s",
+                                }}
+                              />
+                            </div>
+                            {errors.card_expiry && (
+                              <span
+                                style={{
+                                  color: "#dc3545",
+                                  fontSize: "12px",
+                                  marginTop: "4px",
+                                  display: "block",
+                                }}
+                              >
+                                {errors.card_expiry}
+                              </span>
+                            )}
+                          </div>
+
+                          <div>
+                            <label
+                              style={{
+                                display: "block",
+                                fontSize: "13px",
+                                fontWeight: "600",
+                                marginBottom: "4px",
+                                color: "#333",
+                              }}
+                            >
+                              {t.cardCVV}{" "}
+                              <span style={{ color: "#dc3545" }}>*</span>
+                            </label>
+                            <div style={{ position: "relative" }}>
+                              <Lock
+                                size={16}
+                                style={{
+                                  position: "absolute",
+                                  left: "12px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  color: "#999",
+                                }}
+                              />
+                              <input
+                                type="password"
+                                name="card_cvv"
+                                placeholder="123"
+                                value={formData.card_cvv}
+                                onChange={handleChange}
+                                maxLength="4"
+                                onFocus={() => setCardFocused("card_cvv")}
+                                onBlur={() => setCardFocused("")}
+                                style={{
+                                  width: "100%",
+                                  padding: "10px 12px 10px 40px",
+                                  border: errors.card_cvv
+                                    ? "2px solid #dc3545"
+                                    : cardFocused === "card_cvv"
+                                      ? "2px solid #dfa528"
+                                      : "2px solid #e0e0e0",
+                                  borderRadius: "8px",
+                                  fontSize: "14px",
+                                  outline: "none",
+                                  transition: "all 0.2s",
+                                }}
+                              />
+                            </div>
+                            {errors.card_cvv && (
+                              <span
+                                style={{
+                                  color: "#dc3545",
+                                  fontSize: "12px",
+                                  marginTop: "4px",
+                                  display: "block",
+                                }}
+                              >
+                                {errors.card_cvv}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Secure Payment Info */}
+                        <div
+                          style={{
+                            marginTop: "15px",
+                            padding: "12px",
+                            background: "#f8f9fa",
+                            borderRadius: "8px",
+                            fontSize: "12px",
+                            color: "#666",
+                            textAlign: "center",
+                          }}
+                        >
+                          <Lock
+                            size={14}
+                            style={{ display: "inline", marginRight: "6px" }}
+                          />
+                          {isRTL
+                            ? "مدفوعات آمنة عبر بوابة ميسر"
+                            : "Secure payments via Moyasar gateway"}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {errors.submit && (
+                    <div
+                      style={{
+                        background: "#fee",
+                        color: "#dc3545",
+                        padding: "12px",
+                        borderRadius: "8px",
+                        marginTop: "15px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {errors.submit}
+                    </div>
+                  )}
+
+                  <div
+                    style={{ display: "flex", gap: "12px", marginTop: "20px" }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setStep(1)}
+                      style={{
+                        flex: 1,
+                        padding: "12px",
+                        background: "#f0f0f0",
+                        border: "none",
+                        borderRadius: "8px",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {t.cancel}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      style={{
+                        flex: 2,
+                        padding: "12px",
+                        background:
+                          formData.payment_method === "credit_card"
+                            ? "#dfa528"
+                            : "#28a745",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "8px",
+                        fontWeight: "600",
+                        cursor: loading ? "not-allowed" : "pointer",
+                        opacity: loading ? 0.6 : 1,
+                        fontSize: "14px",
+                        transition: "all 0.3s",
+                      }}
+                      onMouseEnter={(e) =>
+                        !loading &&
+                        (e.target.style.background =
+                          formData.payment_method === "credit_card"
+                            ? "#c98c1e"
+                            : "#218838")
+                      }
+                      onMouseLeave={(e) =>
+                        !loading &&
+                        (e.target.style.background =
+                          formData.payment_method === "credit_card"
+                            ? "#dfa528"
+                            : "#28a745")
+                      }
+                    >
+                      {loading
+                        ? "Submitting..."
+                        : formData.payment_method === "credit_card"
+                          ? isRTL
+                            ? "دفع بالبطاقة"
+                            : "Pay with Card"
+                          : t.confirm}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {step === 3 && (
+                <div style={{ textAlign: "center", padding: "30px 0" }}>
+                  <div
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      borderRadius: "50%",
+                      background: "#d4edda",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 20px",
+                    }}
+                  >
+                    <Check size={40} color="#28a745" />
+                  </div>
+                  <h3 style={{ color: "#28a745", marginBottom: "10px" }}>
+                    {t.bookingSuccess}
+                  </h3>
+                  <p style={{ color: "#666", fontSize: "14px" }}>
+                    {t.thankYou}
+                  </p>
+                </div>
+              )}
             </div>
-          )}
-        </section>
-
-        {status.state === "error" && <div style={alertStyle("error")}>{status.message}</div>}
-        {status.state === "success" && <div style={alertStyle("success")}>{status.message}</div>}
-
-        <footer style={footerStyle}>
-          <div style={{ fontWeight: 700, fontSize: "1.05rem" }}>
-            {t.total}: {totalAmount} SAR
-          </div>
-          <div style={{ display: "flex", gap: "0.6rem" }}>
-            {step > 1 && (
-              <button style={ghostBtnStyle} onClick={back} disabled={disabled}>
-                {t.back}
-              </button>
-            )}
-            {step < 4 && (
-              <button style={primaryBtnStyle} onClick={next} disabled={disabled || !canContinue}>
-                {t.continue}
-              </button>
-            )}
-            {step === 4 && (
-              <button style={primaryBtnStyle} onClick={handleSubmit} disabled={disabled}>
-                {status.state === "loading" ? t.processing : t.payConfirm}
-              </button>
-            )}
-          </div>
-        </footer>
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
-
-  return createPortal(modal, document.body);
 }

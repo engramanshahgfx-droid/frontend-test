@@ -10,22 +10,26 @@
     "admin": "Admin Panel",
     "aboutSaudi": "About Saudi Arabia",
     "visa": "Visa",
-    "bookings": "My Bookings",    "flightBookings": "Flight Bookings",    "offers": "Special Offers",
+    "bookings": "My Bookings",
+    "offers": "Domestic Packages",
     "payment": "Payment",
-    "trips": "Trips",
+    "trips": "Our Trips",
+    "ourTrips": "Our Trips",
     "faq": "FAQ",
     "terms": "Terms & Conditions",
-    "international": "International offers",
+    "international": "International Packages",
+    "specialServices": "Special Services",
     "travelRequirements": "Travel Requirements"
   },
+  "international": "International Packages",
   "navbar": {
     "basic": {
       "title": "Travel basic",
       "subtitle": "Prepare for your journey"
     },
-    "international": {
-      "title": "International offers",
-      "subtitle": "Global travel services"
+    "specialServices": {
+      "title": "Special Services",
+      "subtitle": "International tours and premium services"
     }
   },
   "buttons": {
@@ -40,15 +44,11 @@
     "save": "Save",
     "back": "Back",
     "next": "Next",
-    "continue": "Continue",
-    "proceedToPayment": "Proceed to Payment",
-    "processing": "Processing",
-    "returnHome": "Return Home",
     "confirm": "Confirm",
     "logout": "Logout",
     "login": "Login",
     "register": "Register",
-    "download": "Download PDF",
+    "download": "Download",
     "upload": "Upload",
     "close": "Close",
     "reset": "Reset",
@@ -65,7 +65,6 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "fullName": "Full Name",
-    "name": "Name",
     "email": "Email Address",
     "phoneNumber": "Phone Number",
     "phone": "Phone",
@@ -85,7 +84,6 @@
     "gender": "Gender",
     "nationality": "Nationality",
     "passport": "Passport Number",
-    "document": "Document",
     "visaNumber": "Visa Number",
     "quantity": "Quantity",
     "price": "Price",
@@ -208,145 +206,6 @@
     "cancelled": "Cancelled",
     "refund": "Refund",
     "cancellationPolicy": "Cancellation Policy"
-  },
-  "flightBooking": {
-    "header": "✈️ TILAL RIMAL BOOKING",
-    "steps": {
-      "passengers": "Passengers",
-      "extras": "Extras",
-      "review": "Review",
-      "payment": "Payment",
-      "confirmed": "Confirmed"
-    },
-    "preparingJourney": "Preparing your journey…",
-    "noFlightSelected": "No flight selected",
-    "searchFlightsFirst": "Please search for a flight first.",
-    "searchFlights": "Search Flights",
-    "yourJourney": "Your Journey",
-    "priceBreakdown": "Price Breakdown",
-    "secureBooking": "Secure booking · 256-bit SSL encryption",
-    
-    "passengersStep": {
-      "heading": "Passenger {number}",
-      "adult": "Adult",
-      "child": "Child",
-      "infant": "Infant",
-      "personalInformation": "Personal Information",
-      "title": "Title",
-      "selectTitle": "Select",
-      "mr": "Mr",
-      "mrs": "Mrs",
-      "ms": "Ms",
-      "dr": "Dr",
-      "asInPassport": "As in passport",
-      "travelDocument": "Travel Document",
-      "passportNumber": "Passport Number",
-      "expiryDate": "Expiry Date",
-      "mustBeValid6Months": "Must be valid 6+ months from travel",
-      "issuingCountry": "Issuing Country",
-      "contactDetails": "Contact Details",
-      "phoneNumber": "Phone Number",
-      "emailAddress": "Email Address",
-      "name@example": "name@example.com",
-      "phoneFormat": "+966 5XX XXX XXXX"
-    },
-    
-    "extrasStep": {
-      "title": "Enhance Your Journey",
-      "subtitle": "Select optional add-ons to elevate your travel experience. All prices are per booking.",
-      "travelInsurance": "Travel Insurance",
-      "travelInsuranceDesc": "Comprehensive medical & trip coverage",
-      "autoCheckIn": "Auto Check-in",
-      "autoCheckInDesc": "We check you in automatically at the optimal time",
-      "delayProtection": "Delay Protection",
-      "delayProtectionDesc": "Guaranteed compensation for delays over 2 hours",
-      "cancellationFreedom": "Cancellation Freedom",
-      "cancellationFreedomDesc": "Cancel for any reason and receive a full refund"
-    },
-    
-    "reviewStep": {
-      "flightItinerary": "Flight Itinerary",
-      "passengers": "Passengers",
-      "holdExpiresIn": "Hold expires in"
-    },
-    
-    "paymentStep": {
-      "securePayment": "Secure Payment",
-      "reference": "Reference",
-      "pnr": "PNR",
-      "totalDue": "Total Due",
-      "cardholderName": "Cardholder Name",
-      "cardNumber": "Card Number",
-      "month": "Month",
-      "year": "Year",
-      "cvv": "CVV",
-      "payNow": "Pay {amount} SAR",
-      "processingPayment": "Processing Payment…",
-      "secureEncryption": "256-bit Secure Encryption · Secure booking",
-      "cardValidationError": "Please fill in all payment details",
-      "cardNumberError": "Card number must be 16 digits",
-      "cvvError": "CVV must be at least 3 digits"
-    },
-    
-    "confirmationStep": {
-      "eTicketConfirmation": "E-TICKET CONFIRMATION",
-      "preparedFor": "PREPARED FOR",
-      "travelConsultant": "TRAVEL CONSULTANT",
-      "reservationCode": "RESERVATION CODE",
-      "airlineReservationCode": "AIRLINE RESERVATION CODE",
-      "departure": "DEPARTURE: {date}",
-      "verifyFlightTimes": "Please verify flight times prior to departure",
-      "aircraft": "Aircraft",
-      "meals": "Meals",
-      "baggage": "Baggage",
-      "passengerDetails": "PASSENGER DETAILS",
-      "seats": "Seats",
-      "checkInRequired": "Check-In Required",
-      "ticketNumber": "Ticket Number",
-      "totalAmount": "Total Amount",
-      "paymentStatus": "Payment Status",
-      "paid": "PAID",
-      "pendingIssuance": "Pending Issuance",
-      "duration": "Duration",
-      "status": "Status",
-      "confirmed": "Confirmed",
-      "cabin": "Cabin",
-      "departingAt": "Departing At",
-      "arrivingAt": "Arriving At",
-      "terminal": "Terminal",
-      "mainTerminal": "Main Terminal",
-      "notAvailable": "Not Available",
-      "passengerName": "Passenger Name",
-      "type": "Type",
-      "tripTo": "TRIP TO",
-      "printETicket": "Print E-Ticket",
-      "bookingDate": "BOOKING DATE"
-    },
-    
-    "validation": {
-      "selectPassengerType": "Please select a passenger type",
-      "firstNameRequired": "First name is required",
-      "lastNameRequired": "Last name is required",
-      "dateOfBirthRequired": "Date of birth is required",
-      "emailRequired": "Email is required",
-      "passportNumberRequired": "Passport number is required",
-      "passportExpiryRequired": "Passport expiry date is required",
-      "passportValidation": "Passport expiry ({expiry}) must be valid 6+ months from travel date ({date})",
-      "noFlightSelected": "No flight selected. Please select a flight again.",
-      "orderNotStarted": "Order not started. Please complete the booking start process first.",
-      "orderNotStartedPayment": "Order not started",
-      "bookingExpired": "Hold expired. Please start over.",
-      "paymentFailed": "Payment failed. Please try again.",
-      "bookingConfirmationTimeout": "Booking confirmation timed out"
-    },
-    
-    "messages": {
-      "continue": "Continue →",
-      "proceedToPayment": "Proceed to Payment →",
-      "addPassenger": "Add Passenger",
-      "startingBooking": "Starting booking with",
-      "addingPassengers": "Adding passengers with ref"
-    }
   },
   "payment": {
     "paymentDetails": "Payment Details",

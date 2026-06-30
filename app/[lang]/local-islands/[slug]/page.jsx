@@ -1,547 +1,725 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { MapPin, Clock, Users, Star, Waves, ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { API_URL } from "../../../../lib/api";
-import { useUI } from "../../../../providers/UIProvider";
+import { API_URL } from "../../../lib/api";
 
-export default function LocalIslandDetailPage() {
+export default function DestinationDetails() {
   const params = useParams();
   const router = useRouter();
-  const lang = params.lang || "en";
-  const slug = params.slug;
-  const { openBookingOrAuth } = useUI();
-
+  const lang = params?.lang || "en";
+  const slug = params?.slug;
+  
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Static labels
   const labels = {
     en: {
-      backButton: "Back",
-      bookNow: "Book Now",
-      duration: "Duration",
-      groupSize: "Group Size",
-      location: "Location",
-      price: "Price",
-      per_person: "per person",
-      features: "Features",
       description: "Description",
+      packageIncludes: "Package Includes",
+      packageNotIncludes: "Package Not Includes",
+      importantNotes: "Important Notes",
+      packageProgram: "Package Program",
+      basicInfo: "Basic Information",
+      contactInfo: "Contact Information",
+      paymentMethods: "Payment Methods",
+      tripCode: "Trip Code",
+      daysNum: "Days Num",
+      destinationName: "Destination Name",
+      availableTo: "Available To",
+      doubleRoom: "Double Room",
+      singleRoom: "Single Room",
+      perPerson: "SAR per person",
+      bookNow: "Book Now",
+      viewAll: "View All Destinations",
     },
     ar: {
-      backButton: "عودة",
-      bookNow: "احجز الآن",
-      duration: "المدة",
-      groupSize: "حجم المجموعة",
-      location: "الموقع",
-      price: "السعر",
-      per_person: "للشخص",
-      features: "المميزات",
       description: "الوصف",
-    },
-    zh: {
-      backButton: "返回",
-      bookNow: "立即预订",
-      duration: "行程时间",
-      groupSize: "团队规模",
-      location: "位置",
-      price: "价格",
-      per_person: "每人",
-      features: "特色",
-      description: "描述",
-    },
+      packageIncludes: "تشمل الباقة",
+      packageNotIncludes: "لا تشمل الباقة",
+      importantNotes: "ملاحظات مهمة",
+      packageProgram: "برنامج الباقة",
+      basicInfo: "معلومات أساسية",
+      contactInfo: "معلومات الاتصال",
+      paymentMethods: "طرق الدفع",
+      tripCode: "رمز الرحلة",
+      daysNum: "عدد الأيام",
+      destinationName: "اسم الوجهة",
+      availableTo: "متاح حتى",
+      doubleRoom: "غرفة مزدوجة",
+      singleRoom: "غرفة فردية",
+      perPerson: "ريال سعودي للفرد",
+      bookNow: "احجز الآن",
+      viewAll: "عرض جميع الوجهات",
+    }
   };
 
   const t = labels[lang] || labels.en;
 
-  // Get localized field
   const getText = (obj, field) => {
-    // Special handling for fields without localization suffix
-    if (field === "groupSize" || field === "group_size") {
-      return obj.group_size || obj.groupSize || "";
+    if (!obj) return "";
+    if (field === "title" && obj.title_en) {
+      return lang === "ar" ? obj.title_ar || obj.title_en : obj.title_en;
     }
-    let fieldKey;
-    if (lang === "ar") {
-      fieldKey = `${field}_ar`;
-    } else if (lang === "zh") {
-      fieldKey = `${field}_zh`;
-    } else {
-      fieldKey = `${field}_en`;
+    if (field === "description" && obj.description_en) {
+      return lang === "ar" ? obj.description_ar || obj.description_en : obj.description_en;
     }
-    return obj[fieldKey] || obj[field] || "";
+    const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
+    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
-  // Build image URL
   const getImageUrl = (img) => {
-    const placeholder = "/placeholder.png";
-    if (!img) return placeholder;
-    if (/^https?:\/\//i.test(img)) return img;
+    if (!img) return "/placeholder.png";
+    if (/^https?:\/\//.test(img)) return img;
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-
-    // If path starts with leading slash, treat it as backend-rooted path
     if (img.startsWith("/")) return `${backendBase}${img}`;
-
-    // Support storage/ and islands/ conventions
-    if (img.startsWith("storage/") || img.startsWith("islands/")) return `${backendBase}/${img}`;
-
-    // Fallback to storage/islands
-    return `${backendBase}/storage/islands/${img}`;
+    return `${backendBase}/storage/tourism/${img}`;
   };
 
-  // Parse list
-  const parseList = (value) => {
-    if (!value) return [];
-    if (Array.isArray(value)) return value;
-    if (typeof value === "string") {
-      try {
-        const parsed = JSON.parse(value);
-        if (Array.isArray(parsed)) return parsed;
-      } catch (e) {
-        return value
-          .split(",")
-          .map((s) => s.trim())
-          .filter(Boolean);
-      }
-    }
-    return [];
-  };
-
-  // Fetch full local list from backend and select by slug
   useEffect(() => {
-    if (!slug) return;
     const controller = new AbortController();
-    (async () => {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
-      setDestination(null);
       try {
-        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/island-destinations/local`;
-        console.debug('[LocalIslandDetail] Fetching from:', apiEndpoint);
+        const apiEndpoint = `${API_URL.replace(/\/$/, '')}/tourism-destinations/${slug}`;
+        console.log('[DestinationDetails] Fetching from:', apiEndpoint);
         
-        const res = await fetch(apiEndpoint, { signal: controller.signal });
-        console.debug('[LocalIslandDetail] Response status:', res.status);
+        const res = await fetch(apiEndpoint, { 
+          signal: controller.signal,
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        });
         
         const json = await res.json();
-        console.debug('[LocalIslandDetail] Response data count:', Array.isArray(json.data) ? json.data.length : 0);
+        console.log('[DestinationDetails] Response:', json);
         
         if (!res.ok) {
           throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
         }
         
         if (!json?.success) {
-          throw new Error(json?.message || 'Failed to load destination');
+          throw new Error(json?.message || 'Failed to fetch destination');
         }
-
-        const list = Array.isArray(json.data) ? json.data : [];
-        const slugList = list.map((d) => ({slug: d.slug, id: d.id, title: d.title_en}));
-        console.debug('[LocalIslandDetail] Looking for slug:', slug, 'in list of:', slugList);
         
-        // Try to find by slug first, then by ID as fallback
-        const found = list.find((d) => {
-          const slugMatch = d.slug === slug || d.slug === decodeURIComponent(slug);
-          const idMatch = d.id?.toString() === slug;
-          if (slugMatch || idMatch) {
-            console.debug('[LocalIslandDetail] Found match:', {slug: d.slug, id: d.id, match: slugMatch ? 'slug' : 'id'});
-          }
-          return slugMatch || idMatch;
-        });
-        
+        setDestination(json.data);
         setLoading(false);
-        
-        if (found) {
-          console.debug('[LocalIslandDetail] Destination loaded successfully:', found.slug || found.id);
-          setDestination(found);
-          setError(null);
-        } else {
-          console.warn('[LocalIslandDetail] Destination not found. Requested slug:', slug, 'Available:', list.map(d => d.slug).join(', '));
-          setDestination(null);
-          setError(lang === 'ar' ? 'الوجهة غير موجودة. يرجى المحاولة مرة أخرى.' : 'Destination not found. Please try again.');
-        }
       } catch (err) {
         if (err.name !== 'AbortError') {
-          console.error('[LocalIslandDetail] fetch error:', err.message, err);
-          setError(err.message || 'Error loading destination');
-          setDestination(null);
+          console.error('[DestinationDetails] Fetch error:', err.message);
+          setError(err.message);
+          setLoading(false);
         }
-        setLoading(false);
       }
-    })();
+    };
 
+    if (slug) {
+      fetchData();
+    }
     return () => controller.abort();
-  }, [slug, lang]);
+  }, [slug]);
+
+  const handleBookNow = () => {
+    // Implement booking logic
+    alert('Booking functionality coming soon!');
+  };
+
+  const handleViewAll = () => {
+    router.push(`/${lang}/tourism-destinations`);
+  };
 
   if (loading) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: "60px 20px",
-          color: "#fff",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background:
-            "linear-gradient(135deg, #8A7779 0%, #6e6768ff 50%, #5a4f50 100%)",
-        }}
-      >
-        <p>Loading destination details...</p>
+      <div className="details-section">
+        <div className="container">
+          <div className="row text-center" style={{ padding: "60px 0" }}>
+            <div className="col-12">
+              <div className="spinner-border text-warning" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p style={{ marginTop: "20px", color: "#666" }}>Loading destination details...</p>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 
-  if (!destination) {
-    const errorMsg = error || (lang === 'ar' ? 'الوجهة غير موجودة' : 'Destination not found');
+  if (error || !destination) {
     return (
-      <div
-        style={{
-          textAlign: "center",
-          padding: "60px 20px",
-          color: "#fff",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background:
-            "linear-gradient(135deg, #8A7779 0%, #6e6768ff 50%, #5a4f50 100%)",
-        }}
-      >
-        <div>
-          <p style={{ color: "#ff6b6b", fontSize: "1.1rem" }}>
-            {errorMsg}
-          </p>
-          <button
-            onClick={() => router.back()}
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              background: "#dfa528",
-              color: "#333",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
-            {t.backButton}
+      <div className="details-section">
+        <div className="container">
+          <div className="row text-center" style={{ padding: "60px 0" }}>
+            <div className="col-12">
+              <p style={{ color: "#ff6b6b" }}>{error || 'Destination not found'}</p>
+              <button
+                onClick={handleViewAll}
+                className="btn btn-main"
+                style={{
+                  marginTop: "20px",
+                  padding: "10px 30px",
+                  background: "#dfa528",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "25px",
+                  cursor: "pointer",
+                }}
+              >
+                {t.viewAll}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const features = getText(destination, 'features') || [];
+  const includes = getText(destination, 'includes') || [];
+  const notIncludes = getText(destination, 'not_includes') || [];
+  const itinerary = getText(destination, 'itinerary') || [];
+  const basicInfo = destination.basic_info || {};
+  const contactInfo = destination.contact_info || {};
+  const paymentMethods = destination.payment_methods || [];
+
+  return (
+    <div className="details-section" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="container">
+        {/* Breadcrumb */}
+        <nav className="breadcrumb">
+          <a href={`/${lang}`}>Home</a>
+          <span> / </span>
+          <a href={`/${lang}/tourism-destinations`}>{t.viewAll}</a>
+          <span> / </span>
+          <span className="current">{getText(destination, 'title')}</span>
+        </nav>
+
+        {/* Title */}
+        <h1 className="page-title">{getText(destination, 'title')}</h1>
+
+        {/* Description */}
+        <div className="description-section">
+          <h2>{t.description}</h2>
+          <p>{getText(destination, 'long_description') || getText(destination, 'description')}</p>
+          {destination.image && (
+            <img 
+              src={getImageUrl(destination.image)} 
+              alt={getText(destination, 'title')}
+              className="main-image"
+            />
+          )}
+        </div>
+
+        {/* Package Includes & Not Includes */}
+        <div className="row package-info">
+          <div className="col-md-6">
+            <div className="info-card">
+              <h3>{t.packageIncludes}</h3>
+              <ul>
+                {features.map((item, index) => (
+                  <li key={index}>✓ {item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="info-card">
+              <h3>{t.packageNotIncludes}</h3>
+              <ul>
+                {notIncludes.map((item, index) => (
+                  <li key={index}>✗ {item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Important Notes */}
+        {destination.description_en && (
+          <div className="notes-section">
+            <h2>{t.importantNotes}</h2>
+            <p>{getText(destination, 'description')}</p>
+          </div>
+        )}
+
+        {/* Package Program */}
+        {itinerary.length > 0 && (
+          <div className="itinerary-section">
+            <h2>{t.packageProgram}</h2>
+            {itinerary.map((day, index) => (
+              <motion.div 
+                key={index}
+                className="day-card"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <h4>Day {day.day} : {day.title}</h4>
+                <p>{day.description}</p>
+                {day.image && (
+                  <img 
+                    src={getImageUrl(day.image)} 
+                    alt={`Day ${day.day}`}
+                    className="day-image"
+                  />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* Basic Information */}
+        {Object.keys(basicInfo).length > 0 && (
+          <div className="info-section">
+            <h2>{t.basicInfo}</h2>
+            <div className="info-grid">
+              {basicInfo.trip_code && (
+                <div className="info-item">
+                  <strong>{t.tripCode}:</strong> {basicInfo.trip_code}
+                </div>
+              )}
+              {basicInfo.days_num && (
+                <div className="info-item">
+                  <strong>{t.daysNum}:</strong> {basicInfo.days_num}
+                </div>
+              )}
+              {basicInfo.destination_name && (
+                <div className="info-item">
+                  <strong>{t.destinationName}:</strong> {basicInfo.destination_name}
+                </div>
+              )}
+              {basicInfo.available_to && (
+                <div className="info-item">
+                  <strong>{t.availableTo}:</strong> {basicInfo.available_to}
+                </div>
+              )}
+              {basicInfo.double_room && (
+                <div className="info-item">
+                  <strong>{t.doubleRoom}:</strong> {basicInfo.double_room} {t.perPerson}
+                </div>
+              )}
+              {basicInfo.single_room && (
+                <div className="info-item">
+                  <strong>{t.singleRoom}:</strong> {basicInfo.single_room} {t.perPerson}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Contact Information */}
+        {Object.keys(contactInfo).length > 0 && (
+          <div className="contact-section">
+            <h2>{t.contactInfo}</h2>
+            <div className="contact-grid">
+              {contactInfo.address && (
+                <div className="contact-item">
+                  <span className="icon">📍</span>
+                  <span>{contactInfo.address}</span>
+                </div>
+              )}
+              {contactInfo.phone && (
+                <div className="contact-item">
+                  <span className="icon">📞</span>
+                  <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
+                </div>
+              )}
+              {contactInfo.whatsapp && (
+                <div className="contact-item">
+                  <span className="icon">💬</span>
+                  <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, '')}`}>
+                    {contactInfo.whatsapp}
+                  </a>
+                </div>
+              )}
+              {contactInfo.email && (
+                <div className="contact-item">
+                  <span className="icon">✉️</span>
+                  <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Payment Methods */}
+        {paymentMethods.length > 0 && (
+          <div className="payment-section">
+            <h2>{t.paymentMethods}</h2>
+            <div className="payment-grid">
+              {paymentMethods.map((method, index) => (
+                <div key={index} className="payment-card">
+                  {method.logo && (
+                    <img 
+                      src={`/images/banks-logos/${method.logo}`} 
+                      alt={method.name}
+                      className="bank-logo"
+                    />
+                  )}
+                  <h5>{method.name}</h5>
+                  <p><strong>Account No:</strong> {method.account_no}</p>
+                  <p><strong>IBAN:</strong> {method.iban}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Book Now Button */}
+        <div className="text-center">
+          <button className="btn-book-now" onClick={handleBookNow}>
+            {t.bookNow}
+          </button>
+          <button className="btn-view-all" onClick={handleViewAll}>
+            {t.viewAll}
           </button>
         </div>
       </div>
-    );
-  }
 
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        size={18}
-        fill={i < Math.floor(rating) ? "#dfa528" : "none"}
-        color="#dfa528"
-      />
-    ));
-  };
+      <style jsx>{`
+        .details-section {
+          padding: 40px 0 60px;
+          background: #f8f9fa;
+        }
 
-  const handleBookNowWhatsApp = () => {
-    // Prefer booking modal (handles auth + payment); fallback to WhatsApp if modal unavailable
-    const title = getText(destination, "title") || "";
-    const amount = destination.price || destination.price_en || 0;
-    const slugVal = destination.slug || destination.id || "";
+        .breadcrumb {
+          padding: 10px 0 20px;
+          font-size: 0.95rem;
+          color: #666;
+        }
 
-    try {
-      openBookingOrAuth({ title, amount, slug: slugVal });
-    } catch (e) {
-      console.error('openBookingOrAuth not available', e);
-      const base =
-        typeof window !== "undefined" && window.location.origin
-          ? window.location.origin
-          : API_URL.replace(/\/api\/?$/, "");
-      const url = slugVal ? `${base}/${lang}/local-islands/${slugVal}` : base;
-      let message;
-      if (lang === "ar") {
-        message = `مرحبا، أريد الاستفسار عن ${title} (السعر: ${amount}). ${url}`;
-      } else if (lang === "zh") {
-        message = `你好，我对${title}感兴趣（价格：${amount}）。${url}`;
-      } else {
-        message = `Hello, I'm interested in ${title} (Price: ${amount}). ${url}`;
-      }
-      const phoneNumber = "+966547305060";
-      const whatsappUrl = `https://wa.me/${encodeURIComponent(phoneNumber)}?text=${encodeURIComponent(
-        message
-      )}`;
-      window.open(whatsappUrl, "_blank");
-    }
-  };
+        .breadcrumb a {
+          color: #dfa528;
+          text-decoration: none;
+        }
 
-  return (
-    <section
-      style={{
-        background:
-          "linear-gradient(135deg, #8A7779 0%, #6e6768ff 50%, #5a4f50 100%)",
-        color: "white",
-        direction: lang === "ar" ? "rtl" : "ltr",
-        minHeight: "100vh",
-        padding: "60px 20px",
-      }}
-    >
-      <div className="container">
-        {/* Back Button */}
-        <motion.button
-          onClick={() => router.back()}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="btn d-flex align-items-center gap-2 mb-4"
-          style={{
-            background: "rgba(255,255,255,0.15)",
-            color: "#fff",
-            border: "2px solid rgba(255,255,255,0.3)",
-            borderRadius: "25px",
-          }}
-        >
-          <ArrowLeft size={20} />
-          {t.backButton}
-        </motion.button>
+        .breadcrumb a:hover {
+          text-decoration: underline;
+        }
 
-        <div className="row">
-          {/* Hero Image */}
-          <div className="col-lg-8 mb-5" style={{ maxWidth: "820px" }}>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6 }}
-              style={{
-                position: "relative",
-                width: "100%",
-                maxWidth: "820px",
-                aspectRatio: "820 / 1120",
-                borderRadius: "15px",
-                overflow: "hidden",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
-              }}
-            >
-              <img
-                src={getImageUrl(destination.image)}
-                alt={getText(destination, "title")}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  display: "block",
-                }}
-                onError={(e) => {
-                  e.target.src = "/placeholder.png";
-                }}
-              />
-            </motion.div>
-          </div>
+        .breadcrumb .current {
+          color: #333;
+        }
 
-          {/* Details Sidebar */}
-          <div className="col-lg-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              style={{
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(20px)",
-                padding: "30px",
-                borderRadius: "15px",
-                border: "2px solid rgba(255,255,255,0.2)",
-              }}
-            >
-              {/* Title */}
-              <h1
-                className="fw-bold mb-3"
-                style={{
-                  fontSize: "2rem",
-                  background:
-                    "linear-gradient(135deg, #ffffff, #EFC8AE, #dfa528)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                {getText(destination, "title")}
-              </h1>
+        .page-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: #2c2c2c;
+          margin-bottom: 30px;
+        }
 
-              {/* Rating */}
-              <div className="d-flex align-items-center gap-2 mb-4">
-                {renderStars(destination.rating || 0)}
-                <span className="text-warning fw-bold ms-2">
-                  {destination.rating || 0}
-                </span>
-              </div>
+        .description-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
 
-              {/* Price */}
-              <div className="mb-4 pb-4 border-bottom border-light border-opacity-25">
-                <div
-                  className="text-warning fw-bold"
-                  style={{ fontSize: "2rem" }}
-                >
-                  {getText(destination, "price")}
-                </div>
-                <small className="text-light-50">{t.per_person}</small>
-              </div>
+        .description-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 15px;
+        }
 
-              {/* Info Grid */}
-              <div className="mb-4">
-                <div className="d-flex align-items-center gap-3 mb-3">
-                  <Clock size={20} className="text-warning" />
-                  <div>
-                    <small className="d-block text-light-50">
-                      {t.duration}
-                    </small>
-                    <strong>{getText(destination, "duration")}</strong>
-                  </div>
-                </div>
+        .description-section p {
+          font-size: 1rem;
+          line-height: 1.8;
+          color: #555;
+          margin-bottom: 20px;
+        }
 
-                <div className="d-flex align-items-center gap-3 mb-3">
-                  <Users size={20} className="text-warning" />
-                  <div>
-                    <small className="d-block text-light-50">
-                      {t.groupSize}
-                    </small>
-                    <strong>{getText(destination, "groupSize")}</strong>
-                  </div>
-                </div>
+        .main-image {
+          width: 100%;
+          max-height: 400px;
+          object-fit: cover;
+          border-radius: 8px;
+        }
 
-                <div className="d-flex align-items-center gap-3">
-                  <MapPin size={20} className="text-warning" />
-                  <div>
-                    <small className="d-block text-light-50">
-                      {t.location}
-                    </small>
-                    <strong>{getText(destination, "location")}</strong>
-                  </div>
-                </div>
-              </div>
+        .info-card {
+          background: #fff;
+          padding: 25px;
+          border-radius: 12px;
+          margin-bottom: 20px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
 
-              {/* Book Button */}
-              <motion.button
-                onClick={handleBookNowWhatsApp}
-                className="btn w-100 fw-bold py-3"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  background: "#EFC8AE",
-                  color: "#000",
-                  border: "none",
-                  borderRadius: "25px",
-                  fontSize: "1rem",
-                }}
-              >
-                {t.bookNow}
-              </motion.button>
-            </motion.div>
-          </div>
-        </div>
+        .info-card h3 {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 15px;
+        }
 
-        {/* Description Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="row mt-5"
-        >
-          <div className="col-lg-8">
-            <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-              {t.description}
-            </h2>
-            <p style={{ fontSize: "1.1rem", lineHeight: "1.8", opacity: 0.95 }}>
-              {getText(destination, "description")}
-            </p>
-          </div>
-        </motion.div>
+        .info-card ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
 
-        {/* Features Section */}
-        {parseList(getText(destination, "features")).length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="row mt-5"
-          >
-            <div className="col-lg-8">
-              <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-                {t.features}
-              </h2>
-              <div className="row">
-                {parseList(getText(destination, "features")).map((feature, idx) => (
-                  <div key={idx} className="col-md-6 mb-3">
-                    <div className="d-flex align-items-center gap-3">
-                      <Waves size={20} className="text-warning flex-shrink-0" />
-                      <span style={{ fontSize: "1.05rem" }}>{feature}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
+        .info-card ul li {
+          padding: 8px 0;
+          color: #555;
+          font-size: 0.95rem;
+          border-bottom: 1px solid #f0f0f0;
+        }
 
-        {/* Itinerary Section */}
-        {getText(destination, "itinerary") && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="row mt-5"
-          >
-            <div className="col-lg-8">
-              <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-                {t.itinerary}
-              </h2>
-              <div
-                style={{
-                  background: "rgba(255,255,255,0.05)",
-                  padding: "25px",
-                  borderRadius: "15px",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  fontSize: "1rem",
-                  lineHeight: "1.8",
-                  whiteSpace: "pre-wrap",
-                  wordWrap: "break-word",
-                  fontFamily: "Tajawal, sans-serif",
-                  color: "rgba(255,255,255,0.95)",
-                }}
-              >
-                {getText(destination, "itinerary")}
-              </div>
-            </div>
-          </motion.div>
-        )}
+        .info-card ul li:last-child {
+          border-bottom: none;
+        }
 
-        {/* Includes Section */}
-{parseList(getText(destination, "includes")).length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0 }}
-            className="row mt-5"
-          >
-            <div className="col-lg-8">
-              <h2 className="fw-bold mb-4" style={{ fontSize: "1.75rem" }}>
-                {t.whatsIncluded}
-              </h2>
-              <div className="row">
-                {parseList(getText(destination, "includes")).map((item, idx) => (
-                  <div key={idx} className="col-md-6 mb-3">
-                    <div className="d-flex align-items-start gap-3">
-                      <Star
-                        size={20}
-                        className="text-warning flex-shrink-0 mt-1"
-                      />
-                      <span style={{ fontSize: "1rem" }}>{item}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </section>
+        .notes-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .notes-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 15px;
+        }
+
+        .notes-section p {
+          font-size: 1rem;
+          line-height: 1.8;
+          color: #555;
+        }
+
+        .itinerary-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .itinerary-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 20px;
+        }
+
+        .day-card {
+          padding: 20px;
+          margin-bottom: 20px;
+          background: #f8f9fa;
+          border-radius: 8px;
+          border-left: 4px solid #dfa528;
+        }
+
+        .day-card h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 10px;
+        }
+
+        .day-card p {
+          font-size: 0.95rem;
+          line-height: 1.8;
+          color: #555;
+          margin-bottom: 10px;
+        }
+
+        .day-image {
+          width: 100%;
+          max-height: 250px;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+
+        .info-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 20px;
+        }
+
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 15px;
+        }
+
+        .info-item {
+          padding: 12px 15px;
+          background: #f8f9fa;
+          border-radius: 8px;
+        }
+
+        .info-item strong {
+          color: #2c2c2c;
+        }
+
+        .contact-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 20px;
+        }
+
+        .contact-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 15px;
+        }
+
+        .contact-item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 15px;
+          background: #f8f9fa;
+          border-radius: 8px;
+        }
+
+        .contact-item .icon {
+          font-size: 1.2rem;
+        }
+
+        .contact-item a {
+          color: #dfa528;
+          text-decoration: none;
+        }
+
+        .contact-item a:hover {
+          text-decoration: underline;
+        }
+
+        .payment-section {
+          background: #fff;
+          padding: 30px;
+          border-radius: 12px;
+          margin-bottom: 30px;
+          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .payment-section h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 20px;
+        }
+
+        .payment-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+        }
+
+        .payment-card {
+          padding: 20px;
+          background: #f8f9fa;
+          border-radius: 8px;
+          text-align: center;
+        }
+
+        .payment-card .bank-logo {
+          max-height: 50px;
+          margin-bottom: 10px;
+        }
+
+        .payment-card h5 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #2c2c2c;
+          margin-bottom: 10px;
+        }
+
+        .payment-card p {
+          font-size: 0.9rem;
+          color: #555;
+          margin: 5px 0;
+          word-break: break-all;
+        }
+
+        .btn-book-now {
+          background: #dfa528;
+          color: #fff;
+          border: none;
+          padding: 14px 45px;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 1.1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin: 10px;
+          box-shadow: 0 4px 20px rgba(223, 165, 40, 0.3);
+        }
+
+        .btn-book-now:hover {
+          background: #c98c1e;
+          transform: translateY(-3px);
+          box-shadow: 0 8px 30px rgba(223, 165, 40, 0.4);
+        }
+
+        .btn-view-all {
+          background: transparent;
+          color: #dfa528;
+          border: 2px solid #dfa528;
+          padding: 12px 35px;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          margin: 10px;
+        }
+
+        .btn-view-all:hover {
+          background: #dfa528;
+          color: #fff;
+          transform: translateY(-3px);
+          box-shadow: 0 10px 30px rgba(223, 165, 40, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .page-title {
+            font-size: 2rem;
+          }
+
+          .info-grid,
+          .contact-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .payment-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .btn-book-now,
+          .btn-view-all {
+            width: 100%;
+          }
+        }
+      `}</style>
+    </div>
   );
 }

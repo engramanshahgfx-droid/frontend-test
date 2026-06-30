@@ -72,7 +72,7 @@ export default function Contact({ lang }) {
 
       contactInfo: {
         address: "King Fahd Road, Sitteen Street, Jeddah 21454",
-        phone: "+966547305060",
+        phone: "966547305060",
         email: "info@tilalr.com",
         hours: "Open 24/7",
       },
@@ -99,7 +99,7 @@ export default function Contact({ lang }) {
 
       contactInfo: {
         address: "法赫德国王路，六十街，吉达 21454",
-        phone: "+966547305060",
+        phone: "966547305060",
         email: "info@tilalr.com",
         hours: "24/7 开放",
       },

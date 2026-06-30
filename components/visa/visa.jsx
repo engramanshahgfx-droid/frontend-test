@@ -1,4 +1,3 @@
-// components/visa/visa.jsx
 "use client";
 
 import React, { useState } from "react";
@@ -15,6 +14,12 @@ import {
   FaUserCheck,
   FaGlobeAmericas,
   FaShieldAlt,
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+  FaCalendarAlt,
+  FaUpload,
+  FaSpinner,
 } from "react-icons/fa";
 
 export default function Visa({ lang }) {
@@ -22,6 +27,28 @@ export default function Visa({ lang }) {
   const [activeGccTab, setActiveGccTab] = useState(1);
   const [activeSchengenTab, setActiveSchengenTab] = useState(1);
   const [activeOtherTab, setActiveOtherTab] = useState(1);
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    nationality: "",
+    passportNumber: "",
+    visaType: "electronic",
+    travelDate: "",
+    notes: "",
+    files: {
+      passport: null,
+      photo: null,
+      other: null,
+    },
+  });
+  
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const content = {
     en: {
@@ -135,14 +162,42 @@ export default function Visa({ lang }) {
         }
       ],
 
+      // Form Labels
+      requestService: "Request Visa Assistance",
+      requestDesc: "Fill out the form below and our team will contact you to help with your Saudi visa application.",
+      fullName: "Full Name",
+      phone: "Phone Number",
+      email: "Email Address",
+      nationality: "Nationality",
+      passportNumber: "Passport Number",
+      visaTypeLabel: "Visa Type",
+      visaTypes: {
+        electronic: "Electronic Visa",
+        arrival: "Visa on Arrival",
+        transit: "Transit Visa",
+        embassy: "Embassy/Consulate Visa"
+      },
+      travelDate: "Expected Travel Date",
+      notes: "Additional Notes / Questions",
+      attachments: "Attachments",
+      passportCopy: "Passport Copy",
+      photo: "Recent Photo",
+      otherDoc: "Other Documents (Optional)",
+      submit: "Submit Application",
+      submitting: "Submitting...",
+      success: "Your application has been submitted successfully! Our team will contact you within 24 hours.",
+      error: "An error occurred. Please try again.",
+      connectionError: "Connection error. Please check your internet connection.",
       applyNow: "Apply Now",
       search: "Search",
       requirements: "Requirements",
-      howToApply: "How to Apply"
+      howToApply: "How to Apply",
+      needHelp: "Need help with your visa application?",
+      getHelp: "Request Assistance"
     },
     ar: {
       heroTitle: "سحر الطبيعة كما لم تره من قبل",
-      heroSubtitle: "اكتشف نوع التأشيرة التي تحتاجها لزيارة المملكة العربية السعودية",
+      heroSubtitle: "اكتشف نوع التأشيرات التي تحتاجها لزيارة المملكة العربية السعودية",
       heroDescription: "دعنا نخطط.. وأنت استمتع بالرحلة",
 
       welcomeTitle: "مرحبا!",
@@ -172,7 +227,7 @@ export default function Visa({ lang }) {
           icon: <FaPlane />,
           content: {
             title: "المعلومات",
-            description: "تكلفة التأشيرة الإلكترونية: 300 ريال (حوالي 80 دولار أمريكي)\n\nرسوم الطلب: 39.44 ريال (حوالي 10.50 دولار أمريكي)\n\nرسوم التأمين الطبي: غير مشمولة (يتم تحديد السعر بناءاً على مقدم الخدمة)\n\nعدد مرات الدخول: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: أشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها وتسمح بالإقامة لمدة لا تتجاوز 90 يوماً متتالية",
+            description: "تكلفة التأشيرات الإلكترونية: 300 ريال (حوالي 80 دولار أمريكي)\n\nرسوم الطلب: 39.44 ريال (حوالي 10.50 دولار أمريكي)\n\nرسوم التأمين الطبي: غير مشمولة (يتم تحديد السعر بناءاً على مقدم الخدمة)\n\nعدد مرات الدخول: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: أشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها وتسمح بالإقامة لمدة لا تتجاوز 90 يوماً متتالية",
             requirements: "يجب عليك تقديم تأشيرة إقامة صادرة من إحدى دول مجلس التعاون الخليجي مع صلاحية لا تقل عن ثلاثة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية.\nبالنسبة للمسافرين الذين تقل أعمارهم عن 18 عاماً، يتعين على والد المسافر التقدم للحصول على تأشيرة إلكترونية أولاً\n\nيمكن للمسافرين الراغبين في أداء مناسك العمرة بحجز موعد العمرة عبر منصة نُسك الرسمية",
             applyButton: "تقديم الأن",
             applyLink: "https://visa.visitsaudi.com/"
@@ -184,24 +239,24 @@ export default function Visa({ lang }) {
       schengenTabs: [
         { 
           id: 1, 
-          title: "التأشيرة الإلكترونية", 
+          title: "التأشيرات الإلكترونية", 
           icon: <FaDesktop />,
           content: {
             title: "المعلومات",
-            description: "تكلفة التأشيرة الإلكترونية:: 395 ريال\n\nرسوم التقديم: مشمولة في سعر التأشيرة الإلكترونية\n\nرسوم التأمين الطبي: مشمولة في سعر التأشيرة الإلكترونية\n\nعدد مرات الدخول: دخول متعدد\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها وتسمح بالإقامة لمدة لا تتجاوز 90 يوماً متتالية",
-            requirements: "يمكنك التقدّم للحصول على التأشيرة الإلكترونية لزيارة السعودية في أي عمر. وإذا كنت قاصراً وتسافر دون مرافق، فيجب عليك مراجعة أنظمة بلدك المتعلقة بالسفر دون ولي أمر، حيث تختلف هذه الأنظمة حسب الجنسية. يُرجى التأكّد من استيفاء جميع المتطلبات قبل تقديم الطلب، وللمزيد من المعلومات يمكنك الاطّلاع على دليل التأشيرة الإلكترونية أو التواصل معنا للحصول على المساعدة.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية باستثناء مواطني الولايات المتحدة الأمريكية يمكن لمواطني الولايات المتحدة الدخول طالما أن جواز سفرهم ساري المفعول، بغض النظر عن الوقت المتبقي قبل انتهاء الصلاحية.",
+            description: "تكلفة التأشيرات الإلكترونية:: 395 ريال\n\nرسوم التقديم: مشمولة في سعر التأشيرات الإلكترونية\n\nرسوم التأمين الطبي: مشمولة في سعر التأشيرات الإلكترونية\n\nعدد مرات الدخول: دخول متعدد\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها وتسمح بالإقامة لمدة لا تتجاوز 90 يوماً متتالية",
+            requirements: "يمكنك التقدّم للحصول على التأشيرات الإلكترونية لزيارة السعودية في أي عمر. وإذا كنت قاصراً وتسافر دون مرافق، فيجب عليك مراجعة أنظمة بلدك المتعلقة بالسفر دون ولي أمر، حيث تختلف هذه الأنظمة حسب الجنسية. يُرجى التأكّد من استيفاء جميع المتطلبات قبل تقديم الطلب، وللمزيد من المعلومات يمكنك الاطّلاع على دليل التأشيرات الإلكترونية أو التواصل معنا للحصول على المساعدة.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية باستثناء مواطني الولايات المتحدة الأمريكية يمكن لمواطني الولايات المتحدة الدخول طالما أن جواز سفرهم ساري المفعول، بغض النظر عن الوقت المتبقي قبل انتهاء الصلاحية.",
             applyButton: "تقديم الأن",
             applyLink: "https://visa.visitsaudi.com/"
           }
         },
         { 
           id: 2, 
-          title: "التأشيرة عند الوصول", 
+          title: "التأشيرات عند الوصول", 
           icon: <FaPlane />,
           content: {
             title: "المعلومات",
-            description: "تكلفة التأشيرة عند الوصول: 300 ريال (ما يعادل حوالي 80 دولار أمريكي)\n\nرسوم التأمين الطبي: 95 ريال  (ما يعادل حوالي 25.33 دولار أمريكي)\n\nدخول متعدد: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها. تسمح التأشيرة بالإقامة لمدة تصل إلى 90 يوماً كحد أقصى",
-            requirements: "بمجرد وصولك إلى مطار وجهتك أو إحدى نقاط الدخول الأخرى في السعودية، يمكنك استخدام أجهزة الخدمة الذاتية أو توجّه مباشرة إلى مكتب الجوازات للتقدم بطلب للحصول على تأشيرتك عند الوصول.\n\nيمكنك التقدّم للحصول على التأشيرة الإلكترونية لزيارة السعودية في أي عمر. وإذا كنت قاصراً وتسافر دون مرافق، فيجب عليك مراجعة أنظمة بلدك المتعلقة بالسفر دون ولي أمر، حيث تختلف هذه الأنظمة حسب الجنسية. يُرجى التأكّد من استيفاء جميع المتطلبات قبل تقديم الطلب، وللمزيد من المعلومات يمكنك الاطّلاع على دليل التأشيرة الإلكترونية أو التواصل معنا للحصول على المساعدة.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية باستثناء مواطني الولايات المتحدة الأمريكية حيث يمكن لمواطني الولايات المتحدة الدخول طالما أن جواز سفرهم ساري المفعول، بغض النظر عن الوقت المتبقي قبل انتهاء الصلاحية.\nيمكن للمسافرين الراغبين في أداء مناسك العمرة بحجز موعد العمرة عبر منصة نُسك الرسمية"
+            description: "تكلفة التأشيرات عند الوصول: 300 ريال (ما يعادل حوالي 80 دولار أمريكي)\n\nرسوم التأمين الطبي: 95 ريال  (ما يعادل حوالي 25.33 دولار أمريكي)\n\nدخول متعدد: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها. تسمح التأشيرات بالإقامة لمدة تصل إلى 90 يوماً كحد أقصى",
+            requirements: "بمجرد وصولك إلى مطار وجهتك أو إحدى نقاط الدخول الأخرى في السعودية، يمكنك استخدام أجهزة الخدمة الذاتية أو توجّه مباشرة إلى مكتب الجوازات للتقدم بطلب للحصول على تأشيرتك عند الوصول.\n\nيمكنك التقدّم للحصول على التأشيرات الإلكترونية لزيارة السعودية في أي عمر. وإذا كنت قاصراً وتسافر دون مرافق، فيجب عليك مراجعة أنظمة بلدك المتعلقة بالسفر دون ولي أمر، حيث تختلف هذه الأنظمة حسب الجنسية. يُرجى التأكّد من استيفاء جميع المتطلبات قبل تقديم الطلب، وللمزيد من المعلومات يمكنك الاطّلاع على دليل التأشيرات الإلكترونية أو التواصل معنا للحصول على المساعدة.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية باستثناء مواطني الولايات المتحدة الأمريكية حيث يمكن لمواطني الولايات المتحدة الدخول طالما أن جواز سفرهم ساري المفعول، بغض النظر عن الوقت المتبقي قبل انتهاء الصلاحية.\nيمكن للمسافرين الراغبين في أداء مناسك العمرة بحجز موعد العمرة عبر منصة نُسك الرسمية"
           }
         },
         { 
@@ -223,7 +278,7 @@ export default function Visa({ lang }) {
           icon: <FaPassport />,
           content: {
             title: "المعلومات",
-            description: "رسوم التأمين الطبي: غير مشمولة (يتم تحديد السعر بناءاً على مقدم الخدمة)\n\nعدد مرات الدخول: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها. تسمح التأشيرة بالإقامة لمدة تصل إلى 90 يوماً",
+            description: "رسوم التأمين الطبي: غير مشمولة (يتم تحديد السعر بناءاً على مقدم الخدمة)\n\nعدد مرات الدخول: دخول متعدد أو دخول واحد وفقاً لقرار وزارة الخارجية السعودية\n\nمدة الصلاحية: تأشيرة الدخول المتعدد صالحة لمدة عام من تاريخ إصدارها. تسمح التأشيرات بالإقامة لمدة تصل إلى 90 يوماً",
             requirements: "يجب ألا يقل عمرك عن 18 عاماً للدخول بمفردك. لا يجوز للمسافرين الذين تقل أعمارهم عن 18 عاماً الدخول إلا إذا كانوا برفقة أحد الوالدين أو الأجداد أو الأشقاء البالغين (فوق 18 عاماً).\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية.\nالوثائق التالية مطلوبة أيضاً للحصول على تأشيرة سفارة/قنصلية/تأشير: إثبات الإقامة (في البلد الذي تقيم فيه)، تذكرة العودة، إثبات العمل، إثبات مالي/كشف الحساب المصرفي، خط سير الرحلة، الهوية، عنوان الإقامة (عنوان الاقامة أثناء زيارة السعودية)."
           }
         },
@@ -251,10 +306,38 @@ export default function Visa({ lang }) {
         }
       ],
 
+      // Form Labels
+      requestService: "طلب المساعدة في التأشيرات",
+      requestDesc: "املأ النموذج أدناه وسيتواصل معك فريقنا للمساعدة في طلب تأشيرة السعودية الخاصة بك.",
+      fullName: "الاسم الكامل",
+      phone: "رقم الجوال",
+      email: "البريد الإلكتروني",
+      nationality: "الجنسية",
+      passportNumber: "رقم الجواز",
+      visaTypeLabel: "نوع التأشيرات",
+      visaTypes: {
+        electronic: "التأشيرات الإلكترونية",
+        arrival: "تأشيرة عند الوصول",
+        transit: "تأشيرة عبور",
+        embassy: "تأشيرة سفارة"
+      },
+      travelDate: "تاريخ السفر المتوقع",
+      notes: "ملاحظات إضافية",
+      attachments: "المرفقات",
+      passportCopy: "نسخة الجواز",
+      photo: "صورة شخصية حديثة",
+      otherDoc: "مستندات أخرى (اختياري)",
+      submit: "إرسال الطلب",
+      submitting: "جاري الإرسال...",
+      success: "تم إرسال طلبك بنجاح! سيتواصل معك فريقنا خلال 24 ساعة.",
+      error: "حدث خطأ. الرجاء المحاولة مرة أخرى.",
+      connectionError: "خطأ في الاتصال. تأكد من اتصال الإنترنت.",
       applyNow: "تقديم الأن",
       search: "أبحث",
       requirements: "المتطلبات",
-      howToApply: "كيفية التقديم"
+      howToApply: "كيفية التقديم",
+      needHelp: "تحتاج مساعدة في طلب التأشيرات؟",
+      getHelp: "طلب مساعدة"
     },
     zh: {
       heroTitle: "大自然的神奇，前所未见",
@@ -367,10 +450,38 @@ export default function Visa({ lang }) {
         }
       ],
 
+      // Form Labels
+      requestService: "请求签证协助",
+      requestDesc: "填写下表，我们的团队将与您联系，帮助您申请沙特签证。",
+      fullName: "全名",
+      phone: "电话号码",
+      email: "电子邮件",
+      nationality: "国籍",
+      passportNumber: "护照号码",
+      visaTypeLabel: "签证类型",
+      visaTypes: {
+        electronic: "电子签证",
+        arrival: "落地签证",
+        transit: "过境签证",
+        embassy: "大使馆/领事馆签证"
+      },
+      travelDate: "预计出行日期",
+      notes: "附加说明/问题",
+      attachments: "附件",
+      passportCopy: "护照复印件",
+      photo: "近期照片",
+      otherDoc: "其他文件（可选）",
+      submit: "提交申请",
+      submitting: "提交中...",
+      success: "您的申请已成功提交！我们的团队将在24小时内与您联系。",
+      error: "发生错误，请重试。",
+      connectionError: "连接错误，请检查您的网络连接。",
       applyNow: "立即申请",
       search: "搜索",
       requirements: "要求",
-      howToApply: "如何申请"
+      howToApply: "如何申请",
+      needHelp: "签证申请需要帮助？",
+      getHelp: "请求协助"
     }
   };
 
@@ -378,12 +489,92 @@ export default function Visa({ lang }) {
   const t = content[safeLang];
   const isRTL = safeLang === "ar";
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e, fileKey) => {
+    const file = e.target.files[0];
+    setFormData(prev => ({
+      ...prev,
+      files: {
+        ...prev.files,
+        [fileKey]: file
+      }
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError(null);
+
+    // Create FormData for file uploads
+    const submitFormData = new FormData();
+    submitFormData.append('full_name', formData.fullName);
+    submitFormData.append('phone', formData.phone);
+    submitFormData.append('email', formData.email);
+    submitFormData.append('nationality', formData.nationality);
+    submitFormData.append('passport_number', formData.passportNumber);
+    submitFormData.append('visa_type', formData.visaType);
+    submitFormData.append('travel_date', formData.travelDate);
+    submitFormData.append('notes', formData.notes);
+    submitFormData.append('locale', safeLang);
+    submitFormData.append('application_type', 'saudi_visa');
+
+    // Append files
+    if (formData.files.passport) {
+      submitFormData.append('passport_copy', formData.files.passport);
+    }
+    if (formData.files.photo) {
+      submitFormData.append('photo', formData.files.photo);
+    }
+    if (formData.files.other) {
+      submitFormData.append('other_documents', formData.files.other);
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visa-applications`, {
+        method: 'POST',
+        body: submitFormData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({
+          fullName: "",
+          phone: "",
+          email: "",
+          nationality: "",
+          passportNumber: "",
+          visaType: "electronic",
+          travelDate: "",
+          notes: "",
+          files: { passport: null, photo: null, other: null },
+        });
+        // Reset file inputs
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => input.value = '');
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setError(data.errors || { message: t.error });
+      }
+    } catch (err) {
+      setError({ message: t.connectionError });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const renderContent = (tabContent) => (
     <div className="tab-content">
       <div className="content-section">
         <h3 className="content-title">{tabContent.title}</h3>
         <p className="content-description">
-          {tabContent.description.split('\n').map((line, index) => (
+          {tabContent.description?.split('\n').map((line, index) => (
             <React.Fragment key={index}>
               {line}
               <br />
@@ -403,13 +594,6 @@ export default function Visa({ lang }) {
               </React.Fragment>
             ))}
           </p>
-        </div>
-      )}
-
-      {tabContent.howToApply && (
-        <div className="content-section">
-          <h4 className="section-subtitle">{t.howToApply}</h4>
-          <p className="content-description">{tabContent.howToApply}</p>
         </div>
       )}
 
@@ -455,6 +639,12 @@ export default function Visa({ lang }) {
                 <h1 className="display-4 fw-bold mb-4">{t.heroTitle}</h1>
                 <p className="lead mb-3">{t.heroSubtitle}</p>
                 <p className="hero-description">{t.heroDescription}</p>
+                <button 
+                  className="help-btn"
+                  onClick={() => setShowForm(!showForm)}
+                >
+                  {t.needHelp}
+                </button>
               </div>
             </div>
           </div>
@@ -542,6 +732,179 @@ export default function Visa({ lang }) {
               </div>
             )}
           </div>
+
+          {/* Visa Assistance Form */}
+          {(showForm || activeMainTab === 3) && (
+            <div className="visa-form-section">
+              <h2 className="form-section-title">{t.requestService}</h2>
+              <p className="form-section-desc">{t.requestDesc}</p>
+
+              {error && (
+                <div className="error-message">
+                  {typeof error === 'object' ? Object.values(error).flat().join(", ") : error.message}
+                </div>
+              )}
+
+              {submitted && (
+                <div className="success-message">
+                  <FaCheckCircle /> {t.success}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="visa-application-form" encType="multipart/form-data">
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label><FaUser /> {t.fullName} *</label>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      placeholder={t.fullName}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaPhone /> {t.phone} *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      placeholder={t.phone}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaEnvelope /> {t.email} *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      placeholder={t.email}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaGlobeAmericas /> {t.nationality} *</label>
+                    <input
+                      type="text"
+                      name="nationality"
+                      value={formData.nationality}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      placeholder={t.nationality}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaPassport /> {t.passportNumber} *</label>
+                    <input
+                      type="text"
+                      name="passportNumber"
+                      value={formData.passportNumber}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                      placeholder={t.passportNumber}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaShieldAlt /> {t.visaTypeLabel} *</label>
+                    <select
+                      name="visaType"
+                      value={formData.visaType}
+                      onChange={handleInputChange}
+                      required
+                      disabled={submitting}
+                    >
+                      <option value="electronic">{t.visaTypes.electronic}</option>
+                      <option value="arrival">{t.visaTypes.arrival}</option>
+                      <option value="transit">{t.visaTypes.transit}</option>
+                      <option value="embassy">{t.visaTypes.embassy}</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label><FaCalendarAlt /> {t.travelDate}</label>
+                    <input
+                      type="date"
+                      name="travelDate"
+                      value={formData.travelDate}
+                      onChange={handleInputChange}
+                      disabled={submitting}
+                    />
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>{t.notes}</label>
+                    <textarea
+                      name="notes"
+                      value={formData.notes}
+                      onChange={handleInputChange}
+                      rows={3}
+                      disabled={submitting}
+                      placeholder={t.notes}
+                    />
+                  </div>
+                </div>
+
+                <div className="files-section">
+                  <h3><FaUpload /> {t.attachments}</h3>
+                  <div className="files-grid">
+                    <div className="file-group">
+                      <label>{t.passportCopy} *</label>
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileChange(e, 'passport')}
+                        required
+                        disabled={submitting}
+                      />
+                      <small>PDF, JPG, PNG (Max 5MB)</small>
+                    </div>
+
+                    <div className="file-group">
+                      <label>{t.photo} *</label>
+                      <input
+                        type="file"
+                        accept=".jpg,.jpeg,.png"
+                        onChange={(e) => handleFileChange(e, 'photo')}
+                        required
+                        disabled={submitting}
+                      />
+                      <small>JPG, PNG (Max 2MB)</small>
+                    </div>
+
+                    <div className="file-group">
+                      <label>{t.otherDoc}</label>
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileChange(e, 'other')}
+                        disabled={submitting}
+                      />
+                      <small>PDF, JPG, PNG (Max 5MB)</small>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" className="submit-btn" disabled={submitting}>
+                  {submitting ? <FaSpinner className="spinner" /> : t.submit}
+                  {submitting ? " " + t.submitting : ""}
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </section>
 
@@ -617,6 +980,24 @@ export default function Visa({ lang }) {
           color: rgba(255, 255, 255, 0.9);
         }
 
+        .help-btn {
+          margin-top: 1.5rem;
+          padding: 0.75rem 2rem;
+          background: white;
+          color: #8a7779;
+          border: none;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .help-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
         .visa-tabs-section {
           background: #f8f9fa;
         }
@@ -666,6 +1047,7 @@ export default function Visa({ lang }) {
           border-radius: 20px;
           padding: 2rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          margin-bottom: 2rem;
         }
 
         .sub-tabs {
@@ -746,7 +1128,7 @@ export default function Visa({ lang }) {
           display: inline-flex;
           align-items: center;
           font-family: 'Tajawal', sans-serif;
-        
+        }
 
         .primary-btn {
           background: linear-gradient(45deg, #8a7779, #a89294);
@@ -783,6 +1165,180 @@ export default function Visa({ lang }) {
           transform: translateY(-2px);
         }
 
+        /* Form Styles */
+        .visa-form-section {
+          background: white;
+          border-radius: 20px;
+          padding: 2rem;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          margin-top: 2rem;
+        }
+
+        .form-section-title {
+          color: #2c3e50;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          font-size: 1.8rem;
+          text-align: center;
+        }
+
+        .form-section-desc {
+          color: #5d6d7e;
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+          grid-column: span 2;
+        }
+
+        .form-group label {
+          font-weight: 600;
+          color: #2c3e50;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 0.75rem;
+          border: 1px solid #e9ecef;
+          border-radius: 10px;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+          outline: none;
+          border-color: #8a7779;
+          box-shadow: 0 0 0 2px rgba(138, 119, 121, 0.1);
+        }
+
+        .files-section {
+          margin-top: 2rem;
+          padding-top: 1rem;
+          border-top: 1px solid #e9ecef;
+        }
+
+        .files-section h3 {
+          color: #2c3e50;
+          font-size: 1.2rem;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .files-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+        }
+
+        .file-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .file-group label {
+          font-weight: 600;
+          color: #2c3e50;
+        }
+
+        .file-group input {
+          padding: 0.5rem;
+          border: 1px solid #e9ecef;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+
+        .file-group small {
+          color: #7f8c8d;
+          font-size: 0.75rem;
+        }
+
+        .submit-btn {
+          margin-top: 2rem;
+          padding: 1rem 2rem;
+          background: linear-gradient(45deg, #8a7779, #a89294);
+          color: white;
+          border: none;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 1.1rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          width: 100%;
+          max-width: 300px;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 15px rgba(138, 119, 121, 0.4);
+        }
+
+        .submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .spinner {
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+          background: #fee;
+          color: #c00;
+          padding: 1rem;
+          border-radius: 10px;
+          margin-bottom: 1.5rem;
+          text-align: center;
+        }
+
+        .success-message {
+          background: #e8f5e9;
+          color: #2e7d32;
+          padding: 1rem;
+          border-radius: 10px;
+          margin-bottom: 1.5rem;
+          text-align: center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+
+        [dir="rtl"] .ms-2 {
+          margin-left: 0;
+          margin-right: 0.5rem;
+        }
+
         @media (max-width: 768px) {
           .visa-hero {
             padding: 100px 0 60px;
@@ -790,11 +1346,11 @@ export default function Visa({ lang }) {
           }
 
           .hero-content h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
           }
 
           .hero-content .lead {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
           }
 
           .main-tabs {
@@ -819,19 +1375,17 @@ export default function Visa({ lang }) {
           .action-btn {
             justify-content: center;
           }
-        }
 
-        @media (max-width: 576px) {
-          .hero-content h1 {
-            font-size: 1.8rem;
+          .form-grid {
+            grid-template-columns: 1fr;
           }
 
-          .sub-tabs-section {
-            padding: 1.5rem;
+          .form-group.full-width {
+            grid-column: span 1;
           }
 
-          .content-title {
-            font-size: 1.3rem;
+          .files-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

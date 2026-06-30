@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '../../../providers/AuthProvider';
 import { bookingsAPI, paymentsAPI, reservationsAPI } from '../../../lib/api';
+import { formatCurrency, amountWithVAT } from '@/lib/localization';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
@@ -322,7 +323,7 @@ export default function DashboardPage() {
                           <p><strong>{t.guests}:</strong> {booking.guests}</p>
                           <p><strong>{t.paymentStatus}:</strong> {getStatusBadge(booking.payment_status)}</p>
                           {booking.details?.amount && (
-                            <p><strong>{t.amount}:</strong> {booking.details.amount} SAR</p>
+                            <p><strong>{t.amount}:</strong> {formatCurrency(amountWithVAT(booking.details.amount), 'SAR', lang)}</p>
                           )}
                           {booking.details?.trip_title && (
                             <p><strong>{t.trip}:</strong> {booking.details.trip_title}</p>

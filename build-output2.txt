@@ -1,0 +1,52 @@
+
+> happy-face@0.1.0 build
+> next build
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env.local
+
+ ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./components/Navbar.jsx:28:10
+Ecmascript file had an error
+  26 | } from "react-icons/fa";
+  27 | import { SiX } from "react-icons/si";
+> 28 | import { Menu, X, Phone } from "lucide-react";
+     |          ^^^^
+  29 |
+  30 | export default function Navbar({ lang }) {
+  31 |   const pathname = usePathname();
+
+the name `Menu` is defined multiple times
+
+Import trace:
+  Server Component:
+    ./components/Navbar.jsx
+    ./app/[lang]/layout.jsx
+
+
+./components/Navbar.jsx:28:16
+Ecmascript file had an error
+  26 | } from "react-icons/fa";
+  27 | import { SiX } from "react-icons/si";
+> 28 | import { Menu, X, Phone } from "lucide-react";
+     |                ^
+  29 |
+  30 | export default function Navbar({ lang }) {
+  31 |   const pathname = usePathname();
+
+the name `X` is defined multiple times
+
+Import trace:
+  Server Component:
+    ./components/Navbar.jsx
+    ./app/[lang]/layout.jsx
+
+
+    at <unknown> (./components/Navbar.jsx:28:10)
+    at <unknown> (./components/Navbar.jsx:28:16)

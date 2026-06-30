@@ -12,7 +12,7 @@ export default function TravelBasic({ lang }) {
         {
           id: 1,
           title: "متطلبات تأشيرة الدخول",
-          description: "تعرف على متطلبات التأشيرة والإجراءات اللازمة لدخول المملكة العربية السعودية",
+          description: "تعرف على متطلبات التأشيرات والإجراءات اللازمة لدخول المملكة العربية السعودية",
           icon: <FaPassport size={40} />,
           link: "/visa-requirements",
           buttonText: "اعرف أكثر"
