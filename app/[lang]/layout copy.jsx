@@ -27,9 +27,9 @@ export async function generateMetadata({ params }) {
 
 const metas = {
   en: {
-    title: "Tilal R - Discover Saudi Arabia's Natural Wonders",
+    title: "Tilal Rimal - Discover Saudi Arabia's Natural Wonders",
     description:
-      "Tilal R offers unique travel experiences across Saudi Arabia. Discover desert adventures, mountain hiking, cultural tours, and coastal escapes with expert local guides. Book your unforgettable journey today.",
+      "Tilal Rimal offers unique travel experiences across Saudi Arabia. Discover desert adventures, mountain hiking, cultural tours, and coastal escapes with expert local guides. Book your unforgettable journey today.",
     keywords: "Saudi Arabia travel, desert safari, mountain hiking, cultural tours, Red Sea trips, adventure tourism, family trips, school trips, corporate trips",
   },
   ar: {

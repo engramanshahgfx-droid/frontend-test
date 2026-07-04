@@ -1,4 +1,3 @@
-// components/TripDetails/TripDetails.jsx
 "use client";
 
 import React from "react";
@@ -278,11 +277,21 @@ export default function TripDetails({ lang, tripId }) {
     }
   };
 
+  // Helper function to get currency symbol based on language
+  const getCurrencySymbol = () => {
+    switch(safeLang) {
+      case 'ar': return "ر.س";
+      case 'zh': return "沙特里亚尔";
+      default: return "SAR";
+    }
+  };
+
   const goBack = () => {
     router.back();
   };
 
   const infoCardTitles = getInfoCardTitles();
+  const currencySymbol = getCurrencySymbol();
 
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="trip-details-page">
@@ -411,7 +420,7 @@ export default function TripDetails({ lang, tripId }) {
                   {getPriceLabel()}
                 </span>
                 <span className="price-amount">
-                  {safeLang === 'ar' ? "٣٥٠ ر.س" : safeLang === 'zh' ? "350 沙特里亚尔" : "350 SAR"}
+                  350 {currencySymbol}
                 </span>
               </div>
               <button
@@ -429,6 +438,9 @@ export default function TripDetails({ lang, tripId }) {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
   
 
       <style jsx>{`
@@ -648,6 +660,3 @@ export default function TripDetails({ lang, tripId }) {
           }
         }
       `}</style>
-    </div>
-  );
-}

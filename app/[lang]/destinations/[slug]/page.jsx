@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
+import Image from "next/image";
 import {
   Luggage,
   Laptop,
@@ -52,7 +53,7 @@ export default function DestinationDetails() {
       availableTo: "Available To",
       doubleRoom: "Double Room",
       singleRoom: "Single Room",
-      perPerson: "SAR per person",
+      perPerson: "per person",
       bookNow: "Book Now",
       viewAll: "View All Destinations",
       home: "Home",
@@ -77,7 +78,7 @@ export default function DestinationDetails() {
       availableTo: "متاح حتى",
       doubleRoom: "غرفة مزدوجة",
       singleRoom: "غرفة فردية",
-      perPerson: "ريال سعودي للفرد",
+      perPerson: "للفرد",
       bookNow: "احجز الآن",
       viewAll: "عرض جميع الوجهات",
       home: "الرئيسية",
@@ -315,36 +316,7 @@ export default function DestinationDetails() {
   const paymentMethods = parseJsonField(destination.payment_methods, []);
 
   const defaultPaymentMethods = [
-    {
-      name: "Bank Transfer",
-      account_no: "593608010029976",
-      iban: "SA1080000593608010029976",
-      logo: "rajhi.webp",
-    },
-    {
-      name: "بنك الرياض",
-      account_no: "2451449249940",
-      iban: "SA202000000245144249940",
-      logo: "riyad.webp",
-    },
-    {
-      name: "SNB الإمارات",
-      account_no: "26163780000106",
-      iban: "SA3210000026163780000106",
-      logo: "ahli.webp",
-    },
-    {
-      name: "Emirates NBD",
-      account_no: "1016047862801",
-      iban: "SA9595000001016047862801",
-      logo: "nbd.webp",
-    },
-    {
-      name: "SABB",
-      account_no: "155285513001",
-      iban: "SA3945000000155285513001",
-      logo: "sabb.webp",
-    },
+ 
   ];
 
   const displayPaymentMethods =
@@ -509,7 +481,15 @@ export default function DestinationDetails() {
                     <Users size={16} color="#dfa528" />
                     <span className="label">{isRTL ? 'غرفة مزدوجة :' : 'Double Room :'}</span>
                     <span className="value highlight">
-                      {basicInfo.double_room || "N/A"} {t.perPerson}
+                      {basicInfo.double_room || "N/A"}
+                      <Image 
+                        src="/saudi_riyal.png" 
+                        alt="SAR" 
+                        width={14} 
+                        height={14} 
+                        className="currency-icon"
+                      />
+                      {` ${t.perPerson}`}
                     </span>
                   </li>
                   <li className="divider"></li>
@@ -517,7 +497,15 @@ export default function DestinationDetails() {
                     <User size={16} color="#dfa528" />
                     <span className="label">{isRTL ? 'غرفة فردية :' : 'Single Room :'}</span>
                     <span className="value highlight">
-                      {basicInfo.single_room || "N/A"} {t.perPerson}
+                      {basicInfo.single_room || "N/A"}
+                      <Image 
+                        src="/saudi_riyal.png" 
+                        alt="SAR" 
+                        width={14} 
+                        height={14} 
+                        className="currency-icon"
+                      />
+                      {` ${t.perPerson}`}
                     </span>
                   </li>
                 </ul>
@@ -542,14 +530,14 @@ export default function DestinationDetails() {
                   <li>
                     <MapPin size={16} color="#dfa528" />
                     <span>
-                      {contactInfo.address || "Exit 5, Al Murooj, Riyadh"}
+                      {contactInfo.address || "al Rabwa Jeddah"}
                     </span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Phone size={16} color="#dfa528" />
                     <a href={`tel:${contactInfo.phone || "0114562097"}`}>
-                      {contactInfo.phone || "011 456 2097"}
+                      {contactInfo.phone || "0547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
@@ -557,12 +545,12 @@ export default function DestinationDetails() {
                     <MessageSquare size={16} color="#dfa528" />
                     <a
                       href={`https://wa.me/${(
-                        contactInfo.whatsapp || "966595177774"
+                        contactInfo.whatsapp || "966547305060"
                       ).replace(/\s/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {contactInfo.whatsapp || "+966 5951 77774"}
+                      {contactInfo.whatsapp || "966547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
@@ -570,10 +558,10 @@ export default function DestinationDetails() {
                     <Mail size={16} color="#dfa528" />
                     <a
                       href={`mailto:${
-                        contactInfo.email || "info@travelerclub.sa.com"
+                        contactInfo.email || "info@tilalr.com"
                       }`}
                     >
-                      {contactInfo.email || "info@travelerclub.sa.com"}
+                      {contactInfo.email || "info@tilalr.com"}
                     </a>
                   </li>
                 </ul>
@@ -914,6 +902,14 @@ export default function DestinationDetails() {
           font-weight: 600;
           text-align: right;
           margin-left: auto;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+
+        .currency-icon {
+          display: inline-block;
+          vertical-align: middle;
         }
 
         .info-list li .value.highlight {

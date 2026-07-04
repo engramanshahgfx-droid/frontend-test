@@ -140,7 +140,7 @@ export default function InsuranceContent({ lang }) {
         icon: <FaPhoneAlt size={28} />,
         points: [
           "رقم الطوارئ 24/7: 8001234567",
-          "البريد الإلكتروني: claims@insurance.sa",
+          "البريد الإلكتروني: info@tilalr.com",
           "الموقع الإلكتروني: https://tilalr.com/insurance",
           "واتساب للطوارئ: +966500000000",
         ],
@@ -277,7 +277,7 @@ en: {
       icon: <FaPhoneAlt size={28} />,
       points: [
         "24/7 Emergency Hotline: 8001234567",
-        "Email: claims@insurance.sa",
+        "Email: info@tilalr.com",
         "Website: https://tilalr.com/insurance",
         "Emergency WhatsApp: +966500000000",
       ],

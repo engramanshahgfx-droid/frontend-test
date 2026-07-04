@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { API_URL } from "../lib/api";
 
 export default function TourismDestinations({ lang, region }) {
@@ -192,6 +193,23 @@ export default function TourismDestinations({ lang, region }) {
   // When region is selected (on region page), show all
   const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, 4);
 
+  // Helper function to format price with icon
+  const formatPriceWithIcon = (price) => {
+    return (
+      <span className="price-wrapper">
+        <span className="price-amount">{price}</span>
+        <Image 
+          src="/saudi_riyal.png" 
+          alt="SAR" 
+          width={14} 
+          height={14} 
+          className="currency-icon"
+        />
+        <span className="price-per">{t.perPerson}</span>
+      </span>
+    );
+  };
+
   return (
     <section className="tourism-section">
       <div className="container">
@@ -235,7 +253,7 @@ export default function TourismDestinations({ lang, region }) {
                   </div>
                   {destination.rating && (
                     <div className="destination-rating">
-                      <span>★ {destination.rating}</span>
+                      <span> {destination.rating}</span>
                     </div>
                   )}
                 </div>
@@ -249,7 +267,20 @@ export default function TourismDestinations({ lang, region }) {
                   </p>
                   <div className="destination-footer">
                     <span className="destination-price">
-                      {destination.price ? `${t.from} ${destination.price} ${t.perPerson}` : ''}
+                      {destination.price ? (
+                        <>
+                          {t.from} 
+                          <span className="price-amount">{destination.price}</span>
+                          <Image 
+                            src="/saudi_riyal.png" 
+                            alt="SAR" 
+                            width={14} 
+                            height={14} 
+                            className="currency-icon"
+                          />
+                          <span className="price-per">{t.perPerson}</span>
+                        </>
+                      ) : ''}
                     </span>
                     <span className="destination-duration">
                       {getText(destination, 'duration')}
@@ -450,12 +481,34 @@ export default function TourismDestinations({ lang, region }) {
           align-items: center;
           padding-top: 12px;
           border-top: 1px solid #eee;
+          flex-wrap: wrap;
+          gap: 8px;
         }
 
         .destination-price {
           font-size: 1rem;
           font-weight: 700;
           color: #dfa528;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          flex-wrap: wrap;
+        }
+
+        .price-amount {
+          font-weight: 700;
+          color: #dfa528;
+        }
+
+        .currency-icon {
+          display: inline-block;
+          vertical-align: middle;
+        }
+
+        .price-per {
+          font-size: 0.7rem;
+          color: #888;
+          font-weight: 400;
         }
 
         .destination-duration {
@@ -506,6 +559,10 @@ export default function TourismDestinations({ lang, region }) {
           }
           .title h2 {
             font-size: 2rem;
+          }
+          .destination-footer {
+            flex-direction: column;
+            align-items: flex-start;
           }
         }
 

@@ -34,7 +34,7 @@ export default function Footer({ lang }) {
     links: {
       home: "الرئيسية",
       about: "من نحن",
-      international: "الباقات الدولية ",
+
       offers: "الباقات الداخلية  ",
       archive: "أرشيف الرحلات",
       basics: "معلومات تهمك ",
@@ -46,14 +46,14 @@ export default function Footer({ lang }) {
     },
     rightsReserved: "جميع الحقوق محفوظة.",
     address: "جده, المملكة العربية السعودية",
-    // phone: "966547305060",
-    // email: "Info@tilalr.com",
+    phone: "966547305060",
+    email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
 
   const englishText = {
-    companyName: "Tilal R",
+    companyName: "Tilal Rimal",
     description:
       "For Tourism Trips Organization - We offer unique trips that combine fun, adventure, and meaningful value throughout the Kingdom.",
     companyTitle: "Company",
@@ -62,7 +62,7 @@ export default function Footer({ lang }) {
     links: {
       home: "Home",
       about: "About Us",
-      international: "International Packages",
+
       offers: "Domestic Packages",
       archive: "Trips Archive",
       basics: "Travel Requirements",
@@ -73,13 +73,13 @@ export default function Footer({ lang }) {
     rightsReserved: "All Rights Reserved.",
     address: "Jeddah, Saudi Arabia",
     phone: "966547305060",
-    // email: "Info@tilalr.com",
+    email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
 
   const chineseText = {
-    companyName: "Tilal R",
+    companyName: "Tilal Rimal",
     description:
       "旅游行程组织 - 我们提供结合乐趣、冒险和有意义价值的独特旅行，遍及整个王国。",
     companyTitle: "公司",
@@ -88,7 +88,7 @@ export default function Footer({ lang }) {
     links: {
       home: "首页",
       about: "关于我们",
-      international: "国际优惠",
+
       offers: "国内优惠",
       archive: "行程存档",
       basics: "旅行要求",
@@ -99,14 +99,14 @@ export default function Footer({ lang }) {
     rightsReserved: "保留所有权利。",
     address: "吉达，沙特阿拉伯",
     phone: "966547305060",
-    // email: "Info@tilalr.com",
+    email: "Info@tilalr.com",
     website: "tilalr.com",
     googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
   };
 
   // Get the appropriate text based on language
   let localeText;
-  switch(lang) {
+  switch (lang) {
     case "ar":
       localeText = arabicText;
       break;
@@ -122,15 +122,15 @@ export default function Footer({ lang }) {
   // Translation helper for localized strings (from JSON files)
   const translations = { en, ar, zh };
   const tr = (key) => {
-    const keys = key.split('.');
+    const keys = key.split(".");
     let v = translations[lang] || translations.en;
     for (const k of keys) {
-      if (v && typeof v === 'object' && k in v) v = v[k];
+      if (v && typeof v === "object" && k in v) v = v[k];
       else return key;
     }
-    return typeof v === 'string' ? v : key;
+    return typeof v === "string" ? v : key;
   };
-  
+
   return (
     <footer
       className="footer lh-lg"
@@ -225,11 +225,7 @@ export default function Footer({ lang }) {
                 className={`d-flex align-items-center mb-1 gap-2 ${
                   isRTL ? "flex-row-reverse justify-content-start" : ""
                 }`}
-              >
-            
-              </div>
-
-        
+              ></div>
             </div>
 
             {/* Social Media Icons */}
@@ -306,22 +302,7 @@ export default function Footer({ lang }) {
                   {localeText.links.about}
                 </Link>
               </div>
-              <div className="mb-1">
-                <Link
-                  href={`/${lang}/international`}
-                  className="text-decoration-none footer-link"
-                >
-                  {localeText.links.international}
-                </Link>
-              </div>
-              {/* <div className="mb-1">
-                <Link
-                  href={`/${lang}/offers`}
-                  className="text-decoration-none footer-link"
-                >
-                  {localeText.links.offers}
-                </Link>
-              </div> */}
+
               <div className="mb-1">
                 <Link
                   href={`/${lang}/trips-archive`}
@@ -332,7 +313,7 @@ export default function Footer({ lang }) {
               </div>
               <div>
                 <Link
-                  href={`/${lang}/about-saudi`}
+                  href={`/${lang}/transportation`}
                   className="text-decoration-none footer-link"
                 >
                   {localeText.links.basics}
@@ -378,7 +359,7 @@ export default function Footer({ lang }) {
                       href={`/${lang}/refund-policy`}
                       className="text-decoration-none footer-link"
                     >
-                      {isRTL ? 'سياسة الاسترجاع' : 'Refund Policy'}
+                      {isRTL ? "سياسة الاسترجاع" : "Refund Policy"}
                     </Link>
                   </div>
                   <div className="mb-1">
@@ -386,7 +367,9 @@ export default function Footer({ lang }) {
                       href={`/${lang}/cancellation-policy`}
                       className="text-decoration-none footer-link"
                     >
-                      {isRTL ? 'سياسة الإلغاء/التعديل' : 'Cancellation & Modification'}
+                      {isRTL
+                        ? "سياسة الإلغاء/التعديل"
+                        : "Cancellation & Modification"}
                     </Link>
                   </div>
                   <div className="mb-1">
@@ -394,7 +377,9 @@ export default function Footer({ lang }) {
                       href={`/${lang}/insurance-deposit`}
                       className="text-decoration-none footer-link"
                     >
-                      {isRTL ? 'قواعد التأمين/الوديعة' : 'Insurance & Deposit Rules'}
+                      {isRTL
+                        ? "قواعد التأمين/الوديعة"
+                        : "Insurance & Deposit Rules"}
                     </Link>
                   </div>
                   <div>
@@ -410,7 +395,17 @@ export default function Footer({ lang }) {
 
               {/* Quick Contact */}
               <div className="col-sm-6">
-              
+                {/* Add this heading */}
+                <h6
+                  className="mb-1"
+                  style={{
+                    fontWeight: "600",
+                    color: "#dfa528",
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  {localeText.contactTitle}
+                </h6>
 
                 <div className="d-flex flex-column">
                   {/* Phone */}
@@ -434,11 +429,15 @@ export default function Footer({ lang }) {
                     </a>
                   </div>
 
-                  {/* Email - with Arabic label */}
                   <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
                     <FaEnvelope className="icon" />
-                    <a href={`mailto:${localeText.email}`} className="footer-link">
-                      {isRTL ? "راسلنا عبر البريد" : tr("footer.emailUs")}
+                    <a
+                      href="https://mail.google.com/mail/?view=cm&fs=1&to=info@tilalr.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="footer-link"
+                    >
+                      info@tilalr.com
                     </a>
                   </div>
                 </div>
@@ -459,8 +458,8 @@ export default function Footer({ lang }) {
               <div style={{ fontSize: "12px" }}>
                 <span style={{ color: "#dfa528", fontWeight: "600" }}>
                   {isRTL
-                    ? 'رقم الترخيص: 73106935 | التلال والرمال لتنظيم الرحلات السياحية | منظم رحلات سياحية / وكالة سفر وسياحة  '
-                    : 'License No: 73106935 | Tilal Rimal Tourism Company | Tourism Agent / Travel Agency | © 2026 Tilal R | All Rights Reserved'}
+                    ? "رقم الترخيص: 73106935 | التلال والرمال لتنظيم الرحلات السياحية | منظم رحلات سياحية / وكالة سفر وسياحة  "
+                    : "License No: 73106935 | Tilal Rimal Tourism Company | Tourism Agent / Travel Agency "}
                 </span>
               </div>
 
@@ -468,7 +467,9 @@ export default function Footer({ lang }) {
               <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-1">
                 <span style={{ fontSize: "12px" }}>
                   &copy; 2026{" "}
-                  <span style={{ color: "#dfa528" }}>{localeText.companyName}</span>
+                  <span style={{ color: "#dfa528" }}>
+                    {localeText.companyName}
+                  </span>
                 </span>
                 <span
                   className="d-none d-md-inline"
@@ -489,7 +490,9 @@ export default function Footer({ lang }) {
       <style jsx>{`
         .footer-link {
           color: #e0e0e0;
-          transition: color 0.3s, transform 0.3s;
+          transition:
+            color 0.3s,
+            transform 0.3s;
           font-size: 0.85rem;
           line-height: 1.2;
           display: block;
@@ -513,7 +516,7 @@ export default function Footer({ lang }) {
           flex-shrink: 0;
         }
         .icon.whatsapp {
-          color: #25D366;
+          color: #25d366;
         }
         .footer-link:hover {
           color: #ffffff !important;

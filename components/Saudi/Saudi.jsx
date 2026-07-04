@@ -46,16 +46,10 @@ const Saudi = ({ lang = "ar" }) => {
       button: "Discover More",
     },
     ar: {
-      title: "مرحبًا بكم في تلال رمال. نقدم تجارب سياحية عالية الجودة وبأسعار تنافسية تجمع بين المتعة والخبرة المحلية لصنع ذكريات لا تُنسى. فريقنا المتفاني يخطط لكل رحلة بعناية — اكتشف السعودية بمنظور جديد.",
+      title: "مرحبًا بكم في التلال رمال. نقدم تجارب سياحية عالية الجودة وبأسعار تنافسية تجمع بين المتعة والخبرة المحلية لصنع ذكريات لا تُنسى. فريقنا المتفاني يخطط لكل رحلة بعناية — اكتشف السعودية بمنظور جديد.",
       subtitle: "",
       desc: "دعنا نخطط بينما تستمتع بالرحلة.",
       button: "اكتشف المزيد",
-    },
-    zh: {
-      title: "欢迎来到Tilal Rimal。我们提供高品质、价格具有竞争力的旅游体验，将乐趣与当地专业知识相结合，创造难忘的回忆。我们敬业的团队精心策划每一次旅行。",
-      subtitle: "",
-      desc: "让我们来规划，您只管享受旅程。",
-      button: "探索更多",
     },
   };
 
@@ -67,7 +61,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 1,
       nameEn: "Arar",
       nameAr: "عرعر",
-      nameZh: "阿尔阿尔",
       img: "/cities/Arar.jpeg",
       top: 12,
       left: 38,
@@ -76,7 +69,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 2,
       nameEn: "Sakaka",
       nameAr: "سكاكا",
-      nameZh: "塞卡卡",
       img: "/cities/Sakaka.jpeg",
       top: 20,
       left: 42,
@@ -85,7 +77,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 3,
       nameEn: "Tabuk",
       nameAr: "تبوك",
-      nameZh: "塔布克",
       img: "/cities/tabuk.jpeg",
       top: 26,
       left: 22,
@@ -94,7 +85,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 4,
       nameEn: "AlUla",
       nameAr: "العلا",
-      nameZh: "阿尔乌拉",
       img: "/cities/alula.jpg",
       top: 32,
       left: 28,
@@ -103,7 +93,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 5,
       nameEn: "Hail",
       nameAr: "حائل",
-      nameZh: "哈伊勒",
       img: "/cities/hail.jpeg",
       top: 28,
       left: 42,
@@ -112,7 +101,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 7,
       nameEn: "Madina",
       nameAr: "المدينة",
-      nameZh: "麦地那",
       img: "/madina.png",
       top: 40,
       left: 26,
@@ -121,7 +109,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 8,
       nameEn: "Makkah",
       nameAr: "مكة",
-      nameZh: "麦加",
       img: "/cities/makkah.jpeg",
       top: 60,
       left: 40,
@@ -130,7 +117,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 9,
       nameEn: "Jeddah",
       nameAr: "جدة",
-      nameZh: "吉达",
       img: "/cities/jeddah.png",
       top: 62,
       left: 33,
@@ -139,7 +125,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 11,
       nameEn: "Qassim",
       nameAr: "القصيم",
-      nameZh: "卡西姆",
       img: "/cities/qassim.jpeg",
       top: 36,
       left: 46,
@@ -148,7 +133,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 12,
       nameEn: "Riyadh",
       nameAr: "الرياض",
-      nameZh: "利雅得",
       img: "/cities/Riyadh.jpeg",
       top: 52,
       left: 54,
@@ -157,7 +141,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 13,
       nameEn: "Dammam",
       nameAr: "الدمام",
-      nameZh: "达曼",
       img: "/cities/dammam.png",
       top: 42,
       left: 64,
@@ -166,7 +149,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 15,
       nameEn: "Abha",
       nameAr: "أبها",
-      nameZh: "艾卜哈",
       img: "/cities/abha.png",
       top: 70,
       left: 39,
@@ -175,7 +157,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 16,
       nameEn: "Najran",
       nameAr: "نجران",
-      nameZh: "纳季兰",
       img: "/cities/Najran.jpeg",
       top: 86,
       left: 54,
@@ -184,7 +165,6 @@ const Saudi = ({ lang = "ar" }) => {
       id: 17,
       nameEn: "Jizan",
       nameAr: "جيزان",
-      nameZh: "吉赞",
       img: "/cities/jizan.webp",
       top: 90,
       left: 42,
@@ -193,14 +173,10 @@ const Saudi = ({ lang = "ar" }) => {
 
   // Function to get city name based on language
   const getCityName = (city) => {
-    switch(lang) {
-      case "ar":
-        return city.nameAr;
-      case "zh":
-        return city.nameZh;
-      default:
-        return city.nameEn;
+    if (lang === "ar") {
+      return city.nameAr;
     }
+    return city.nameEn; // Default to English
   };
 
   return (
@@ -220,8 +196,6 @@ const Saudi = ({ lang = "ar" }) => {
         <div className={styles.overlay}></div>
       </div>
 
-    
-
       {/* Main Content Wrapper */}
       <div
         className={`${styles.mainWrapper} ${
@@ -239,7 +213,7 @@ const Saudi = ({ lang = "ar" }) => {
           <p className={`${styles.description} text-white text-[20px] md:text-[20px] mt-1`}>
             {t.desc}
           </p>
-          <Link href={`/${lang}/about-us`}>
+          <Link href={`/${lang}/tousimoffers`}>
             <button 
               style={{
                 background: "linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%)",

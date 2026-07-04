@@ -22,7 +22,7 @@ export default function Contact({ lang }) {
     message: "",
   });
 
- const content = {
+  const content = {
     ar: {
       contactTitle: "تواصل معنا",
       contactSubtitle: "نحن هنا لمساعدتك في تخطيط رحلتك المثالية",
@@ -45,7 +45,7 @@ export default function Contact({ lang }) {
 
       contactInfo: {
         address: "طريق الملك فهد، طريق ستين، جدة 21454",
-        phone: "966547305060+",
+        phone: "966547305060",
         email: "info@tilalr.com",
         hours: "مفتوح 24/7",
       },
@@ -324,19 +324,16 @@ export default function Contact({ lang }) {
         }
 
         .banner {
-          /* larger padding like other hero sections */
           padding: 120px 0 60px;
           position: relative;
-          overflow: visible; /* allow overlap */
+          overflow: visible;
           border-bottom-left-radius: 28px;
           border-bottom-right-radius: 28px;
-          /* use site primary + accent colors for a consistent look */
           background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 70%);
           color: #fff;
           box-shadow: 0 6px 24px rgba(0,0,0,0.06) inset;
         }
 
-        /* subtle overlay to match other hero sections */
         .banner::after {
           content: "";
           position: absolute;
@@ -351,7 +348,7 @@ export default function Contact({ lang }) {
           padding: 0 1rem;
           text-align: ${isRTL ? "right" : "left"};
           position: relative;
-          z-index: 2; /* above overlay */
+          z-index: 2;
         }
 
         .banner-title {
@@ -367,7 +364,6 @@ export default function Contact({ lang }) {
           font-size: 1.1rem;
         }
 
-        /* Make navbar visible over the banner on this page (semi-opaque for a professional look) */
         :global(.navbar) {
           background: rgba(255, 255, 255, 0.92) !important;
           box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -386,7 +382,7 @@ export default function Contact({ lang }) {
         }
 
         .contact-wrapper {
-          margin-top: -100px; /* larger overlap for a modern look */
+          margin-top: -100px;
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 3rem;
@@ -399,7 +395,7 @@ export default function Contact({ lang }) {
           padding: 2.5rem;
           box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
           position: relative;
-          z-index: 3; /* ensure form card sits above the banner overlay */
+          z-index: 3;
           border-top: 6px solid rgba(138,119,121,0.06);
         }
 
@@ -444,7 +440,6 @@ export default function Contact({ lang }) {
           color: #999;
         }
 
-        /* Page-local overrides: ensure Trip Type select is readable on the light form */
         .contact-form select.form-control {
           background-color: #ffffff !important;
           color: #2c3e50 !important;
@@ -492,17 +487,6 @@ export default function Contact({ lang }) {
           box-shadow: 0 12px 30px rgba(138, 119, 121, 0.25);
         }
 
-        @media (max-width: 968px) {
-          .contact-wrapper {
-            margin-top: -40px;
-          }
-        }
-
-        .btn-submit:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(138, 119, 121, 0.4);
-        }
-
         .btn-submit:disabled {
           opacity: 0.7;
           cursor: not-allowed;
@@ -529,11 +513,14 @@ export default function Contact({ lang }) {
           border: 1px solid #f5c6cb;
         }
 
+        /* FIXED: Info container with proper styling to not show behind banner */
         .info-container {
           background: white;
           border-radius: 20px;
           padding: 2.5rem;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          position: relative;
+          z-index: 3;
         }
 
         .contact-info {
@@ -549,6 +536,7 @@ export default function Contact({ lang }) {
           padding: 1rem;
           border-radius: 10px;
           transition: all 0.3s ease;
+          background: white;
         }
 
         .contact-item:hover {
@@ -566,11 +554,12 @@ export default function Contact({ lang }) {
           color: #2c3e50;
           font-size: 1rem;
           margin-bottom: 0.25rem;
+          font-weight: 700;
         }
 
         .contact-item span {
           display: block;
-          color: #5d6d7e;
+          color: #6c7a8a;
           font-size: 0.85rem;
         }
 
@@ -602,6 +591,7 @@ export default function Contact({ lang }) {
         /* Responsive Design */
         @media (max-width: 968px) {
           .contact-wrapper {
+            margin-top: -40px;
             grid-template-columns: 1fr;
           }
 

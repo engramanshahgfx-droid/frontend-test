@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Star, MapPin, Clock } from "lucide-react";
 import { API_URL } from "@/lib/api";
+import Image from "next/image";
 
 export default function TourismOffersPage() {
   const params = useParams();
@@ -196,7 +197,16 @@ export default function TourismOffersPage() {
                   <div className="offer-footer">
                     <div className="price">
                       <span className="price-label">{t.from}</span>
-                      <span className="price-amount">{offer.price} SAR</span>
+                      <span className="price-amount">
+                        {offer.price}
+                        <Image 
+                          src="/saudi_riyal.png" 
+                          alt="SAR" 
+                          width={14} 
+                          height={14} 
+                          className="currency-icon"
+                        />
+                      </span>
                       <span className="price-per">{t.perPerson}</span>
                     </div>
                     <button className="btn-book" onClick={(e) => {
@@ -383,6 +393,14 @@ export default function TourismOffersPage() {
           font-size: 1.2rem;
           font-weight: 700;
           color: #dfa528;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+
+        .currency-icon {
+          display: inline-block;
+          vertical-align: middle;
         }
 
         .price-per {

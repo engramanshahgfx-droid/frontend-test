@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   Star,
   MapPin,
@@ -190,17 +191,23 @@ export default function TourismOffers({ lang }) {
     router.push(`/${currentLang}/tousimoffers`);
   };
 
-  const handleViewDetails = (destination) => {
-    const id = destination.id || destination.slug || "";
-    router.push(`/${currentLang}/tousimoffers/${id}`);
-  };
+ const handleViewDetails = (destination) => {
+  // Use slug for SEO-friendly URLs, fallback to ID
+  const slug = destination.slug || destination.id || "";
+  router.push(`/${currentLang}/tousimoffers/${slug}`);
+};
 
-  const handleBookNow = (destination) => {
-    console.log("Book Now clicked for:", destination);
-    setSelectedOffer(destination);
-    setShowBookingModal(true);
-  };
-
+ const handleBookNow = (destination) => {
+  console.log("Book Now clicked for:", destination);
+  console.log("Offer data:", {
+    id: destination.id,
+    title: destination.title_en,
+    price: destination.price,
+    slug: destination.slug
+  });
+  setSelectedOffer(destination);
+  setShowBookingModal(true);
+};
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating || 0);
     const hasHalfStar = (rating || 0) - fullStars >= 0.5;
@@ -213,6 +220,22 @@ export default function TourismOffers({ lang }) {
         return <Star key={i} size={16} fill="none" color="#ddd" style={{ display: "inline" }} />;
       }
     });
+  };
+
+  // Helper function to format price with icon
+  const formatPriceWithIcon = (price) => {
+    return (
+      <span className="price-amount-wrapper">
+        <span className="price-amount">{price}</span>
+        <Image 
+          src="/saudi_riyal.png" 
+          alt="SAR" 
+          width={16} 
+          height={16} 
+          className="currency-icon"
+        />
+      </span>
+    );
   };
 
   if (loading) {
@@ -318,12 +341,26 @@ export default function TourismOffers({ lang }) {
                       <div className="offer-price">
                         {destination.original_price && (
                           <span className="price-original">
-                            {formatCurrency(destination.original_price, "SAR", lang)}
+                            {destination.original_price}
+                            <Image 
+                              src="/saudi_riyal.png" 
+                              alt="SAR" 
+                              width={12} 
+                              height={12} 
+                              className="currency-icon-small"
+                            />
                           </span>
                         )}
-                        <span className="price-amount">
-                          {formatCurrency(destination.price, "SAR", lang)}
-                        </span>
+                        <div className="price-amount-wrapper">
+                          <span className="price-amount">{destination.price}</span>
+                          <Image 
+                            src="/saudi_riyal.png" 
+                            alt="SAR" 
+                            width={16} 
+                            height={16} 
+                            className="currency-icon"
+                          />
+                        </div>
                         <span className="price-per">{t.perPerson}</span>
                       </div>
                       <button 
@@ -637,12 +674,32 @@ export default function TourismOffers({ lang }) {
             font-size: 0.8rem;
             color: #999;
             text-decoration: line-through;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+          }
+
+          .price-amount-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
           }
 
           .price-amount {
             font-size: 1.3rem;
             font-weight: 700;
             color: #dfa528;
+          }
+
+          .currency-icon {
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          .currency-icon-small {
+            display: inline-block;
+            vertical-align: middle;
+            opacity: 0.7;
           }
 
           .price-per {

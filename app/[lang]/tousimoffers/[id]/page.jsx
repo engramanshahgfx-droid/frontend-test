@@ -4,13 +4,14 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import TourismOfferBookingModal from "@/components/TourismOfferBookingModal";
+import Image from "next/image";
 
 export default function TourismOfferDetails() {
   const params = useParams();
   const router = useRouter();
   const lang = params?.lang || "en";
   const id = params?.id;
-const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   const [offer, setOffer] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ const [showBookingModal, setShowBookingModal] = useState(false);
       notIncludes: "Package Not Includes",
       itinerary: "Itinerary",
       bookNow: "Book Now",
-      perPerson: "SAR per person",
+      perPerson: "per person",
       from: "From",
       contact: "Contact Information",
       paymentMethods: "Payment Methods",
@@ -47,7 +48,7 @@ const [showBookingModal, setShowBookingModal] = useState(false);
       notIncludes: "لا تشمل الباقة",
       itinerary: "البرنامج",
       bookNow: "احجز الآن",
-      perPerson: "ريال سعودي للفرد",
+      perPerson: "للفرد",
       from: "من",
       contact: "معلومات الاتصال",
       paymentMethods: "طرق الدفع",
@@ -126,7 +127,6 @@ const [showBookingModal, setShowBookingModal] = useState(false);
       }
     }
     if (data && typeof data === "object") {
-      // If it's an object with numeric keys, convert to array
       if (Object.values(data).every((v) => typeof v === "object")) {
         return Object.values(data);
       }
@@ -187,9 +187,10 @@ const [showBookingModal, setShowBookingModal] = useState(false);
     return `${backendBase}/storage/${img}`;
   };
 
-const handleBookNow = () => {
-  setShowBookingModal(true);
-};
+  const handleBookNow = () => {
+    console.log("Opening booking modal for offer:", offer);
+    setShowBookingModal(true);
+  };
 
   if (loading) {
     return (
@@ -242,285 +243,332 @@ const handleBookNow = () => {
   const basicInfo = getBasicInfo();
 
   return (
-    <div className="offer-details" dir={lang === "ar" ? "rtl" : "ltr"}>
-      <div className="container">
-        {/* Breadcrumb */}
-        <nav className="breadcrumb">
-          <a href={`/${lang}`}>Home</a>
-          <span> / </span>
-          <a href={`/${lang}/tousimoffers`}>Tourism Offers</a>
-          <span> / </span>
-          <span className="current">{getText(offer, "title")}</span>
-        </nav>
+    <>
+      <div className="offer-details" dir={lang === "ar" ? "rtl" : "ltr"}>
+        <div className="container">
+          {/* Breadcrumb */}
+          <nav className="breadcrumb">
+            <a href={`/${lang}`}>Home</a>
+            <span> / </span>
+            <a href={`/${lang}/tousimoffers`}>Tourism Offers</a>
+            <span> / </span>
+            <span className="current">{getText(offer, "title")}</span>
+          </nav>
 
-        {/* Back Button */}
-        <button
-          className="btn-back"
-          onClick={() => router.push(`/${lang}/tousimoffers`)}
-        >
-          {t.back}
-        </button>
-
-        {/* Header */}
-        <div className="offer-header">
-          <h1>{getText(offer, "title")}</h1>
-          {offer.rating && (
-            <div className="rating">
-              <span>⭐</span>
-              <span>{offer.rating}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Main Image */}
-        <div className="main-image">
-          <img
-            src={getImageUrl(offer.image)}
-            alt={getText(offer, "title")}
-            onError={(e) => {
-              e.target.src = "/placeholder.png";
-            }}
-          />
-          {offer.discount && (
-            <span className="discount-badge">{offer.discount}% OFF</span>
-          )}
-        </div>
-
-        {/* Gallery */}
-        {offer.gallery &&
-          Array.isArray(offer.gallery) &&
-          offer.gallery.length > 0 && (
-            <div className="gallery">
-              {offer.gallery.map((img, index) => (
-                <img
-                  key={index}
-                  src={getImageUrl(img)}
-                  alt={`Gallery ${index + 1}`}
-                  onError={(e) => {
-                    e.target.src = "/placeholder.png";
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
-        {/* Description */}
-        <div className="section">
-          <h2>{t.description}</h2>
-          <p>
-            {getText(offer, "long_description") ||
-              getText(offer, "description")}
-          </p>
-        </div>
-
-        {/* Quick Info */}
-        <div className="quick-info">
-          <div className="info-item">
-            <span className="label">{t.price}</span>
-            <span className="value">
-              {offer.original_price && (
-                <span className="original-price">
-                  {offer.original_price} SAR
-                </span>
-              )}
-              <span className="current-price">{offer.price} SAR</span>
-              <span className="per">{t.perPerson}</span>
-            </span>
-          </div>
-          {getText(offer, "duration") && (
-            <div className="info-item">
-              <span className="label">{t.duration}</span>
-              <span className="value">{getText(offer, "duration")}</span>
-            </div>
-          )}
-          {getText(offer, "location") && (
-            <div className="info-item">
-              <span className="label">{t.location}</span>
-              <span className="value">{getText(offer, "location")}</span>
-            </div>
-          )}
-          {getText(offer, "group_size") && (
-            <div className="info-item">
-              <span className="label">{t.groupSize}</span>
-              <span className="value">{getText(offer, "group_size")}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Features */}
-        {features.length > 0 && (
-          <div className="section">
-            <h2>{t.features}</h2>
-            <ul className="features-list">
-              {features.map((item, index) => (
-                <li key={index}>
-                  ✓{" "}
-                  {typeof item === "object"
-                    ? item.feature || item.include || JSON.stringify(item)
-                    : item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Includes */}
-        {includes.length > 0 && (
-          <div className="section">
-            <h2>{t.includes}</h2>
-            <ul className="includes-list">
-              {includes.map((item, index) => (
-                <li key={index}>
-                  ✓{" "}
-                  {typeof item === "object"
-                    ? item.include || item.feature || JSON.stringify(item)
-                    : item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Not Includes */}
-        {notIncludes.length > 0 && (
-          <div className="section">
-            <h2>{t.notIncludes}</h2>
-            <ul className="not-includes-list">
-              {notIncludes.map((item, index) => (
-                <li key={index}>
-                  ✗{" "}
-                  {typeof item === "object"
-                    ? item.not_include || JSON.stringify(item)
-                    : item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Itinerary */}
-        {itinerary.length > 0 && (
-          <div className="section">
-            <h2>{t.itinerary}</h2>
-            <div className="itinerary">
-              {itinerary.map((day, index) => (
-                <motion.div
-                  key={index}
-                  className="day-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <h4>
-                    Day {day.day}: {day.title}
-                  </h4>
-                  <p>{day.description}</p>
-                  {day.image && (
-                    <img
-                      src={getImageUrl(day.image)}
-                      alt={`Day ${day.day}`}
-                      onError={(e) => {
-                        e.target.src = "/placeholder.png";
-                      }}
-                    />
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Basic Info */}
-        {Object.keys(basicInfo).length > 0 && (
-          <div className="section">
-            <h2>{t.details}</h2>
-            <div className="contact-grid">
-              {basicInfo.trip_code && (
-                <div>🆔 Trip Code: {basicInfo.trip_code}</div>
-              )}
-              {basicInfo.days_num && <div>📅 Days: {basicInfo.days_num}</div>}
-              {basicInfo.destination_name && (
-                <div>📍 Destination: {basicInfo.destination_name}</div>
-              )}
-              {basicInfo.available_to && (
-                <div>📆 Available To: {basicInfo.available_to}</div>
-              )}
-              {basicInfo.double_room && (
-                <div>🛏️ Double Room: {basicInfo.double_room} SAR</div>
-              )}
-              {basicInfo.single_room && (
-                <div>🛏️ Single Room: {basicInfo.single_room} SAR</div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Contact Info */}
-        {Object.keys(contactInfo).length > 0 && (
-          <div className="section">
-            <h2>{t.contact}</h2>
-            <div className="contact-grid">
-              {contactInfo.address && <div>📍 {contactInfo.address}</div>}
-              {contactInfo.phone && (
-                <div>
-                  📞{" "}
-                  <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
-                </div>
-              )}
-              {contactInfo.whatsapp && (
-                <div>
-                  💬{" "}
-                  <a
-                    href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`}
-                  >
-                    {contactInfo.whatsapp}
-                  </a>
-                </div>
-              )}
-              {contactInfo.email && (
-                <div>
-                  ✉️{" "}
-                  <a href={`mailto:${contactInfo.email}`}>
-                    {contactInfo.email}
-                  </a>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Payment Methods */}
-        {paymentMethods.length > 0 && (
-          <div className="section">
-            <h2>{t.paymentMethods}</h2>
-            <div className="payment-grid">
-              {paymentMethods.map((method, index) => (
-                <div key={index} className="payment-card">
-                  {method.logo && (
-                    <img
-                      src={method.logo}
-                      alt={method.name}
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
-                    />
-                  )}
-                  <h5>{method.name}</h5>
-                  {method.account_no && <p>Account: {method.account_no}</p>}
-                  {method.iban && <p>IBAN: {method.iban}</p>}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Book Now */}
-        <div className="book-now-section">
-          <button className="btn-book-now" onClick={handleBookNow}>
-            {t.bookNow}
+          {/* Back Button */}
+          <button
+            className="btn-back"
+            onClick={() => router.push(`/${lang}/tousimoffers`)}
+          >
+            {t.back}
           </button>
+
+          {/* Header */}
+          <div className="offer-header">
+            <h1>{getText(offer, "title")}</h1>
+            {offer.rating && (
+              <div className="rating">
+                <span>⭐</span>
+                <span>{offer.rating}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Main Image */}
+          <div className="main-image">
+            <img
+              src={getImageUrl(offer.image)}
+              alt={getText(offer, "title")}
+              onError={(e) => {
+                e.target.src = "/placeholder.png";
+              }}
+            />
+            {offer.discount && (
+              <span className="discount-badge">{offer.discount}% OFF</span>
+            )}
+          </div>
+
+          {/* Gallery */}
+          {offer.gallery &&
+            Array.isArray(offer.gallery) &&
+            offer.gallery.length > 0 && (
+              <div className="gallery">
+                {offer.gallery.map((img, index) => (
+                  <img
+                    key={index}
+                    src={getImageUrl(img)}
+                    alt={`Gallery ${index + 1}`}
+                    onError={(e) => {
+                      e.target.src = "/placeholder.png";
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+          {/* Description */}
+          <div className="section">
+            <h2>{t.description}</h2>
+            <p>
+              {getText(offer, "long_description") ||
+                getText(offer, "description")}
+            </p>
+          </div>
+
+          {/* Quick Info */}
+          <div className="quick-info">
+            <div className="info-item">
+              <span className="label">{t.price}</span>
+              <span className="value">
+                {offer.original_price && (
+                  <span className="original-price">
+                    {offer.original_price}{" "}
+                    <Image 
+                      src="/saudi_riyal.png" 
+                      alt="SAR" 
+                      width={14} 
+                      height={14} 
+                      className="currency-icon"
+                    />
+                  </span>
+                )}
+                <span className="current-price">
+                  {offer.price}{" "}
+                  <Image 
+                    src="/saudi_riyal.png" 
+                    alt="SAR" 
+                    width={16} 
+                    height={16} 
+                    className="currency-icon"
+                  />
+                </span>
+                <span className="per">{t.perPerson}</span>
+              </span>
+            </div>
+            {getText(offer, "duration") && (
+              <div className="info-item">
+                <span className="label">{t.duration}</span>
+                <span className="value">{getText(offer, "duration")}</span>
+              </div>
+            )}
+            {getText(offer, "location") && (
+              <div className="info-item">
+                <span className="label">{t.location}</span>
+                <span className="value">{getText(offer, "location")}</span>
+              </div>
+            )}
+            {getText(offer, "group_size") && (
+              <div className="info-item">
+                <span className="label">{t.groupSize}</span>
+                <span className="value">{getText(offer, "group_size")}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Features */}
+          {features.length > 0 && (
+            <div className="section">
+              <h2>{t.features}</h2>
+              <ul className="features-list">
+                {features.map((item, index) => (
+                  <li key={index}>
+                    ✓{" "}
+                    {typeof item === "object"
+                      ? item.feature || item.include || JSON.stringify(item)
+                      : item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Includes */}
+          {includes.length > 0 && (
+            <div className="section">
+              <h2>{t.includes}</h2>
+              <ul className="includes-list">
+                {includes.map((item, index) => (
+                  <li key={index}>
+                    ✓{" "}
+                    {typeof item === "object"
+                      ? item.include || item.feature || JSON.stringify(item)
+                      : item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Not Includes */}
+          {notIncludes.length > 0 && (
+            <div className="section">
+              <h2>{t.notIncludes}</h2>
+              <ul className="not-includes-list">
+                {notIncludes.map((item, index) => (
+                  <li key={index}>
+                    ✗{" "}
+                    {typeof item === "object"
+                      ? item.not_include || JSON.stringify(item)
+                      : item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Itinerary */}
+          {itinerary.length > 0 && (
+            <div className="section">
+              <h2>{t.itinerary}</h2>
+              <div className="itinerary">
+                {itinerary.map((day, index) => (
+                  <motion.div
+                    key={index}
+                    className="day-card"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <h4>
+                      Day {day.day}: {day.title}
+                    </h4>
+                    <p>{day.description}</p>
+                    {day.image && (
+                      <img
+                        src={getImageUrl(day.image)}
+                        alt={`Day ${day.day}`}
+                        onError={(e) => {
+                          e.target.src = "/placeholder.png";
+                        }}
+                      />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Basic Info */}
+          {Object.keys(basicInfo).length > 0 && (
+            <div className="section">
+              <h2>{t.details}</h2>
+              <div className="contact-grid">
+                {basicInfo.trip_code && (
+                  <div>🆔 Trip Code: {basicInfo.trip_code}</div>
+                )}
+                {basicInfo.days_num && <div>📅 Days: {basicInfo.days_num}</div>}
+                {basicInfo.destination_name && (
+                  <div>📍 Destination: {basicInfo.destination_name}</div>
+                )}
+                {basicInfo.available_to && (
+                  <div>📆 Available To: {basicInfo.available_to}</div>
+                )}
+                {basicInfo.double_room && (
+                  <div>
+                    🛏️ Double Room: {basicInfo.double_room}{" "}
+                    <Image 
+                      src="/saudi_riyal.png" 
+                      alt="SAR" 
+                      width={12} 
+                      height={12} 
+                      className="currency-icon"
+                    />
+                  </div>
+                )}
+                {basicInfo.single_room && (
+                  <div>
+                    🛏️ Single Room: {basicInfo.single_room}{" "}
+                    <Image 
+                      src="/saudi_riyal.png" 
+                      alt="SAR" 
+                      width={12} 
+                      height={12} 
+                      className="currency-icon"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Contact Info */}
+          {Object.keys(contactInfo).length > 0 && (
+            <div className="section">
+              <h2>{t.contact}</h2>
+              <div className="contact-grid">
+                {contactInfo.address && <div>📍 {contactInfo.address}</div>}
+                {contactInfo.phone && (
+                  <div>
+                    📞{" "}
+                    <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
+                  </div>
+                )}
+                {contactInfo.whatsapp && (
+                  <div>
+                    💬{" "}
+                    <a
+                      href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`}
+                    >
+                      {contactInfo.whatsapp}
+                    </a>
+                  </div>
+                )}
+                {contactInfo.email && (
+                  <div>
+                    ✉️{" "}
+                    <a href={`mailto:${contactInfo.email}`}>
+                      {contactInfo.email}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Payment Methods */}
+          {paymentMethods.length > 0 && (
+            <div className="section">
+              <h2>{t.paymentMethods}</h2>
+              <div className="payment-grid">
+                {paymentMethods.map((method, index) => (
+                  <div key={index} className="payment-card">
+                    {method.logo && (
+                      <img
+                        src={method.logo}
+                        alt={method.name}
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
+                      />
+                    )}
+                    <h5>{method.name}</h5>
+                    {method.account_no && <p>Account: {method.account_no}</p>}
+                    {method.iban && <p>IBAN: {method.iban}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Book Now */}
+          <div className="book-now-section">
+            <button className="btn-book-now" onClick={handleBookNow}>
+              {t.bookNow}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Booking Modal - Pass offer data */}
+      <TourismOfferBookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          console.log("Closing modal");
+          setShowBookingModal(false);
+        }}
+        offerData={offer}
+        lang={lang}
+      />
 
       <style jsx>{`
         .offer-details {
@@ -665,6 +713,15 @@ const handleBookNow = () => {
           font-size: 1.1rem;
           font-weight: 600;
           color: #2c2c2c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+        }
+
+        .currency-icon {
+          display: inline-block;
+          vertical-align: middle;
         }
 
         .original-price {
@@ -672,12 +729,18 @@ const handleBookNow = () => {
           color: #999;
           font-size: 0.9rem;
           margin-right: 8px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
         }
 
         .current-price {
           color: #dfa528;
           font-size: 1.3rem;
           font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 4px;
         }
 
         .per {
@@ -849,6 +912,6 @@ const handleBookNow = () => {
           }
         }
       `}</style>
-    </div>
+    </>
   );
 }

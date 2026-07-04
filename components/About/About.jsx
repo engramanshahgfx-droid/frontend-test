@@ -31,7 +31,7 @@ export default function About({ lang }) {
       testimonials: [
         {
           id: 1,
-          text: "شكر خاص ل أ عمر لاهتمامة بأدق التفاصيل في المغامرة وفريق العمل المتعاون . الفعالية لا تنسى كانت تجربة مميزة",
+          text: "شكر خاص للأستاذ عمر لاهتمامه بأدق التفاصيل في المغامرة وفريق العمل المتعاون. الفعالية لا تنسى كانت تجربة مميزة",
           author: "عميل راضي",
           rating: 5
         },
@@ -101,55 +101,6 @@ export default function About({ lang }) {
       ctaButtons: {
         contact: "Contact Us",
         book: "Book Your Trip Now"
-      }
-    },
-    zh: {
-      heroTitle: "大自然的神奇，前所未见",
-      heroSubtitle: "从新视角探索沙特阿拉伯",
-      heroDescription: "让我们来规划... 您只管享受旅程",
-      
-      welcomeTitle: "欢迎来到Tilal Rimal",
-      welcomeSubtitle: "旅游行程组织",
-      welcomeDescription: "我们以极具竞争力的价格提供高品质的旅游行程，将乐趣与宝贵体验相结合，为您创造难忘的回忆。我们年轻而充满激情的团队精心策划和执行每一次旅行，为您留下终生的美好记忆。加入我们，在壮丽的自然风光、历史地标和愉快的冒险中，以独特风格探索沙特阿拉伯的美丽。",
-
-      features: [
-        {
-          icon: <FaHandshake size={40} />,
-          title: "值得信赖且经验丰富",
-          description: "我们组织独特的旅行，在整个王国范围内结合乐趣、冒险和宝贵的体验。"
-        }
-      ],
-
-      visionTitle: "我们的愿景",
-      visionDescription: "我们渴望组织高品质且价格具有竞争力的旅游行程，将愉快时刻与宝贵体验融为一体。我们努力使我们的旅行与众不同，并在更新王国旅游娱乐概念方面具有变革性，与沙特2030年愿景保持一致。我们相信，旅游体验应该丰富个人生活，并增强对我们国家美丽和独特文化的探索。",
-
-      testimonialsTitle: "客户评价",
-      testimonialsDescription: "了解我们的客户对他们的体验有何评价，以及我们如何帮助他们实现难忘的旅程",
-
-      testimonials: [
-        {
-          id: 1,
-          text: "特别感谢奥马尔先生对冒险中最微小细节的关注以及合作的工作团队。这次活动令人难忘，是一次卓越的体验",
-          author: "满意客户",
-          rating: 5
-        },
-        {
-          id: 2,
-          text: "这是我一生中经历过的最好的旅游体验。组织非常出色，导游非常专业",
-          author: "莎拉·艾哈迈德",
-          rating: 5
-        },
-        {
-          id: 3,
-          text: "对细节的关注和卓越的服务使这次旅行令人难忘。感谢Tilal Rimal团队",
-          author: "穆罕默德·阿尔·哈立德",
-          rating: 5
-        }
-      ],
-
-      ctaButtons: {
-        contact: "联系我们",
-        book: "立即预订您的行程"
       }
     }
   };
@@ -242,12 +193,6 @@ export default function About({ lang }) {
                   >
                     {t.ctaButtons.contact}
                   </a>
-                  {/* <a
-                    href={`/${lang}/offers`}
-                    className="btn btn-outline-primary btn-lg"
-                  >
-                    {t.ctaButtons.book}
-                  </a> */}
                 </div>
               </div>
             </div>

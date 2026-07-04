@@ -26,10 +26,13 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
 
   useEffect(() => {
     if (offerData) {
-      const packageCode = offerData.basic_info?.trip_code || 
-                          offerData.trip_code || 
-                          offerData.code || 
-                          `PKG-${offerData.id}`;
+      // Get package code from various possible sources
+      const packageCode = 
+        offerData.basic_info?.trip_code || 
+        offerData.trip_code || 
+        offerData.code || 
+        offerData.slug ||
+        `PKG-${offerData.id || Date.now()}`;
       
       setFormData(prev => ({
         ...prev,
@@ -81,6 +84,18 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
   };
 
   const t = labels[lang] || labels.en;
+
+  // Helper to get the title from the offer data
+  const getOfferTitle = () => {
+    if (!offerData) return 'Tourism Offer';
+    return offerData.title_en || offerData.title_ar || offerData.title || 'Tourism Offer';
+  };
+
+  // Helper to get the price from the offer data
+  const getOfferPrice = () => {
+    if (!offerData) return null;
+    return offerData.price || offerData.original_price || null;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -258,11 +273,16 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                     marginBottom: '20px'
                   }}>
                     <h4 style={{ margin: '0 0 5px', color: '#2c2c2c' }}>
-                      {offerData.title_en || offerData.title_ar || 'Tourism Offer'}
+                      {getOfferTitle()}
                     </h4>
-                    {offerData.price && (
+                    {getOfferPrice() && (
                       <p style={{ margin: 0, color: '#dfa528', fontWeight: 'bold' }}>
-                        {offerData.price} SAR
+                        {getOfferPrice()} SAR
+                      </p>
+                    )}
+                    {offerData.duration && (
+                      <p style={{ margin: '5px 0 0', color: '#666', fontSize: '14px' }}>
+                        Duration: {offerData.duration}
                       </p>
                     )}
                   </div>
@@ -613,7 +633,9 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                   justifyContent: 'center',
                   margin: '0 auto 20px'
                 }}>
-                  <i className="fas fa-check" style={{ fontSize: '40px', color: '#28a745' }}></i>
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#28a745" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                 </div>
                 <h3 style={{ color: '#28a745', marginBottom: '10px' }}>{t.bookingSuccess}</h3>
                 <p style={{ color: '#666', fontSize: '14px' }}>{t.thankYou}</p>

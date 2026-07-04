@@ -1532,7 +1532,7 @@ export default function BookingPage() {
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>{t('flightBooking.confirmationStep.travelConsultant')}</div>
-            <div style={{ fontSize: 13, fontWeight: 600 }}>TILAL RIMAL</div>
+            <div style={{ fontSize: 13, fontWeight: 600 }}>Tilal Rimal</div>
           </div>
         </div>
 
@@ -1683,7 +1683,7 @@ export default function BookingPage() {
         <div style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, color: '#aaa' }}>
           <div>
             <div style={{ fontWeight: 600, color: '#666', marginBottom: 2 }}>{t('flightBooking.confirmationStep.travelConsultant')}</div>
-            <div>TILAL RIMAL — tilalrimal.com</div>
+            <div>Tilal Rimal — tilalrimal.com</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontWeight: 600, color: '#666', marginBottom: 2 }}>{t('flightBooking.confirmationStep.bookingDate')}</div>

@@ -3,7 +3,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { useEffect, useState, useRef } from "react";
 
 const WhatsAppButton = ({ lang = "en" }) => {
-  const phoneNumber = "+966547305060"; 
+  const phoneNumber = "966547305060"; 
   const message = lang === "ar" 
     ? "مرحبا، أريد الاستفسار عن خدماتكم" 
     : lang === "zh" 
