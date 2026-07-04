@@ -26,6 +26,24 @@ import {
 } from "react-icons/fa";
 import { SiX } from "react-icons/si";
 
+// ✅ FIXED: Region translations with lowercase keys matching API response
+const REGION_LABELS = {
+  en: {
+    europe: 'Europe',
+    asia: 'Asia',
+    africa: 'Africa',
+    australia: 'Australia & New Zealand',
+    america: 'America'
+  },
+  ar: {
+    europe: 'أوروبا',
+    asia: 'آسيا',
+    africa: 'أفريقيا',
+    australia: 'أستراليا ونيوزيلندا',
+    america: 'أمريكا'
+  }
+};
+
 export default function Navbar({ lang }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -37,6 +55,7 @@ export default function Navbar({ lang }) {
   const [openSubDropdown, setOpenSubDropdown] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [tourismDestinations, setTourismDestinations] = useState(null);
+  const [dropdownError, setDropdownError] = useState(null);
 
   const userMenuRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
@@ -52,6 +71,7 @@ export default function Navbar({ lang }) {
           setTourismDestinations(getFallbackDestinations());
         }
       } catch (error) {
+        console.error("Error fetching destinations:", error);
         setTourismDestinations(getFallbackDestinations());
       }
     };
@@ -59,8 +79,11 @@ export default function Navbar({ lang }) {
   }, []);
 
   const getFallbackDestinations = () => ({
-    Europe: { icon: "🌍", ar: "أوروبا", countries: [{ en: "Poland", ar: "بولندا", slug: "poland-discovery" }] },
-    Asia: { icon: "🌏", ar: "آسيا", countries: [{ en: "Thailand", ar: "تايلاند", slug: "thailand-getaway" }] },
+    europe: { icon: "🌍", countries: [{ en: "Poland", ar: "بولندا", slug: "poland-discovery" }] },
+    asia: { icon: "🌏", countries: [{ en: "Thailand", ar: "تايلاند", slug: "thailand-getaway" }] },
+    africa: { icon: "🌍", countries: [{ en: "Morocco", ar: "المغرب", slug: "morocco-discovery" }] },
+    australia: { icon: "🌏", countries: [{ en: "Australia", ar: "أستراليا", slug: "australia-adventure" }] },
+    america: { icon: "🌎", countries: [{ en: "USA", ar: "الولايات المتحدة", slug: "usa-east-coast" }] },
   });
 
   useEffect(() => {
@@ -102,6 +125,17 @@ export default function Navbar({ lang }) {
 
   const displayDestinations = tourismDestinations || getFallbackDestinations();
 
+  // ✅ Get translated region name - handles both lowercase and capitalized keys
+  const getRegionLabel = (regionKey) => {
+    const labels = REGION_LABELS[lang] || REGION_LABELS.en;
+    // Try exact match first, then try lowercase match
+    if (labels[regionKey]) return labels[regionKey];
+    // If key is capitalized (e.g., "Europe"), try lowercase
+    const lowerKey = regionKey?.toLowerCase();
+    if (labels[lowerKey]) return labels[lowerKey];
+    return regionKey; // Fallback to the key itself
+  };
+
   const menuItems = [
     { href: "#", label: lang === "ar" ? "الوجهات السياحية" : "Tourism Destinations", dropdown: true, type: "packages" },
     { href: "/tousimoffers", label: lang === "ar" ? "العروض السياحية" : "Tourism Offers" },
@@ -111,9 +145,8 @@ export default function Navbar({ lang }) {
     { href: "/basic", label: lang === "ar" ? "متطلبات السفر" : "Travel Requirements", dropdown: true, type: "basic" },
   ];
     
-
   const visaData = [{ title: { en: "Schengen visa", ar: "تأشيرة الشنغن" }, description: { en: "Requirements", ar: "المتطلبات" }, icon: "🏛️", href: "/visa" }];
- const basicData = [
+  const basicData = [
     {
       title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية" },
       description: { en: "Culture and heritage", ar: "الثقافة والتراث" },
@@ -129,19 +162,20 @@ export default function Navbar({ lang }) {
   ];
   
   const servicesData = [
-  {
-    title: { en: "Private Jet Booking", ar: "طلب استئجار طائرة خاصة" },
-    description: { en: "Request private jet services", ar: "طلب خدمات الطيران الخاص" },
-    icon: "✈️",
-    href: "/international/private-jet",
-  },
-  {
-    title: { en: "Internet Packages", ar: "باقات الإنترنت" },
-    description: { en: "Global internet solutions", ar: "حلول الإنترنت العالمية" },
-    icon: "🌐",
-    href: "/international/internet-packages",
-  }
-]; // The bracket must close here!
+    {
+      title: { en: "Private Jet Booking", ar: "طلب استئجار طائرة خاصة" },
+      description: { en: "Request private jet services", ar: "طلب خدمات الطيران الخاص" },
+      icon: "✈️",
+      href: "/international/private-jet",
+    },
+    {
+      title: { en: "Internet Packages", ar: "باقات الإنترنت" },
+      description: { en: "Global internet solutions", ar: "حلول الإنترنت العالمية" },
+      icon: "🌐",
+      href: "/international/internet-packages",
+    }
+  ];
+
   const handleDropdownMouseEnter = (type) => {
     if (window.innerWidth > 1024) {
       if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -184,16 +218,16 @@ export default function Navbar({ lang }) {
       {/* Top Bar */}
       <div className="top-bar">
         <div className="top-bar-container">
-         <div className="top-bar-left">
-  <Phone className="top-bar-icon" />
-  <a
-    href="tel:+966547305060"
-    className="top-bar-phone"
-    style={{ color: "#fff", textDecoration: "none" }}
-  >
-    +966547305060
-  </a>
-</div>
+          <div className="top-bar-left">
+            <Phone className="top-bar-icon" />
+            <a
+              href="tel:+966547305060"
+              className="top-bar-phone"
+              style={{ color: "#fff", textDecoration: "none" }}
+            >
+              +966547305060
+            </a>
+          </div>
           <div className="top-bar-right">
             <div className="social-icons">
                <a href="#" className="social-icon"><FaTiktok size={14} /></a>
@@ -242,13 +276,13 @@ export default function Navbar({ lang }) {
                     >
                       {item.type === "packages" ? (
                         <div className="dropdown-packages">
-                          {Object.entries(displayDestinations).map(([region, data]) => (
-                            <div key={region} className="region-group" onMouseEnter={() => setOpenSubDropdown(region)}>
+                          {Object.entries(displayDestinations).map(([regionKey, data]) => (
+                            <div key={regionKey} className="region-group" onMouseEnter={() => setOpenSubDropdown(regionKey)}>
                               <div className="region-trigger">
-                                <span>{data.icon} {lang === 'ar' ? data.ar : region}</span>
+                                <span>{data.icon} {getRegionLabel(regionKey)}</span>
                                 <ChevronRight size={14} />
                               </div>
-                              {openSubDropdown === region && (
+                              {openSubDropdown === regionKey && data.countries && data.countries.length > 0 && (
                                 <div className="sub-menu">
                                   {data.countries.map(c => (
                                     <Link key={c.slug} href={`/${lang}/destinations/${c.slug}`} className="sub-item">
@@ -332,12 +366,12 @@ export default function Navbar({ lang }) {
                         {openMobileDropdown === item.type && (
                           <div className="mobile-nested-menu">
                             {item.type === "packages" ? (
-                              Object.entries(displayDestinations).map(([region, data]) => (
-                                <div key={region} className="mobile-region-section">
-                                  <button className="mobile-region-btn" onClick={(e) => toggleSubDropdown(region, e)}>
-                                    {data.icon} {lang === 'ar' ? data.ar : region}
+                              Object.entries(displayDestinations).map(([regionKey, data]) => (
+                                <div key={regionKey} className="mobile-region-section">
+                                  <button className="mobile-region-btn" onClick={(e) => toggleSubDropdown(regionKey, e)}>
+                                    {data.icon} {getRegionLabel(regionKey)}
                                   </button>
-                                  {openSubDropdown === region && (
+                                  {openSubDropdown === regionKey && data.countries && data.countries.length > 0 && (
                                     <div className="mobile-country-list">
                                       {data.countries.map(c => (
                                         <Link key={c.slug} href={`/${lang}/destinations/${c.slug}`} onClick={() => setMobileMenuOpen(false)}>
@@ -403,7 +437,6 @@ export default function Navbar({ lang }) {
         .dropdown-item { display: flex; align-items: center; padding: 10px; text-decoration: none; color: var(--navy); border-radius: 5px; }
         .dropdown-item:hover { background: #f9f9f9; color: var(--gold); }
 
-        /* Region Submenu styling */
         .region-group { position: relative; padding: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
         .region-group:hover { background: #f9f9f9; }
         .sub-menu { position: absolute; left: 100%; top: 0; background: white; border: 1px solid var(--border); min-width: 200px; border-radius: 8px; box-shadow: 10px 0 30px rgba(0,0,0,0.1); padding: 5px; }
@@ -411,7 +444,6 @@ export default function Navbar({ lang }) {
         .sub-item { display: block; padding: 8px 15px; text-decoration: none; color: var(--navy); font-size: 13px; }
         .sub-item:hover { background: #fff9eb; color: var(--gold); }
 
-        /* Mobile Sidebar */
         .mobile-toggle { background: none; border: none; color: var(--navy); cursor: pointer; }
         .mobile-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1050; }
         .mobile-sidebar { position: fixed; top: 0; bottom: 0; width: 300px; background: white; z-index: 1060; padding: 20px; overflow-y: auto; }

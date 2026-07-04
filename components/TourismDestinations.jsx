@@ -586,20 +586,25 @@ export default function TourismDestinations({ lang, region }) {
   );
 }
 
+// ✅ FIXED: Region titles with proper lowercase keys matching database values
 function getRegionTitle(region, lang) {
   const titles = {
     en: {
-      Europe: 'European Destinations',
-      Asia: 'Asian Destinations',
-      Africa: 'African Destinations',
-      Australia: 'Australia & New Zealand Destinations',
+      europe: 'European Destinations',
+      asia: 'Asian Destinations',
+      africa: 'African Destinations',
+      australia: 'Australia & New Zealand Destinations',
+      america: 'American Destinations',
     },
     ar: {
-      Europe: 'الوجهات الأوروبية',
-      Asia: 'الوجهات الآسيوية',
-      Africa: 'الوجهات الأفريقية',
-      Australia: 'الوجهات الأسترالية ونيوزيلندا',
+      europe: 'الوجهات الأوروبية',
+      asia: 'الوجهات الآسيوية',
+      africa: 'الوجهات الأفريقية',
+      australia: 'الوجهات الأسترالية ونيوزيلندا',
+      america: 'الوجهات الأمريكية',
     }
   };
-  return titles[lang]?.[region] || titles.en[region] || '';
+  
+  // Return the title for the given language and region, or fallback to English
+  return titles[lang]?.[region] || titles.en[region] || region || '';
 }
