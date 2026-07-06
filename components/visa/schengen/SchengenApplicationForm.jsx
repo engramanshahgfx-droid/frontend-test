@@ -26,6 +26,7 @@ const content = {
     success: "✅ تم استلام بياناتك بنجاح. فريقنا سيتواصل معك خلال 24 ساعة لتأكيد الموعد ومراجعة الملف.",
     error: "حدث خطأ. الرجاء المحاولة مرة أخرى",
     connectionError: "خطأ في الاتصال. تأكد من اتصال الإنترنت",
+    selectStatus: "اختر الحالة",
   },
   en: {
     title: "Schengen Visa File Preparation Request",
@@ -49,6 +50,7 @@ const content = {
     success: "✅ Your data has been received successfully. Our team will contact you within 24 hours to confirm the appointment and review your file.",
     error: "An error occurred. Please try again.",
     connectionError: "Connection error. Please check your internet connection.",
+    selectStatus: "Select status",
   },
   zh: {
     title: "申根签证文件准备申请",
@@ -72,6 +74,7 @@ const content = {
     success: "✅ 您的信息已成功接收。我们的团队将在24小时内与您联系，确认预约并审核您的文件。",
     error: "发生错误，请重试。",
     connectionError: "连接错误，请检查您的网络连接。",
+    selectStatus: "选择身份",
   },
 };
 
@@ -143,7 +146,7 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
   };
 
   return (
-    <section className={styles.sectionCard}>
+    <div className={styles.sectionCard}>
       <h2 className={styles.sectionTitle}>{t.title}</h2>
       <p className={styles.sectionLead}>{t.lead}</p>
 
@@ -162,8 +165,8 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.formGrid}>
-          <label className={styles.field}>
-            <span>{t.fullName}</span>
+          <div className={styles.field}>
+            <label>{t.fullName}</label>
             <input
               type="text"
               name="fullName"
@@ -171,11 +174,12 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               onChange={handleChange}
               required
               disabled={submitting}
+              placeholder={t.fullName}
             />
-          </label>
+          </div>
 
-          <label className={styles.field}>
-            <span>{t.phone}</span>
+          <div className={styles.field}>
+            <label>{t.phone}</label>
             <input
               type="tel"
               name="phone"
@@ -183,11 +187,12 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               onChange={handleChange}
               required
               disabled={submitting}
+              placeholder={t.phone}
             />
-          </label>
+          </div>
 
-          <label className={styles.field}>
-            <span>{t.email}</span>
+          <div className={styles.field}>
+            <label>{t.email}</label>
             <input
               type="email"
               name="email"
@@ -195,11 +200,12 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               onChange={handleChange}
               required
               disabled={submitting}
+              placeholder={t.email}
             />
-          </label>
+          </div>
 
-          <label className={styles.field}>
-            <span>{t.nationality}</span>
+          <div className={styles.field}>
+            <label>{t.nationality}</label>
             <input
               type="text"
               name="nationality"
@@ -207,11 +213,12 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               onChange={handleChange}
               required
               disabled={submitting}
+              placeholder={t.nationality}
             />
-          </label>
+          </div>
 
-          <label className={styles.field}>
-            <span>{t.status}</span>
+          <div className={styles.field}>
+            <label>{t.status}</label>
             <select
               name="residencyStatus"
               value={formData.residencyStatus}
@@ -219,14 +226,14 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               required
               disabled={submitting}
             >
-              <option value="">{isRTL ? "اختر الحالة" : (locale === 'zh' ? "选择身份" : "Select status")}</option>
+              <option value="">{t.selectStatus}</option>
               <option value="saudi">{t.saudi}</option>
               <option value="resident">{t.resident}</option>
             </select>
-          </label>
+          </div>
 
-          <label className={styles.field}>
-            <span>{t.travelDate}</span>
+          <div className={styles.field}>
+            <label>{t.travelDate}</label>
             <input
               type="date"
               name="travelDate"
@@ -235,43 +242,43 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
               required
               disabled={submitting}
             />
-          </label>
+          </div>
         </div>
 
-        <label className={styles.field}>
-          <span>{t.notes}</span>
+        <div className={styles.field}>
+          <label>{t.notes}</label>
           <textarea
             name="notes"
             value={formData.notes}
             onChange={handleChange}
             rows={4}
-            placeholder={isRTL ? "اكتب أي تفاصيل مهمة لملفك" : (locale === 'zh' ? "输入您文件的重要详细说明" : "Write any important details for your file")}
+            placeholder={t.notes}
             disabled={submitting}
           />
-        </label>
+        </div>
 
         <div className={styles.attachmentsBox}>
           <h3 className={styles.attachmentsTitle}>{t.attachments}</h3>
           <div className={styles.formGrid}>
-            <label className={styles.field}>
-              <span>{t.passport}</span>
+            <div className={styles.field}>
+              <label>{t.passport}</label>
               <input type="file" name="passport" accept=".pdf,.jpg,.jpeg,.png" disabled={submitting} />
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span>{t.idOrIqama}</span>
+            <div className={styles.field}>
+              <label>{t.idOrIqama}</label>
               <input type="file" name="idOrIqama" accept=".pdf,.jpg,.jpeg,.png" disabled={submitting} />
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span>{t.familyCard}</span>
+            <div className={styles.field}>
+              <label>{t.familyCard}</label>
               <input type="file" name="familyCard" accept=".pdf,.jpg,.jpeg,.png" disabled={submitting} />
-            </label>
+            </div>
 
-            <label className={styles.field}>
-              <span>{t.salaryLetter}</span>
+            <div className={styles.field}>
+              <label>{t.salaryLetter}</label>
               <input type="file" name="salaryLetter" accept=".pdf,.jpg,.jpeg,.png" disabled={submitting} />
-            </label>
+            </div>
           </div>
         </div>
 
@@ -285,6 +292,6 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
           {t.success}
         </p>
       )}
-    </section>
+    </div>
   );
 }

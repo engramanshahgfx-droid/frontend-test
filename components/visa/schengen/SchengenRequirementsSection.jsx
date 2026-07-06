@@ -3,7 +3,6 @@
 import React from "react";
 import styles from "./SchengenVisaPage.module.css";
 
-// Multilingual content
 const content = {
   ar: {
     title: "المتطلبات الأساسية لاستخراج تأشيرة شنغن",
@@ -84,7 +83,7 @@ export default function SchengenRequirementsSection({ lang = "ar" }) {
   const t = content[locale];
 
   return (
-    <section className={styles.sectionCard}>
+    <div className={styles.sectionCard}>
       <h2 className={styles.sectionTitle}>{t.title}</h2>
       <p className={styles.sectionLead}>{t.lead}</p>
 
@@ -114,6 +113,6 @@ export default function SchengenRequirementsSection({ lang = "ar" }) {
           ))}
         </ul>
       </div>
-    </section>
+    </div>
   );
 }

@@ -14,19 +14,17 @@ import {
   Phone,
   Bed,
   Users,
-  Banknote,
   ExternalLink,
   Building2,
   AlertCircle,
+  Loader2,
 } from "lucide-react";
 import { API_URL } from "@/lib/api";
 
 export default function BookingModal({ isOpen, onClose, packageData, lang }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [bankDetails, setBankDetails] = useState(null);
   const [bookingId, setBookingId] = useState(null);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -44,8 +42,43 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
   });
   const [errors, setErrors] = useState({});
   const [isRedirecting, setIsRedirecting] = useState(false);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paymentUrl, setPaymentUrl] = useState(null);
+  const [showPaymentIframe, setShowPaymentIframe] = useState(false);
 
   const isRTL = lang === "ar";
+
+  // Get base price from package data
+  const getBasePrice = () => {
+    return (
+      parseFloat(packageData?.price) ||
+      parseFloat(packageData?.basic_info?.price) ||
+      100
+    );
+  };
+
+  // Calculate total price based on room type and guests
+  const calculateTotalPrice = () => {
+    const basePrice = getBasePrice();
+    const guests = formData.guests || 1;
+    const roomType = formData.room_type;
+
+    if (roomType === "DoubleRoom") {
+      if (guests <= 2) {
+        return basePrice;
+      } else {
+        const extraGuests = guests - 2;
+        return basePrice + extraGuests * basePrice * 0.5;
+      }
+    } else {
+      return basePrice * guests;
+    }
+  };
+
+  // Update total amount when form data changes
+  useEffect(() => {
+    setTotalAmount(calculateTotalPrice());
+  }, [formData.guests, formData.room_type, packageData]);
 
   useEffect(() => {
     if (packageData) {
@@ -61,6 +94,8 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
         package_id: String(packageData.id || packageData.slug || ""),
         package_code: String(packageCode),
       }));
+
+      setTotalAmount(calculateTotalPrice());
     }
   }, [packageData]);
 
@@ -76,25 +111,38 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.first_name) newErrors.first_name = isRTL ? "الاسم الأول مطلوب" : "First Name is Required";
-    if (!formData.last_name) newErrors.last_name = isRTL ? "اسم العائلة مطلوب" : "Last Name is Required";
+    if (!formData.first_name)
+      newErrors.first_name = isRTL
+        ? "الاسم الأول مطلوب"
+        : "First Name is Required";
+    if (!formData.last_name)
+      newErrors.last_name = isRTL
+        ? "اسم العائلة مطلوب"
+        : "Last Name is Required";
     if (!formData.email) {
       newErrors.email = isRTL ? "البريد الإلكتروني مطلوب" : "Email is Required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = isRTL ? "البريد الإلكتروني غير صحيح" : "The Email field is not a valid e-mail address.";
+      newErrors.email = isRTL
+        ? "البريد الإلكتروني غير صحيح"
+        : "The Email field is not a valid e-mail address.";
     }
-    if (!formData.mobile) newErrors.mobile = isRTL ? "رقم الجوال مطلوب" : "Mobile is Required";
+    if (!formData.mobile)
+      newErrors.mobile = isRTL ? "رقم الجوال مطلوب" : "Mobile is Required";
     if (!formData.travel_date)
-      newErrors.travel_date = isRTL ? "تاريخ السفر مطلوب" : "The Travel Date field is required.";
+      newErrors.travel_date = isRTL
+        ? "تاريخ السفر مطلوب"
+        : "The Travel Date field is required.";
     if (!formData.guests || formData.guests < 1)
-      newErrors.guests = isRTL ? "يرجى اختيار ضيف واحد على الأقل" : "Please select at least 1 guest";
+      newErrors.guests = isRTL
+        ? "يرجى اختيار ضيف واحد على الأقل"
+        : "Please select at least 1 guest";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle Bank Transfer Submission
-  const handleBankTransferSubmit = async (e) => {
+  // Handle Booking & Payment Submission
+  const handleSubmitBooking = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -102,12 +150,18 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
       return;
     }
 
+    setLoading(true);
+    setPaymentError(null);
+    setErrors({});
+
     const packageId = formData.package_id || String(packageData?.id || "");
     const packageCode =
       formData.package_code ||
       packageData?.basic_info?.trip_code ||
       packageData?.trip_code ||
       `PKG-${packageData?.id || "1"}`;
+
+    const calculatedTotal = calculateTotalPrice();
 
     const bookingData = {
       first_name: formData.first_name,
@@ -119,18 +173,19 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
       package_id: packageId,
       package_code: packageCode,
       notes: formData.notes || "",
-      payment_method: "bank_transfer",
+      payment_method: "credit_card",
       booking_type: "destination",
       guests: formData.guests || 1,
       special_requests: formData.special_requests || "",
+      total_amount: calculatedTotal,
+      price: calculatedTotal,
     };
 
-    console.log("Submitting bank transfer booking:", bookingData);
-    setLoading(true);
-    setErrors({});
+    console.log("Submitting booking:", bookingData);
 
     try {
-      const response = await fetch(`${API_URL}/bookings/guest`, {
+      // Step 1: Create the booking
+      const bookingResponse = await fetch(`${API_URL}/bookings/guest`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,103 +194,46 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
         body: JSON.stringify(bookingData),
       });
 
-      const data = await response.json();
-      console.log("Booking response:", data);
+      const bookingResult = await bookingResponse.json();
+      console.log("Booking response:", bookingResult);
 
-      if (response.ok && data.success) {
-        setBookingId(data.data.id);
-        setBankDetails({
-          account_number: data.data.bank_account || "SA1234567890",
-          iban: data.data.iban || "SA1234567890123456789012",
-          bank_name: data.data.bank_name || "البنك الأهلي السعودي",
-          amount: packageData?.price || data.data.total_amount || 100,
-        });
-        setStep(3);
-        setPaymentSuccess(true);
+      if (bookingResponse.ok && bookingResult.success) {
+        const newBookingId = bookingResult.data.id;
+        setBookingId(newBookingId);
+
+        // Step 2: Move to the Moyasar payment form flow.
         setLoading(false);
+        setIsRedirecting(true);
+        window.location.href = `/${lang}/booking-success?booking_id=${newBookingId}`;
       } else {
-        if (data.errors) {
-          console.log("Validation errors:", data.errors);
-          setErrors(data.errors);
+        if (bookingResult.errors) {
+          setErrors(bookingResult.errors);
         } else {
-          setErrors({ submit: data.message || (isRTL ? "حدث خطأ ما" : "Something went wrong") });
+          setErrors({
+            submit: bookingResult.message || (isRTL ? "حدث خطأ ما" : "Something went wrong"),
+          });
         }
         setLoading(false);
       }
     } catch (error) {
       console.error("Booking error:", error);
-      setErrors({ submit: isRTL ? "فشل إنشاء الحجز. يرجى المحاولة مرة أخرى." : "Failed to create booking. Please try again." });
+      setErrors({
+        submit: isRTL
+          ? "فشل إنشاء الحجز. يرجى المحاولة مرة أخرى."
+          : "Failed to create booking. Please try again.",
+      });
       setLoading(false);
     }
   };
 
-  // Handle Credit Card Payment - Redirect to Moyasar Hosted Checkout Page
-  const handleCreditCardPayment = async () => {
-    if (!bookingId) {
-      setPaymentError(isRTL ? "يرجى إنشاء الحجز أولاً" : "Please create booking first");
-      return;
-    }
-
-    setIsRedirecting(true);
-    setPaymentError(null);
-
-    try {
-      const price = packageData?.price || 100;
-
-      // Prepare the payment payload
-      const paymentPayload = {
-        booking_id: bookingId,
-        amount: Math.round(price * 100), // Moyasar expects amount in smallest currency unit (halalas)
-        payment_method: "credit_card",
-        success_url: `${window.location.origin}/${lang}/booking-success?booking_id=${bookingId}`,
-        cancel_url: `${window.location.origin}/${lang}/booking-cancel?booking_id=${bookingId}`,
-      };
-
-      console.log("Initiating payment with payload:", paymentPayload);
-
-      // Call Moyasar API to create a payment session
-      const moyasarResponse = await fetch(
-        `${API_URL}/payments/moyasar/initiate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(paymentPayload),
-        }
-      );
-
-      const paymentData = await moyasarResponse.json();
-      console.log("Payment response:", paymentData);
-
-      if (paymentData.success && paymentData.payment_url) {
-        // Redirect to Moyasar Hosted Checkout Page
-        console.log("Redirecting to:", paymentData.payment_url);
-        window.location.href = paymentData.payment_url;
-        return;
-      } else {
-        setPaymentError(
-          paymentData.message || 
-          paymentData.error || 
-          (isRTL ? "فشل بدء عملية الدفع" : "Payment initiation failed")
-        );
-        setIsRedirecting(false);
-      }
-    } catch (error) {
-      console.error("Payment error:", error);
-      setPaymentError(
-        isRTL ? "فشل الاتصال ببوابة الدفع. يرجى المحاولة مرة أخرى." : "Failed to connect to payment gateway. Please try again."
-      );
-      setIsRedirecting(false);
-    }
-  };
-
+const initiatePayment = async (bookingId, amount) => {
+  setLoading(false);
+  setIsRedirecting(true);
+  window.location.href = `/${lang}/booking-success?booking_id=${bookingId}`;
+};
   const resetForm = () => {
     setStep(1);
-    setBankDetails(null);
     setBookingId(null);
-    setPaymentSuccess(false);
     setPaymentError(null);
     setFormData({
       first_name: "",
@@ -253,17 +251,14 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
     });
     setErrors({});
     setIsRedirecting(false);
+    setTotalAmount(0);
+    setPaymentUrl(null);
+    setShowPaymentIframe(false);
   };
 
   const handleClose = () => {
     resetForm();
     onClose();
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert(isRTL ? "تم النسخ!" : "Copied!");
-    });
   };
 
   const labels = {
@@ -279,38 +274,35 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
       singleRoom: "Single Room",
       notes: "Notes",
       paymentMethod: "Payment Method",
-      bankTransfer: "Bank Transfer",
-      creditCard: "Pay with Credit Card",
-      confirm: "Confirm Booking",
+      creditCard: "Pay with Moyasar (Visa, Mada, STC Pay, Apple Pay)",
+      confirm: "Confirm Booking & Pay",
       cancel: "Cancel",
       selectPackage: "Select Package",
       data: "Data",
       completed: "Completed",
       bookingSuccess: "Booking Created Successfully!",
       bookingNumber: "Booking Number",
-      bankTransferDetails: "Bank Transfer Details",
-      accountNumber: "Account Number",
-      iban: "IBAN",
-      bankName: "Bank Name",
-      amount: "Amount",
-      copy: "Copy",
       redirecting: "Redirecting to payment gateway...",
-      thankYou: "Please complete the payment using the bank transfer details below.",
       guests: "Number of Guests",
       specialRequests: "Special Requests",
       continue: "Continue",
-      submit: "Submitting...",
+      submit: "Processing...",
       payWithCard: "Pay with Credit Card",
       securePayment: "Secure payments via Moyasar gateway",
-      or: "or",
       paymentSuccess: "Payment Successful!",
       paymentSuccessMessage: "Your booking has been confirmed. We will contact you shortly.",
       payMore: "Pay with Credit Card",
-      bankTransferInfo: "Bank account details will be sent after confirmation",
-      supports: "Supports Mada, Visa, Mastercard, Apple Pay, Samsung Pay",
+      supports: "Supports Visa, Mada, STC Pay, Apple Pay. Bank transfer fallback available.",
       retry: "Retry",
       paymentError: "Payment Error",
+      pricePerPerson: "per person",
+      totalAmount: "Total Amount",
+      roomPrice: "Room Price",
+      additionalGuests: "Additional guests",
+      redirectingToPayment: "Redirecting to secure payment page...",
+      processingBooking: "Creating your booking...",
     },
+
     ar: {
       title: "أكمل بياناتك",
       firstName: "الاسم الأول",
@@ -323,41 +315,71 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
       singleRoom: "غرفة فردية",
       notes: "ملاحظات",
       paymentMethod: "طريقة الدفع",
-      bankTransfer: "تحويل بنكي",
-      creditCard: "ادفع ببطاقة الائتمان",
-      confirm: "تأكيد الحجز",
+      creditCard: "ادفع عبر Moyasar (فيزا، مدى، إس تي سي باي، آبل باي)",
+      confirm: "تأكيد الحجز والدفع",
       cancel: "إلغاء",
       selectPackage: "اختر الباقة",
       data: "البيانات",
       completed: "مكتمل",
       bookingSuccess: "تم إنشاء الحجز بنجاح!",
       bookingNumber: "رقم الحجز",
-      bankTransferDetails: "تفاصيل التحويل البنكي",
-      accountNumber: "رقم الحساب",
-      iban: "رقم الآيبان",
-      bankName: "اسم البنك",
-      amount: "المبلغ",
-      copy: "نسخ",
       redirecting: "جاري التوجيه لبوابة الدفع...",
-      thankYou: "يرجى إكمال الدفع باستخدام تفاصيل التحويل البنكي أدناه.",
       guests: "عدد الضيوف",
       specialRequests: "طلبات خاصة",
       continue: "متابعة",
-      submit: "جاري الإرسال...",
+      submit: "جاري المعالجة...",
       payWithCard: "ادفع ببطاقة الائتمان",
       securePayment: "مدفوعات آمنة عبر بوابة ميسر",
-      or: "أو",
       paymentSuccess: "تم الدفع بنجاح!",
       paymentSuccessMessage: "تم تأكيد حجزك. سنتواصل معك قريباً.",
       payMore: "ادفع ببطاقة الائتمان",
-      bankTransferInfo: "سيتم إرسال تفاصيل الحساب البنكي بعد التأكيد",
-      supports: "يدعم مدى، فيزا، ماستركارد، آبل باي، سامسونج باي",
+      supports: "يدعم فيزا، مدى، إس تي سي باي، آبل باي. الدفع عبر التحويل البنكي متاح كخيار احتياطي.",
       retry: "إعادة المحاولة",
       paymentError: "خطأ في الدفع",
+      pricePerPerson: "للفرد",
+      totalAmount: "المبلغ الإجمالي",
+      roomPrice: "سعر الغرفة",
+      additionalGuests: "ضيوف إضافيين",
+      redirectingToPayment: "جاري التوجيه لصفحة الدفع الآمنة...",
+      processingBooking: "جاري إنشاء حجزك...",
     },
   };
 
   const t = labels[lang] || labels.en;
+
+  // Get price breakdown for display
+  const getPriceBreakdown = () => {
+    const basePrice = getBasePrice();
+    const guests = formData.guests || 1;
+    const roomType = formData.room_type;
+
+    if (roomType === "DoubleRoom") {
+      if (guests <= 2) {
+        return {
+          basePrice: basePrice,
+          extraCost: 0,
+          total: basePrice,
+          description: t.roomPrice,
+        };
+      } else {
+        const extraGuests = guests - 2;
+        const extraCost = extraGuests * basePrice * 0.5;
+        return {
+          basePrice: basePrice,
+          extraCost: extraCost,
+          total: basePrice + extraCost,
+          description: `${t.roomPrice} + ${extraGuests} ${t.additionalGuests}`,
+        };
+      }
+    } else {
+      return {
+        basePrice: basePrice * guests,
+        extraCost: 0,
+        total: basePrice * guests,
+        description: `${guests} × ${t.pricePerPerson}`,
+      };
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -578,7 +600,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
               )}
 
               {step === 2 && (
-                <form onSubmit={handleBankTransferSubmit}>
+                <form onSubmit={handleSubmitBooking}>
                   <div
                     style={{
                       display: "grid",
@@ -658,8 +680,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
                           color: "#333",
                         }}
                       >
-                        {t.lastName}{" "}
-                        <span style={{ color: "#dc3545" }}>*</span>
+                        {t.lastName} <span style={{ color: "#dc3545" }}>*</span>
                       </label>
                       <div style={{ position: "relative" }}>
                         <User
@@ -993,6 +1014,49 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
                       )}
                     </div>
 
+                    {/* Price Breakdown Display */}
+                    <div style={{ gridColumn: "1 / -1" }}>
+                      <div
+                        style={{
+                          background: "#f0f8ff",
+                          padding: "15px",
+                          borderRadius: "8px",
+                          border: "1px solid #d4edda",
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span style={{ fontWeight: "600", color: "#2c2c2c" }}>
+                            {t.totalAmount}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "700",
+                              color: "#dfa528",
+                            }}
+                          >
+                            {totalAmount} SAR
+                          </span>
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "12px",
+                            color: "#666",
+                            marginTop: "4px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {getPriceBreakdown().description}
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Special Requests */}
                     <div style={{ gridColumn: "1 / -1" }}>
                       <label
@@ -1028,23 +1092,33 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
                       </div>
                     </div>
 
-                    {/* Bank Transfer Info */}
+                    {/* Payment Method Info */}
                     <div style={{ gridColumn: "1 / -1", marginTop: "10px" }}>
                       <div
                         style={{
                           background: "#f8f9fa",
                           padding: "15px",
                           borderRadius: "8px",
-                          border: "2px solid #28a745",
+                          border: "2px solid #dfa528",
                           textAlign: "center",
                         }}
                       >
-                        <Banknote size={24} color="#28a745" style={{ display: "block", margin: "0 auto 8px" }} />
-                        <span style={{ fontWeight: "600", color: "#28a745" }}>
-                          {t.bankTransfer}
+                        <CreditCard
+                          size={24}
+                          color="#dfa528"
+                          style={{ display: "block", margin: "0 auto 8px" }}
+                        />
+                        <span style={{ fontWeight: "600", color: "#dfa528" }}>
+                          {t.creditCard}
                         </span>
-                        <p style={{ fontSize: "12px", color: "#666", marginTop: "4px" }}>
-                          {t.bankTransferInfo}
+                        <p
+                          style={{
+                            fontSize: "12px",
+                            color: "#666",
+                            marginTop: "4px",
+                          }}
+                        >
+                          {t.supports}
                         </p>
                       </div>
                     </div>
@@ -1090,242 +1164,143 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
                       style={{
                         flex: 2,
                         padding: "12px",
-                        background: "#28a745",
+                        background: loading ? "#c98c1e" : "#dfa528",
                         color: "#fff",
                         border: "none",
                         borderRadius: "8px",
                         fontWeight: "600",
                         cursor: loading ? "not-allowed" : "pointer",
-                        opacity: loading ? 0.6 : 1,
+                        opacity: loading ? 0.7 : 1,
                         fontSize: "14px",
                         transition: "all 0.3s",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "8px",
                       }}
                       onMouseEnter={(e) =>
-                        !loading &&
-                        (e.target.style.background = "#218838")
+                        !loading && (e.target.style.background = "#c98c1e")
                       }
                       onMouseLeave={(e) =>
-                        !loading &&
-                        (e.target.style.background = "#28a745")
+                        !loading && (e.target.style.background = "#dfa528")
                       }
                     >
-                      {loading ? t.submit : t.confirm}
+                      {loading ? (
+                        <>
+                          <Loader2 size={16} style={{ animation: "spin 1s linear infinite" }} />
+                          {t.submit}
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard size={16} />
+                          {t.confirm} ({totalAmount} SAR)
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
               )}
 
-              {step === 3 && bankDetails && (
-                <div style={{ padding: "10px 0" }}>
+              {step === 3 && (
+                <div style={{ padding: "10px 0 0" }}>
                   <div
                     style={{
-                      textAlign: "center",
-                      marginBottom: "20px",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "12px",
+                      gap: "10px",
                     }}
                   >
-                    <div
+                    <div>
+                      <h3 style={{ color: "#28a745", margin: "0 0 6px" }}>
+                        {t.bookingSuccess}
+                      </h3>
+                      <p style={{ color: "#666", fontSize: "14px", margin: 0 }}>
+                        {t.redirectingToPayment}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPaymentUrl(null);
+                        setShowPaymentIframe(false);
+                        setStep(2);
+                        setPaymentError(null);
+                      }}
                       style={{
-                        width: "70px",
-                        height: "70px",
-                        borderRadius: "50%",
-                        background: "#d4edda",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto 15px",
+                        background: "#f0f0f0",
+                        border: "none",
+                        borderRadius: "8px",
+                        padding: "8px 12px",
+                        cursor: "pointer",
+                        fontWeight: "600",
                       }}
                     >
-                      <Check size={35} color="#28a745" />
-                    </div>
-                    <h3 style={{ color: "#28a745", marginBottom: "5px" }}>
-                      {t.bookingSuccess}
-                    </h3>
-                    <p style={{ color: "#666", fontSize: "14px" }}>
-                      {t.thankYou}
-                    </p>
+                      {t.cancel}
+                    </button>
                   </div>
 
-                  {/* Payment Error */}
+                  {showPaymentIframe && paymentUrl ? (
+                    <div
+                      style={{
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "10px",
+                        overflow: "hidden",
+                        minHeight: "620px",
+                        background: "#fff",
+                      }}
+                    >
+                      <iframe
+                        src={paymentUrl}
+                        title="Moyasar payment"
+                        style={{ width: "100%", minHeight: "620px", border: "0" }}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center", padding: "40px 20px" }}>
+                      <Loader2
+                        size={34}
+                        color="#dfa528"
+                        style={{ animation: "spin 1s linear infinite", marginBottom: "12px" }}
+                      />
+                      <p style={{ color: "#666", margin: 0 }}>
+                        {t.redirectingToPayment}
+                      </p>
+                    </div>
+                  )}
+
                   {paymentError && (
                     <div
                       style={{
                         background: "#fde8e8",
-                        border: "1px solid #f5c6cb",
-                        color: "#721c24",
-                        padding: "12px 15px",
+                        color: "#dc3545",
+                        padding: "15px",
                         borderRadius: "8px",
-                        marginBottom: "15px",
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "10px",
+                        marginTop: "15px",
                       }}
                     >
-                      <AlertCircle size={18} style={{ flexShrink: 0, marginTop: "2px" }} />
-                      <div>
-                        <strong>{t.paymentError}:</strong> {paymentError}
-                        <button
-                          onClick={() => {
-                            setPaymentError(null);
-                            handleCreditCardPayment();
-                          }}
-                          style={{
-                            background: "none",
-                            border: "none",
-                            color: "#dfa528",
-                            cursor: "pointer",
-                            fontWeight: "600",
-                            marginLeft: "10px",
-                            textDecoration: "underline",
-                          }}
-                        >
-                          {t.retry}
-                        </button>
-                      </div>
+                      <strong>{t.paymentError}:</strong> {paymentError}
+                      <button
+                        onClick={() => {
+                          setPaymentError(null);
+                          setStep(2);
+                        }}
+                        style={{
+                          background: "#dfa528",
+                          color: "#fff",
+                          border: "none",
+                          padding: "8px 20px",
+                          borderRadius: "20px",
+                          cursor: "pointer",
+                          marginTop: "10px",
+                          fontWeight: "600",
+                        }}
+                      >
+                        {t.retry}
+                      </button>
                     </div>
                   )}
-
-                  {/* Bank Transfer Details */}
-                  <div
-                    style={{
-                      background: "#f8f9fa",
-                      padding: "20px",
-                      borderRadius: "12px",
-                      border: "1px solid #e0e0e0",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <h4 style={{ margin: "0 0 15px 0", color: "#2c2c2c", textAlign: "center" }}>
-                      <Building2 size={18} style={{ display: "inline", marginRight: "8px" }} />
-                      {t.bankTransferDetails}
-                    </h4>
-
-                    <div style={{ display: "grid", gap: "12px" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#fff", borderRadius: "6px" }}>
-                        <span style={{ color: "#666", fontSize: "13px" }}>{t.bankName}</span>
-                        <span style={{ fontWeight: "600", fontSize: "14px" }}>{bankDetails.bank_name}</span>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#fff", borderRadius: "6px" }}>
-                        <span style={{ color: "#666", fontSize: "13px" }}>{t.accountNumber}</span>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontWeight: "600", fontSize: "14px" }}>{bankDetails.account_number}</span>
-                          <button
-                            onClick={() => copyToClipboard(bankDetails.account_number)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "#dfa528",
-                              cursor: "pointer",
-                              padding: "2px 6px",
-                              fontSize: "12px",
-                            }}
-                          >
-                            {t.copy}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#fff", borderRadius: "6px" }}>
-                        <span style={{ color: "#666", fontSize: "13px" }}>{t.iban}</span>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <span style={{ fontWeight: "600", fontSize: "13px", fontFamily: "monospace" }}>{bankDetails.iban}</span>
-                          <button
-                            onClick={() => copyToClipboard(bankDetails.iban)}
-                            style={{
-                              background: "none",
-                              border: "none",
-                              color: "#dfa528",
-                              cursor: "pointer",
-                              padding: "2px 6px",
-                              fontSize: "12px",
-                            }}
-                          >
-                            {t.copy}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "#fff", borderRadius: "6px", borderTop: "2px solid #dfa528" }}>
-                        <span style={{ color: "#666", fontSize: "13px" }}>{t.amount}</span>
-                        <span style={{ fontWeight: "700", fontSize: "18px", color: "#dfa528" }}>
-                          {bankDetails.amount} SAR
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Pay with Credit Card Button */}
-                  <div style={{ textAlign: "center", marginTop: "10px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "15px", marginBottom: "15px" }}>
-                      <div style={{ flex: 1, height: "1px", background: "#e0e0e0" }}></div>
-                      <span style={{ color: "#999", fontSize: "13px" }}>{t.or}</span>
-                      <div style={{ flex: 1, height: "1px", background: "#e0e0e0" }}></div>
-                    </div>
-
-                    <button
-                      onClick={handleCreditCardPayment}
-                      disabled={isRedirecting}
-                      style={{
-                        width: "100%",
-                        padding: "14px",
-                        background: isRedirecting 
-                          ? "linear-gradient(135deg, #c98c1e 0%, #b87a1a 100%)"
-                          : "linear-gradient(135deg, #dfa528 0%, #c98c1e 100%)",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "8px",
-                        fontWeight: "600",
-                        fontSize: "16px",
-                        cursor: isRedirecting ? "not-allowed" : "pointer",
-                        opacity: isRedirecting ? 0.7 : 1,
-                        transition: "all 0.3s",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "10px",
-                        boxShadow: isRedirecting 
-                          ? "none"
-                          : "0 4px 15px rgba(223, 165, 40, 0.4)",
-                      }}
-                      onMouseEnter={(e) =>
-                        !isRedirecting &&
-                        (e.target.style.background = "linear-gradient(135deg, #c98c1e 0%, #b87a1a 100%)")
-                      }
-                      onMouseLeave={(e) =>
-                        !isRedirecting &&
-                        (e.target.style.background = "linear-gradient(135deg, #dfa528 0%, #c98c1e 100%)")
-                      }
-                    >
-                      {isRedirecting ? (
-                        <>
-                          <span style={{
-                            display: "inline-block",
-                            width: "20px",
-                            height: "20px",
-                            border: "3px solid rgba(255,255,255,0.3)",
-                            borderTop: "3px solid #fff",
-                            borderRadius: "50%",
-                            animation: "spin 0.8s linear infinite",
-                          }} />
-                          {t.redirecting}
-                        </>
-                      ) : (
-                        <>
-                          <CreditCard size={20} />
-                          {t.payWithCard}
-                          <ExternalLink size={16} />
-                        </>
-                      )}
-                    </button>
-
-                    <p style={{ fontSize: "12px", color: "#888", marginTop: "10px" }}>
-                      <Lock size={12} style={{ display: "inline", marginRight: "4px" }} />
-                      {t.securePayment}
-                    </p>
-                    <p style={{ fontSize: "11px", color: "#aaa", marginTop: "4px" }}>
-                      {t.supports}
-                    </p>
-                  </div>
                 </div>
               )}
             </div>
@@ -1337,11 +1312,13 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
 }
 
 // Global styles for spinner animation
-<style dangerouslySetInnerHTML={{
-  __html: `
+<style
+  dangerouslySetInnerHTML={{
+    __html: `
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  `
-}} />;
+  `,
+  }}
+/>;

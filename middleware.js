@@ -8,6 +8,8 @@ export function middleware(request) {
   if (
     pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/") ||
+    pathname === "/proxy" ||
+    pathname.startsWith("/proxy/") ||
     pathname.includes(".")
   ) {
     return NextResponse.next();

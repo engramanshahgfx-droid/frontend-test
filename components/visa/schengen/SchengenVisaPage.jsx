@@ -35,7 +35,7 @@ export default function SchengenVisaPage({ lang = "ar" }) {
 
   return (
     <main className={styles.page} dir={t.dir}>
-      {/* Black top bar */}
+      {/* Fixed Top Bar - Black */}
       <div className={styles.topBar}></div>
       
       <div className={styles.hero}>

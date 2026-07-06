@@ -44,6 +44,23 @@ const nextConfig = {
       },
     ];
   },
+
+  async rewrites() {
+  return [
+    {
+      source: '/api/:path*',
+      destination: 'http://localhost:8000/api/:path*',
+    },
+    {
+      source: '/:lang/proxy/:path*',
+      destination: '/proxy/:path*',
+    },
+    {
+      source: '/:lang/proxy',
+      destination: '/proxy',
+    },
+  ];
+}
 };
 
 export default nextConfig;

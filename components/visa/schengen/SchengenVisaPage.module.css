@@ -1,29 +1,20 @@
-/* Add this new style for the top bar */
-.topBar {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
-  height: 70px;
-  background: #000000;
-  z-index: 10;
-}
+/* SchengenVisaPage.module.css - Complete Fixed */
 
-/* Update page padding to account for the top bar */
 .page {
   min-height: 100vh;
   background: radial-gradient(circle at top, #fff7ea 0%, #fdfdfd 45%, #f2f5f8 100%);
-  padding: 80px 16px 56px;  /* Increased top padding from 32px to 80px */
+  padding-top: 120px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 56px;
   color: #122230;
-  position: relative;
   overflow-x: hidden;
 }
 
-/* Rest of your existing CSS remains exactly the same */
+/* Hero */
 .hero {
   max-width: 1100px;
-  margin: 0 auto 20px;
+  margin: 50 auto 20px;
   background: linear-gradient(120deg, #1f4e5f 0%, #2a6f83 100%);
   border-radius: 18px;
   padding: 24px;
@@ -31,15 +22,14 @@
   box-shadow: 0 16px 36px rgba(13, 52, 69, 0.24);
 }
 
-/* ... all your other existing CSS stays exactly the same ... */
 .badge {
   display: inline-block;
   background: #f2c264;
   color: #2d2103;
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 0.84rem;
-  margin: 0 0 10px;
+  margin: 0 0 20px;
   font-weight: 700;
 }
 
@@ -55,6 +45,7 @@
   opacity: 0.95;
 }
 
+/* Content */
 .contentStack {
   max-width: 1100px;
   margin: 0 auto;
@@ -62,164 +53,279 @@
   gap: 16px;
 }
 
+/* Section Cards - Used by all child components */
 .sectionCard {
   background: #ffffff;
   border: 1px solid #e4eaef;
   border-radius: 16px;
-  padding: 18px;
+  padding: 24px;
   box-shadow: 0 8px 24px rgba(18, 34, 48, 0.06);
 }
 
 .sectionTitle {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f4e5f;
 }
 
 .sectionLead {
-  margin: 8px 0 0;
+  margin: 0 0 16px 0;
   color: #365367;
-}
-
-.group {
-  margin-top: 16px;
-}
-
-.groupTitle {
-  margin: 0 0 8px;
-  color: #0f394f;
   font-size: 1rem;
 }
 
-.list {
-  margin: 0;
-  padding-right: 20px;
-  display: grid;
-  gap: 8px;
-  line-height: 1.8;
-}
-
+/* Form Styles */
 .form {
-  margin-top: 14px;
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .formGrid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
 
 .field {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
-  font-size: 0.95rem;
+}
+
+.field label {
+  font-size: 0.9rem;
+  font-weight: 600;
   color: #17384d;
 }
 
 .field input,
 .field select,
 .field textarea {
+  width: 100%;
+  padding: 10px 12px;
   border: 1px solid #c8d4de;
   border-radius: 10px;
-  padding: 10px 12px;
   font-size: 0.95rem;
   background: #ffffff;
   color: #102736;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  outline: 2px solid #78adc9;
-  outline-offset: 0;
+  outline: none;
   border-color: #78adc9;
+  box-shadow: 0 0 0 3px rgba(120, 173, 201, 0.2);
 }
 
-.attachmentsBox {
-  border: 1px dashed #a8bfce;
-  border-radius: 12px;
-  padding: 12px;
-  background: #f8fbfd;
-}
-
-.attachmentsTitle {
-  margin: 0 0 10px;
-  font-size: 1rem;
-  color: #0f394f;
-}
-
-.submitButton {
-  justify-self: start;
-  background: linear-gradient(135deg, #d29a2f 0%, #efc880 100%);
-  color: #2b1c00;
-  border: none;
-  border-radius: 10px;
-  padding: 11px 24px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.submitButton:hover {
-  filter: brightness(1.05);
-}
-
-.submitButton:disabled {
-  opacity: 0.6;
+.field input:disabled,
+.field select:disabled,
+.field textarea:disabled {
+  background: #f5f7fa;
   cursor: not-allowed;
 }
 
-.successMessage {
-  margin-top: 12px;
-  color: #0f6b2c;
-  background: #e8f8ee;
-  border: 1px solid #b8e2c7;
-  padding: 10px 12px;
-  border-radius: 10px;
+/* Attachments */
+.attachmentsBox {
+  border: 2px dashed #a8bfce;
+  border-radius: 12px;
+  padding: 20px;
+  background: #f8fbfd;
+  margin-top: 8px;
 }
 
+.attachmentsTitle {
+  margin: 0 0 16px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0f394f;
+}
+
+/* Services Grid */
 .serviceGrid {
-  margin-top: 14px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .serviceItem {
   background: #f5f9fc;
   border: 1px solid #d6e2ea;
   border-radius: 10px;
-  padding: 10px 12px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-weight: 500;
 }
 
 .checkMark {
   color: #0f6b2c;
   font-weight: 800;
+  font-size: 1.1rem;
 }
 
+/* Submit Button */
+.submitButton {
+  background: linear-gradient(135deg, #d29a2f 0%, #efc880 100%);
+  color: #2b1c00;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 32px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  justify-self: start;
+}
+
+.submitButton:hover {
+  filter: brightness(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(210, 154, 47, 0.3);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Success Message */
+.successMessage {
+  margin-top: 16px;
+  padding: 16px;
+  background: #e8f8ee;
+  border: 1px solid #b8e2c7;
+  border-radius: 10px;
+  color: #0f6b2c;
+  font-weight: 500;
+}
+
+/* Mobile Responsive */
 @media (max-width: 880px) {
+  .page {
+    padding-top: 100px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 40px !important;
+  }
+
   .formGrid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .serviceGrid {
     grid-template-columns: 1fr 1fr;
   }
+
+  .sectionCard {
+    padding: 18px;
+  }
 }
 
 @media (max-width: 580px) {
+  .page {
+    padding-top: 90px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .hero {
+    padding: 18px !important;
+    border-radius: 14px !important;
+    margin-top: 0 !important;
+  }
+
+  .title {
+    font-size: 1.5rem !important;
+  }
+
+  .subtitle {
+    font-size: 0.95rem !important;
+  }
+
+  .badge {
+    font-size: 0.75rem !important;
+    padding: 20px 30px !important;
+  }
+
+  .sectionCard {
+    padding: 14px !important;
+    border-radius: 14px !important;
+  }
+
+  .sectionTitle {
+    font-size: 1.1rem !important;
+  }
+
   .serviceGrid {
     grid-template-columns: 1fr;
   }
 
+  .submitButton {
+    width: 100%;
+    justify-self: stretch;
+    text-align: center;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .attachmentsBox {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 380px) {
   .page {
-    padding: 20px 12px 42px;
+    padding-top: 80px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    padding-bottom: 24px !important;
   }
 
   .hero {
-    padding: 18px;
+    padding: 14px !important;
+  }
+
+  .title {
+    font-size: 1.3rem !important;
+  }
+
+  .sectionCard {
+    padding: 10px !important;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .list {
+  padding-right: 20px;
+  padding-left: 0;
+}
+
+[dir="rtl"] .field input,
+[dir="rtl"] .field select,
+[dir="rtl"] .field textarea {
+  text-align: right;
+}
+
+[dir="rtl"] .submitButton {
+  justify-self: end;
+}
+
+@media (max-width: 580px) {
+  [dir="rtl"] .submitButton {
+    justify-self: stretch;
   }
 }

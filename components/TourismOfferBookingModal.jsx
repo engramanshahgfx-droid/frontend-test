@@ -133,14 +133,25 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     setErrors({});
 
     try {
+      // Get the offer price
+      const offerPrice = getOfferPrice();
+      if (!offerPrice) {
+        setErrors({ submit: 'Offer price not available' });
+        setLoading(false);
+        return;
+      }
+
       const bookingData = {
         ...formData,
         booking_type: 'tourism_offer',
-        payment_method: 'bank_transfer',
+        payment_method: 'credit_card',
+        total_amount: offerPrice,
+        package_title: getOfferTitle(),
       };
 
       console.log("Submitting tourism offer booking:", bookingData);
       
+      // Step 1: Create the booking
       const response = await fetch(`${API_URL}/bookings/guest`, {
         method: 'POST',
         headers: {
@@ -154,23 +165,21 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
       console.log("Booking response:", data);
 
       if (response.ok && data.success) {
-        setStep(2);
-        setTimeout(() => {
-          onClose();
-          setStep(1);
-          resetForm();
-        }, 3000);
+        const bookingId = data.data.id;
+        
+        // Redirect to checkout page where Moyasar form will handle payment
+        window.location.href = `/${lang}/booking-success?booking_id=${bookingId}`;
       } else {
         if (data.errors) {
           setErrors(data.errors);
         } else {
           setErrors({ submit: data.message || 'Something went wrong' });
         }
+        setLoading(false);
       }
     } catch (error) {
       console.error('Booking error:', error);
       setErrors({ submit: 'Failed to create booking. Please try again.' });
-    } finally {
       setLoading(false);
     }
   };
@@ -584,6 +593,7 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                     <button
                       type="button"
                       onClick={handleClose}
+                      disabled={loading}
                       style={{
                         flex: 1,
                         padding: '12px',
@@ -591,7 +601,8 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                         border: 'none',
                         borderRadius: '8px',
                         fontWeight: '600',
-                        cursor: 'pointer',
+                        cursor: loading ? 'not-allowed' : 'pointer',
+                        opacity: loading ? 0.6 : 1,
                         fontSize: '14px'
                       }}
                     >
@@ -616,7 +627,7 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                       onMouseEnter={(e) => !loading && (e.target.style.background = '#c98c1e')}
                       onMouseLeave={(e) => !loading && (e.target.style.background = '#dfa528')}
                     >
-                      {loading ? 'Submitting...' : t.confirm}
+                      {loading ? 'Processing...' : t.confirm}
                     </button>
                   </div>
                 </form>
@@ -638,7 +649,20 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                   </svg>
                 </div>
                 <h3 style={{ color: '#28a745', marginBottom: '10px' }}>{t.bookingSuccess}</h3>
-                <p style={{ color: '#666', fontSize: '14px' }}>{t.thankYou}</p>
+                <p style={{ color: '#666', fontSize: '14px', marginBottom: '16px' }}>
+                  {isRTL 
+                    ? 'سيتم نقلك إلى صفحة الدفع الآمنة...'
+                    : 'You will be redirected to secure payment page...'}
+                </p>
+                <div style={{
+                  display: 'inline-block',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  border: '3px solid #dfa528',
+                  borderTopColor: 'transparent',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
               </div>
             )}
           </motion.div>

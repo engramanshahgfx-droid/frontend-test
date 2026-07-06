@@ -1,3 +1,4 @@
+// app/[lang]/international/internet-packages/page.jsx
 import InternetPackagesForm from "@/components/international/InternetPackagesForm";
 
 export const dynamic = 'force-dynamic';

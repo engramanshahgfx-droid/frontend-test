@@ -110,48 +110,6 @@ const translations = {
     noHiddenFees: "بدون رسوم خفية",
     easyTopup: "شحن سهل",
   },
-  zh: {
-    title: "全球互联网套餐",
-    subtitle: "在200多个国家保持连接，享受闪电般快速的互联网",
-    formTitle: "立即连接",
-    country: "目的地国家",
-    countryPlaceholder: "选择或输入您的目的地",
-    mobileNumber: "手机号码",
-    mobilePlaceholder: "+966 5X XXX XXXX",
-    package: "选择套餐",
-    selectPackage: "选择数据套餐",
-    submit: "激活套餐",
-    submitting: "处理中...",
-    submitSuccess: "套餐激活成功！",
-    submitError: "激活套餐失败，请重试。",
-    popular: "最受欢迎",
-    bestValue: "最佳价值",
-    features: {
-      title: "高级功能",
-      global: "全球覆盖",
-      globalDesc: "在200多个国家无缝连接",
-      fast: "闪电速度",
-      fastDesc: "主要城市提供5G速度",
-      affordable: "最优价格",
-      affordableDesc: "节省高达70%的漫游费用",
-      support: "优先支持",
-      supportDesc: "24/7专属协助",
-    },
-    trustIndicators: {
-      title: "全球信赖",
-      customers: "满意旅客",
-      coverage: "国家覆盖",
-      uptime: "网络可靠性",
-    },
-    contactInfo: "需要帮助？",
-    workingHours: "支持可用",
-    workingHoursDetail: "24/7 - 全球支持团队",
-    callUs: "呼叫中心",
-    emailUs: "邮件支持",
-    instantActivation: "即时激活",
-    noHiddenFees: "无隐藏费用",
-    easyTopup: "轻松充值",
-  },
 };
 
 export default function InternetPackagesForm({ lang = "en" }) {
@@ -183,7 +141,7 @@ export default function InternetPackagesForm({ lang = "en" }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (name === "country" && value) {
       const countryFlags = {
-        "saudi": "🇸🇦", "uae": "🇦🇪", "egypt": "🇪🇬", "usa": "🇺🇸", 
+        "saudi": "🇸🇦", "uae": "🇦🇪", "egypt": "🇪🇬", "usa": "🇺🇸",
         "uk": "🇬🇧", "france": "🇫🇷", "germany": "🇩🇪", "italy": "🇮🇹",
         "spain": "🇪🇸", "turkey": "🇹🇷", "japan": "🇯🇵", "china": "🇨🇳",
       };
@@ -237,14 +195,14 @@ export default function InternetPackagesForm({ lang = "en" }) {
 
   return (
     <div style={{ direction: isRTL ? "rtl" : "ltr" }}>
-      {/* Full width black header - 60px height */}
+      {/* Full width black header */}
       <div style={{ height: "60px", backgroundColor: "#000000", width: "100%", position: "relative", zIndex: 10 }} />
       
-      {/* Main Content with Gradient Background */}
-      <div style={{ 
+      {/* Main Content */}
+      <div style={{
         minHeight: "calc(100vh - 60px)",
         background: "#8A7779",
-        padding: "48px 32px",
+        padding: "32px 16px",
       }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           {/* Header Section */}
@@ -252,30 +210,30 @@ export default function InternetPackagesForm({ lang = "en" }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            style={{ textAlign: "center", marginBottom: "48px" }}
+            style={{ textAlign: "center", marginBottom: "40px" }}
           >
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "80px",
-                height: "80px",
+                width: "72px",
+                height: "72px",
                 background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
                 borderRadius: "16px",
-                marginBottom: "24px",
+                marginBottom: "20px",
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
               }}
             >
-              <Wifi size={40} color="white" />
+              <Wifi size={36} color="white" />
             </motion.div>
-            
+
             <h1 style={{
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
+              fontSize: "clamp(1.8rem, 5vw, 3.2rem)",
               fontWeight: "bold",
-              marginBottom: "16px",
+              marginBottom: "12px",
               background: "linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -283,50 +241,95 @@ export default function InternetPackagesForm({ lang = "en" }) {
             }}>
               {t.title}
             </h1>
-            
-            <p style={{ fontSize: "1.25rem", color: "#9ca3af", maxWidth: "768px", margin: "0 auto" }}>
+
+            <p style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#d1d5db", maxWidth: "768px", margin: "0 auto" }}>
               {t.subtitle}
             </p>
-            
-            {/* Quick Stats Pills */}
-            <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "32px", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", backdropFilter: "blur(4px)", padding: "8px 16px", borderRadius: "9999px" }}>
-                <Zap size={16} color="#facc15" />
-                <span style={{ color: "white", fontSize: "0.875rem" }}>{t.instantActivation}</span>
+
+            {/* Quick Stats Pills - Responsive wrap */}
+            <div style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "12px",
+              marginTop: "24px",
+              flexWrap: "wrap",
+            }}>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(4px)",
+                padding: "6px 14px",
+                borderRadius: "9999px",
+                fontSize: "0.8rem"
+              }}>
+                <Zap size={14} color="#facc15" />
+                <span style={{ color: "white" }}>{t.instantActivation}</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", backdropFilter: "blur(4px)", padding: "8px 16px", borderRadius: "9999px" }}>
-                <Shield size={16} color="#4ade80" />
-                <span style={{ color: "white", fontSize: "0.875rem" }}>{t.noHiddenFees}</span>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(4px)",
+                padding: "6px 14px",
+                borderRadius: "9999px",
+                fontSize: "0.8rem"
+              }}>
+                <Shield size={14} color="#4ade80" />
+                <span style={{ color: "white" }}>{t.noHiddenFees}</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", background: "rgba(255,255,255,0.1)", backdropFilter: "blur(4px)", padding: "8px 16px", borderRadius: "9999px" }}>
-                <TrendingUp size={16} color="#60a5fa" />
-                <span style={{ color: "white", fontSize: "0.875rem" }}>{t.easyTopup}</span>
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                background: "rgba(255,255,255,0.1)",
+                backdropFilter: "blur(4px)",
+                padding: "6px 14px",
+                borderRadius: "9999px",
+                fontSize: "0.8rem"
+              }}>
+                <TrendingUp size={14} color="#60a5fa" />
+                <span style={{ color: "white" }}>{t.easyTopup}</span>
               </div>
             </div>
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "32px" }}>
-            {/* Form Section - takes 2 columns */}
+          {/* MAIN GRID - Responsive: 1 column on mobile, 2 on tablet, 3 on desktop */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: "24px",
+            "@media (min-width: 768px)": {
+              gridTemplateColumns: "2fr 1fr",
+            },
+          }}>
+            {/* Form Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              style={{ gridColumn: "span 2" }}
             >
               <div style={{
                 background: "rgba(255,255,255,0.1)",
                 backdropFilter: "blur(16px)",
-                borderRadius: "24px",
+                borderRadius: "20px",
                 boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
                 overflow: "hidden",
                 border: "1px solid rgba(255,255,255,0.2)"
               }}>
-                <div style={{ background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", padding: "24px 32px" }}>
-                  <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "white" }}>{t.formTitle}</h2>
-                  <p style={{ color: "#bfdbfe", fontSize: "0.875rem", marginTop: "4px" }}>Fill out the details and get connected in minutes</p>
+                <div style={{
+                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                  padding: "20px 24px"
+                }}>
+                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "white" }}>{t.formTitle}</h2>
+                  <p style={{ color: "#bfdbfe", fontSize: "0.8rem", marginTop: "2px" }}>
+                    Fill out the details and get connected in minutes
+                  </p>
                 </div>
 
-                <form onSubmit={handleSubmit} style={{ padding: "32px" }}>
+                <form onSubmit={handleSubmit} style={{ padding: "20px 16px" }}>
                   {/* Status Messages */}
                   <AnimatePresence>
                     {submitStatus === "success" && (
@@ -334,9 +337,19 @@ export default function InternetPackagesForm({ lang = "en" }) {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        style={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px", background: "rgba(34,197,94,0.2)", border: "1px solid rgba(34,197,94,0.5)", borderRadius: "12px", marginBottom: "24px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          padding: "12px 16px",
+                          background: "rgba(34,197,94,0.2)",
+                          border: "1px solid rgba(34,197,94,0.5)",
+                          borderRadius: "12px",
+                          marginBottom: "20px",
+                          fontSize: "0.9rem"
+                        }}
                       >
-                        <CheckCircle size={20} color="#4ade80" />
+                        <CheckCircle size={18} color="#4ade80" />
                         <span style={{ color: "#bbf7d0", fontWeight: "500" }}>{t.submitSuccess}</span>
                       </motion.div>
                     )}
@@ -345,21 +358,56 @@ export default function InternetPackagesForm({ lang = "en" }) {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        style={{ display: "flex", alignItems: "center", gap: "12px", padding: "16px", background: "rgba(239,68,68,0.2)", border: "1px solid rgba(239,68,68,0.5)", borderRadius: "12px", marginBottom: "24px" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                          padding: "12px 16px",
+                          background: "rgba(239,68,68,0.2)",
+                          border: "1px solid rgba(239,68,68,0.5)",
+                          borderRadius: "12px",
+                          marginBottom: "20px",
+                          fontSize: "0.9rem"
+                        }}
                       >
-                        <div style={{ width: "20px", height: "20px", background: "#ef4444", borderRadius: "9999px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <span style={{ color: "white", fontSize: "10px" }}>!</span>
-                        </div>
+                        <div style={{
+                          width: "18px",
+                          height: "18px",
+                          background: "#ef4444",
+                          borderRadius: "9999px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          color: "white"
+                        }}>!</div>
                         <span style={{ color: "#fecaca", fontWeight: "500" }}>{t.submitError}</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
 
-                  {/* Form Fields */}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px", marginBottom: "24px" }}>
+                  {/* Form Fields - Responsive: stack on mobile */}
+                  <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr",
+                    gap: "16px",
+                    marginBottom: "20px",
+                    "@media (min-width: 480px)": {
+                      gridTemplateColumns: "1fr 1fr",
+                    },
+                  }}>
                     <div>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.875rem", fontWeight: "600", color: "#e5e7eb", marginBottom: "8px" }}>
-                        <Globe size={16} color="#60a5fa" /> {t.country}
+                      <label style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "0.8rem",
+                        fontWeight: "600",
+                        color: "#e5e7eb",
+                        marginBottom: "6px"
+                      }}>
+                        <Globe size={14} color="#60a5fa" /> {t.country}
                       </label>
                       <div style={{ position: "relative" }}>
                         <input
@@ -371,23 +419,40 @@ export default function InternetPackagesForm({ lang = "en" }) {
                           placeholder={t.countryPlaceholder}
                           style={{
                             width: "100%",
-                            padding: "12px 16px",
+                            padding: "10px 14px",
+                            paddingRight: "48px",
                             background: "rgba(255,255,255,0.1)",
                             border: "1px solid rgba(255,255,255,0.2)",
-                            borderRadius: "12px",
+                            borderRadius: "10px",
                             color: "white",
-                            outline: "none"
+                            outline: "none",
+                            fontSize: "0.95rem",
                           }}
                         />
-                        <div style={{ position: "absolute", right: "16px", top: "50%", transform: "translateY(-50%)", fontSize: "24px" }}>
+                        <div style={{
+                          position: "absolute",
+                          right: "12px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          fontSize: "22px",
+                          pointerEvents: "none"
+                        }}>
                           {selectedCountryFlag}
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.875rem", fontWeight: "600", color: "#e5e7eb", marginBottom: "8px" }}>
-                        <Phone size={16} color="#60a5fa" /> {t.mobileNumber}
+                      <label style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        fontSize: "0.8rem",
+                        fontWeight: "600",
+                        color: "#e5e7eb",
+                        marginBottom: "6px"
+                      }}>
+                        <Phone size={14} color="#60a5fa" /> {t.mobileNumber}
                       </label>
                       <input
                         type="tel"
@@ -398,23 +463,41 @@ export default function InternetPackagesForm({ lang = "en" }) {
                         placeholder={t.mobilePlaceholder}
                         style={{
                           width: "100%",
-                          padding: "12px 16px",
+                          padding: "10px 14px",
                           background: "rgba(255,255,255,0.1)",
                           border: "1px solid rgba(255,255,255,0.2)",
-                          borderRadius: "12px",
+                          borderRadius: "10px",
                           color: "white",
-                          outline: "none"
+                          outline: "none",
+                          fontSize: "0.95rem",
                         }}
                       />
                     </div>
                   </div>
 
                   {/* Package Selection */}
-                  <div style={{ marginBottom: "24px" }}>
-                    <label style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.875rem", fontWeight: "600", color: "#e5e7eb", marginBottom: "12px" }}>
-                      <Wifi size={16} color="#60a5fa" /> {t.package}
+                  <div style={{ marginBottom: "20px" }}>
+                    <label style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontSize: "0.8rem",
+                      fontWeight: "600",
+                      color: "#e5e7eb",
+                      marginBottom: "10px"
+                    }}>
+                      <Wifi size={14} color="#60a5fa" /> {t.package}
                     </label>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+                    
+                    {/* Responsive package grid: 2 on mobile, 3 on tablet+ */}
+                    <div style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2, 1fr)",
+                      gap: "10px",
+                      "@media (min-width: 480px)": {
+                        gridTemplateColumns: "repeat(3, 1fr)",
+                      },
+                    }}>
                       {packages.map((pkg) => (
                         <motion.button
                           key={pkg.value}
@@ -424,31 +507,62 @@ export default function InternetPackagesForm({ lang = "en" }) {
                           onClick={() => setFormData(prev => ({ ...prev, package: pkg.value }))}
                           style={{
                             position: "relative",
-                            padding: "16px",
-                            borderRadius: "12px",
+                            padding: "12px 10px",
+                            borderRadius: "10px",
                             border: formData.package === pkg.value ? "2px solid #3b82f6" : "1px solid rgba(255,255,255,0.2)",
-                            background: formData.package === pkg.value ? "rgba(59,130,246,0.2)" : "rgba(255,255,255,0.1)",
+                            background: formData.package === pkg.value ? "rgba(59,130,246,0.25)" : "rgba(255,255,255,0.08)",
                             textAlign: "left",
-                            cursor: "pointer"
+                            cursor: "pointer",
+                            transition: "all 0.2s",
+                            minHeight: "80px",
                           }}
                         >
                           {pkg.popular && (
-                            <div style={{ position: "absolute", top: "-8px", right: "-8px", background: "linear-gradient(135deg, #eab308, #f97316)", color: "white", fontSize: "10px", fontWeight: "bold", padding: "2px 8px", borderRadius: "9999px" }}>
+                            <div style={{
+                              position: "absolute",
+                              top: "-6px",
+                              right: "-6px",
+                              background: "linear-gradient(135deg, #eab308, #f97316)",
+                              color: "white",
+                              fontSize: "8px",
+                              fontWeight: "bold",
+                              padding: "2px 8px",
+                              borderRadius: "9999px",
+                              textTransform: "uppercase",
+                              letterSpacing: "0.3px"
+                            }}>
                               {t.popular}
                             </div>
                           )}
                           {pkg.bestValue && (
-                            <div style={{ position: "absolute", top: "-8px", right: "-8px", background: "linear-gradient(135deg, #22c55e, #059669)", color: "white", fontSize: "10px", fontWeight: "bold", padding: "2px 8px", borderRadius: "9999px" }}>
+                            <div style={{
+                              position: "absolute",
+                              top: "-6px",
+                              right: "-6px",
+                              background: "linear-gradient(135deg, #22c55e, #059669)",
+                              color: "white",
+                              fontSize: "8px",
+                              fontWeight: "bold",
+                              padding: "2px 8px",
+                              borderRadius: "9999px",
+                              textTransform: "uppercase",
+                              letterSpacing: "0.3px"
+                            }}>
                               {t.bestValue}
                             </div>
                           )}
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-                            <span style={{ color: "white", fontWeight: "bold", fontSize: "1.125rem" }}>{pkg.label}</span>
-                            <span style={{ color: "#60a5fa", fontWeight: "bold" }}>{pkg.price}</span>
+                          <div style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            marginBottom: "6px"
+                          }}>
+                            <span style={{ color: "white", fontWeight: "bold", fontSize: "1rem" }}>{pkg.label}</span>
+                            <span style={{ color: "#60a5fa", fontWeight: "bold", fontSize: "0.9rem" }}>{pkg.price}</span>
                           </div>
-                          <div style={{ color: "#9ca3af", fontSize: "11px" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "2px" }}>
-                              <Clock size={12} /> {pkg.validity}
+                          <div style={{ color: "#9ca3af", fontSize: "10px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "3px", marginBottom: "1px" }}>
+                              <Clock size={10} /> {pkg.validity}
                             </div>
                             <div>{pkg.speed}</div>
                           </div>
@@ -467,27 +581,50 @@ export default function InternetPackagesForm({ lang = "en" }) {
                         style={{
                           background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2))",
                           borderRadius: "12px",
-                          padding: "16px",
+                          padding: "14px 16px",
                           border: "1px solid rgba(59,130,246,0.3)",
-                          marginBottom: "24px"
+                          marginBottom: "20px",
                         }}
                       >
-                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                            <div style={{ width: "48px", height: "48px", background: "linear-gradient(135deg, #3b82f6, #8b5cf6)", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <Wifi size={24} color="white" />
+                        <div style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          flexWrap: "wrap",
+                          gap: "10px"
+                        }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{
+                              width: "40px",
+                              height: "40px",
+                              background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
+                              borderRadius: "10px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexShrink: 0
+                            }}>
+                              <Wifi size={20} color="white" />
                             </div>
                             <div>
-                              <p style={{ fontWeight: "bold", color: "white", fontSize: "1.125rem" }}>{selectedPackage.label}</p>
-                              <div style={{ display: "flex", gap: "12px", fontSize: "0.875rem", color: "#d1d5db" }}>
-                                <span style={{ display: "flex", alignItems: "center", gap: "4px" }}><Clock size={12} /> {selectedPackage.validity}</span>
+                              <p style={{ fontWeight: "bold", color: "white", fontSize: "1rem" }}>{selectedPackage.label}</p>
+                              <div style={{
+                                display: "flex",
+                                gap: "10px",
+                                fontSize: "0.75rem",
+                                color: "#d1d5db",
+                                flexWrap: "wrap"
+                              }}>
+                                <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                  <Clock size={10} /> {selectedPackage.validity}
+                                </span>
                                 <span>{selectedPackage.speed}</span>
                               </div>
                             </div>
                           </div>
                           <div style={{ textAlign: "right" }}>
-                            <p style={{ fontSize: "1.875rem", fontWeight: "bold", color: "#60a5fa" }}>{selectedPackage.price}</p>
-                            <p style={{ fontSize: "0.75rem", color: "#9ca3af" }}>One-time payment</p>
+                            <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#60a5fa" }}>{selectedPackage.price}</p>
+                            <p style={{ fontSize: "0.65rem", color: "#9ca3af" }}>One-time payment</p>
                           </div>
                         </div>
                       </motion.div>
@@ -496,36 +633,38 @@ export default function InternetPackagesForm({ lang = "en" }) {
 
                   {/* Submit Button */}
                   <motion.button
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={isSubmitting}
                     style={{
                       width: "100%",
-                      padding: "16px 24px",
+                      padding: "14px 20px",
                       background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
                       border: "none",
                       borderRadius: "12px",
                       color: "white",
                       fontWeight: "600",
+                      fontSize: "1rem",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "12px",
+                      gap: "10px",
                       cursor: isSubmitting ? "not-allowed" : "pointer",
-                      opacity: isSubmitting ? 0.5 : 1
+                      opacity: isSubmitting ? 0.6 : 1,
+                      transition: "opacity 0.2s",
                     }}
                   >
                     {isSubmitting ? (
                       <>
-                        <Clock size={20} className="animate-spin" />
+                        <Clock size={18} style={{ animation: "spin 1s linear infinite" }} />
                         {t.submitting}
                       </>
                     ) : (
                       <>
-                        <Sparkles size={20} />
+                        <Sparkles size={18} />
                         {t.submit}
-                        <ChevronRight size={20} />
+                        <ChevronRight size={18} />
                       </>
                     )}
                   </motion.button>
@@ -533,38 +672,60 @@ export default function InternetPackagesForm({ lang = "en" }) {
               </div>
             </motion.div>
 
-            {/* Features Section - takes 1 column */}
+            {/* Sidebar - Features, Trust, Contact */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+              }}
             >
               {/* Features Card */}
               <div style={{
                 background: "rgba(255,255,255,0.1)",
                 backdropFilter: "blur(16px)",
                 borderRadius: "16px",
-                padding: "24px",
-                marginBottom: "24px",
+                padding: "20px",
                 border: "1px solid rgba(255,255,255,0.2)"
               }}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "white", marginBottom: "24px", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Award size={20} color="#facc15" /> {t.features.title}
+                <h3 style={{
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                  color: "white",
+                  marginBottom: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}>
+                  <Award size={18} color="#facc15" /> {t.features.title}
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                   {[
                     { icon: Globe, color: "linear-gradient(135deg, #3b82f6, #06b6d4)", title: t.features.global, desc: t.features.globalDesc },
                     { icon: Zap, color: "linear-gradient(135deg, #eab308, #f97316)", title: t.features.fast, desc: t.features.fastDesc },
                     { icon: DollarSign, color: "linear-gradient(135deg, #22c55e, #10b981)", title: t.features.affordable, desc: t.features.affordableDesc },
                     { icon: Headphones, color: "linear-gradient(135deg, #8b5cf6, #ec4899)", title: t.features.support, desc: t.features.supportDesc },
                   ].map((feature, idx) => (
-                    <div key={idx} style={{ display: "flex", gap: "16px", padding: "12px", borderRadius: "12px" }}>
-                      <div style={{ width: "40px", height: "40px", background: feature.color, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <feature.icon size={20} color="white" />
+                    <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                      <div style={{
+                        width: "34px",
+                        height: "34px",
+                        background: feature.color,
+                        borderRadius: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                        marginTop: "2px"
+                      }}>
+                        <feature.icon size={16} color="white" />
                       </div>
                       <div>
-                        <h4 style={{ fontWeight: "600", color: "white", marginBottom: "4px" }}>{feature.title}</h4>
-                        <p style={{ fontSize: "0.875rem", color: "#d1d5db" }}>{feature.desc}</p>
+                        <h4 style={{ fontWeight: "600", color: "white", fontSize: "0.9rem", marginBottom: "2px" }}>{feature.title}</h4>
+                        <p style={{ fontSize: "0.8rem", color: "#d1d5db" }}>{feature.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -576,15 +737,30 @@ export default function InternetPackagesForm({ lang = "en" }) {
                 background: "rgba(255,255,255,0.1)",
                 backdropFilter: "blur(16px)",
                 borderRadius: "16px",
-                padding: "24px",
-                marginBottom: "24px",
+                padding: "20px",
                 border: "1px solid rgba(255,255,255,0.2)"
               }}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "white", marginBottom: "16px" }}>{t.trustIndicators.title}</h3>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", textAlign: "center" }}>
-                  <div><div style={{ fontSize: "1.875rem", fontWeight: "bold", color: "#60a5fa" }}>100K+</div><div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>{t.trustIndicators.customers}</div></div>
-                  <div><div style={{ fontSize: "1.875rem", fontWeight: "bold", color: "#4ade80" }}>200+</div><div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>{t.trustIndicators.coverage}</div></div>
-                  <div><div style={{ fontSize: "1.875rem", fontWeight: "bold", color: "#a78bfa" }}>99.9%</div><div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>{t.trustIndicators.uptime}</div></div>
+                <h3 style={{ fontSize: "1.1rem", fontWeight: "bold", color: "white", marginBottom: "14px" }}>
+                  {t.trustIndicators.title}
+                </h3>
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "12px",
+                  textAlign: "center"
+                }}>
+                  <div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#60a5fa" }}>100K+</div>
+                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.customers}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#4ade80" }}>200+</div>
+                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.coverage}</div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#a78bfa" }}>99.9%</div>
+                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.uptime}</div>
+                  </div>
                 </div>
               </div>
 
@@ -592,24 +768,40 @@ export default function InternetPackagesForm({ lang = "en" }) {
               <div style={{
                 background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
                 borderRadius: "16px",
-                padding: "24px",
+                padding: "20px",
                 color: "white"
               }}>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: "bold", marginBottom: "16px", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <Headphones size={20} /> {t.contactInfo}
+                <h3 style={{
+                  fontSize: "1.1rem",
+                  fontWeight: "bold",
+                  marginBottom: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}>
+                  <Headphones size={18} /> {t.contactInfo}
                 </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "8px", borderRadius: "8px" }}>
-                    <Clock size={20} />
-                    <div><p style={{ fontWeight: "600" }}>{t.workingHours}</p><p style={{ fontSize: "0.875rem", opacity: 0.9 }}>{t.workingHoursDetail}</p></div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <Clock size={16} />
+                    <div>
+                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.workingHours}</p>
+                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>{t.workingHoursDetail}</p>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "8px", borderRadius: "8px" }}>
-                    <Phone size={20} />
-                    <div><p style={{ fontWeight: "600" }}>{t.callUs}</p><p style={{ fontSize: "0.875rem", opacity: 0.9 }}>+966 54 730 5060</p></div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <Phone size={16} />
+                    <div>
+                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.callUs}</p>
+                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>+966 54 730 5060</p>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "8px", borderRadius: "8px" }}>
-                    <Globe size={20} />
-                    <div><p style={{ fontWeight: "600" }}>{t.emailUs}</p><p style={{ fontSize: "0.875rem", opacity: 0.9 }}>support@tilalrimal.com</p></div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <Globe size={16} />
+                    <div>
+                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.emailUs}</p>
+                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>support@tilalrimal.com</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -617,6 +809,22 @@ export default function InternetPackagesForm({ lang = "en" }) {
           </div>
         </div>
       </div>
+
+      {/* Add spin animation for loading state */}
+      <style>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+        /* Responsive fine-tuning for very small screens */
+        @media (max-width: 400px) {
+          .main-wrap { padding: 16px 10px; }
+          .form-body { padding: 16px 12px; }
+        }
+      `}</style>
     </div>
   );
 }
