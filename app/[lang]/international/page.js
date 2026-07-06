@@ -5,7 +5,7 @@ import {
   getInternationalPackagesStatic,
   getInternationalDestinationsStatic,
 } from '@/lib/server-api';
-import InternationalContent from "@/components/international/InternationalContent";
+import InternationalContent from '@/components/InternationalContent';
 
 /**
  * Dynamic rendering - fetches fresh data on each request
