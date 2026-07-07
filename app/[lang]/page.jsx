@@ -13,6 +13,7 @@ import Saudi from '@/components/Saudi/Saudi';
 import TourismDestinations from "@/components/TourismDestinations";
 import TourismOffers from "@/components/TourismOffers";
 import SpecialOffers from "@/components/SpecialOffer/SpecialOffers";
+import { getApiUrl } from '@/config/api';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -190,8 +191,8 @@ const content = {
   
   console.log('🔍 Initial services (from hardcoded content):', services?.length || 0, 'items');
   
-  // Define API URL in outer scope so catch/fallbacks can reference it safely
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+  // Use dynamic API URL detection (env var first, then detect from hostname)
+  const apiUrl = getApiUrl();
   try {
     console.log('📡 Attempting to fetch services from:', `${apiUrl}/services`);
 

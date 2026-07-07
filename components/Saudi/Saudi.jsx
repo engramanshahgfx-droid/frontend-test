@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import styles from "./Saudi.module.css";
 
 const Saudi = ({ lang = "ar" }) => {
+  const router = useRouter();
   const [hoveredCity, setHoveredCity] = useState(null);
   const [showEidPopup, setShowEidPopup] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
@@ -59,6 +61,7 @@ const Saudi = ({ lang = "ar" }) => {
   const citiesData = [
     {
       id: 1,
+      cityKey: "arar",
       nameEn: "Arar",
       nameAr: "عرعر",
       img: "/cities/Arar.jpeg",
@@ -67,6 +70,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 2,
+      cityKey: "sakaka",
       nameEn: "Sakaka",
       nameAr: "سكاكا",
       img: "/cities/Sakaka.jpeg",
@@ -75,6 +79,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 3,
+      cityKey: "tabuk",
       nameEn: "Tabuk",
       nameAr: "تبوك",
       img: "/cities/tabuk.jpeg",
@@ -83,6 +88,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 4,
+      cityKey: "alula",
       nameEn: "AlUla",
       nameAr: "العلا",
       img: "/cities/alula.jpg",
@@ -91,6 +97,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 5,
+      cityKey: "hail",
       nameEn: "Hail",
       nameAr: "حائل",
       img: "/cities/hail.jpeg",
@@ -99,6 +106,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 7,
+      cityKey: "madina",
       nameEn: "Madina",
       nameAr: "المدينة",
       img: "/madina.png",
@@ -107,6 +115,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 8,
+      cityKey: "makkah",
       nameEn: "Makkah",
       nameAr: "مكة",
       img: "/cities/makkah.jpeg",
@@ -115,6 +124,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 9,
+      cityKey: "jeddah",
       nameEn: "Jeddah",
       nameAr: "جدة",
       img: "/cities/jeddah.png",
@@ -123,6 +133,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 11,
+      cityKey: "qassim",
       nameEn: "Qassim",
       nameAr: "القصيم",
       img: "/cities/qassim.jpeg",
@@ -131,6 +142,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 12,
+      cityKey: "riyadh",
       nameEn: "Riyadh",
       nameAr: "الرياض",
       img: "/cities/Riyadh.jpeg",
@@ -139,6 +151,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 13,
+      cityKey: "dammam",
       nameEn: "Dammam",
       nameAr: "الدمام",
       img: "/cities/dammam.png",
@@ -147,6 +160,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 15,
+      cityKey: "abha",
       nameEn: "Abha",
       nameAr: "أبها",
       img: "/cities/abha.png",
@@ -155,6 +169,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 16,
+      cityKey: "najran",
       nameEn: "Najran",
       nameAr: "نجران",
       img: "/cities/Najran.jpeg",
@@ -163,6 +178,7 @@ const Saudi = ({ lang = "ar" }) => {
     },
     {
       id: 17,
+      cityKey: "jizan",
       nameEn: "Jizan",
       nameAr: "جيزان",
       img: "/cities/jizan.webp",
@@ -316,9 +332,14 @@ const Saudi = ({ lang = "ar" }) => {
             <div
               key={city.id}
               className={styles.cityLabelWrapper}
-              style={{ top: `${city.top}%`, left: `${city.left}%` }}
+              style={{ top: `${city.top}%`, left: `${city.left}%`, cursor: "pointer" }}
               onMouseEnter={() => setHoveredCity(city)}
               onMouseLeave={() => setHoveredCity(null)}
+              onClick={() => {
+                if (city.cityKey) {
+                  router.push(`/${lang}/city/${city.cityKey}`);
+                }
+              }}
             >
               {/* Small icon image */}
               <img 
