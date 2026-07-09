@@ -18,7 +18,7 @@ export default function TourismOffersPage() {
     en: {
       title: "Tourism Offers",
       subtitle: "Discover amazing deals and unforgettable experiences",
-      viewDetails: "View Details",
+      viewDetails: "More",
       from: "From",
       perPerson: "per person",
       noOffers: "No offers available",
@@ -30,7 +30,7 @@ export default function TourismOffersPage() {
     ar: {
       title: "عروض السياحة",
       subtitle: "اكتشف الصفقات المذهلة والتجارب التي لا تنسى",
-      viewDetails: "عرض التفاصيل",
+      viewDetails: " المزيد",
       from: "من",
       perPerson: "للفرد",
       noOffers: "لا توجد عروض متاحة",

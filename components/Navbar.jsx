@@ -60,6 +60,7 @@ export default function Navbar({ lang }) {
   const userMenuRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
   const navRef = useRef(null);
+  const dropdownRefs = useRef({});
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -217,10 +218,12 @@ export default function Navbar({ lang }) {
 
   if (!pathname || pathname?.startsWith(`/${lang}/admin`)) return null;
 
+  const isRTL = lang === "ar";
+
   return (
     <>
       {/* Top Bar */}
-      <div className="top-bar">
+      <div className="top-bar" dir={isRTL ? "rtl" : "ltr"}>
         <div className="top-bar-container">
           <div className="top-bar-left">
             <Phone className="top-bar-icon" />
@@ -243,13 +246,13 @@ export default function Navbar({ lang }) {
         </div>
       </div>
 
-      <header className="main-header" dir={lang === "ar" ? "rtl" : "ltr"}>
+      <header className="main-header" dir={isRTL ? "rtl" : "ltr"}>
         <div className="header-container" ref={navRef}>
           <Link href={`/${lang}`} className="logo-wrapper">
             <img src="/logo.png" alt="Logo" className="logo-image" />
             <div className="logo-text">
               <span className="logo-title">{lang === "ar" ? "التلال والرمال" : "Tilal Rimal"}</span>
-              <span className="logo-subtitle">TOURISM</span>
+              <span className="logo-subtitle">لتنظيم الرحلات السياحية </span>
             </div>
           </Link>
 
@@ -286,7 +289,7 @@ export default function Navbar({ lang }) {
                         animate={{ opacity: 1, y: 0 }} 
                         exit={{ opacity: 0, y: 5 }}
                         transition={{ duration: 0.15 }}
-                        className="dropdown-menu-wrapper"
+                        className={`dropdown-menu-wrapper ${isRTL ? 'dropdown-rtl' : 'dropdown-ltr'}`}
                       >
                         {item.type === "packages" ? (
                           <div className="dropdown-packages">
@@ -301,7 +304,7 @@ export default function Navbar({ lang }) {
                                   <span>{data.icon} {getRegionLabel(regionKey)}</span>
                                 </div>
                                 {openSubDropdown === regionKey && data.countries && data.countries.length > 0 && (
-                                  <div className="sub-menu">
+                                  <div className={`sub-menu ${isRTL ? 'sub-rtl' : 'sub-ltr'}`}>
                                     {data.countries.map(c => (
                                       <Link 
                                         key={c.slug} 
@@ -372,6 +375,7 @@ export default function Navbar({ lang }) {
               animate={{ x: 0 }}
               exit={{ x: lang === 'ar' ? '-100%' : '100%' }}
               className="mobile-sidebar"
+              dir={isRTL ? "rtl" : "ltr"}
             >
               <div className="mobile-sidebar-header">
                 <img src="/logo.png" alt="logo" className="mobile-logo" />
@@ -491,11 +495,10 @@ export default function Navbar({ lang }) {
         }
         .nav-link:hover { color: var(--gold); }
 
+        /* ===== FIXED DROPDOWN ALIGNMENT ===== */
         .dropdown-menu-wrapper { 
           position: absolute; 
           top: calc(100% + 5px);
-          left: 50%;
-          transform: translateX(-50%);
           background: white; 
           border: 1px solid var(--border); 
           box-shadow: 0 15px 40px rgba(0,0,0,0.1); 
@@ -504,9 +507,28 @@ export default function Navbar({ lang }) {
           padding: 8px; 
           z-index: 1000; 
         }
-        [dir="rtl"] .dropdown-menu-wrapper {
-          left: auto;
-          right: 50%;
+
+        /* LTR: Left aligned */
+        .dropdown-ltr {
+          left: 0;
+          transform: none;
+        }
+
+        /* RTL: Right aligned */
+        .dropdown-rtl {
+          right: 0;
+          transform: none;
+        }
+
+        /* For specific items that need centering (like the middle ones) */
+        .dropdown-menu-wrapper.dropdown-center {
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        [dir="rtl"] .dropdown-menu-wrapper.dropdown-center {
+          left: 50%;
+          right: auto;
           transform: translateX(50%);
         }
         
@@ -539,9 +561,9 @@ export default function Navbar({ lang }) {
         .region-trigger { display: flex; align-items: center; gap: 8px; font-weight: 500; }
         .region-trigger span { display: flex; align-items: center; gap: 6px; }
         
+        /* Sub-menu alignment */
         .sub-menu { 
           position: absolute; 
-          left: calc(100% + 8px); 
           top: -5px; 
           background: white; 
           border: 1px solid var(--border); 
@@ -551,9 +573,15 @@ export default function Navbar({ lang }) {
           padding: 5px; 
           z-index: 1001;
         }
-        [dir="rtl"] .sub-menu { 
-          left: auto; 
-          right: calc(100% + 8px); 
+
+        /* LTR: Sub-menu to the right */
+        .sub-ltr {
+          left: calc(100% + 8px);
+        }
+
+        /* RTL: Sub-menu to the left */
+        .sub-rtl {
+          right: calc(100% + 8px);
         }
         
         .sub-item { 
