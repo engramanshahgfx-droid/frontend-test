@@ -131,10 +131,10 @@ export default function CancellationContent({ lang }) {
         title: "التواصل",
         icon: <FaEnvelopeOpenText size={28} />,
         points: [
-          "البريد الإلكتروني: cancellations@altelal-walramal.sa",
-          "الموقع الإلكتروني: https://tilalr.com",
-          "خدمة العملاء: 920000123",
-          "واتساب: +966500000000",
+          "البريد الإلكتروني: info@tilalr",
+          "الموقع الإلكتروني: wwww.tilalr.com",
+          "خدمة العملاء: 966547305060",
+          "واتساب: 966547305060",
         ],
       },
       {

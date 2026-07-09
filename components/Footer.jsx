@@ -46,10 +46,10 @@ export default function Footer({ lang }) {
     },
     rightsReserved: "جميع الحقوق محفوظة.",
     address: "جده, المملكة العربية السعودية",
-    phone: "966547305060",
+    phone: "00966547305060",
     email: "Info@tilalr.com",
     website: "tilalr.com",
-    googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
+    googleMapsUrl: "https://maps.app.goo.gl/FNQfHFEZzv91WEMt9",
   };
 
   const englishText = {
@@ -75,7 +75,7 @@ export default function Footer({ lang }) {
     phone: "966547305060",
     email: "Info@tilalr.com",
     website: "tilalr.com",
-    googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
+    googleMapsUrl: "https://maps.app.goo.gl/FNQfHFEZzv91WEMt9",
   };
 
   const chineseText = {
@@ -372,16 +372,7 @@ export default function Footer({ lang }) {
                         : "Cancellation & Modification"}
                     </Link>
                   </div>
-                  <div className="mb-1">
-                    <Link
-                      href={`/${lang}/insurance-deposit`}
-                      className="text-decoration-none footer-link"
-                    >
-                      {isRTL
-                        ? "قواعد التأمين/الوديعة"
-                        : "Insurance & Deposit Rules"}
-                    </Link>
-                  </div>
+                
                   <div>
                     <Link
                       href={`/${lang}/contact-us`}

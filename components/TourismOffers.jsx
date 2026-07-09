@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "../lib/api";
 import { formatCurrency, amountWithVAT } from "../lib/localization";
-import TourismOfferBookingModal from "@/components/TourismOfferBookingModal";
+import BookingModal from "@/components/BookingModal";
 
 // Fallback data if API fails
 const fallbackDestinations = [
@@ -94,7 +94,7 @@ export default function TourismOffers({ lang }) {
       limited: "Limited Offer",
     },
     ar: {
-      title: "أفضل عروض السياحة",
+      title: "أفضل عروض السعودية",
       subtitle: "اكتشف الصفقات المذهلة والتجارب التي لا تنسى",
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
@@ -792,15 +792,16 @@ export default function TourismOffers({ lang }) {
         `}</style>
       </section>
 
-      <TourismOfferBookingModal
+      <BookingModal
         isOpen={showBookingModal}
         onClose={() => {
           console.log("Closing modal");
           setShowBookingModal(false);
           setSelectedOffer(null);
         }}
-        offerData={selectedOffer}
+        packageData={selectedOffer}
         lang={lang}
+        bookingType="tourism_offer"
       />
     </>
   );

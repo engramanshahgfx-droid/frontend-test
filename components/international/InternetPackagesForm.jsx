@@ -78,7 +78,7 @@ const translations = {
     mobilePlaceholder: "+966 5X XXX XXXX",
     package: "اختر باقتك",
     selectPackage: "اختر باقة البيانات",
-    submit: "تفعيل الباقة",
+    submit: " ارسل الطلب",
     submitting: "جاري المعالجة...",
     submitSuccess: "تم تفعيل الباقة بنجاح!",
     submitError: "فشل تفعيل الباقة. يرجى المحاولة مرة أخرى.",
@@ -213,21 +213,9 @@ export default function InternetPackagesForm({ lang = "en" }) {
             style={{ textAlign: "center", marginBottom: "40px" }}
           >
             <motion.div
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "72px",
-                height: "72px",
-                background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-                borderRadius: "16px",
-                marginBottom: "20px",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
-              }}
+          
             >
-              <Wifi size={36} color="white" />
+              <Wifi size={0} color="white" />
             </motion.div>
 
             <h1 style={{
@@ -560,7 +548,7 @@ export default function InternetPackagesForm({ lang = "en" }) {
                             <span style={{ color: "white", fontWeight: "bold", fontSize: "1rem" }}>{pkg.label}</span>
                             <span style={{ color: "#60a5fa", fontWeight: "bold", fontSize: "0.9rem" }}>{pkg.price}</span>
                           </div>
-                          <div style={{ color: "#9ca3af", fontSize: "10px" }}>
+                          <div style={{ color: "#ffffff", fontSize: "10px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "3px", marginBottom: "1px" }}>
                               <Clock size={10} /> {pkg.validity}
                             </div>
@@ -793,14 +781,14 @@ export default function InternetPackagesForm({ lang = "en" }) {
                     <Phone size={16} />
                     <div>
                       <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.callUs}</p>
-                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>+966 54 730 5060</p>
+                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>00966547305060</p>
                     </div>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <Globe size={16} />
                     <div>
                       <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.emailUs}</p>
-                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>support@tilalrimal.com</p>
+                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>info@tilalr.com</p>
                     </div>
                   </div>
                 </div>

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "../lib/api";
 import { formatCurrency, amountWithVAT } from "../lib/localization";
-import TourismOfferBookingModal from "@/components/TourismOfferBookingModal";
+import BookingModal from "@/components/BookingModal";
 
 // Fallback data if API fails
 const fallbackDestinations = [
@@ -25,8 +25,11 @@ const fallbackDestinations = [
     rating: 4.8,
     price: 2500,
     description_en: "Experience luxury like never before with stunning ocean views",
+    description_ar: "اختبر الفخامة كما لم تفعل من قبل مع إطلالات بحرية ساحرة",
     location: "Maldives",
+    location_ar: "جزر المالديف",
     duration: "5 Days",
+    duration_ar: "5 أيام",
     discount: 20,
   },
   {
@@ -36,10 +39,12 @@ const fallbackDestinations = [
     title_ar: "مغامرة جبلية",
     image: "/placeholder.png",
     rating: 4.6,
-    price: 1800,
     description_en: "Explore the breathtaking mountains with guided tours",
+    description_ar: "استكشف الجبال الخلابة مع جولات إرشادية",
     location: "Swiss Alps",
+    location_ar: "جبال الألب السويسرية",
     duration: "4 Days",
+    duration_ar: "4 أيام",
     discount: 15,
   },
   {
@@ -49,10 +54,12 @@ const fallbackDestinations = [
     title_ar: "جولة مدينة ثقافية",
     image: "/placeholder.png",
     rating: 4.7,
-    price: 1200,
     description_en: "Immerse yourself in rich history and culture",
+    description_ar: "انغمس في التاريخ الغني والثقافة",
     location: "Istanbul",
+    location_ar: "اسطنبول",
     duration: "3 Days",
+    duration_ar: "3 أيام",
     discount: null,
   },
   {
@@ -62,10 +69,12 @@ const fallbackDestinations = [
     title_ar: "رحلة صحراوية",
     image: "/placeholder.png",
     rating: 4.9,
-    price: 3200,
     description_en: "Experience the thrill of desert adventures",
+    description_ar: "اختبر إثارة مغامرات الصحراء",
     location: "Dubai",
+    location_ar: "دبي",
     duration: "2 Days",
+    duration_ar: "2 أيام",
     discount: 25,
   },
 ];
@@ -98,7 +107,7 @@ export default function BestTourismOffers({ lang }) {
       limited: "Limited Offer",
     },
     ar: {
-      title: "أفضل عروض السياحة",
+      title: "أفضل عروض السعودية",
       subtitle: "اكتشف الصفقات المذهلة والتجارب التي لا تنسى",
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
@@ -157,6 +166,17 @@ export default function BestTourismOffers({ lang }) {
             "Content-Type": "application/json",
           },
         });
+        const contentType = (res.headers.get("content-type") || "").toLowerCase();
+
+        // If the server returned non-JSON (e.g. HTML error page), fall back safely
+        if (!contentType.includes("application/json")) {
+          const text = await res.text();
+          console.warn("[BestTourismOffers] Non-JSON response from API:", text.slice(0, 300));
+          // If it's an HTML error (starts with <!DOCTYPE or <html), assume backend served an error page
+          setDestinations(fallbackDestinations);
+          setLoading(false);
+          return;
+        }
 
         const json = await res.json();
         console.log("[BestTourismOffers] Response:", json);
@@ -165,16 +185,23 @@ export default function BestTourismOffers({ lang }) {
           throw new Error(`API error: ${res.status} - ${json?.message || "Unknown error"}`);
         }
 
-        if (!json?.success) {
-          throw new Error(json?.message || "Failed to fetch offers");
+        if (Array.isArray(json)) {
+          // Some endpoints may return an array directly
+          if (json.length > 0) setDestinations(json);
+          else setDestinations(fallbackDestinations);
+        } else {
+          if (!json?.success && !Array.isArray(json?.data)) {
+            throw new Error(json?.message || "Failed to fetch offers");
+          }
+
+          const data = Array.isArray(json.data) ? json.data : [];
+          if (data.length > 0) {
+            setDestinations(data);
+          } else {
+            setDestinations(fallbackDestinations);
+          }
         }
 
-        const data = Array.isArray(json.data) ? json.data : [];
-        if (data.length > 0) {
-          setDestinations(data);
-        } else {
-          setDestinations(fallbackDestinations);
-        }
         setLoading(false);
       } catch (err) {
         if (err.name !== "AbortError") {
@@ -713,15 +740,16 @@ export default function BestTourismOffers({ lang }) {
       </section>
 
       {/* Modal - Placed outside the section */}
-      <TourismOfferBookingModal
+      <BookingModal
         isOpen={showBookingModal}
         onClose={() => {
           console.log("Closing modal");
           setShowBookingModal(false);
           setSelectedOffer(null);
         }}
-        offerData={selectedOffer}
+        packageData={selectedOffer}
         lang={lang}
+        bookingType="tourism_offer"
       />
     </>
   );

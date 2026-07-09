@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
-import TourismOfferBookingModal from "@/components/TourismOfferBookingModal";
+import BookingModal from "@/components/BookingModal";
 import Image from "next/image";
 
 export default function TourismOfferDetails() {
@@ -19,7 +19,7 @@ export default function TourismOfferDetails() {
 
   const labels = {
     en: {
-      back: "← Back to Offers",
+      back: " ← Back to Offers",
       description: "Description",
       details: "Details",
       price: "Price",
@@ -35,9 +35,23 @@ export default function TourismOfferDetails() {
       contact: "Contact Information",
       paymentMethods: "Payment Methods",
       features: "Features",
+      loading: "Loading offer details...",
+      offerNotFound: "Offer not found",
+      failedToLoad: "Failed to load offer",
+      home: "Home",
+      tourismOffers: "Tourism Offers",
+      day: "Day",
+      tripCode: "Trip Code",
+      days: "Days",
+      destination: "Destination",
+      availableTo: "Available To",
+      doubleRoom: "Double Room",
+      singleRoom: "Single Room",
+      account: "Account",
+      iban: "IBAN",
     },
     ar: {
-      back: "← العودة للعروض",
+      back: " ← العودة للعروض",
       description: "الوصف",
       details: "التفاصيل",
       price: "السعر",
@@ -53,6 +67,20 @@ export default function TourismOfferDetails() {
       contact: "معلومات الاتصال",
       paymentMethods: "طرق الدفع",
       features: "المميزات",
+      loading: "جارٍ تحميل تفاصيل العرض...",
+      offerNotFound: "العرض غير موجود",
+      failedToLoad: "فشل تحميل العرض",
+      home: "الرئيسية",
+      tourismOffers: "العروض السياحية",
+      day: "اليوم",
+      tripCode: "رمز الرحلة",
+      days: "الأيام",
+      destination: "الوجهة",
+      availableTo: "متاح حتى",
+      doubleRoom: "غرفة مزدوجة",
+      singleRoom: "غرفة مفردة",
+      account: "الحساب",
+      iban: "رقم الآيبان",
     },
   };
 
@@ -81,38 +109,161 @@ export default function TourismOfferDetails() {
     }
   };
 
+  // Improved getLocalizedText function that handles more cases
+  const getLocalizedText = (value, fallback = "") => {
+    if (!value) return fallback;
+    if (typeof value === "string") return value;
+    if (typeof value !== "object") return fallback;
+
+    // If it's an array, try to get the first item or join
+    if (Array.isArray(value)) {
+      return value.length > 0 ? value[0] : fallback;
+    }
+
+    // Check for Arabic version first if lang is Arabic
+    if (lang === "ar") {
+      // Try various Arabic field names
+      const arValue = 
+        value.ar ||
+        value.arabic ||
+        value.title_ar ||
+        value.name_ar ||
+        value.feature_ar ||
+        value.include_ar ||
+        value.not_include_ar ||
+        value.description_ar ||
+        value.text_ar ||
+        value.label_ar ||
+        value.address_ar ||
+        value.value_ar ||
+        value.title ||
+        value.name ||
+        value.feature ||
+        value.include ||
+        value.not_include ||
+        value.description ||
+        value.text ||
+        value.label ||
+        value.address ||
+        value.value;
+      
+      // If we found an Arabic value, return it
+      if (arValue && typeof arValue === "string") return arValue;
+      if (arValue && typeof arValue === "object") return JSON.stringify(arValue);
+      
+      // Fallback to English if no Arabic found
+      const enValue = 
+        value.en ||
+        value.english ||
+        value.title_en ||
+        value.name_en ||
+        value.feature_en ||
+        value.include_en ||
+        value.not_include_en ||
+        value.description_en ||
+        value.text_en ||
+        value.label_en ||
+        value.address_en ||
+        value.value_en;
+      
+      return enValue || fallback;
+    } else {
+      // English version
+      const enValue = 
+        value.en ||
+        value.english ||
+        value.title_en ||
+        value.name_en ||
+        value.feature_en ||
+        value.include_en ||
+        value.not_include_en ||
+        value.description_en ||
+        value.text_en ||
+        value.label_en ||
+        value.address_en ||
+        value.value_en ||
+        value.title ||
+        value.name ||
+        value.feature ||
+        value.include ||
+        value.not_include ||
+        value.description ||
+        value.text ||
+        value.label ||
+        value.address ||
+        value.value;
+      
+      if (enValue && typeof enValue === "string") return enValue;
+      if (enValue && typeof enValue === "object") return JSON.stringify(enValue);
+      
+      // Fallback to Arabic if no English found
+      const arValue = 
+        value.ar ||
+        value.arabic ||
+        value.title_ar ||
+        value.name_ar ||
+        value.feature_ar ||
+        value.include_ar ||
+        value.not_include_ar ||
+        value.description_ar ||
+        value.text_ar ||
+        value.label_ar ||
+        value.address_ar ||
+        value.value_ar;
+      
+      return arValue || fallback;
+    }
+  };
+
   const getText = (obj, field) => {
     if (!obj) return "";
-    if (field === "title" && obj.title_en) {
-      return lang === "ar" ? obj.title_ar || obj.title_en : obj.title_en;
+    
+    // Handle specific fields with priority
+    if (field === "title") {
+      if (lang === "ar") {
+        return obj.title_ar || obj.title_en || obj.title || "";
+      }
+      return obj.title_en || obj.title_ar || obj.title || "";
     }
-    if (field === "description" && obj.description_en) {
-      return lang === "ar"
-        ? obj.description_ar || obj.description_en
-        : obj.description_en;
+    
+    if (field === "description") {
+      if (lang === "ar") {
+        return obj.description_ar || obj.description_en || obj.description || "";
+      }
+      return obj.description_en || obj.description_ar || obj.description || "";
     }
-    if (field === "long_description" && obj.long_description_en) {
-      return lang === "ar"
-        ? obj.long_description_ar || obj.long_description_en
-        : obj.long_description_en;
+    
+    if (field === "long_description") {
+      if (lang === "ar") {
+        return obj.long_description_ar || obj.long_description_en || obj.long_description || "";
+      }
+      return obj.long_description_en || obj.long_description_ar || obj.long_description || "";
     }
-    if (field === "duration" && obj.duration_en) {
-      return lang === "ar"
-        ? obj.duration_ar || obj.duration_en
-        : obj.duration_en;
+    
+    if (field === "duration") {
+      if (lang === "ar") {
+        return obj.duration_ar || obj.duration_en || obj.duration || "";
+      }
+      return obj.duration_en || obj.duration_ar || obj.duration || "";
     }
-    if (field === "location" && obj.location_en) {
-      return lang === "ar"
-        ? obj.location_ar || obj.location_en
-        : obj.location_en;
+    
+    if (field === "location") {
+      if (lang === "ar") {
+        return obj.location_ar || obj.location_en || obj.location || "";
+      }
+      return obj.location_en || obj.location_ar || obj.location || "";
     }
-    if (field === "group_size" && obj.group_size_en) {
-      return lang === "ar"
-        ? obj.group_size_ar || obj.group_size_en
-        : obj.group_size_en;
+    
+    if (field === "group_size") {
+      if (lang === "ar") {
+        return obj.group_size_ar || obj.group_size_en || obj.group_size || "";
+      }
+      return obj.group_size_en || obj.group_size_ar || obj.group_size || "";
     }
+    
+    // Generic field handling
     const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
+    return obj[fieldKey] || obj[`${field}_en`] || obj[`${field}_ar`] || obj[field] || "";
   };
 
   // Helper to safely parse JSON fields
@@ -202,7 +353,7 @@ export default function TourismOfferDetails() {
           <span className="visually-hidden">Loading...</span>
         </div>
         <p style={{ marginTop: "20px", color: "#666" }}>
-          Loading offer details...
+          {t.loading}
         </p>
       </div>
     );
@@ -214,7 +365,7 @@ export default function TourismOfferDetails() {
         className="container"
         style={{ padding: "100px 0", textAlign: "center" }}
       >
-        <p style={{ color: "#ff6b6b" }}>{error || "Offer not found"}</p>
+        <p style={{ color: "#ff6b6b" }}>{error || t.offerNotFound}</p>
         <button
           onClick={() => router.push(`/${lang}/tousimoffers`)}
           className="btn-back"
@@ -248,9 +399,9 @@ export default function TourismOfferDetails() {
         <div className="container">
           {/* Breadcrumb */}
           <nav className="breadcrumb">
-            <a href={`/${lang}`}>Home</a>
+            <a href={`/${lang}`}>{t.home}</a>
             <span> / </span>
-            <a href={`/${lang}/tousimoffers`}>Tourism Offers</a>
+            <a href={`/${lang}/tousimoffers`}>{t.tourismOffers}</a>
             <span> / </span>
             <span className="current">{getText(offer, "title")}</span>
           </nav>
@@ -372,10 +523,7 @@ export default function TourismOfferDetails() {
               <ul className="features-list">
                 {features.map((item, index) => (
                   <li key={index}>
-                    ✓{" "}
-                    {typeof item === "object"
-                      ? item.feature || item.include || JSON.stringify(item)
-                      : item}
+                    {getLocalizedText(item, typeof item === "string" ? item : "")}
                   </li>
                 ))}
               </ul>
@@ -390,9 +538,7 @@ export default function TourismOfferDetails() {
                 {includes.map((item, index) => (
                   <li key={index}>
                     ✓{" "}
-                    {typeof item === "object"
-                      ? item.include || item.feature || JSON.stringify(item)
-                      : item}
+                    {getLocalizedText(item, typeof item === "string" ? item : "")}
                   </li>
                 ))}
               </ul>
@@ -407,9 +553,7 @@ export default function TourismOfferDetails() {
                 {notIncludes.map((item, index) => (
                   <li key={index}>
                     ✗{" "}
-                    {typeof item === "object"
-                      ? item.not_include || JSON.stringify(item)
-                      : item}
+                    {getLocalizedText(item, typeof item === "string" ? item : "")}
                   </li>
                 ))}
               </ul>
@@ -430,9 +574,9 @@ export default function TourismOfferDetails() {
                     transition={{ delay: index * 0.1 }}
                   >
                     <h4>
-                      Day {day.day}: {day.title}
+                      {t.day} {day.day}: {getLocalizedText(day.title, day.title) || getLocalizedText(day, "title") || day.title || "Title"}
                     </h4>
-                    <p>{day.description}</p>
+                    <p>{getLocalizedText(day.description, day.description) || getLocalizedText(day, "description") || day.description || "Description"}</p>
                     {day.image && (
                       <img
                         src={getImageUrl(day.image)}
@@ -454,18 +598,18 @@ export default function TourismOfferDetails() {
               <h2>{t.details}</h2>
               <div className="contact-grid">
                 {basicInfo.trip_code && (
-                  <div>🆔 Trip Code: {basicInfo.trip_code}</div>
+                  <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
                 )}
-                {basicInfo.days_num && <div>📅 Days: {basicInfo.days_num}</div>}
+                {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
                 {basicInfo.destination_name && (
-                  <div>📍 Destination: {basicInfo.destination_name}</div>
+                  <div>📍 {t.destination}: {getLocalizedText(basicInfo, "destination_name") || basicInfo.destination_name}</div>
                 )}
                 {basicInfo.available_to && (
-                  <div>📆 Available To: {basicInfo.available_to}</div>
+                  <div>📆 {t.availableTo}: {basicInfo.available_to}</div>
                 )}
                 {basicInfo.double_room && (
                   <div>
-                    🛏️ Double Room: {basicInfo.double_room}{" "}
+                    🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
                     <Image 
                       src="/saudi_riyal.png" 
                       alt="SAR" 
@@ -477,7 +621,7 @@ export default function TourismOfferDetails() {
                 )}
                 {basicInfo.single_room && (
                   <div>
-                    🛏️ Single Room: {basicInfo.single_room}{" "}
+                    🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
                     <Image 
                       src="/saudi_riyal.png" 
                       alt="SAR" 
@@ -496,7 +640,7 @@ export default function TourismOfferDetails() {
             <div className="section">
               <h2>{t.contact}</h2>
               <div className="contact-grid">
-                {contactInfo.address && <div>📍 {contactInfo.address}</div>}
+                {contactInfo.address && <div>📍 {getLocalizedText(contactInfo, "address") || contactInfo.address}</div>}
                 {contactInfo.phone && (
                   <div>
                     📞{" "}
@@ -541,9 +685,9 @@ export default function TourismOfferDetails() {
                         }}
                       />
                     )}
-                    <h5>{method.name}</h5>
-                    {method.account_no && <p>Account: {method.account_no}</p>}
-                    {method.iban && <p>IBAN: {method.iban}</p>}
+                    <h5>{getLocalizedText(method, "name") || method.name}</h5>
+                    {method.account_no && <p>{t.account}: {method.account_no}</p>}
+                    {method.iban && <p>{t.iban}: {method.iban}</p>}
                   </div>
                 ))}
               </div>
@@ -560,14 +704,15 @@ export default function TourismOfferDetails() {
       </div>
 
       {/* Booking Modal - Pass offer data */}
-      <TourismOfferBookingModal
+      <BookingModal
         isOpen={showBookingModal}
         onClose={() => {
           console.log("Closing modal");
           setShowBookingModal(false);
         }}
-        offerData={offer}
+        packageData={offer}
         lang={lang}
+        bookingType="tourism_offer"
       />
 
       <style jsx>{`
@@ -578,7 +723,7 @@ export default function TourismOfferDetails() {
         }
 
         .breadcrumb {
-          padding: 10px 0 20px;
+          padding: 40px 0 20px;
           font-size: 0.95rem;
           color: #666;
         }

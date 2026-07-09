@@ -55,6 +55,10 @@ export default function DestinationDetails() {
       singleRoom: "Single Room",
       perPerson: "per person",
       bookNow: "Book Now",
+      loading: "Loading destination details...",
+      destinationNotFound: "Destination not found",
+      dayLabel: "Day",
+      na: "N/A",
       viewAll: "View All Destinations",
       home: "Home",
       electronicPayment: "Electronic payment",
@@ -80,6 +84,10 @@ export default function DestinationDetails() {
       singleRoom: "غرفة فردية",
       perPerson: "للفرد",
       bookNow: "احجز الآن",
+      loading: "جاري تحميل تفاصيل الوجهة...",
+      destinationNotFound: "الوجهة غير موجودة",
+      dayLabel: "اليوم",
+      na: "غير متوفر",
       viewAll: "عرض جميع الوجهات",
       home: "الرئيسية",
       electronicPayment: "الدفع الإلكتروني",
@@ -92,75 +100,62 @@ export default function DestinationDetails() {
 
   const t = labels[lang] || labels.en;
 
+  const getLocalizedField = (obj, field) => {
+    if (!obj) return "";
+
+    const primaryKey = isRTL ? `${field}_ar` : `${field}_en`;
+    const secondaryKey = isRTL ? `${field}_en` : `${field}_ar`;
+
+    if (obj[primaryKey]) return obj[primaryKey];
+    if (obj[field]) return obj[field];
+    if (obj[secondaryKey]) return obj[secondaryKey];
+
+    return "";
+  };
+
+  const getArrayField = (obj, field) => {
+    if (!obj) return [];
+
+    const primaryKey = isRTL ? `${field}_ar` : `${field}_en`;
+    const secondaryKey = isRTL ? `${field}_en` : `${field}_ar`;
+
+    if (Array.isArray(obj[primaryKey])) return obj[primaryKey];
+    if (Array.isArray(obj[field])) return obj[field];
+    if (Array.isArray(obj[secondaryKey])) return obj[secondaryKey];
+
+    return [];
+  };
+
+  const getLocalizedItemText = (item, field) => {
+    if (!item) return "";
+    if (typeof item === "string") return item;
+    return (
+      item[isRTL ? `${field}_ar` : `${field}_en`] ||
+      item[field] ||
+      item[`${field}_en`] ||
+      item[`${field}_ar`] ||
+      ""
+    );
+  };
+
   const getText = (obj, field) => {
     if (!obj) return "";
-    
-    // Handle title
-    if (field === "title") {
-      if (isRTL && obj.title_ar) return obj.title_ar;
-      if (obj.title_en) return obj.title_en;
-      return obj.title || "";
+
+    switch (field) {
+      case "title":
+      case "description":
+      case "long_description":
+      case "location":
+      case "duration":
+        return getLocalizedField(obj, field);
+      case "features":
+      case "includes":
+      case "not_includes":
+      case "itinerary":
+        return getArrayField(obj, field);
+      default:
+        return getLocalizedField(obj, field);
     }
-    
-    // Handle description
-    if (field === "description") {
-      if (isRTL && obj.description_ar) return obj.description_ar;
-      if (obj.description_en) return obj.description_en;
-      return obj.description || "";
-    }
-    
-    // Handle long_description
-    if (field === "long_description") {
-      if (isRTL && obj.long_description_ar) return obj.long_description_ar;
-      if (obj.long_description_en) return obj.long_description_en;
-      return obj.long_description || "";
-    }
-    
-    // Handle location
-    if (field === "location") {
-      if (isRTL && obj.location_ar) return obj.location_ar;
-      if (obj.location_en) return obj.location_en;
-      return obj.location || "";
-    }
-    
-    // Handle duration
-    if (field === "duration") {
-      if (isRTL && obj.duration_ar) return obj.duration_ar;
-      if (obj.duration_en) return obj.duration_en;
-      return obj.duration || "";
-    }
-    
-    // Handle features (arrays)
-    if (field === "features") {
-      if (isRTL && obj.features_ar && Array.isArray(obj.features_ar)) return obj.features_ar;
-      if (obj.features_en && Array.isArray(obj.features_en)) return obj.features_en;
-      return obj.features || [];
-    }
-    
-    // Handle includes (arrays)
-    if (field === "includes") {
-      if (isRTL && obj.includes_ar && Array.isArray(obj.includes_ar)) return obj.includes_ar;
-      if (obj.includes_en && Array.isArray(obj.includes_en)) return obj.includes_en;
-      return obj.includes || [];
-    }
-    
-    // Handle not_includes (arrays)
-    if (field === "not_includes") {
-      if (isRTL && obj.not_includes_ar && Array.isArray(obj.not_includes_ar)) return obj.not_includes_ar;
-      if (obj.not_includes_en && Array.isArray(obj.not_includes_en)) return obj.not_includes_en;
-      return obj.not_includes || [];
-    }
-    
-    // Handle itinerary (arrays)
-    if (field === "itinerary") {
-      if (isRTL && obj.itinerary_ar && Array.isArray(obj.itinerary_ar)) return obj.itinerary_ar;
-      if (obj.itinerary_en && Array.isArray(obj.itinerary_en)) return obj.itinerary_en;
-      return obj.itinerary || [];
-    }
-    
-    // Generic fallback
-    const fieldKey = isRTL ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
   const parseJsonField = (field, fallback) => {
@@ -265,7 +260,7 @@ export default function DestinationDetails() {
                 <span className="visually-hidden">Loading...</span>
               </div>
               <p style={{ marginTop: "20px", color: "#666" }}>
-                Loading destination details...
+                {t.loading}
               </p>
             </div>
           </div>
@@ -281,7 +276,7 @@ export default function DestinationDetails() {
           <div className="row text-center" style={{ padding: "60px 0" }}>
             <div className="col-12">
               <p style={{ color: "#ff6b6b" }}>
-                {error || "Destination not found"}
+                {error || t.destinationNotFound}
               </p>
               <button
                 onClick={handleViewAll}
@@ -321,6 +316,24 @@ export default function DestinationDetails() {
 
   const displayPaymentMethods =
     paymentMethods.length > 0 ? paymentMethods : defaultPaymentMethods;
+
+  const doubleRoomRate =
+    destination?.double_room_price ??
+    basicInfo.double_room ??
+    basicInfo.doubleRoom ??
+    destination?.price ??
+    null;
+  const singleRoomRate =
+    destination?.single_room_price ??
+    basicInfo.single_room ??
+    basicInfo.singleRoom ??
+    destination?.price ??
+    null;
+  const tripCode = basicInfo.trip_code ?? destination?.trip_code ?? t.na;
+  const daysNum = basicInfo.days_num ?? basicInfo.days ?? t.na;
+  const destinationName =
+    basicInfo.destination_name ?? getText(destination, "title") ?? t.na;
+  const availableTo = basicInfo.available_to ?? destination?.available_to ?? t.na;
 
   return (
     <div className="details-section" dir={isRTL ? "rtl" : "ltr"}>
@@ -410,9 +423,9 @@ export default function DestinationDetails() {
                     viewport={{ once: true }}
                   >
                     <h4>
-                      {isRTL ? `اليوم ${day.day}` : `Day ${day.day}`} : {day.title}
+                      {`${t.dayLabel} ${day.day}`} : {getLocalizedItemText(day, 'title')}
                     </h4>
-                    <p>{day.description}</p>
+                    <p>{getLocalizedItemText(day, 'description')}</p>
                     {day.image && (
                       <img
                         src={getImageUrl(day.image_url || day.image)}
@@ -448,45 +461,40 @@ export default function DestinationDetails() {
                 <ul className="info-list">
                   <li>
                     <Laptop size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'رمز الرحلة :' : 'Trip Code :'}</span>
+                    <span className="label">{t.tripCode} :</span>
                     <span className="value">
-                      {basicInfo.trip_code || "N/A"}
+                      {tripCode}
                     </span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Clock size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'عدد الأيام :' : 'Days Num :'}</span>
-                    <span className="value">{basicInfo.days_num || "N/A"}</span>
+                    <span className="label">{t.daysNum} :</span>
+                    <span className="value">{daysNum}</span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Globe size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'اسم الوجهة :' : 'Destination Name :'}</span>
-                    <span className="value">
-                      {basicInfo.destination_name ||
-                        getText(destination, "title")}
-                    </span>
+                    <span className="label">{t.destinationName} :</span>
+                    <span className="value">{destinationName}</span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Calendar size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'متاح حتى :' : 'Available To :'}</span>
-                    <span className="value">
-                      {basicInfo.available_to || "N/A"}
-                    </span>
+                    <span className="label">{t.availableTo} :</span>
+                    <span className="value">{availableTo}</span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Users size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'غرفة مزدوجة :' : 'Double Room :'}</span>
+                    <span className="label">{t.doubleRoom} :</span>
                     <span className="value highlight">
-                      {basicInfo.double_room || "N/A"}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={14} 
-                        height={14} 
+                      {doubleRoomRate ?? t.na}
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={14}
+                        height={14}
                         className="currency-icon"
                       />
                       {` ${t.perPerson}`}
@@ -495,14 +503,14 @@ export default function DestinationDetails() {
                   <li className="divider"></li>
                   <li>
                     <User size={16} color="#dfa528" />
-                    <span className="label">{isRTL ? 'غرفة فردية :' : 'Single Room :'}</span>
+                    <span className="label">{t.singleRoom} :</span>
                     <span className="value highlight">
-                      {basicInfo.single_room || "N/A"}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={14} 
-                        height={14} 
+                      {singleRoomRate ?? t.na}
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={14}
+                        height={14}
                         className="currency-icon"
                       />
                       {` ${t.perPerson}`}

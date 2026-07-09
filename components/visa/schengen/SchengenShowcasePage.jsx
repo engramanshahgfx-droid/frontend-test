@@ -63,7 +63,7 @@ const content = {
       resident: "مقيم",
       date: "تاريخ السفر المتوقع",
       notes: "ملاحظات إضافية",
-      submit: "إرسال الطلب",
+      submit: "إرسل الطلب",
     },
     familyOption: "هذا الطلب لعائلة / عدة مسافرين",
     travelersTitle: "بيانات المسافرين",

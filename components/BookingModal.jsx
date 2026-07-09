@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "@/lib/api";
 
-export default function BookingModal({ isOpen, onClose, packageData, lang }) {
+export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination" }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [bookingId, setBookingId] = useState(null);
@@ -38,7 +38,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
     notes: "",
     guests: 1,
     special_requests: "",
-    booking_type: "destination",
+    booking_type: bookingType,
   });
   const [errors, setErrors] = useState({});
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -48,14 +48,46 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
 
   const isRTL = lang === "ar";
 
-  // Get base price from package data
-  const getBasePrice = () => {
-    return (
-      parseFloat(packageData?.price) ||
-      parseFloat(packageData?.basic_info?.price) ||
-      100
-    );
+  const parseJsonField = (field, fallback = {}) => {
+    if (!field) return fallback;
+    if (typeof field === "string") {
+      try {
+        return JSON.parse(field);
+      } catch {
+        return fallback;
+      }
+    }
+    return field;
   };
+
+  const getPackageBasicInfo = () => {
+    return parseJsonField(packageData?.basic_info, {});
+  };
+
+  const getRoomRate = (roomType) => {
+    const basicInfo = getPackageBasicInfo();
+    const defaultPrice = Number(packageData?.price) || 0;
+
+    const rawRate =
+      roomType === "DoubleRoom"
+        ? packageData?.double_room_price ??
+          basicInfo.double_room ??
+          basicInfo.doubleRoom ??
+          packageData?.price
+        : packageData?.single_room_price ??
+          basicInfo.single_room ??
+          basicInfo.singleRoom ??
+          packageData?.price;
+
+    return Number(rawRate) || defaultPrice;
+  };
+
+  const getBasePrice = () => getRoomRate(formData.room_type);
+
+  const packageTitle =
+    lang === "ar"
+      ? packageData?.title_ar ?? packageData?.title_en ?? packageData?.title
+      : packageData?.title_en ?? packageData?.title_ar ?? packageData?.title;
 
   // Calculate total price based on room type and guests
   const calculateTotalPrice = () => {
@@ -79,6 +111,13 @@ export default function BookingModal({ isOpen, onClose, packageData, lang }) {
   useEffect(() => {
     setTotalAmount(calculateTotalPrice());
   }, [formData.guests, formData.room_type, packageData]);
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      booking_type: bookingType,
+    }));
+  }, [bookingType]);
 
   useEffect(() => {
     if (packageData) {
@@ -331,7 +370,7 @@ const initiatePayment = async (bookingId, amount) => {
       payWithCard: "ادفع ببطاقة الائتمان",
       securePayment: "مدفوعات آمنة عبر بوابة ميسر",
       paymentSuccess: "تم الدفع بنجاح!",
-      paymentSuccessMessage: "تم تأكيد حجزك. سنتواصل معك قريباً.",
+      paymentSuccessMessage: "  .   تم ارسال الطلب بنجاح ستصلك رسالة تاكيد",
       payMore: "ادفع ببطاقة الائتمان",
       supports: "يدعم فيزا، مدى، إس تي سي باي، آبل باي. الدفع عبر التحويل البنكي متاح كخيار احتياطي.",
       retry: "إعادة المحاولة",
@@ -553,18 +592,11 @@ const initiatePayment = async (bookingId, amount) => {
                     }}
                   >
                     <h4 style={{ margin: "0 0 8px 0", color: "#2c2c2c" }}>
-                      {packageData?.title_en || packageData?.title}
+                      {packageTitle || packageData?.title || packageData?.title_en}
                     </h4>
                     {packageData?.basic_info && (
                       <div style={{ fontSize: "14px", color: "#666" }}>
-                        <span>
-                          {isRTL ? "رمز الرحلة:" : "Trip Code:"}{" "}
-                          {packageData.basic_info.trip_code}
-                        </span>
-                        <span style={{ marginLeft: "20px" }}>
-                          {isRTL ? "عدد الأيام:" : "Days:"}{" "}
-                          {packageData.basic_info.days_num}
-                        </span>
+                     
                       </div>
                     )}
                   </div>
@@ -594,7 +626,7 @@ const initiatePayment = async (bookingId, amount) => {
                     }
                   >
                     {t.continue}
-                    <ArrowRight size={16} />
+                    {/* <ArrowRight size={16} /> */}
                   </button>
                 </div>
               )}
@@ -1092,36 +1124,7 @@ const initiatePayment = async (bookingId, amount) => {
                       </div>
                     </div>
 
-                    {/* Payment Method Info */}
-                    <div style={{ gridColumn: "1 / -1", marginTop: "10px" }}>
-                      <div
-                        style={{
-                          background: "#f8f9fa",
-                          padding: "15px",
-                          borderRadius: "8px",
-                          border: "2px solid #dfa528",
-                          textAlign: "center",
-                        }}
-                      >
-                        <CreditCard
-                          size={24}
-                          color="#dfa528"
-                          style={{ display: "block", margin: "0 auto 8px" }}
-                        />
-                        <span style={{ fontWeight: "600", color: "#dfa528" }}>
-                          {t.creditCard}
-                        </span>
-                        <p
-                          style={{
-                            fontSize: "12px",
-                            color: "#666",
-                            marginTop: "4px",
-                          }}
-                        >
-                          {t.supports}
-                        </p>
-                      </div>
-                    </div>
+              
                   </div>
 
                   {errors.submit && (

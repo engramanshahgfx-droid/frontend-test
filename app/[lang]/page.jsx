@@ -269,12 +269,12 @@ const content = {
        {/* <StartProject lang={lang} /> */}
 
        {/* local cities  */}
-        {/* <NewServices
+        <NewServices
         lang={lang}
         servicesData={services}
         sectionTitle={discoverTitle}
         sectionDescription={discoverDescription}
-      /> */}
+      />
 
       {/* <SpecialOffers lang={lang} /> */}
      <TourismOffers lang={lang} />

@@ -1,8 +1,5 @@
 "use client";
 
-
-
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -21,8 +18,11 @@ import { API_URL } from "@/lib/api";
 
 const labels = {
   en: {
+    // Hero
+    premiumBadge: "Premium Service",
     title: "Private Jet Charter",
     subtitle: "Experience the pinnacle of luxury travel with our premium private jet services",
+    // Form
     formTitle: "Request a Quote",
     name: "Full Name",
     namePlaceholder: "Enter your full name",
@@ -40,7 +40,6 @@ const labels = {
     returnDate: "Return Date (optional)",
     passengers: "Number of Passengers",
     passengersPlaceholder: "Enter number",
-    moreThan20: "More than 20 people",
     aircraftType: "Aircraft Preference",
     selectAircraftType: "Select aircraft type",
     aircraftOptions: {
@@ -56,26 +55,40 @@ const labels = {
     submitting: "Submitting...",
     submitSuccess: "Request Submitted Successfully!",
     submitError: "Error submitting request. Please try again.",
-    features: {
-      title: "Why Choose Us",
-      luxury: "Luxury Experience",
-      luxuryDesc: "Premium cabins with personalized service",
-      global: "Global Network",
-      globalDesc: "Access to 5,000+ private airports worldwide",
-      flexibility: "Flexible Scheduling",
-      flexibilityDesc: "Fly on your schedule, 24/7 availability",
-      safety: "Safety First",
-      safetyDesc: "FAA/EASA certified operators",
+    // Client Type Options
+    clientOptions: {
+      businessman: "Businessman",
+      hajj: "Hajj",
+      footballTeam: "Football Team",
+      government: "Government Entity",
+      medical: "Medical Evacuation",
+      other: "Other",
     },
+    // Features
+    featuresTitle: "Why Choose Us",
+    luxury: "Luxury Experience",
+    luxuryDesc: "Premium cabins with personalized service",
+    global: "Global Network",
+    globalDesc: "Access to 5,000+ private airports worldwide",
+    flexibility: "Flexible Scheduling",
+    flexibilityDesc: "Fly on your schedule, 24/7 availability",
+    safety: "Safety First",
+    safetyDesc: "FAA/EASA certified operators",
+    // Contact
     contactInfo: "Contact Information",
     workingHours: "Working Hours",
     workingHoursDetail: "24/7 - Available anytime",
     callUs: "Call Us",
     emailUs: "Email Us",
+    // Form helper
+    formHelper: "Fill out the form and our team will contact you within 2 hours",
   },
   ar: {
+    // Hero
+    premiumBadge: "خدمة متميزة",
     title: "استئجار طائرة خاصة",
-    subtitle: "اختبر قمة السفر الفاخر مع خدمات الطيران الخاص premium لدينا",
+    subtitle: "اختبر قمة السفر الفاخر مع خدمات الطيران الخاص الحصرية لدينا",
+    // Form
     formTitle: "طلب عرض سعر",
     name: "الاسم الكامل",
     namePlaceholder: "أدخل اسمك الكامل",
@@ -93,91 +106,48 @@ const labels = {
     returnDate: "تاريخ العودة (اختياري)",
     passengers: "عدد المسافرين",
     passengersPlaceholder: "أدخل العدد",
-    moreThan20: "أكثر من 20 شخصاً",
     aircraftType: "نوع الطائرة المفضل",
     selectAircraftType: "اختر نوع الطائرة",
     aircraftOptions: {
       light: "طائرة خفيفة (4-6 أشخاص)",
       midsize: "طائرة متوسطة (6-8 أشخاص)",
       heavy: "طائرة كبيرة (8-14 أشخاص)",
-      vip: "طائرة VIP (14+ أشخاص)",
-      xlarge: "طائرة أكبر (20+ شخص)",
+      vip: "طائرة VIP (14+ شخص)",
+      xlarge: "طائرة كبيرة جداً (20+ شخص)",
     },
     specialRequests: "طلبات خاصة",
     specialRequestsPlaceholder: "تجهيزات الطعام، النقل البري، إلخ...",
-    submit: "إرسال الطلب",
+    submit: "إرسل الطلب",
     submitting: "جاري الإرسال...",
-    submitSuccess: "تم إرسال الطلب بنجاح!",
-    submitError: "خطأ في إرسال الطلب. يرجى المحاولة مرة أخرى.",
-    features: {
-      title: "لماذا تختارنا",
-      luxury: "تجربة فاخرة",
-      luxuryDesc: "مقصورات فاخرة مع خدمة شخصية",
-      global: "شبكة عالمية",
-      globalDesc: "الوصول إلى أكثر من 5000 مطار خاص حول العالم",
-      flexibility: "جدولة مرنة",
-      flexibilityDesc: "السفر في وقتك المناسب، متوفر 24/7",
-      safety: "السلامة أولاً",
-      safetyDesc: "مشغلون معتمدون من FAA/EASA",
+    submitSuccess: "تم إرسل الطلب بنجاح!",
+    submitError: "حدث خطأ في إرسل الطلب. يرجى المحاولة مرة أخرى.",
+    // Client Type Options
+    clientOptions: {
+      businessman: "رجل أعمال",
+      hajj: "حج",
+      footballTeam: "فريق كرة قدم",
+      government: "جهة حكومية",
+      medical: "إخلاء طبي",
+      other: "أخرى",
     },
+    // Features
+    featuresTitle: "لماذا تختارنا",
+    luxury: "تجربة فاخرة",
+    luxuryDesc: "مقصورات فاخرة مع خدمة شخصية",
+    global: "شبكة عالمية",
+    globalDesc: "الوصول إلى أكثر من 5000 مطار خاص حول العالم",
+    flexibility: "جدولة مرنة",
+    flexibilityDesc: "السفر في وقتك المناسب، متوفر 24/7",
+    safety: "السلامة أولاً",
+    safetyDesc: "مشغلون معتمدون من FAA/EASA",
+    // Contact
     contactInfo: "معلومات الاتصال",
     workingHours: "ساعات العمل",
     workingHoursDetail: "24/7 - متاحون في أي وقت",
     callUs: "اتصل بنا",
     emailUs: "راسلنا",
-  },
-  zh: {
-    title: "私人飞机包机",
-    subtitle: "通过我们的优质私人飞机服务体验奢华旅行的巅峰",
-    formTitle: "请求报价",
-    name: "全名",
-    namePlaceholder: "请输入您的全名",
-    email: "电子邮箱",
-    emailPlaceholder: "you@example.com",
-    phone: "电话号码",
-    phonePlaceholder: "+966 5X XXX XXXX",
-    clientType: "请求类型",
-    clientTypePlaceholder: "选择请求类型",
-    departure: "出发城市 / 机场",
-    departurePlaceholder: "例如：利雅得机场、吉达、迪拜",
-    destination: "目的地城市",
-    destinationPlaceholder: "例如：伦敦、巴黎、纽约",
-    date: "出发日期",
-    returnDate: "返程日期（可选）",
-    passengers: "乘客人数",
-    passengersPlaceholder: "请输入人数",
-    moreThan20: "20人以上",
-    aircraftType: "飞机偏好",
-    selectAircraftType: "选择飞机类型",
-    aircraftOptions: {
-      light: "轻型飞机 (4-6人)",
-      midsize: "中型飞机 (6-8人)",
-      heavy: "重型飞机 (8-14人)",
-      vip: "VIP客机 (14人以上)",
-      xlarge: "特大型飞机 (20人以上)",
-    },
-    specialRequests: "特殊要求",
-    specialRequestsPlaceholder: "餐饮、地面交通等...",
-    submit: "提交请求",
-    submitting: "提交中...",
-    submitSuccess: "请求提交成功！",
-    submitError: "提交请求出错，请重试。",
-    features: {
-      title: "为什么选择我们",
-      luxury: "奢华体验",
-      luxuryDesc: "高级客舱与个性化服务",
-      global: "全球网络",
-      globalDesc: "通达全球5,000+个私人机场",
-      flexibility: "灵活安排",
-      flexibilityDesc: "按您的时间飞行，24/7全天候服务",
-      safety: "安全第一",
-      safetyDesc: "FAA/EASA认证运营商",
-    },
-    contactInfo: "联系信息",
-    workingHours: "工作时间",
-    workingHoursDetail: "24/7 - 随时可用",
-    callUs: "致电我们",
-    emailUs: "发送邮件",
+    // Form helper
+    formHelper: "املأ النموذج وسيتواصل معك فريقنا خلال ساعتين",
   },
 };
 
@@ -272,9 +242,6 @@ export default function PrivateJetRequestForm({ lang }) {
     }
   };
 
-  const passengerOptions = Array.from({ length: 20 }, (_, i) => i + 1);
-
-  // Critical fix: Remove the inline style that might cause overflow issues
   return (
     <div className="container py-5" style={{ direction: isRTL ? "rtl" : "ltr", overflow: "visible" }}>
       {/* Hero Section */}
@@ -287,7 +254,7 @@ export default function PrivateJetRequestForm({ lang }) {
         <div className="d-inline-flex align-items-center gap-2 bg-warning bg-opacity-10 px-4 py-2 rounded-pill mb-4">
           <Plane size={20} className="text-warning" />
           <span className="text-warning fw-semibold small text-uppercase">
-            Premium Service
+            {t.premiumBadge}
           </span>
         </div>
         <h1 className="display-4 fw-bold mb-3" style={{ color: "#1a1a2e" }}>
@@ -311,7 +278,7 @@ export default function PrivateJetRequestForm({ lang }) {
             <div className="card-header bg-dark text-white py-4 px-4 border-0">
               <h3 className="h4 mb-0 fw-semibold">{t.formTitle}</h3>
               <p className="text-white-50 small mt-1 mb-0">
-                Fill out the form and our team will contact you within 2 hours
+                {t.formHelper}
               </p>
             </div>
             <div className="card-body p-4 overflow-visible">
@@ -374,12 +341,12 @@ export default function PrivateJetRequestForm({ lang }) {
                       <option value="" disabled>
                         {t.clientTypePlaceholder}
                       </option>
-                      <option value="Businessman">Businessman</option>
-                      <option value="Hajj">Hajj</option>
-                      <option value="Football Team">Football Team</option>
-                      <option value="Government Entity">Government Entity</option>
-                      <option value="Medical Evacuation">Medical Evacuation</option>
-                      <option value="Other">Other</option>
+                      <option value="Businessman">{t.clientOptions.businessman}</option>
+                      <option value="Hajj">{t.clientOptions.hajj}</option>
+                      <option value="Football Team">{t.clientOptions.footballTeam}</option>
+                      <option value="Government Entity">{t.clientOptions.government}</option>
+                      <option value="Medical Evacuation">{t.clientOptions.medical}</option>
+                      <option value="Other">{t.clientOptions.other}</option>
                     </select>
                   </div>
                   <div className="col-md-6">
@@ -524,7 +491,7 @@ export default function PrivateJetRequestForm({ lang }) {
           </div>
         </motion.div>
 
-        {/* Features & Contact Section - Rest remains the same */}
+        {/* Features & Contact Section */}
         <motion.div
           initial={{ opacity: 0, x: isRTL ? -30 : 30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -533,7 +500,7 @@ export default function PrivateJetRequestForm({ lang }) {
         >
           <div className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
             <div className="card-header bg-dark text-white py-3 px-4 border-0">
-              <h4 className="h5 mb-0 fw-semibold">{t.features.title}</h4>
+              <h4 className="h5 mb-0 fw-semibold">{t.featuresTitle}</h4>
             </div>
             <div className="card-body p-4">
               <div className="d-flex gap-3 mb-4">
@@ -541,8 +508,8 @@ export default function PrivateJetRequestForm({ lang }) {
                   <Plane size={24} className="text-warning" />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.features.luxury}</h6>
-                  <p className="text-muted small mb-0">{t.features.luxuryDesc}</p>
+                  <h6 className="fw-bold mb-1">{t.luxury}</h6>
+                  <p className="text-muted small mb-0">{t.luxuryDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
@@ -550,8 +517,8 @@ export default function PrivateJetRequestForm({ lang }) {
                   <MapPin size={24} className="text-warning" />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.features.global}</h6>
-                  <p className="text-muted small mb-0">{t.features.globalDesc}</p>
+                  <h6 className="fw-bold mb-1">{t.global}</h6>
+                  <p className="text-muted small mb-0">{t.globalDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
@@ -559,8 +526,8 @@ export default function PrivateJetRequestForm({ lang }) {
                   <Clock size={24} className="text-warning" />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.features.flexibility}</h6>
-                  <p className="text-muted small mb-0">{t.features.flexibilityDesc}</p>
+                  <h6 className="fw-bold mb-1">{t.flexibility}</h6>
+                  <p className="text-muted small mb-0">{t.flexibilityDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3">
@@ -568,8 +535,8 @@ export default function PrivateJetRequestForm({ lang }) {
                   <CheckCircle size={24} className="text-warning" />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.features.safety}</h6>
-                  <p className="text-muted small mb-0">{t.features.safetyDesc}</p>
+                  <h6 className="fw-bold mb-1">{t.safety}</h6>
+                  <p className="text-muted small mb-0">{t.safetyDesc}</p>
                 </div>
               </div>
             </div>

@@ -7,6 +7,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 declare global {
   interface Window {
     Moyasar: any;
+    ApplePaySession?: {
+      canMakePayments?: () => boolean;
+    };
   }
 }
 
@@ -15,10 +18,35 @@ export default function BookingSuccessPage() {
   const [bookingId, setBookingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  type PaymentMethodType = 'creditcard' | 'stcpay' | 'applepay';
+  type PaymentMethod = {
+    value: PaymentMethodType;
+    label: string; 
+    // icon: JSX.Element;
+    available: boolean;
+  };
+
   const [amount, setAmount] = useState<number | null>(null);
-  const [selectedMethod, setSelectedMethod] = useState<'creditcard' | 'stcpay' | 'applepay' | null>('creditcard');
+  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType | null>('creditcard');
   const paymentFormRef = useRef<HTMLDivElement | null>(null);
   const [bookingReference, setBookingReference] = useState<string | null>(null);
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
+
+  const paymentMethods: PaymentMethod[] = [
+    {
+      value: 'creditcard',
+      label: 'Card Payment',
+    
+      available: true,
+    },
+    {
+      value: 'stcpay',
+      label: 'STC Pay',
+    
+      available: true,
+    },
+
+  ];
 
   // Inject CSS
   useEffect(() => {
@@ -140,6 +168,7 @@ export default function BookingSuccessPage() {
           border-radius: 24px;
           border: 1px solid #f0e8d8;
           padding: 32px 40px;
+          ar
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
 
@@ -153,7 +182,7 @@ export default function BookingSuccessPage() {
           border-radius: 50%;
           background: #fef3e8;
           color: #d4a853;
-          margin-bottom: 16px;
+          margin-top: -12px !important;
         }
         .payment-header-icon svg {
           width: 28px;
@@ -208,10 +237,25 @@ export default function BookingSuccessPage() {
           border-color: #d4a853;
           background: #fefaf0;
         }
+        .payment-method-btn.disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background: #f5f2eb;
+          border-color: #e8e2d7;
+          color: #9b8f7e;
+        }
         .payment-method-btn.active {
           background: #d4a853;
           color: #ffffff;
           border-color: #d4a853;
+        }
+        .payment-method-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          margin-right: 8px;
         }
 
         /* ===== PAYMENT FORM ===== */
@@ -231,6 +275,36 @@ export default function BookingSuccessPage() {
         #moyasar-payment-form {
           width: 100%;
           min-height: 320px;
+        }
+
+        /* Improve layout of Moyasar form fields so card inputs line up nicely */
+        #moyasar-payment-form .moyasar-form .moyasar-field {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          padding: 10px;
+        }
+        #moyasar-payment-form .moyasar-form .moyasar-field > * {
+          flex: 1 1 0;
+          min-width: 0;
+        }
+        #moyasar-payment-form .moyasar-form input,
+        #moyasar-payment-form .moyasar-form .moyasar-input {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 10px 12px;
+          border-radius: 10px;
+          border: 1px solid rgba(15, 23, 42, 0.06);
+          background: #fff;
+        }
+        /* make sure grouped fields (card number / expiry / cvc) look balanced */
+        #moyasar-payment-form .moyasar-form .moyasar-field.moyasar-field--inline {
+          display: flex;
+        }
+        /* RTL tweaks when the page language is Arabic */
+        .payment-container[dir="rtl"] #moyasar-payment-form .moyasar-form,
+        .payment-container[dir="rtl"] #moyasar-payment-form .moyasar-form .moyasar-field {
+          direction: rtl;
         }
 
         /* ===== MOYASAR OVERRIDES ===== */
@@ -358,6 +432,16 @@ export default function BookingSuccessPage() {
     setLang(currentLang);
     setBookingId(id);
 
+    const applePaySupported =
+      typeof window.ApplePaySession !== 'undefined' &&
+      typeof window.ApplePaySession.canMakePayments === 'function' &&
+      window.ApplePaySession.canMakePayments();
+
+    setApplePayAvailable(Boolean(applePaySupported));
+    if (!applePaySupported && selectedMethod === 'applepay') {
+      setSelectedMethod('creditcard');
+    }
+
     if (!id) {
       setError('No booking ID provided.');
       setLoading(false);
@@ -420,8 +504,8 @@ export default function BookingSuccessPage() {
         return;
       }
 
-      if (typeof window.Moyasar === 'undefined') {
-        setError('SDK not loaded. Please refresh.');
+      if (selectedMethod === 'applepay' && !applePayAvailable) {
+        setError('Apple Pay is not available on this device/browser.');
         return;
       }
 
@@ -433,7 +517,9 @@ export default function BookingSuccessPage() {
 
       try {
         container.innerHTML = '';
-        const methods = selectedMethod ? [selectedMethod] : ['creditcard', 'stcpay', 'applepay'];
+        const methods = selectedMethod
+          ? [selectedMethod]
+          : ['creditcard', 'stcpay', ...(applePayAvailable ? ['applepay'] : [])];
 
         window.Moyasar.init({
           element: container,
@@ -511,18 +597,18 @@ export default function BookingSuccessPage() {
 
   return (
     <div className="payment-page">
-      <div className="payment-container">
+      <div className="payment-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
 
         {/* Header Icon */}
         <div style={{ textAlign: 'center' }}>
-          <div className="payment-header-icon">
+          {/* <div className="payment-header-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h18M7 15h.01M7 5h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
             </svg>
-          </div>
+          </div> */}
 
-          <h1 className="payment-title">Complete Your Payment</h1>
-          <p className="payment-subtitle">Secure checkout with your preferred payment method.</p>
+          {/* <h1 className="payment-title">Complete Your Payment</h1>
+          <p className="payment-subtitle">Secure checkout with your preferred payment method.</p> */}
 
           <div className="payment-amount-box">
             Total Amount: <span>{amount} SAR</span>
@@ -530,24 +616,17 @@ export default function BookingSuccessPage() {
 
           {/* Method Buttons */}
           <div className="payment-methods-row">
-            <button
-              className={`payment-method-btn ${selectedMethod === 'creditcard' ? 'active' : ''}`}
-              onClick={() => setSelectedMethod('creditcard')}
-            >
-              💳 Card
-            </button>
-            <button
-              className={`payment-method-btn ${selectedMethod === 'stcpay' ? 'active' : ''}`}
-              onClick={() => setSelectedMethod('stcpay')}
-            >
-              📱 STC Pay
-            </button>
-            <button
-              className={`payment-method-btn ${selectedMethod === 'applepay' ? 'active' : ''}`}
-              onClick={() => setSelectedMethod('applepay')}
-            >
-              🍎 Apple Pay
-            </button>
+            {paymentMethods.map((method) => (
+              <button
+                key={method.value}
+                className={`payment-method-btn ${selectedMethod === method.value ? 'active' : ''} ${!method.available ? 'disabled' : ''}`}
+                onClick={() => method.available && setSelectedMethod(method.value)}
+                disabled={!method.available}
+              >
+                {/* <span className="payment-method-icon">{method.icon}</span> */}
+                {method.label}
+              </button>
+            ))}
           </div>
         </div>
 

@@ -440,7 +440,7 @@ export default function EvisaCountryDetails({
                 onClick={handleSubmitApplication}
                 disabled={submitting || !fullName || !email || !phone || !nationality}
               >
-                {submitting ? (locale === 'ar' ? 'جاري الإرسال...' : (locale === 'zh' ? '提交中...' : 'Submitting...')) : (locale === 'ar' ? 'إرسال الطلب' : (locale === 'zh' ? '提交申请' : 'Submit Application'))}
+                {submitting ? (locale === 'ar' ? 'جاري الإرسال...' : (locale === 'zh' ? '提交中...' : 'Submitting...')) : (locale === 'ar' ? 'إرسل الطلب' : (locale === 'zh' ? '提交申请' : 'Submit Application'))}
               </button>
             </div>
           </section>

@@ -33,7 +33,7 @@ export default function Contact({ lang }) {
         phone: "رقم الهاتف",
         tripType: "نوع الرحلة",
         message: "أخبرنا عن رحلتك المثالية",
-        submit: "إرسال الطلب",
+        submit: "ارسل الطلب",
         tripTypes: [
           "رحلات عائلية",
           "رحلات شركات",

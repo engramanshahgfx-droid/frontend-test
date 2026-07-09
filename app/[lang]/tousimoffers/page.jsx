@@ -23,6 +23,9 @@ export default function TourismOffersPage() {
       perPerson: "per person",
       noOffers: "No offers available",
       backToHome: "Back to Home",
+      loading: "Loading offers...",
+      popular: "Popular",
+      off: "OFF",
     },
     ar: {
       title: "عروض السياحة",
@@ -32,6 +35,9 @@ export default function TourismOffersPage() {
       perPerson: "للفرد",
       noOffers: "لا توجد عروض متاحة",
       backToHome: "العودة للرئيسية",
+      loading: "جارٍ تحميل العروض...",
+      popular: "الأكثر شهرة",
+      off: "خصم",
     }
   };
 
@@ -99,7 +105,7 @@ export default function TourismOffersPage() {
         <div className="spinner-border text-warning" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
-        <p style={{ marginTop: "20px", color: "#666" }}>Loading offers...</p>
+        <p style={{ marginTop: "20px", color: "#666" }}>{t.loading}</p>
       </div>
     );
   }
@@ -171,10 +177,10 @@ export default function TourismOffersPage() {
                     onError={(e) => { e.target.src = "/placeholder.png"; }}
                   />
                   {offer.discount && (
-                    <span className="discount-badge">{offer.discount}% OFF</span>
+                    <span className="discount-badge">{offer.discount}% {t.off}</span>
                   )}
                   {offer.popular && (
-                    <span className="popular-badge">Popular</span>
+                    <span className="popular-badge">{t.popular}</span>
                   )}
                 </div>
                 <div className="offer-content">
@@ -187,11 +193,11 @@ export default function TourismOffersPage() {
                   </div>
                   <p>{getText(offer, "description")}</p>
                   <div className="offer-meta">
-                    {offer.location && (
-                      <span><MapPin size={14} /> {offer.location}</span>
+                    {getText(offer, "location") && (
+                      <span><MapPin size={14} /> {getText(offer, "location")}</span>
                     )}
-                    {offer.duration && (
-                      <span><Clock size={14} /> {offer.duration}</span>
+                    {getText(offer, "duration") && (
+                      <span><Clock size={14} /> {getText(offer, "duration")}</span>
                     )}
                   </div>
                   <div className="offer-footer">
@@ -201,7 +207,7 @@ export default function TourismOffersPage() {
                         {offer.price}
                         <Image 
                           src="/saudi_riyal.png" 
-                          alt="SAR" 
+                          alt="ريال" 
                           width={14} 
                           height={14} 
                           className="currency-icon"
