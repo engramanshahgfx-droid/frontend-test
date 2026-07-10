@@ -141,20 +141,32 @@ export default function DestinationDetails() {
   const getText = (obj, field) => {
     if (!obj) return "";
 
+    const normalize = (value) => {
+      if (typeof value === "string") {
+        try {
+          const parsed = JSON.parse(value);
+          return parsed;
+        } catch {
+          return value;
+        }
+      }
+      return value;
+    };
+
     switch (field) {
       case "title":
       case "description":
       case "long_description":
       case "location":
       case "duration":
-        return getLocalizedField(obj, field);
+        return normalize(getLocalizedField(obj, field));
       case "features":
       case "includes":
       case "not_includes":
       case "itinerary":
         return getArrayField(obj, field);
       default:
-        return getLocalizedField(obj, field);
+        return normalize(getLocalizedField(obj, field));
     }
   };
 
@@ -310,12 +322,26 @@ export default function DestinationDetails() {
   const contactInfo = parseJsonField(destination.contact_info, {});
   const paymentMethods = parseJsonField(destination.payment_methods, []);
 
+  const localizedContactInfo = {
+    address: getLocalizedItemText(contactInfo, "address") || contactInfo.address || contactInfo.address_en || contactInfo.address_ar || "",
+    phone: contactInfo.phone || "",
+    whatsapp: contactInfo.whatsapp || "",
+    email: contactInfo.email || "",
+  };
+
+  const localizedPaymentMethods = paymentMethods.map((method) => ({
+    ...method,
+    name: getLocalizedItemText(method, "name") || method.name || method.name_en || method.name_ar || "",
+    account_no: method.account_no || method.accountNo || "",
+    iban: method.iban || "",
+  }));
+
   const defaultPaymentMethods = [
  
   ];
 
   const displayPaymentMethods =
-    paymentMethods.length > 0 ? paymentMethods : defaultPaymentMethods;
+    localizedPaymentMethods.length > 0 ? localizedPaymentMethods : defaultPaymentMethods;
 
   const doubleRoomRate =
     destination?.double_room_price ??
@@ -332,7 +358,10 @@ export default function DestinationDetails() {
   const tripCode = basicInfo.trip_code ?? destination?.trip_code ?? t.na;
   const daysNum = basicInfo.days_num ?? basicInfo.days ?? t.na;
   const destinationName =
-    basicInfo.destination_name ?? getText(destination, "title") ?? t.na;
+    (isRTL ? basicInfo.destination_name_ar : basicInfo.destination_name_en) ||
+    basicInfo.destination_name ||
+    getText(destination, "title") ||
+    t.na;
   const availableTo = basicInfo.available_to ?? destination?.available_to ?? t.na;
 
   return (
@@ -538,14 +567,14 @@ export default function DestinationDetails() {
                   <li>
                     <MapPin size={16} color="#dfa528" />
                     <span>
-                      {contactInfo.address || "al Rabwa Jeddah"}
+                      {localizedContactInfo.address || "al Rabwa Jeddah"}
                     </span>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Phone size={16} color="#dfa528" />
-                    <a href={`tel:${contactInfo.phone || "0114562097"}`}>
-                      {contactInfo.phone || "0547305060"}
+                    <a href={`tel:${localizedContactInfo.phone || "0114562097"}`}>
+                      {localizedContactInfo.phone || "0547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
@@ -553,12 +582,12 @@ export default function DestinationDetails() {
                     <MessageSquare size={16} color="#dfa528" />
                     <a
                       href={`https://wa.me/${(
-                        contactInfo.whatsapp || "966547305060"
+                        localizedContactInfo.whatsapp || "966547305060"
                       ).replace(/\s/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {contactInfo.whatsapp || "966547305060"}
+                      {localizedContactInfo.whatsapp || "966547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
@@ -566,10 +595,10 @@ export default function DestinationDetails() {
                     <Mail size={16} color="#dfa528" />
                     <a
                       href={`mailto:${
-                        contactInfo.email || "info@tilalr.com"
+                        localizedContactInfo.email || "info@tilalr.com"
                       }`}
                     >
-                      {contactInfo.email || "info@tilalr.com"}
+                      {localizedContactInfo.email || "info@tilalr.com"}
                     </a>
                   </li>
                 </ul>
@@ -597,6 +626,10 @@ export default function DestinationDetails() {
                       />
                     )}
                     <div className="bank-details">
+                      <div className="bank-row">
+                        <span className="bank-label">{isRTL ? 'الاسم' : 'Name'} :</span>
+                        <span className="bank-number">{method.name || method.name_en || method.name_ar || ""}</span>
+                      </div>
                       <div className="bank-row">
                         <span className="bank-label">Account No. :</span>
                         <span className="bank-number">
