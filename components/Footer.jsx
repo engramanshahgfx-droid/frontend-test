@@ -49,7 +49,7 @@ export default function Footer({ lang }) {
     phone: "00966547305060",
     email: "Info@tilalr.com",
     website: "tilalr.com",
-    googleMapsUrl: "https://maps.app.goo.gl/FNQfHFEZzv91WEMt9",
+    googleMapsUrl: "https://maps.app.goo.gl/WakCAhdZsZERp1M97",
   };
 
   const englishText = {
@@ -75,7 +75,7 @@ export default function Footer({ lang }) {
     phone: "966547305060",
     email: "Info@tilalr.com",
     website: "tilalr.com",
-    googleMapsUrl: "https://maps.app.goo.gl/FNQfHFEZzv91WEMt9",
+    googleMapsUrl: "https://maps.app.goo.gl/WakCAhdZsZERp1M97",
   };
 
   const chineseText = {
@@ -101,7 +101,7 @@ export default function Footer({ lang }) {
     phone: "966547305060",
     email: "Info@tilalr.com",
     website: "tilalr.com",
-    googleMapsUrl: "https://maps.app.goo.gl/di5qeND1dsmGQp7YA",
+    googleMapsUrl: "https://maps.app.goo.gl/WakCAhdZsZERp1M97",
   };
 
   // Get the appropriate text based on language
