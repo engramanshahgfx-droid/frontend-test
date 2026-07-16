@@ -96,7 +96,7 @@ export default function BestTourismOffers({ lang }) {
 
   const labels = {
     en: {
-      title: "Best Tourism Offers",
+      title: "Best Saudi Offers",
       subtitle: "Discover amazing deals and unforgettable experiences",
       viewDetails: "View Details",
       bookNow: "Book Now",

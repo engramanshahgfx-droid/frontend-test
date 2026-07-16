@@ -72,7 +72,7 @@ const fallbackDestinations = [
 ];
 
 // ✅ FIXED: Changed from BestTourismOffers to TourismOffers
-export default function TourismOffers({ lang }) {
+export default function TourismOffers({ lang, maxItems = 3 }) {
   const router = useRouter();
   const currentLang = lang || "en";
   const [destinations, setDestinations] = useState([]);
@@ -83,7 +83,7 @@ export default function TourismOffers({ lang }) {
 
   const labels = {
     en: {
-      title: "Best Tourism Offers",
+      title: "Best Saudi Offers",
       subtitle: "Discover amazing deals and unforgettable experiences",
       viewDetails: "View Details",
       bookNow: "Book Now",
@@ -268,7 +268,9 @@ export default function TourismOffers({ lang }) {
     );
   }
 
-  const displayDestinations = destinations.length > 0 ? destinations : [];
+  const displayDestinations = Array.isArray(destinations) && destinations.length > 0
+    ? destinations.slice(0, maxItems)
+    : [];
 
   return (
     <>

@@ -91,10 +91,63 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     return offerData.title_en || offerData.title_ar || offerData.title || 'Tourism Offer';
   };
 
-  // Helper to get the price from the offer data
+  // Helper to get the selected room rate from the offer data
   const getOfferPrice = () => {
-    if (!offerData) return null;
-    return offerData.price || offerData.original_price || null;
+    if (!offerData) return 0;
+
+    const basicInfo = (() => {
+      if (!offerData.basic_info) return {};
+      if (typeof offerData.basic_info === 'string') {
+        try {
+          return JSON.parse(offerData.basic_info);
+        } catch {
+          return {};
+        }
+      }
+      return offerData.basic_info;
+    })();
+
+    const doubleRoomPrice = Number(
+      offerData.double_room_price ??
+        basicInfo.double_room ??
+        basicInfo.doubleRoom ??
+        offerData.price ??
+        offerData.original_price ??
+        0
+    );
+
+    const singleRoomPrice = Number(
+      offerData.single_room_price ??
+        basicInfo.single_room ??
+        basicInfo.singleRoom ??
+        offerData.double_room_price ??
+        basicInfo.double_room ??
+        basicInfo.doubleRoom ??
+        offerData.price ??
+        offerData.original_price ??
+        0
+    );
+
+    return formData.room_type === 'DoubleRoom' ? doubleRoomPrice : singleRoomPrice;
+  };
+
+  const calculateOfferTotal = () => {
+    const price = getOfferPrice();
+    const guests = Number(formData.guests) || 1;
+
+    if (!price || guests < 1) {
+      return 0;
+    }
+
+    if (formData.room_type === 'DoubleRoom') {
+      if (guests <= 2) {
+        return price;
+      }
+      const extraGuests = guests - 2;
+      return price + extraGuests * price * 0.5;
+    }
+
+    return price * guests;
   };
 
   const handleChange = (e) => {
@@ -135,8 +188,10 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     try {
       // Get the offer price
       const offerPrice = getOfferPrice();
-      if (!offerPrice) {
-        setErrors({ submit: 'Offer price not available' });
+      const totalAmount = calculateOfferTotal();
+
+      if (!offerPrice || totalAmount <= 0) {
+        setErrors({ submit: 'Offer price not available or invalid' });
         setLoading(false);
         return;
       }
@@ -145,7 +200,8 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
         ...formData,
         booking_type: 'tourism_offer',
         payment_method: 'credit_card',
-        total_amount: offerPrice,
+        total_amount: totalAmount,
+        price: offerPrice,
         package_title: getOfferTitle(),
       };
 

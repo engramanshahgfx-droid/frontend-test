@@ -27,26 +27,9 @@ export default function BookingSuccessPage() {
   };
 
   const [amount, setAmount] = useState<number | null>(null);
-  const [selectedMethod, setSelectedMethod] = useState<PaymentMethodType | null>('creditcard');
   const paymentFormRef = useRef<HTMLDivElement | null>(null);
   const [bookingReference, setBookingReference] = useState<string | null>(null);
   const [applePayAvailable, setApplePayAvailable] = useState(false);
-
-  const paymentMethods: PaymentMethod[] = [
-    {
-      value: 'creditcard',
-      label: 'Card Payment',
-    
-      available: true,
-    },
-    {
-      value: 'stcpay',
-      label: 'STC Pay',
-    
-      available: true,
-    },
-
-  ];
 
   // Inject CSS
   useEffect(() => {
@@ -438,9 +421,6 @@ export default function BookingSuccessPage() {
       window.ApplePaySession.canMakePayments();
 
     setApplePayAvailable(Boolean(applePaySupported));
-    if (!applePaySupported && selectedMethod === 'applepay') {
-      setSelectedMethod('creditcard');
-    }
 
     if (!id) {
       setError('No booking ID provided.');
@@ -457,8 +437,16 @@ export default function BookingSuccessPage() {
           throw new Error(data.message || 'Unable to load payment details.');
         }
 
-        setAmount(data.amount || 0);
+        const parsedAmount = Number(data.amount);
+        const validAmount = Number.isFinite(parsedAmount) ? parsedAmount : 0;
+        setAmount(validAmount);
         setBookingReference(data.reference || `#${id}`);
+
+        if (validAmount <= 0) {
+          setError('Invalid payment amount. Please refresh or contact support.');
+          setLoading(false);
+          return;
+        }
       } catch (fetchError) {
         console.error('Fetch payment details error:', fetchError);
         setError('Unable to load booking payment details. Please refresh.');
@@ -471,7 +459,22 @@ export default function BookingSuccessPage() {
   }, []);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !amount || loading || !bookingId) return;
+    if (typeof window === 'undefined' || amount === null || loading || !bookingId) return;
+    if (amount <= 0) {
+      setError('Invalid payment amount. Please refresh or contact support.');
+      return;
+    }
+
+    const MOYASAR_SDK_URL = 'https://cdn.moyasar.com/mpf/1.14.0/moyasar.js';
+    const MOYASAR_CSS_URL = 'https://cdn.moyasar.com/mpf/1.14.0/moyasar.css';
+
+    const addMoyasarStylesheet = () => {
+      if (document.querySelector(`link[href="${MOYASAR_CSS_URL}"]`)) return;
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = MOYASAR_CSS_URL;
+      document.head.appendChild(link);
+    };
 
     const loadMoyasarSDK = () => {
       if (typeof window.Moyasar !== 'undefined') {
@@ -480,7 +483,7 @@ export default function BookingSuccessPage() {
       }
 
       const script = document.createElement('script');
-      script.src = '/proxy/moyasar-sdk';
+      script.src = MOYASAR_SDK_URL;
       script.async = true;
       script.onload = () => {
         initPayment();
@@ -489,6 +492,7 @@ export default function BookingSuccessPage() {
         setError('Failed to load payment gateway. Please refresh.');
       };
       document.body.appendChild(script);
+      addMoyasarStylesheet();
 
       setTimeout(() => {
         if (typeof window.Moyasar === 'undefined') {
@@ -498,14 +502,11 @@ export default function BookingSuccessPage() {
     };
 
     const initPayment = () => {
-      const publishableKey = process.env.NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY;
+      const publishableKey =
+        process.env.NEXT_PUBLIC_MOYASAR_PUBLIC_KEY ||
+        process.env.NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY;
       if (!publishableKey) {
         setError('Payment gateway is not configured.');
-        return;
-      }
-
-      if (selectedMethod === 'applepay' && !applePayAvailable) {
-        setError('Apple Pay is not available on this device/browser.');
         return;
       }
 
@@ -517,9 +518,7 @@ export default function BookingSuccessPage() {
 
       try {
         container.innerHTML = '';
-        const methods = selectedMethod
-          ? [selectedMethod]
-          : ['creditcard', 'stcpay', ...(applePayAvailable ? ['applepay'] : [])];
+        const methods = ['creditcard', 'stcpay', ...(applePayAvailable ? ['applepay'] : [])];
 
         window.Moyasar.init({
           element: container,
@@ -565,7 +564,7 @@ export default function BookingSuccessPage() {
     };
 
     loadMoyasarSDK();
-  }, [amount, loading, bookingId, lang, selectedMethod]);
+  }, [amount, loading, bookingId, lang]);
 
   if (loading) {
     return (
@@ -612,21 +611,6 @@ export default function BookingSuccessPage() {
 
           <div className="payment-amount-box">
             Total Amount: <span>{amount} SAR</span>
-          </div>
-
-          {/* Method Buttons */}
-          <div className="payment-methods-row">
-            {paymentMethods.map((method) => (
-              <button
-                key={method.value}
-                className={`payment-method-btn ${selectedMethod === method.value ? 'active' : ''} ${!method.available ? 'disabled' : ''}`}
-                onClick={() => method.available && setSelectedMethod(method.value)}
-                disabled={!method.available}
-              >
-                {/* <span className="payment-method-icon">{method.icon}</span> */}
-                {method.label}
-              </button>
-            ))}
           </div>
         </div>
 

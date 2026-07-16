@@ -77,6 +77,9 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
         : packageData?.single_room_price ??
           basicInfo.single_room ??
           basicInfo.singleRoom ??
+          packageData?.double_room_price ??
+          basicInfo.double_room ??
+          basicInfo.doubleRoom ??
           packageData?.price;
 
     return Number(rawRate) || defaultPrice;

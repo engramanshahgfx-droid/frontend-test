@@ -277,7 +277,7 @@ const content = {
       />
 
       {/* <SpecialOffers lang={lang} /> */}
-     <TourismOffers lang={lang} />
+     <TourismOffers lang={lang} maxItems={3} />
      
     <TourismDestinations lang={lang} />
   

@@ -16,7 +16,7 @@ export default function TourismOffersPage() {
 
   const labels = {
     en: {
-      title: "Tourism Offers",
+      title: "saudi Offers",
       subtitle: "Discover amazing deals and unforgettable experiences",
       viewDetails: "More",
       from: "From",
@@ -28,7 +28,7 @@ export default function TourismOffersPage() {
       off: "OFF",
     },
     ar: {
-      title: "عروض السياحة",
+      title: "عروض السعوديه",
       subtitle: "اكتشف الصفقات المذهلة والتجارب التي لا تنسى",
       viewDetails: " المزيد",
       from: "من",
