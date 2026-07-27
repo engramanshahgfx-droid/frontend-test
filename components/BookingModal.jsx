@@ -216,7 +216,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       package_code: packageCode,
       notes: formData.notes || "",
       payment_method: "credit_card",
-      booking_type: "destination",
+      booking_type: formData.booking_type || bookingType,
       guests: formData.guests || 1,
       special_requests: formData.special_requests || "",
       total_amount: calculatedTotal,
@@ -289,7 +289,7 @@ const initiatePayment = async (bookingId, amount) => {
       notes: "",
       guests: 1,
       special_requests: "",
-      booking_type: "destination",
+      booking_type: bookingType,
     });
     setErrors({});
     setIsRedirecting(false);

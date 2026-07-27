@@ -36,7 +36,7 @@ export default function TourismDestinations({ lang, region }) {
 
   const getText = (obj, field) => {
     if (!obj) return "";
-    
+
     if (field === "title" && obj.title_en) {
       return lang === "ar" ? obj.title_ar || obj.title_en : obj.title_en;
     }
@@ -55,22 +55,21 @@ export default function TourismDestinations({ lang, region }) {
   };
 
   const getImageUrl = (destination) => {
-    if (destination?.image_url) {
-      return destination.image_url;
-    }
-    
-    const img = destination?.image;
+    const img = destination?.image_url || destination?.image;
     if (!img) return "/placeholder.png";
-    
     if (/^https?:\/\//.test(img)) return img;
-    
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-    
-    if (img.startsWith("/")) {
-      return `${backendBase}${img}`;
+    const normalized = img.replace(/^\/+/, '');
+
+    if (normalized.startsWith('storage/')) {
+      return `${backendBase}/${normalized}`;
     }
-    
-    return `${backendBase}/storage/tourism/${img}`;
+
+    if (normalized.startsWith('tourism/')) {
+      return `${backendBase}/storage/${normalized}`;
+    }
+
+    return `${backendBase}/storage/tourism/${normalized}`;
   };
 
   useEffect(() => {
@@ -83,8 +82,8 @@ export default function TourismDestinations({ lang, region }) {
         if (region) {
           apiEndpoint += `/region/${region}`;
         }
-        
-        const res = await fetch(apiEndpoint, { 
+
+        const res = await fetch(apiEndpoint, {
           signal: controller.signal,
           method: 'GET',
           headers: {
@@ -92,19 +91,19 @@ export default function TourismDestinations({ lang, region }) {
             'Content-Type': 'application/json',
           }
         });
-        
+
         const json = await res.json();
-        
+
         if (!res.ok) {
           throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
         }
-        
+
         if (!json?.success) {
           throw new Error(json?.message || 'Failed to fetch destinations');
         }
-        
+
         const data = Array.isArray(json.data) ? json.data : [];
-        
+
         if (data.length > 0) {
           setDestinations(data);
         }
@@ -188,7 +187,7 @@ export default function TourismDestinations({ lang, region }) {
   }
 
   const displayDestinations = destinations.length > 0 ? destinations : [];
-  
+
   // ✅ SHOW ONLY 4 DESTINATIONS ON HOME PAGE (when no region is selected)
   // When region is selected (on region page), show all
   const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, 4);
@@ -198,14 +197,13 @@ export default function TourismDestinations({ lang, region }) {
     return (
       <span className="price-wrapper">
         <span className="price-amount">{price}</span>
-        <Image 
-          src="/saudi_riyal.png" 
-          alt="SAR" 
-          width={14} 
-          height={14} 
+        <Image
+          src="/saudi_riyal.png"
+          alt="SAR"
+          width={14}
+          height={14}
           className="currency-icon"
         />
-        <span className="price-per">{t.perPerson}</span>
       </span>
     );
   };
@@ -226,14 +224,14 @@ export default function TourismDestinations({ lang, region }) {
               className="col-md-3"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: index * 0.1,
                 ease: "easeOut"
               }}
               viewport={{ once: true }}
             >
-              <div 
+              <div
                 className="destination-card"
                 onClick={() => handleDestinationClick(destination)}
               >
@@ -269,16 +267,15 @@ export default function TourismDestinations({ lang, region }) {
                     <span className="destination-price">
                       {destination.price ? (
                         <>
-                          {t.from} 
+                          {t.from}
                           <span className="price-amount">{destination.price}</span>
-                          <Image 
-                            src="/saudi_riyal.png" 
-                            alt="SAR" 
-                            width={14} 
-                            height={14} 
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={14}
+                            height={14}
                             className="currency-icon"
                           />
-                          <span className="price-per">{t.perPerson}</span>
                         </>
                       ) : ''}
                     </span>
@@ -604,7 +601,7 @@ function getRegionTitle(region, lang) {
       america: 'الوجهات الأمريكية',
     }
   };
-  
+
   // Return the title for the given language and region, or fallback to English
   return titles[lang]?.[region] || titles.en[region] || region || '';
 }

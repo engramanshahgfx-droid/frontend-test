@@ -187,12 +187,14 @@ export default function Navbar({ lang }) {
 
   const displayDestinations = tourismDestinations || getFallbackDestinations();
 
-  const getRegionLabel = (regionKey) => {
+  const getRegionLabel = (regionKey, data) => {
+    if (lang === "ar" && data?.ar) return data.ar;
+    if (lang === "en" && data?.en) return data.en;
     const labels = REGION_LABELS[lang] || REGION_LABELS.en;
     if (labels[regionKey]) return labels[regionKey];
     const lowerKey = regionKey?.toLowerCase();
     if (labels[lowerKey]) return labels[lowerKey];
-    return regionKey;
+    return data?.ar || data?.en || regionKey;
   };
 
   const menuItems = [
@@ -359,14 +361,13 @@ export default function Navbar({ lang }) {
       <div className="top-bar" dir={isRTL ? "rtl" : "ltr"}>
         <div className="top-bar-container">
           <div className="top-bar-left">
-            <Phone className="top-bar-icon" size={14} />
+            <Phone className="top-bar-icon" />
             <a
               href="tel:+966547305060"
               className="top-bar-phone"
-              dir="ltr" // Force LTR direction for phone number
+              style={{ color: "#fff", textDecoration: "none" }}
             >
-              <span className="country-code">+966</span>
-              <span className="phone-number">547305060</span>
+              00966547305060
             </a>
           </div>
           <div className="top-bar-right">
@@ -402,14 +403,14 @@ export default function Navbar({ lang }) {
           <Link href={`/${lang}`} className="logo-wrapper">
             <img src="/logo.png" alt="Logo" className="logo-image" />
             <div className="logo-text">
-              {/* <span className="logo-title">
+              <span className="logo-title">
                 {lang === "ar" ? "التلال والرمال" : "Tilal Rimal"}
-              </span> */}
-              {/* <span className="logo-subtitle">
+              </span>
+              <span className="logo-subtitle">
                 {lang === "ar"
                   ? "لتنظيم الرحلات السياحية"
                   : "Tourism Organization"}
-              </span> */}
+              </span>
             </div>
           </Link>
 
@@ -484,7 +485,7 @@ export default function Navbar({ lang }) {
                                 >
                                   <div className="region-trigger">
                                     <span>
-                                      {data.icon} {getRegionLabel(regionKey)}
+                                      {data.icon} {getRegionLabel(regionKey, data)}
                                     </span>
                                   </div>
                                   {openSubDropdown === regionKey &&
@@ -641,7 +642,7 @@ export default function Navbar({ lang }) {
                                           toggleSubDropdown(regionKey, e)
                                         }
                                       >
-                                        {data.icon} {getRegionLabel(regionKey)}
+                                        {data.icon} {getRegionLabel(regionKey, data)}
                                         {openSubDropdown === regionKey ? (
                                           <FaChevronUp
                                             size={10}
@@ -771,50 +772,7 @@ export default function Navbar({ lang }) {
           height: 100%;
           padding: 0 20px;
         }
-        .top-bar-left {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
 
-        .top-bar-icon {
-          color: #ffffff; /* White icon */
-          width: 14px;
-          height: 14px;
-          opacity: 0.8;
-        }
-
-        .top-bar-phone {
-          color: #ffffff;
-          text-decoration: none;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          font-size: 13px;
-          font-weight: 400;
-          letter-spacing: 0.3px;
-          transition: color 0.2s ease;
-          direction: ltr !important; /* Force LTR */
-          unicode-bidi: embed;
-        }
-
-        .top-bar-phone:hover {
-          color: #dfa528; /* Gold on hover for interactivity */
-        }
-
-        .country-code {
-          font-weight: 600;
-          color: #ffffff; /* White */
-          font-size: 13px;
-          opacity: 0.9;
-        }
-
-        .phone-number {
-          font-weight: 550;
-          color: #ffffff; /* White */
-          letter-spacing: 0.5px;
-          opacity: 0.9;
-        }
         .logo-wrapper {
           display: flex;
           align-items: center;

@@ -191,23 +191,23 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
     router.push(`/${currentLang}/tousimoffers`);
   };
 
- const handleViewDetails = (destination) => {
-  // Use slug for SEO-friendly URLs, fallback to ID
-  const slug = destination.slug || destination.id || "";
-  router.push(`/${currentLang}/tousimoffers/${slug}`);
-};
+  const handleViewDetails = (destination) => {
+    // Use slug for SEO-friendly URLs, fallback to ID
+    const slug = destination.slug || destination.id || "";
+    router.push(`/${currentLang}/tousimoffers/${slug}`);
+  };
 
- const handleBookNow = (destination) => {
-  console.log("Book Now clicked for:", destination);
-  console.log("Offer data:", {
-    id: destination.id,
-    title: destination.title_en,
-    price: destination.price,
-    slug: destination.slug
-  });
-  setSelectedOffer(destination);
-  setShowBookingModal(true);
-};
+  const handleBookNow = (destination) => {
+    console.log("Book Now clicked for:", destination);
+    console.log("Offer data:", {
+      id: destination.id,
+      title: destination.title_en,
+      price: destination.price,
+      slug: destination.slug
+    });
+    setSelectedOffer(destination);
+    setShowBookingModal(true);
+  };
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating || 0);
     const hasHalfStar = (rating || 0) - fullStars >= 0.5;
@@ -227,11 +227,11 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
     return (
       <span className="price-amount-wrapper">
         <span className="price-amount">{price}</span>
-        <Image 
-          src="/saudi_riyal.png" 
-          alt="SAR" 
-          width={16} 
-          height={16} 
+        <Image
+          src="/saudi_riyal.png"
+          alt="SAR"
+          width={16}
+          height={16}
           className="currency-icon"
         />
       </span>
@@ -344,29 +344,28 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                         {destination.original_price && (
                           <span className="price-original">
                             {destination.original_price}
-                            <Image 
-                              src="/saudi_riyal.png" 
-                              alt="SAR" 
-                              width={12} 
-                              height={12} 
+                            <Image
+                              src="/saudi_riyal.png"
+                              alt="SAR"
+                              width={12}
+                              height={12}
                               className="currency-icon-small"
                             />
                           </span>
                         )}
                         <div className="price-amount-wrapper">
                           <span className="price-amount">{destination.price}</span>
-                          <Image 
-                            src="/saudi_riyal.png" 
-                            alt="SAR" 
-                            width={16} 
-                            height={16} 
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={16}
+                            height={16}
                             className="currency-icon"
                           />
                         </div>
-                        {/* <span className="price-per">{t.perPerson}</span> */}
                       </div>
-                      <button 
-                        className="btn-book" 
+                      <button
+                        className="btn-book"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleBookNow(destination);
@@ -384,42 +383,42 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           {displayDestinations.length > 0 && (
             <div className="row">
               <div className="col-12 text-center">
-                 <motion.button
-                className="btn-view-all"
-                onClick={handleViewAllOffers}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  background: '#dfa528',
-                  color: '#fff',
-                  padding: '12px 35px',
-                  borderRadius: '30px',
-                  fontWeight: '600',
-                  fontSize: '1rem',
-                  border: 'none',
-                  marginTop: '20px',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(223, 165, 40, 0.3)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#c98c1e';
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(223, 165, 40, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#dfa528';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(223, 165, 40, 0.3)';
-                }}
-              >
-                <span>{t.viewAll}</span>
-                <ChevronRight size={18} />
-              </motion.button>
+                <motion.button
+                  className="btn-view-all"
+                  onClick={handleViewAllOffers}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    background: '#dfa528',
+                    color: '#fff',
+                    padding: '12px 35px',
+                    borderRadius: '30px',
+                    fontWeight: '600',
+                    fontSize: '1rem',
+                    border: 'none',
+                    marginTop: '20px',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 15px rgba(223, 165, 40, 0.3)',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#c98c1e';
+                    e.currentTarget.style.transform = 'translateY(-3px)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(223, 165, 40, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#dfa528';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(223, 165, 40, 0.3)';
+                  }}
+                >
+                  <span>{t.viewAll}</span>
+                  <ChevronRight size={18} />
+                </motion.button>
               </div>
             </div>
           )}
