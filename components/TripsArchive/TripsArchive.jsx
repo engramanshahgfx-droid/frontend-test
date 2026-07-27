@@ -317,25 +317,34 @@ const staticTrips = [
                 const highlights = trip.highlights || [];
 
                 return (
-                  <div key={trip.id} className="col-lg-4 col-md-6">
+                  <div key={trip.id} className="col-lg-4 col-md-6 mb-4">
                     <div className={`trip-card ${isDev ? 'debug-outline' : ''}`}>
                       {/* Trip Badge */}
-                      {/* {trip.badge && <div className="trip-badge">{trip.badge}</div>} */}
+                      {trip.badge && <div className="trip-badge">{trip.badge}</div>}
 
-                      <div className="trip-image" style={{position: 'relative'}}>
+                      <div className="trip-image" style={{position: 'relative', overflow: 'hidden'}}>
                         <video
                           src={(trip.video && (trip.video.startsWith('http') || trip.video.startsWith('/')) ? trip.video : (trip.video ? '/' + trip.video : '/desert2.mp4'))}
                           poster={image}
-                          controls
                           autoPlay
                           muted
                           loop
                           playsInline
                           preload="metadata"
                           className="background-video"
+                          style={{ cursor: 'pointer' }}
+                          onClick={(e) => {
+                            const v = e.target;
+                            if (v) {
+                              if (v.paused) {
+                                v.play().catch(err => console.warn('[TripsArchive] play failed', err));
+                              } else {
+                                v.pause();
+                              }
+                            }
+                          }}
                           ref={(el) => (videoRefs.current[trip.id] = el)}
                           onLoadedData={(e) => {
-                            // Ensure autoplay starts; catch promise rejection and flag the blocked state
                             const v = e.target;
                             if (v && v.play) {
                               v.play().then(() => {
@@ -370,20 +379,22 @@ const staticTrips = [
                             <span className="play-icon">►</span>
                           </button>
                         )}
-
-                        {/* If autoplay is blocked or on small screens, ensure users see an obvious play control and poster */}
-                        {/* Attempt an autoplay retry once trips are mounted */}
-
                       </div>
 
                       <div className="trip-content">
+                        {(trip.city_name || trip.city?.name) && (
+                          <div className="trip-location">
+                            <FaMapMarkerAlt size={12} className={isRTL ? "ms-1" : "me-1"} />
+                            <span>{trip.city_name || trip.city?.name || ''}</span>
+                          </div>
+                        )}
+
                         <h3 className="trip-title">{(trip.title_trans && trip.title_trans[safeLang]) || trip.title || trip.title_trans?.en || ''}</h3>
                         <p className="trip-description">{(trip.description_trans && trip.description_trans[safeLang]) || trip.description || trip.description_trans?.en || ''}</p>
 
                         {/* Trip Highlights */}
                         <div className="trip-highlights">
                           {highlights.map((highlight, index) => {
-                            // Support both string and object highlight formats
                             const highlightText = typeof highlight === 'string' 
                               ? highlight 
                               : (highlight[safeLang] || highlight.en || '');
@@ -394,16 +405,11 @@ const staticTrips = [
                             );
                           })}
                         </div>
-
                         {/* Trip Details */}
-                        <div className="trip-details">
+                        <div className="trip-details mt-auto">
                           <div className="detail-item">
                             <FaCalendarAlt className="detail-icon" />
                             <span className="detail-date">{formatTripDate(trip.start_date)}</span>
-                          </div>
-                          <div className="detail-item">
-                            <FaMapMarkerAlt className="detail-icon" />
-                            <span>{trip.city_name || trip.city?.name || ''}</span>
                           </div>
                           <div className="detail-item">
                             <FaUsers className="detail-icon" />
@@ -414,7 +420,6 @@ const staticTrips = [
                             <span>{durationLabel(trip.duration)}</span>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -493,8 +498,8 @@ const staticTrips = [
           height: 100%;
           background: linear-gradient(
             135deg,
-            rgba(138, 119, 121, 0.95) 0%,
-            rgba(239, 200, 174, 0.85) 100%
+            rgba(28, 0, 82, 0.9) 0%,
+            rgba(249, 229, 210, 0.8) 100%
           );
           z-index: 2;
         }
@@ -531,11 +536,11 @@ const staticTrips = [
         }
 
         .trips-section {
-          background: #f8f9fa;
+          background: #FAF6F0;
         }
 
         .section-title {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 800;
           font-size: 2.5rem;
           position: relative;
@@ -544,7 +549,7 @@ const staticTrips = [
         }
 
         .section-description {
-          color: #5d6d7e;
+          color: #555;
           font-size: 1.1rem;
           max-width: 600px;
           margin: 0 auto;
@@ -554,33 +559,39 @@ const staticTrips = [
 
         .trip-card {
           background: white;
-          border-radius: 20px;
+          border-radius: 10px;
           overflow: hidden;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
           position: relative;
           height: 100%;
-          border: 1px solid #e9ecef;
+          border: 1px solid rgba(28, 0, 82, 0.06);
           font-family: 'Tajawal', sans-serif;
+          display: flex;
+          flex-direction: column;
         }
 
         .trip-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.1);
+          border-color: rgba(232, 93, 31, 0.3);
+        }
+
+        .trip-card:hover .background-video {
+          transform: scale(1.08);
         }
 
         .trip-badge {
           position: absolute;
           top: 15px;
           ${isRTL ? 'right: 15px;' : 'left: 15px;'}
-          background: linear-gradient(45deg, #ffd700, #ffed4e);
-          color: #000;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+          color: white;
           padding: 8px 16px;
-          border-radius: 20px;
+          border-radius: 10px;
           font-size: 0.8rem;
           font-weight: 700;
           z-index: 2;
-          text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
           font-family: 'Tajawal', sans-serif;
         }
 
@@ -594,14 +605,13 @@ const staticTrips = [
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.3s ease;
+          transition: transform 0.5s ease;
         }
 
         .play-overlay {
           display: none;
         }
 
-        /* Visible fallback overlay when autoplay is blocked */
         .play-overlay.visible {
           position: absolute;
           inset: 0;
@@ -622,24 +632,37 @@ const staticTrips = [
           font-size: 1.1rem;
         }
 
-
+        .trip-location {
+          color: #E85D1F;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
 
         .trip-content {
           padding: 25px;
           font-family: 'Tajawal', sans-serif;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .trip-title {
           font-size: 1.4rem;
           font-weight: 700;
-          color: #2c3e50;
+          color: #1C0052;
           margin-bottom: 10px;
           line-height: 1.3;
           font-family: 'Tajawal', sans-serif;
         }
 
         .trip-description {
-          color: #5d6d7e;
+          color: #666;
           margin-bottom: 15px;
           line-height: 1.5;
           font-size: 0.95rem;
@@ -654,13 +677,13 @@ const staticTrips = [
         }
 
         .highlight-tag {
-          background: linear-gradient(45deg, #8a7779, #a89294);
-          color: white;
+          background: rgba(232, 93, 31, 0.08);
+          color: #E85D1F;
+          border: 1px solid rgba(232, 93, 31, 0.15);
           padding: 4px 12px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: 0.75rem;
           font-weight: 500;
-          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           font-family: 'Tajawal', sans-serif;
         }
 
@@ -670,31 +693,30 @@ const staticTrips = [
           gap: 12px;
           margin-bottom: 20px;
           padding: 15px 0;
-          border-top: 1px solid #ecf0f1;
-          border-bottom: 1px solid #ecf0f1;
+          border-top: 1px solid rgba(28, 0, 82, 0.06);
+          border-bottom: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .detail-item {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #7f8c8d;
+          color: #666;
           font-size: 0.85rem;
           font-weight: 500;
           font-family: 'Tajawal', sans-serif;
         }
 
         .detail-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 0.9rem;
           flex-shrink: 0;
         }
 
-        /* Improve readability of dates and numeric time snippets */
         .detail-date, .detail-time {
           font-family: 'Inter', 'Roboto', 'Segoe UI', 'Noto Sans', 'Arial', sans-serif;
           font-weight: 700;
-          color: #2c3e50;
+          color: #1C0052;
           font-size: 0.95rem;
           letter-spacing: 0.2px;
           -webkit-font-smoothing: antialiased;
@@ -702,7 +724,6 @@ const staticTrips = [
           font-variant-numeric: tabular-nums;
         }
 
-        /* Make the time slightly lighter but still clear */
         .detail-time {
           font-weight: 600;
           color: #6c757d;
@@ -714,37 +735,37 @@ const staticTrips = [
         }
 
         .trip-btn {
-          background: linear-gradient(45deg, #8a7779, #a89294);
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           border: none;
           color: white;
           padding: 10px 25px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 600;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
-          box-shadow: 0 4px 15px rgba(138, 119, 121, 0.3);
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
           font-family: 'Tajawal', sans-serif;
         }
 
         .trip-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(138, 119, 121, 0.4);
+          box-shadow: 0 6px 20px rgba(232, 93, 31, 0.3);
         }
 
         .btn-load-more {
           background: transparent;
-          border: 2px solid #8a7779;
-          color: #8a7779;
+          border: 2px solid #E85D1F;
+          color: #E85D1F;
           padding: 12px 30px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 600;
           transition: all 0.3s ease;
           font-family: 'Tajawal', sans-serif;
         }
 
         .btn-load-more:hover {
-          background: #8a7779;
+          background: #E85D1F;
           color: white;
           transform: translateY(-2px);
         }
@@ -758,10 +779,6 @@ const staticTrips = [
           margin-bottom: 1rem;
           font-size: 0.95rem;
           text-align: center;
-        }
-
-        .debug-outline {
-          outline: 3px dashed rgba(223,165,40,0.9);
         }
 
         .load-more-section p {

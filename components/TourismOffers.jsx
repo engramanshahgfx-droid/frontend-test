@@ -213,9 +213,9 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
     const hasHalfStar = (rating || 0) - fullStars >= 0.5;
     return Array.from({ length: 5 }, (_, i) => {
       if (i < fullStars) {
-        return <Star key={i} size={16} fill="#dfa528" color="#dfa528" style={{ display: "inline" }} />;
+        return <Star key={i} size={16} fill="#FFC60B" color="#FFC60B" style={{ display: "inline" }} />;
       } else if (i === fullStars && hasHalfStar) {
-        return <Star key={i} size={16} fill="#dfa528" color="#dfa528" style={{ display: "inline", opacity: 0.5 }} />;
+        return <Star key={i} size={16} fill="#FFC60B" color="#FFC60B" style={{ display: "inline", opacity: 0.5 }} />;
       } else {
         return <Star key={i} size={16} fill="none" color="#ddd" style={{ display: "inline" }} />;
       }
@@ -275,7 +275,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
   return (
     <>
       <section className="offers-section" dir={lang === "ar" ? "rtl" : "ltr"}>
-        <div className="container">
+        <div className="container" style={{ maxWidth: "1200px" }}>
           <div className="row">
             <div className="col-12 text-center">
               <h2 className="section-title">{t.title}</h2>
@@ -287,7 +287,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             {displayDestinations.map((destination, index) => (
               <motion.div
                 key={destination.id || index}
-                className="col-md-4 col-sm-6"
+                className="col-lg-4 col-md-6 col-12"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -363,6 +363,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                             className="currency-icon"
                           />
                         </div>
+                        <span className="price-per">{t.perPerson}</span>
                       </div>
                       <button
                         className="btn-book"
@@ -393,27 +394,27 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    background: '#dfa528',
+                    background: '#1C0052',
                     color: '#fff',
                     padding: '12px 35px',
-                    borderRadius: '30px',
-                    fontWeight: '600',
+                    borderRadius: '10px',
+                    fontWeight: '700',
                     fontSize: '1rem',
                     border: 'none',
                     marginTop: '20px',
                     textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 15px rgba(223, 165, 40, 0.3)',
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: '0 4px 15px rgba(28, 0, 82, 0.25)',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#c98c1e';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)';
                     e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(223, 165, 40, 0.4)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(232, 93, 31, 0.45)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#dfa528';
+                    e.currentTarget.style.background = '#1C0052';
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(223, 165, 40, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 0, 82, 0.25)';
                   }}
                 >
                   <span>{t.viewAll}</span>
@@ -427,13 +428,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
         <style jsx>{`
           .offers-section {
             padding: 60px 0;
-            background: #f8f9fa;
+            background: #FAF6F0; /* Soft Desert Sand theme variant */
           }
 
           .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #2c2c2c;
+            color: #1C0052; /* Deep Heritage Purple */
             position: relative;
             margin-bottom: 10px;
           }
@@ -446,7 +447,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: #dfa528;
+            background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange to Yellow gradient */
           }
 
           .section-subtitle {
@@ -457,10 +458,11 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
 
           .offer-card {
             background: #fff;
-            border-radius: 16px;
+            border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s ease;
+            border: 1px solid rgba(28, 0, 82, 0.06); /* Accent border */
+            box-shadow: 0 5px 25px rgba(28, 0, 82, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             margin-bottom: 30px;
             height: 100%;
             display: flex;
@@ -468,8 +470,9 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           .offer-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(28, 0, 82, 0.12);
+            border-color: rgba(232, 93, 31, 0.3);
           }
 
           .offer-image {
@@ -510,17 +513,23 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             font-weight: 700;
             text-transform: uppercase;
             animation: pulse 2s infinite;
-          }
-
-          .popular-badge {
-            background: linear-gradient(135deg, #dfa528, #f9ca24);
-            color: #fff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-          }
-
+            text-align: center;
+            width: fit-content;
+            align-self: flex-end;
+            }
+            
+            .popular-badge {
+              width: fit-content;
+              background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand sunset orange to yellow */
+              color: #fff;
+              padding: 6px 14px;
+              border-radius: 20px;
+              font-size: 0.75rem;
+              font-weight: 700;
+              text-align: center;
+              align-self: flex-end;
+              }
+              
           .limited-badge {
             background: linear-gradient(135deg, #a29bfe, #6c5ce7);
             color: #fff;
@@ -528,6 +537,8 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
+            text-align: center;
+            align-self: flex-end;
           }
 
           @keyframes pulse {
@@ -542,7 +553,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(28, 0, 82, 0.4);
             opacity: 0;
             transition: opacity 0.4s ease;
             display: flex;
@@ -566,7 +577,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #2c2c2c;
+            color: #1C0052;
             transition: all 0.3s ease;
             cursor: pointer;
             transform: translateY(20px) scale(0.8);
@@ -580,7 +591,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           .btn-quick-view:hover {
-            background: #dfa528;
+            background: #E85D1F; /* Sunset Orange */
             color: #fff;
             transform: scale(1.1);
           }
@@ -609,7 +620,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           .offer-header h3 {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #2c2c2c;
+            color: #1C0052; /* Deep Heritage Purple */
             margin: 0;
             flex: 1;
           }
@@ -638,6 +649,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            color: #555;
           }
 
           .offer-meta {
@@ -652,7 +664,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             align-items: center;
             gap: 5px;
             font-size: 0.85rem;
-            color: #888;
+            color: #666;
           }
 
           .offer-footer {
@@ -689,7 +701,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           .price-amount {
             font-size: 1.3rem;
             font-weight: 700;
-            color: #dfa528;
+            color: #E85D1F; /* Desert Sunset Orange */
           }
 
           .currency-icon {
@@ -709,30 +721,30 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           .btn-book {
-            background: linear-gradient(135deg, #dfa528, #c98c1e);
+            background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand Orange to Yellow gradient */
             color: #fff;
             border: none;
             padding: 10px 24px;
-            border-radius: 25px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 0.85rem;
             transition: all 0.3s ease;
             cursor: pointer;
             white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(223, 165, 40, 0.3);
+            box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
           }
 
           .btn-book:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(223, 165, 40, 0.4);
+            box-shadow: 0 8px 25px rgba(232, 93, 31, 0.45);
           }
 
           .btn-view-all {
-            background: #dfa528;
+            background: #1C0052;
             color: #fff;
             border: none;
             padding: 12px 35px;
-            border-radius: 30px;
+            border-radius: 10px;
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
@@ -741,13 +753,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(223, 165, 40, 0.3);
+            box-shadow: 0 4px 15px rgba(28, 0, 82, 0.2);
           }
 
           .btn-view-all:hover {
-            background: #c98c1e;
+            background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(223, 165, 40, 0.4);
+            box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
           }
 
           .btn-view-all svg {
@@ -759,20 +771,12 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           @media (max-width: 768px) {
-            .col-md-4 {
-              flex: 0 0 50%;
-              max-width: 50%;
-            }
             .section-title {
               font-size: 2rem;
             }
           }
 
           @media (max-width: 480px) {
-            .col-md-4 {
-              flex: 0 0 100%;
-              max-width: 100%;
-            }
             .offer-image {
               height: 180px;
             }

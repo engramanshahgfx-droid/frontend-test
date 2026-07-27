@@ -22,6 +22,8 @@ import {
   Copy,
   CheckCircle,
   Home,
+  Star,
+  ArrowRight,
 } from "lucide-react";
 
 export default function DestinationDetails() {
@@ -34,6 +36,7 @@ export default function DestinationDetails() {
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [countryTours, setCountryTours] = useState(null);
 
   const isRTL = lang === "ar";
 
@@ -51,15 +54,15 @@ export default function DestinationDetails() {
       daysNum: "Days Num",
       destinationName: "Destination Name",
       availableTo: "Available To",
-      doubleRoom: "Double Room",
-      singleRoom: "Single Room",
-      perPerson: "per person",
+      doubleRoom: "Package Price",
+      singleRoom: "Single Supplement",
+      perPerson: "Total",
       bookNow: "Book Now",
       loading: "Loading destination details...",
       destinationNotFound: "Destination not found",
       dayLabel: "Day",
       na: "N/A",
-      viewAll: "View All Destinations",
+      viewAll: "All Destinations",
       home: "Home",
       electronicPayment: "Electronic payment",
       electronicPaymentDesc:
@@ -80,15 +83,15 @@ export default function DestinationDetails() {
       daysNum: "عدد الأيام",
       destinationName: "اسم الوجهة",
       availableTo: "متاح حتى",
-      doubleRoom: "غرفة مزدوجة",
-      singleRoom: "غرفة فردية",
-      perPerson: "للفرد",
+      doubleRoom: "سعر الباقة (شخصين)",
+      singleRoom: "اضافة شخص واحد",
+      perPerson: "إجمالي",
       bookNow: "احجز الآن",
       loading: "جاري تحميل تفاصيل الوجهة...",
       destinationNotFound: "الوجهة غير موجودة",
       dayLabel: "اليوم",
       na: "غير متوفر",
-      viewAll: "عرض جميع الوجهات",
+      viewAll: "جميع الوجهات",
       home: "الرئيسية",
       electronicPayment: "الدفع الإلكتروني",
       electronicPaymentDesc:
@@ -186,12 +189,24 @@ export default function DestinationDetails() {
   const getImageUrl = (imageData) => {
     if (!imageData) return "/placeholder.png";
     if (/^https?:\/\//.test(imageData)) return imageData;
+    const backendBase = API_URL.replace(/\/api\/?$/, "");
     if (imageData.startsWith("/")) {
-      const backendBase = API_URL.replace(/\/api\/?$/, "");
       return `${backendBase}${imageData}`;
     }
-    const backendBase = API_URL.replace(/\/api\/?$/, "");
+    if (imageData.startsWith("tourism/")) {
+      return `${backendBase}/storage/${imageData}`;
+    }
     return `${backendBase}/storage/tourism/${imageData}`;
+  };
+
+  const slugify = (text) => {
+    return text
+      ?.toString()
+      ?.toLowerCase()
+      ?.trim()
+      ?.replace(/\s+/g, "-")
+      ?.replace(/[^\w\-]+/g, "")
+      ?.replace(/\-\-+/g, "-");
   };
 
   const copyToClipboard = (text) => {
@@ -210,9 +225,13 @@ export default function DestinationDetails() {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
+      setCountryTours(null);
+      setDestination(null);
+
+      // 1. Try to fetch specific tour details by slug
       try {
         const apiEndpoint = `${API_URL.replace(/\/$/, "")}/tourism-destinations/${slug}`;
-        console.log("[DestinationDetails] Fetching from:", apiEndpoint);
+        console.log("[DestinationDetails] Fetching specific tour from:", apiEndpoint);
 
         const res = await fetch(apiEndpoint, {
           signal: controller.signal,
@@ -224,24 +243,58 @@ export default function DestinationDetails() {
         });
 
         const json = await res.json();
-        console.log("[DestinationDetails] Response:", json);
+        console.log("[DestinationDetails] Specific tour response:", json);
 
-        if (!res.ok) {
-          throw new Error(
-            `API error: ${res.status} - ${json?.message || "Unknown error"}`,
-          );
+        if (res.ok && json?.success && json?.data) {
+          setDestination(json.data);
+          setLoading(false);
+          return;
         }
-
-        if (!json?.success) {
-          throw new Error(json?.message || "Failed to fetch destination");
-        }
-
-        setDestination(json.data);
-        setLoading(false);
       } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error("[DestinationDetails] Fetch error:", err.message);
-          setError(err.message);
+        if (err.name === "AbortError") return;
+        console.log("[DestinationDetails] Tour not found by slug directly, checking country fallback...");
+      }
+
+      // 2. Fallback: Fetch all tours and filter by slugified country (location_en) name
+      try {
+        const allApiEndpoint = `${API_URL.replace(/\/$/, "")}/tourism-destinations`;
+        console.log("[DestinationDetails] Fetching all tours from:", allApiEndpoint);
+
+        const allRes = await fetch(allApiEndpoint, {
+          signal: controller.signal,
+        });
+
+        const allJson = await allRes.json();
+        if (allRes.ok && allJson?.success && allJson?.data) {
+          const tours = allJson.data;
+
+          const slugify = (text) => {
+            return text
+              ?.toString()
+              ?.toLowerCase()
+              ?.trim()
+              ?.replace(/\s+/g, "-")
+              ?.replace(/[^\w\-]+/g, "")
+              ?.replace(/\-\-+/g, "-");
+          };
+
+          const matchedTours = tours.filter((tour) => {
+            const countrySlug = slugify(tour.location_en);
+            return countrySlug === slug;
+          });
+
+          if (matchedTours.length > 0) {
+            setCountryTours(matchedTours);
+            setLoading(false);
+            return;
+          }
+        }
+
+        throw new Error("Destination not found");
+      } catch (fallbackErr) {
+        if (fallbackErr.name !== "AbortError") {
+          console.error("[DestinationDetails] Fallback error:", fallbackErr.message);
+          setError(fallbackErr.message || "Destination not found");
           setLoading(false);
         }
       }
@@ -259,12 +312,11 @@ export default function DestinationDetails() {
   };
 
   const handleViewAll = () => {
-    router.push(`/${lang}/tourism-destinations`);
+    router.push(`/${lang}/destinations`);
   };
-
   if (loading) {
     return (
-      <div className="details-section">
+      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 0px 50px 0px" }}>
         <div className="container">
           <div className="row text-center" style={{ padding: "60px 0" }}>
             <div className="col-12">
@@ -275,6 +327,143 @@ export default function DestinationDetails() {
                 {t.loading}
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (countryTours) {
+    const countryName = getText(countryTours[0], "location");
+    return (
+      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 0px 50px 0px" }}>
+        <div className="container" style={{ maxWidth: "1200px" }}>
+          {/* Breadcrumb */}
+          <nav className="breadcrumb" style={{ padding: "0 0 20px" }}>
+            <a href={`/${lang}`}>
+              <Home size={14} style={{ display: "inline", marginRight: "4px" }} />
+              {t.home}
+            </a>
+            <span> / </span>
+            <a href={`/${lang}/destinations`}>{t.viewAll}</a>
+            <span> / </span>
+            <span className="current">{countryName}</span>
+          </nav>
+
+          <div className="mb-5 d-flex flex-column align-items-start gap-3">
+            {/* <button
+              onClick={() => router.push(`/${lang}/destinations`)}
+              className="btn px-4 py-2"
+              style={{
+                background: "#FFFFFF",
+                color: "#1C0052",
+                border: "1px solid rgba(28, 0, 82, 0.2)",
+                borderRadius: "10px",
+                fontWeight: "600",
+                cursor: "pointer",
+                transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#1C0052";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(28, 0, 82, 0.2)";
+              }}
+            >
+              {lang === "ar" ? "← العودة للوجهات" : "← Back to Destinations"}
+            </button> */}
+            <h1 className="fw-bold m-0" style={{ fontSize: "2rem", color: "#1C0052" }}>
+              {lang === "ar" ? `الرحلات السياحية في ${countryName}` : `Tourism Trips in ${countryName}`}
+            </h1>
+          </div>
+          <div className="d-flex flex-column gap-4">
+            {countryTours.map((tour) => {
+              const tourTitle = getText(tour, "title");
+              const tourDesc = getText(tour, "description");
+              const tourDuration = getText(tour, "duration");
+              const getImageUrl = (img) => {
+                if (!img) return "/placeholder.png";
+                if (/^https?:\/\//.test(img)) return img;
+                const backendBase = API_URL.replace(/\/api\/?$/, "");
+                if (img.startsWith("/")) return `${backendBase}${img}`;
+                if (img.startsWith("tourism/")) {
+                  return `${backendBase}/storage/${img}`;
+                }
+                return `${backendBase}/storage/tourism/${img}`;
+              };
+
+              return (
+                <div
+                  key={tour.id}
+                  className="card border-0 shadow-sm p-4 transition-all hover-shadow"
+                  style={{
+                    transition: "all 0.2s",
+                    background: "#FFFFFF",
+                    borderRadius: "10px",
+                    border: "1px solid rgba(28, 0, 82, 0.06)"
+                  }}
+                >
+                  <div className="row g-4 align-items-center">
+                    <div className="col-12 col-md-4">
+                      <img
+                        src={getImageUrl(tour.image_url || tour.image)}
+                        alt={tourTitle}
+                        className="w-100 object-fit-cover shadow-sm"
+                        style={{ height: "180px", objectFit: "cover", borderRadius: "10px" }}
+                      />
+                    </div>
+                    <div className="col-12 col-md-5">
+                      <h3 className="fw-bold mb-3" style={{ fontSize: "1.3rem", color: "#1C0052" }}>
+                        {tourTitle}
+                      </h3>
+                      <p className="text-muted mb-3" style={{ fontSize: "0.95rem", lineHeight: "1.6" }}>
+                        {tourDesc}
+                      </p>
+                      <div className="d-flex flex-wrap gap-4 align-items-center text-secondary" style={{ fontSize: "0.85rem" }}>
+                        <span className="d-flex align-items-center gap-2">
+                          <Clock size={16} style={{ color: "#E85D1F" }} /> {tourDuration}
+                        </span>
+                        {tour.rating && (
+                          <span className="d-flex align-items-center gap-2">
+                            <Star size={16} style={{ fill: "#FFC60B", color: "#FFC60B" }} /> {tour.rating}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-12 col-md-3 text-md-end d-flex flex-row flex-md-column justify-content-between align-items-center justify-content-md-center gap-3">
+                      <div>
+                        <div className="text-secondary small">{lang === "ar" ? "تبدأ من" : "From"}</div>
+                        <div className="fw-bold" style={{ fontSize: "1.5rem", color: "#E85D1F" }}>
+                          {tour.price} SAR
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => router.push(`/${lang}/destinations/${tour.slug}`)}
+                        className="btn px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
+                        style={{
+                          background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)",
+                          color: "#FFFFFF",
+                          border: "none",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                          transition: "all 0.3s ease",
+                          boxShadow: "0 4px 15px rgba(232, 93, 31, 0.25)"
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(232, 93, 31, 0.45)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow = "0 4px 15px rgba(232, 93, 31, 0.25)";
+                        }}
+                      >
+                        {lang === "ar" ? "عرض التفاصيل" : "View Trip Details"} <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -316,7 +505,7 @@ export default function DestinationDetails() {
   const features = getText(destination, "features");
   const notIncludes = getText(destination, "not_includes");
   const itinerary = getText(destination, "itinerary");
-  
+
   // Parse basic_info, contact_info, payment_methods
   const basicInfo = parseJsonField(destination.basic_info, {});
   const contactInfo = parseJsonField(destination.contact_info, {});
@@ -337,32 +526,48 @@ export default function DestinationDetails() {
   }));
 
   const defaultPaymentMethods = [
- 
+    {
+      name_en: "Al Rajhi Bank",
+      name_ar: "مصرف الراجحي",
+      account_no: "11111111",
+      iban: "SA1111111111111",
+    },
+    {
+      name_en: "STC Pay",
+      name_ar: "إس تي سي باي",
+      account_no: "22222222",
+      iban: "SA2222222222222",
+    }
   ];
 
   const displayPaymentMethods =
     localizedPaymentMethods.length > 0 ? localizedPaymentMethods : defaultPaymentMethods;
 
-  const doubleRoomRate =
-    destination?.double_room_price ??
-    basicInfo.double_room ??
-    basicInfo.doubleRoom ??
-    destination?.price ??
-    null;
-  const singleRoomRate =
-    destination?.single_room_price ??
-    basicInfo.single_room ??
-    basicInfo.singleRoom ??
-    destination?.price ??
-    null;
+  const doubleRoomRate = destination?.price ?? null;
+  const singleRoomRate = destination?.single_room_price ?? doubleRoomRate;
   const tripCode = basicInfo.trip_code ?? destination?.trip_code ?? t.na;
-  const daysNum = basicInfo.days_num ?? basicInfo.days ?? t.na;
+  const daysNum = basicInfo.days_num ?? basicInfo.days ?? getText(destination, "duration") ?? t.na;
   const destinationName =
     (isRTL ? basicInfo.destination_name_ar : basicInfo.destination_name_en) ||
     basicInfo.destination_name ||
     getText(destination, "title") ||
     t.na;
-  const availableTo = basicInfo.available_to ?? destination?.available_to ?? t.na;
+  const formatDate = (dateStr) => {
+    if (!dateStr) return t.na;
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return dateStr;
+      return date.toLocaleDateString(lang === "ar" ? "ar-EG" : "en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+  const rawAvailableTo = basicInfo.available_to ?? destination?.available_to;
+  const availableTo = rawAvailableTo ? formatDate(rawAvailableTo) : t.na;
 
   return (
     <div className="details-section" dir={isRTL ? "rtl" : "ltr"}>
@@ -374,7 +579,15 @@ export default function DestinationDetails() {
             {t.home}
           </a>
           <span> / </span>
-          <a href={`/${lang}/tourism-destinations`}>{t.viewAll}</a>
+          <a href={`/${lang}/destinations`}>{t.viewAll}</a>
+          {destination && getText(destination, "location") && (
+            <>
+              <span> / </span>
+              <a href={`/${lang}/destinations/${slugify(getText(destination, "location"))}`}>
+                {getText(destination, "location")}
+              </a>
+            </>
+          )}
           <span> / </span>
           <span className="current">{getText(destination, "title")}</span>
         </nav>
@@ -526,7 +739,7 @@ export default function DestinationDetails() {
                         height={14}
                         className="currency-icon"
                       />
-                      {/* {` ${t.perPerson}`} */}
+                      {` ${t.perPerson}`}
                     </span>
                   </li>
                   <li className="divider"></li>
@@ -542,7 +755,7 @@ export default function DestinationDetails() {
                         height={14}
                         className="currency-icon"
                       />
-                      {/* {` ${t.perPerson}`} */}
+                      {` ${t.perPerson}`}
                     </span>
                   </li>
                 </ul>
@@ -566,15 +779,17 @@ export default function DestinationDetails() {
                 <ul className="contact-list">
                   <li>
                     <MapPin size={16} color="#dfa528" />
-                    <span>
-                      {localizedContactInfo.address || "al Rabwa Jeddah"}
-                    </span>
+                    <a href="https://maps.app.goo.gl/WakCAhdZsZERp1M97" target="_blank" rel="noopener noreferrer">
+                      <span>
+                        {localizedContactInfo.address || "Al Rabwa District, Jeddah"}
+                      </span>
+                    </a>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Phone size={16} color="#dfa528" />
                     <a href={`tel:${localizedContactInfo.phone || "0114562097"}`}>
-                      {localizedContactInfo.phone || "0547305060"}
+                      {localizedContactInfo.phone || "+966547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
@@ -582,21 +797,20 @@ export default function DestinationDetails() {
                     <MessageSquare size={16} color="#dfa528" />
                     <a
                       href={`https://wa.me/${(
-                        localizedContactInfo.whatsapp || "966547305060"
+                        localizedContactInfo.whatsapp || "+966547305060"
                       ).replace(/\s/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {localizedContactInfo.whatsapp || "966547305060"}
+                      {localizedContactInfo.whatsapp || "+966547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
                   <li>
                     <Mail size={16} color="#dfa528" />
                     <a
-                      href={`mailto:${
-                        localizedContactInfo.email || "info@tilalr.com"
-                      }`}
+                      href={`mailto:${localizedContactInfo.email || "info@tilalr.com"
+                        }`}
                     >
                       {localizedContactInfo.email || "info@tilalr.com"}
                     </a>
@@ -688,8 +902,8 @@ export default function DestinationDetails() {
 
       <style jsx>{`
         .details-section {
-          padding: 40px 0 60px;
-          background: #f8f9fa;
+          padding: 150px 0 60px; /* Clears floating navbar */
+          background: #FAF6F0; /* Soft Desert Sand theme variant */
           min-height: 100vh;
         }
 
@@ -697,11 +911,14 @@ export default function DestinationDetails() {
           padding: 10px 0 20px;
           font-size: 0.95rem;
           color: #666;
+            max-width: 1200px;
+          margin: 0 auto;
         }
 
         .breadcrumb a {
-          color: #dfa528;
+          color: #1C0052; /* Deep Heritage Purple */
           text-decoration: none;
+          font-weight: 500;
         }
 
         .breadcrumb a:hover {
@@ -709,13 +926,15 @@ export default function DestinationDetails() {
         }
 
         .breadcrumb .current {
-          color: #333;
+          color: #666;
         }
 
         .content-wrapper {
           display: flex;
           gap: 40px;
           align-items: flex-start;
+          max-width: 1200px;
+          margin: 0 auto;
         }
 
         .main-content {
@@ -734,22 +953,23 @@ export default function DestinationDetails() {
         .page-title {
           font-size: 2rem;
           font-weight: 700;
-          color: #2c2c2c;
+          color: #1C0052; /* Deep Heritage Purple */
           margin-bottom: 20px;
         }
 
         .description-section {
           background: #fff;
           padding: 25px;
-          border-radius: 12px;
+          border-radius: 10px; /* 10px rounded corners */
           margin-bottom: 20px;
-          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .description-section h2 {
           font-size: 1.3rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 15px;
         }
 
@@ -764,23 +984,24 @@ export default function DestinationDetails() {
           width: 100%;
           max-height: 350px;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: 10px;
         }
 
         .includes-section,
         .not-includes-section {
           background: #fff;
           padding: 25px;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 20px;
-          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .includes-section h2,
         .not-includes-section h2 {
           font-size: 1.3rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 15px;
         }
 
@@ -807,15 +1028,16 @@ export default function DestinationDetails() {
         .notes-section {
           background: #fff;
           padding: 25px;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 20px;
-          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .notes-section h2 {
           font-size: 1.3rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 15px;
         }
 
@@ -828,15 +1050,16 @@ export default function DestinationDetails() {
         .itinerary-section {
           background: #fff;
           padding: 25px;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 20px;
-          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .itinerary-section h2 {
           font-size: 1.3rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 20px;
         }
 
@@ -844,14 +1067,14 @@ export default function DestinationDetails() {
           padding: 18px;
           margin-bottom: 15px;
           background: #f8f9fa;
-          border-radius: 8px;
-          border-left: 4px solid #dfa528;
+          border-radius: 10px;
+          border-left: 4px solid #E85D1F; /* Sunset Orange accent */
         }
 
         .day-card h4 {
           font-size: 1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 10px;
         }
 
@@ -866,34 +1089,34 @@ export default function DestinationDetails() {
           width: 100%;
           max-height: 200px;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: 10px;
         }
 
         .btn-book-now {
-          background: #dfa528;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange gradient */
           color: #fff;
           border: none;
           padding: 14px 45px;
-          border-radius: 30px;
-          font-weight: 600;
+          border-radius: 10px; /* 10px border radius */
+          font-weight: 700;
           font-size: 1.1rem;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(223, 165, 40, 0.3);
+          box-shadow: 0 4px 20px rgba(232, 93, 31, 0.25);
           margin-top: 10px;
         }
 
         .btn-book-now:hover {
-          background: #c98c1e;
           transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(223, 165, 40, 0.4);
+          box-shadow: 0 8px 30px rgba(232, 93, 31, 0.45);
         }
 
         .sidebar-panel {
           background: #fff;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 20px;
-          box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
           overflow: hidden;
         }
 
@@ -902,8 +1125,7 @@ export default function DestinationDetails() {
           align-items: center;
           gap: 10px;
           padding: 15px 20px;
-          background: #1a9eaa;
-          border-bottom: 1px solid #158a95;
+          background: #1C0052; /* Deep Heritage Purple header */
         }
 
         .panel-header h4 {
@@ -954,13 +1176,14 @@ export default function DestinationDetails() {
         }
 
         .info-list li .value.highlight {
-          color: #dfa528;
+          color: #E85D1F; /* Sunset Orange */
         }
 
         .divider {
-          height: 1px;
+          height: 1px !important;
           background: #f0f0f0;
           margin: 2px 0;
+          padding: 0 !important;
           width: 100%;
         }
 
@@ -968,24 +1191,24 @@ export default function DestinationDetails() {
           width: 100%;
           padding: 12px;
           margin-top: 15px;
-          background: #28a745;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange gradient */
           color: #fff;
           border: none;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: 0.95rem;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 8px;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
         }
 
         .complete-reservation-btn:hover {
-          background: #218838;
           transform: translateY(-2px);
-          box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
         }
 
         .contact-list {
@@ -1010,13 +1233,13 @@ export default function DestinationDetails() {
         }
 
         .contact-list li a:hover {
-          color: #dfa528;
+          color: #E85D1F;
         }
 
         .payment-title {
           font-size: 1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin: 10px 0 15px;
         }
 
@@ -1024,7 +1247,7 @@ export default function DestinationDetails() {
           margin-bottom: 15px;
           padding: 12px;
           background: #f8f9fa;
-          border-radius: 8px;
+          border-radius: 10px;
         }
 
         .bank-item:last-child {
@@ -1067,14 +1290,14 @@ export default function DestinationDetails() {
         .copy-btn {
           background: transparent;
           border: none;
-          color: #dfa528;
+          color: #E85D1F;
           cursor: pointer;
           padding: 2px 5px;
           transition: color 0.3s ease;
         }
 
         .copy-btn:hover {
-          color: #c98c1e;
+          color: #FFC60B;
         }
 
         .electronic-text {

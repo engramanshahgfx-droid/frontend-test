@@ -131,7 +131,7 @@ export default function AboutSaudi({ lang }) {
       </section>
 
       {/* Content Sections */}
-      <section className="content-sections py-5">
+      <section className="content-sections py-5" style={{maxWidth: "1200px", margin: "0 auto"}}>
         <div className="container">
           {/* Culture Section */}
           <div className="row align-items-center mb-5 py-5">
@@ -264,15 +264,17 @@ export default function AboutSaudi({ lang }) {
 
       <style jsx>{`
         .about-saudi-page {
+          background: #FAF6F0;
           font-family: 'Tajawal', sans-serif;
         }
 
         .about-saudi-hero {
           background: linear-gradient(
-            rgba(0, 0, 0, 0.5), 
-            rgba(0, 0, 0, 0.7)
+            135deg, 
+            rgba(28, 0, 82, 0.9) 0%, 
+            rgba(249, 229, 210, 0.8) 100%
           ), url('/vision.jpg') center/cover no-repeat fixed;
-          padding: 6rem 0;
+          padding: 0;
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -286,7 +288,7 @@ export default function AboutSaudi({ lang }) {
           text-decoration: none;
           transition: all 0.3s ease;
           padding: 10px 20px;
-          border-radius: 8px;
+          border-radius: 10px;
           background: rgba(255, 255, 255, 0.2);
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.3);
@@ -304,7 +306,7 @@ export default function AboutSaudi({ lang }) {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 2px;
-          color: rgba(255, 255, 255, 0.9);
+          color: #FFC60B;
           margin-bottom: 1rem;
         }
         
@@ -327,6 +329,8 @@ export default function AboutSaudi({ lang }) {
           position: relative;
           width: 100%;
           height: 400px;
+          border-radius: 10px !important;
+          overflow: hidden;
         }
 
         .section-image .image-container {
@@ -337,11 +341,11 @@ export default function AboutSaudi({ lang }) {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.3s ease;
+          transition: transform 0.5s ease;
         }
 
         .image-container:hover .section-img {
-          transform: scale(1.05);
+          transform: scale(1.08);
         }
 
         .image-overlay {
@@ -350,7 +354,7 @@ export default function AboutSaudi({ lang }) {
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(45deg, rgba(138, 119, 121, 0.1), rgba(42, 67, 113, 0.1));
+          background: linear-gradient(45deg, rgba(28, 0, 82, 0.1), rgba(232, 93, 31, 0.1));
           pointer-events: none;
         }
         
@@ -359,13 +363,13 @@ export default function AboutSaudi({ lang }) {
         }
         
         .stat-number {
-          font-weight: 700;
-          color: #ffffff;
+          font-weight: 800;
+          color: #FFC60B;
           text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
         
         .stat-label {
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.9);
           font-weight: 500;
         }
         
@@ -379,63 +383,62 @@ export default function AboutSaudi({ lang }) {
           justify-content: center;
           width: 60px;
           height: 60px;
-          background: rgba(138, 119, 121, 0.1);
-          border-radius: 12px;
-          color: #8a7779;
+          background: rgba(232, 93, 31, 0.08);
+          border-radius: 10px;
+          color: #E85D1F;
         }
         
         .section-title {
-          color: #2c3e50;
-          background: linear-gradient(135deg, #8a7779, #2c3e50);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #1C0052;
+          font-weight: 800;
+          font-family: 'Tajawal', sans-serif;
         }
         
         .section-text {
-          color: #5d6d7e;
+          color: #555;
           line-height: 1.8;
         }
         
         .pillar-card {
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          border: 1px solid #e9ecef;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(28, 0, 82, 0.06);
           background: white;
+          border-radius: 10px !important;
         }
         
         .pillar-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.1);
+          border-color: rgba(232, 93, 31, 0.3);
         }
         
         .pillar-icon {
-          color: #8a7779;
+          color: #E85D1F;
         }
         
         .pillar-title {
-          color: #2c3e50;
+          color: #1C0052;
         }
         
         .cta-section {
-          background: linear-gradient(135deg, #8a7779 0%, #a89294 100%);
+          background: linear-gradient(135deg, #1C0052 0%, #0F0030 100%);
           color: white;
         }
         
         .btn-primary {
-          background: white;
-          color: #8a7779;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+          color: white !important;
           border: none;
           padding: 12px 30px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 600;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
         }
         
         .btn-primary:hover {
-          background: rgba(255, 255, 255, 0.9);
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-          color: #8a7779;
+          box-shadow: 0 6px 20px rgba(232, 93, 31, 0.35);
         }
         
         @media (max-width: 768px) {

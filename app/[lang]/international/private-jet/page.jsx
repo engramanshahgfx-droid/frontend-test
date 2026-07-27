@@ -43,26 +43,15 @@ export default async function PrivateJetPage({ params }) {
   const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'en';
   
   return (
-    <>
-      {/* Full width black header - 60px height */}
-      <div 
-        className="w-100"
-        style={{ 
-          height: "60px", 
-          backgroundColor: "#000000",
-          position: "relative",
-          zIndex: 10
-        }}
-      />
-      
-      <main 
-        className="min-h-screen bg-gradient-to-b from-amber-50 to-white"
-        style={{ 
-          direction: validLang === 'ar' ? 'rtl' : 'ltr'
-        }}
-      >
-        <PrivateJetRequestForm lang={validLang} />
-      </main>
-    </>
+    <main 
+      className="min-h-screen"
+      style={{ 
+        backgroundColor: "#FAF6F0",
+        paddingTop: "150px",
+        direction: validLang === 'ar' ? 'rtl' : 'ltr'
+      }}
+    >
+      <PrivateJetRequestForm lang={validLang} />
+    </main>
   );
 }

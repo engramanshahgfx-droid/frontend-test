@@ -134,7 +134,7 @@ export default async function ProductsPage({ params }) {
           </p>
         </div>
       </section>
-      <AllProducts lang={lang} products={products} />
+      <AllProducts lang={lang} projects={products} />
     </>
   );
 }

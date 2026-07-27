@@ -36,7 +36,7 @@ const translations = {
     mobilePlaceholder: "+966 5X XXX XXXX",
     package: "Choose Your Package",
     selectPackage: "Select data package",
-    submit: "Activate Package",
+    submit: "Request Package",
     submitting: "Processing...",
     submitSuccess: "Package activated successfully!",
     submitError: "Failed to activate package. Please try again.",
@@ -194,330 +194,295 @@ export default function InternetPackagesForm({ lang = "en" }) {
   const selectedPackage = packages.find(p => p.value === formData.package);
 
   return (
-    <div style={{ direction: isRTL ? "rtl" : "ltr" }}>
-      {/* Full width black header */}
-      <div style={{ height: "60px", backgroundColor: "#000000", width: "100%", position: "relative", zIndex: 10 }} />
-      
-      {/* Main Content */}
-      <div style={{
-        minHeight: "calc(100vh - 60px)",
-        background: "#8A7779",
-        padding: "32px 16px",
-      }}>
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          {/* Header Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            style={{ textAlign: "center", marginBottom: "40px" }}
-          >
-            <motion.div
-          
-            >
-              <Wifi size={0} color="white" />
-            </motion.div>
+    <div className="container py-4" style={{ direction: isRTL ? "rtl" : "ltr", overflow: "visible" }}>
+      <div style={{ maxWidth: "1200px", margin: "0 auto", paddingBottom: "5rem" }}>
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: "center", marginBottom: "40px" }}
+        >
+          <h1 style={{
+            fontSize: "clamp(1.8rem, 5vw, 3.2rem)",
+            fontWeight: "bold",
+            marginBottom: "12px",
+            color: "#1C0052"
+          }}>
+            {t.title}
+          </h1>
 
-            <h1 style={{
-              fontSize: "clamp(1.8rem, 5vw, 3.2rem)",
-              fontWeight: "bold",
-              marginBottom: "12px",
-              background: "linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text"
-            }}>
-              {t.title}
-            </h1>
+          <p style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#666", maxWidth: "768px", margin: "0 auto" }}>
+            {t.subtitle}
+          </p>
 
-            <p style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", color: "#d1d5db", maxWidth: "768px", margin: "0 auto" }}>
-              {t.subtitle}
-            </p>
-
-            {/* Quick Stats Pills - Responsive wrap */}
+          {/* Quick Stats Pills */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "12px",
+            marginTop: "24px",
+            flexWrap: "wrap",
+          }}>
             <div style={{
               display: "flex",
-              justifyContent: "center",
-              gap: "12px",
-              marginTop: "24px",
-              flexWrap: "wrap",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(232, 93, 31, 0.08)",
+              border: "1px solid rgba(232, 93, 31, 0.15)",
+              padding: "6px 14px",
+              borderRadius: "10px",
+              fontSize: "0.8rem",
+              fontWeight: "500"
+            }}>
+              <Zap size={14} color="#E85D1F" />
+              <span style={{ color: "#E85D1F" }}>{t.instantActivation}</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(28, 0, 82, 0.08)",
+              border: "1px solid rgba(28, 0, 82, 0.15)",
+              padding: "6px 14px",
+              borderRadius: "10px",
+              fontSize: "0.8rem",
+              fontWeight: "500"
+            }}>
+              <Shield size={14} color="#1C0052" />
+              <span style={{ color: "#1C0052" }}>{t.noHiddenFees}</span>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(232, 93, 31, 0.08)",
+              border: "1px solid rgba(232, 93, 31, 0.15)",
+              padding: "6px 14px",
+              borderRadius: "10px",
+              fontSize: "0.8rem",
+              fontWeight: "500"
+            }}>
+              <TrendingUp size={14} color="#E85D1F" />
+              <span style={{ color: "#E85D1F" }}>{t.easyTopup}</span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* MAIN GRID */}
+        <div className="row g-4" style={{ overflow: "visible" }}>
+          {/* Form Section */}
+          <motion.div
+            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="col-lg-8"
+          >
+            <div style={{
+              background: "#ffffff",
+              borderRadius: "10px",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.04)",
+              overflow: "hidden",
+              border: "1px solid rgba(28, 0, 82, 0.06)"
             }}>
               <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(4px)",
-                padding: "6px 14px",
-                borderRadius: "9999px",
-                fontSize: "0.8rem"
+                background: "#1C0052",
+                padding: "20px 24px"
               }}>
-                <Zap size={14} color="#facc15" />
-                <span style={{ color: "white" }}>{t.instantActivation}</span>
+                <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "white", marginBottom: "4px" }}>{t.formTitle}</h2>
+                <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.8rem", margin: 0 }}>
+                  {isRTL ? "املأ التفاصيل واحصل على اتصال سريع خلال دقائق" : "Fill out the details and get connected in minutes"}
+                </p>
               </div>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(4px)",
-                padding: "6px 14px",
-                borderRadius: "9999px",
-                fontSize: "0.8rem"
-              }}>
-                <Shield size={14} color="#4ade80" />
-                <span style={{ color: "white" }}>{t.noHiddenFees}</span>
-              </div>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(4px)",
-                padding: "6px 14px",
-                borderRadius: "9999px",
-                fontSize: "0.8rem"
-              }}>
-                <TrendingUp size={14} color="#60a5fa" />
-                <span style={{ color: "white" }}>{t.easyTopup}</span>
-              </div>
-            </div>
-          </motion.div>
 
-          {/* MAIN GRID - Responsive: 1 column on mobile, 2 on tablet, 3 on desktop */}
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "24px",
-            "@media (min-width: 768px)": {
-              gridTemplateColumns: "2fr 1fr",
-            },
-          }}>
-            {/* Form Section */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <div style={{
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(16px)",
-                borderRadius: "20px",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-                overflow: "hidden",
-                border: "1px solid rgba(255,255,255,0.2)"
-              }}>
-                <div style={{
-                  background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-                  padding: "20px 24px"
-                }}>
-                  <h2 style={{ fontSize: "1.25rem", fontWeight: "bold", color: "white" }}>{t.formTitle}</h2>
-                  <p style={{ color: "#bfdbfe", fontSize: "0.8rem", marginTop: "2px" }}>
-                    Fill out the details and get connected in minutes
-                  </p>
-                </div>
-
-                <form onSubmit={handleSubmit} style={{ padding: "20px 16px" }}>
-                  {/* Status Messages */}
-                  <AnimatePresence>
-                    {submitStatus === "success" && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          padding: "12px 16px",
-                          background: "rgba(34,197,94,0.2)",
-                          border: "1px solid rgba(34,197,94,0.5)",
-                          borderRadius: "12px",
-                          marginBottom: "20px",
-                          fontSize: "0.9rem"
-                        }}
-                      >
-                        <CheckCircle size={18} color="#4ade80" />
-                        <span style={{ color: "#bbf7d0", fontWeight: "500" }}>{t.submitSuccess}</span>
-                      </motion.div>
-                    )}
-                    {submitStatus === "error" && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                          padding: "12px 16px",
-                          background: "rgba(239,68,68,0.2)",
-                          border: "1px solid rgba(239,68,68,0.5)",
-                          borderRadius: "12px",
-                          marginBottom: "20px",
-                          fontSize: "0.9rem"
-                        }}
-                      >
-                        <div style={{
-                          width: "18px",
-                          height: "18px",
-                          background: "#ef4444",
-                          borderRadius: "9999px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          fontSize: "10px",
-                          fontWeight: "bold",
-                          color: "white"
-                        }}>!</div>
-                        <span style={{ color: "#fecaca", fontWeight: "500" }}>{t.submitError}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Form Fields - Responsive: stack on mobile */}
-                  <div style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr",
-                    gap: "16px",
-                    marginBottom: "20px",
-                    "@media (min-width: 480px)": {
-                      gridTemplateColumns: "1fr 1fr",
-                    },
-                  }}>
-                    <div>
-                      <label style={{
+              <form onSubmit={handleSubmit} style={{ padding: "24px" }}>
+                {/* Status Messages */}
+                <AnimatePresence>
+                  {submitStatus === "success" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "6px",
-                        fontSize: "0.8rem",
-                        fontWeight: "600",
-                        color: "#e5e7eb",
-                        marginBottom: "6px"
-                      }}>
-                        <Globe size={14} color="#60a5fa" /> {t.country}
-                      </label>
-                      <div style={{ position: "relative" }}>
-                        <input
-                          type="text"
-                          name="country"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          placeholder={t.countryPlaceholder}
-                          style={{
-                            width: "100%",
-                            padding: "10px 14px",
-                            paddingRight: "48px",
-                            background: "rgba(255,255,255,0.1)",
-                            border: "1px solid rgba(255,255,255,0.2)",
-                            borderRadius: "10px",
-                            color: "white",
-                            outline: "none",
-                            fontSize: "0.95rem",
-                          }}
-                        />
-                        <div style={{
-                          position: "absolute",
-                          right: "12px",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          fontSize: "22px",
-                          pointerEvents: "none"
-                        }}>
-                          {selectedCountryFlag}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{
+                        gap: "10px",
+                        padding: "12px 16px",
+                        background: "rgba(34,197,94,0.1)",
+                        border: "1px solid rgba(34,197,94,0.3)",
+                        borderRadius: "10px",
+                        marginBottom: "20px",
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      <CheckCircle size={18} color="#22c55e" />
+                      <span style={{ color: "#15803d", fontWeight: "500" }}>{t.submitSuccess}</span>
+                    </motion.div>
+                  )}
+                  {submitStatus === "error" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "6px",
-                        fontSize: "0.8rem",
-                        fontWeight: "600",
-                        color: "#e5e7eb",
-                        marginBottom: "6px"
-                      }}>
-                        <Phone size={14} color="#60a5fa" /> {t.mobileNumber}
-                      </label>
-                      <input
-                        type="tel"
-                        name="mobile_number"
-                        value={formData.mobile_number}
-                        onChange={handleChange}
-                        required
-                        placeholder={t.mobilePlaceholder}
-                        style={{
-                          width: "100%",
-                          padding: "10px 14px",
-                          background: "rgba(255,255,255,0.1)",
-                          border: "1px solid rgba(255,255,255,0.2)",
-                          borderRadius: "10px",
-                          color: "white",
-                          outline: "none",
-                          fontSize: "0.95rem",
-                        }}
-                      />
-                    </div>
-                  </div>
+                        gap: "10px",
+                        padding: "12px 16px",
+                        background: "rgba(239,68,68,0.1)",
+                        border: "1px solid rgba(239,68,68,0.3)",
+                        borderRadius: "10px",
+                        marginBottom: "20px",
+                        fontSize: "0.9rem"
+                      }}
+                    >
+                      <div style={{
+                        width: "18px",
+                        height: "18px",
+                        background: "#ef4444",
+                        borderRadius: "9999px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "10px",
+                        fontWeight: "bold",
+                        color: "white"
+                      }}>!</div>
+                      <span style={{ color: "#b91c1c", fontWeight: "500" }}>{t.submitError}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                  {/* Package Selection */}
-                  <div style={{ marginBottom: "20px" }}>
+                {/* Form Fields */}
+                <div className="row g-3 mb-4">
+                  <div className="col-md-6">
                     <label style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "6px",
-                      fontSize: "0.8rem",
+                      fontSize: "0.85rem",
                       fontWeight: "600",
-                      color: "#e5e7eb",
-                      marginBottom: "10px"
+                      color: "#1C0052",
+                      marginBottom: "6px"
                     }}>
-                      <Wifi size={14} color="#60a5fa" /> {t.package}
+                      <Globe size={14} color="#E85D1F" /> {t.country}
                     </label>
-                    
-                    {/* Responsive package grid: 2 on mobile, 3 on tablet+ */}
-                    <div style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(2, 1fr)",
-                      gap: "10px",
-                      "@media (min-width: 480px)": {
-                        gridTemplateColumns: "repeat(3, 1fr)",
-                      },
+                    <div style={{ position: "relative" }}>
+                      <input
+                        type="text"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleChange}
+                        required
+                        placeholder={t.countryPlaceholder}
+                        style={{
+                          width: "100%",
+                          padding: "12px 14px",
+                          paddingRight: isRTL ? "14px" : "48px",
+                          paddingLeft: isRTL ? "48px" : "14px",
+                          background: "#ffffff",
+                          border: "1px solid rgba(28, 0, 82, 0.15)",
+                          borderRadius: "10px",
+                          color: "#111",
+                          outline: "none",
+                          fontSize: "0.95rem",
+                        }}
+                      />
+                      <div style={{
+                        position: "absolute",
+                        right: isRTL ? "auto" : "12px",
+                        left: isRTL ? "12px" : "auto",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        fontSize: "22px",
+                        pointerEvents: "none"
+                      }}>
+                        {selectedCountryFlag}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontSize: "0.85rem",
+                      fontWeight: "600",
+                      color: "#1C0052",
+                      marginBottom: "6px"
                     }}>
-                      {packages.map((pkg) => (
+                      <Phone size={14} color="#E85D1F" /> {t.mobileNumber}
+                    </label>
+                    <input
+                      type="tel"
+                      name="mobile_number"
+                      value={formData.mobile_number}
+                      onChange={handleChange}
+                      required
+                      placeholder={t.mobilePlaceholder}
+                      style={{
+                        width: "100%",
+                        padding: "12px 14px",
+                        background: "#ffffff",
+                        border: "1px solid rgba(28, 0, 82, 0.15)",
+                        borderRadius: "10px",
+                        color: "#111",
+                        outline: "none",
+                        fontSize: "0.95rem",
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Package Selection */}
+                <div style={{ marginBottom: "24px" }}>
+                  <label style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontSize: "0.85rem",
+                    fontWeight: "600",
+                    color: "#1C0052",
+                    marginBottom: "10px"
+                  }}>
+                    <Wifi size={14} color="#E85D1F" /> {t.package}
+                  </label>
+                  
+                  <div className="row g-2">
+                    {packages.map((pkg) => (
+                      <div key={pkg.value} className="col-6 col-sm-4">
                         <motion.button
-                          key={pkg.value}
                           type="button"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setFormData(prev => ({ ...prev, package: pkg.value }))}
                           style={{
                             position: "relative",
-                            padding: "12px 10px",
+                            width: "100%",
+                            padding: "14px 12px",
                             borderRadius: "10px",
-                            border: formData.package === pkg.value ? "2px solid #3b82f6" : "1px solid rgba(255,255,255,0.2)",
-                            background: formData.package === pkg.value ? "rgba(59,130,246,0.25)" : "rgba(255,255,255,0.08)",
-                            textAlign: "left",
+                            border: formData.package === pkg.value ? "2px solid #E85D1F" : "1px solid rgba(28, 0, 82, 0.15)",
+                            background: formData.package === pkg.value ? "rgba(232, 93, 31, 0.05)" : "#ffffff",
+                            textAlign: isRTL ? "right" : "left",
                             cursor: "pointer",
                             transition: "all 0.2s",
-                            minHeight: "80px",
+                            minHeight: "85px",
                           }}
                         >
                           {pkg.popular && (
                             <div style={{
                               position: "absolute",
                               top: "-6px",
-                              right: "-6px",
-                              background: "linear-gradient(135deg, #eab308, #f97316)",
+                              right: isRTL ? "auto" : "-6px",
+                              left: isRTL ? "-6px" : "auto",
+                              background: "linear-gradient(135deg, #FFC60B, #E85D1F)",
                               color: "white",
                               fontSize: "8px",
                               fontWeight: "bold",
                               padding: "2px 8px",
-                              borderRadius: "9999px",
-                              textTransform: "uppercase",
-                              letterSpacing: "0.3px"
+                              borderRadius: "10px",
+                              textTransform: "uppercase"
                             }}>
                               {t.popular}
                             </div>
@@ -526,15 +491,15 @@ export default function InternetPackagesForm({ lang = "en" }) {
                             <div style={{
                               position: "absolute",
                               top: "-6px",
-                              right: "-6px",
-                              background: "linear-gradient(135deg, #22c55e, #059669)",
+                              right: isRTL ? "auto" : "-6px",
+                              left: isRTL ? "-6px" : "auto",
+                              background: "linear-gradient(135deg, #1c0052, #E85D1F)",
                               color: "white",
                               fontSize: "8px",
                               fontWeight: "bold",
                               padding: "2px 8px",
-                              borderRadius: "9999px",
-                              textTransform: "uppercase",
-                              letterSpacing: "0.3px"
+                              borderRadius: "10px",
+                              textTransform: "uppercase"
                             }}>
                               {t.bestValue}
                             </div>
@@ -545,272 +510,267 @@ export default function InternetPackagesForm({ lang = "en" }) {
                             alignItems: "center",
                             marginBottom: "6px"
                           }}>
-                            <span style={{ color: "white", fontWeight: "bold", fontSize: "1rem" }}>{pkg.label}</span>
-                            <span style={{ color: "#60a5fa", fontWeight: "bold", fontSize: "0.9rem" }}>{pkg.price}</span>
+                            <span style={{ color: "#1C0052", fontWeight: "bold", fontSize: "0.95rem" }}>{pkg.label}</span>
+                            <span style={{ color: "#E85D1F", fontWeight: "bold", fontSize: "0.9rem" }}>{pkg.price}</span>
                           </div>
-                          <div style={{ color: "#ffffff", fontSize: "10px" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "3px", marginBottom: "1px" }}>
+                          <div style={{ color: "#666", fontSize: "10px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "4px", marginBottom: "2px" }}>
                               <Clock size={10} /> {pkg.validity}
                             </div>
-                            <div>{pkg.speed}</div>
+                            <div style={{ fontWeight: "500", color: "#1C0052" }}>{pkg.speed}</div>
                           </div>
                         </motion.button>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
+                </div>
 
-                  {/* Selected Package Preview */}
-                  <AnimatePresence>
-                    {selectedPackage && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        style={{
-                          background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2))",
-                          borderRadius: "12px",
-                          padding: "14px 16px",
-                          border: "1px solid rgba(59,130,246,0.3)",
-                          marginBottom: "20px",
-                        }}
-                      >
-                        <div style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          flexWrap: "wrap",
-                          gap: "10px"
-                        }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                            <div style={{
-                              width: "40px",
-                              height: "40px",
-                              background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-                              borderRadius: "10px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexShrink: 0
-                            }}>
-                              <Wifi size={20} color="white" />
-                            </div>
-                            <div>
-                              <p style={{ fontWeight: "bold", color: "white", fontSize: "1rem" }}>{selectedPackage.label}</p>
-                              <div style={{
-                                display: "flex",
-                                gap: "10px",
-                                fontSize: "0.75rem",
-                                color: "#d1d5db",
-                                flexWrap: "wrap"
-                              }}>
-                                <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-                                  <Clock size={10} /> {selectedPackage.validity}
-                                </span>
-                                <span>{selectedPackage.speed}</span>
-                              </div>
-                            </div>
+                {/* Selected Package Preview */}
+                <AnimatePresence>
+                  {selectedPackage && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      style={{
+                        background: "rgba(28, 0, 82, 0.04)",
+                        borderRadius: "10px",
+                        padding: "14px 16px",
+                        border: "1px solid rgba(28, 0, 82, 0.08)",
+                        marginBottom: "20px",
+                      }}
+                    >
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: "10px"
+                      }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                          <div style={{
+                            width: "40px",
+                            height: "40px",
+                            background: "linear-gradient(135deg, #1C0052, #E85D1F)",
+                            borderRadius: "10px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            flexShrink: 0
+                          }}>
+                            <Wifi size={20} color="white" />
                           </div>
-                          <div style={{ textAlign: "right" }}>
-                            <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#60a5fa" }}>{selectedPackage.price}</p>
-                            <p style={{ fontSize: "0.65rem", color: "#9ca3af" }}>One-time payment</p>
+                          <div>
+                            <p style={{ fontWeight: "bold", color: "#1C0052", fontSize: "1rem", margin: 0 }}>{selectedPackage.label}</p>
+                            <div style={{
+                              display: "flex",
+                              gap: "10px",
+                              fontSize: "0.75rem",
+                              color: "#666",
+                              flexWrap: "wrap",
+                              marginTop: "2px"
+                            }}>
+                              <span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
+                                <Clock size={10} /> {selectedPackage.validity}
+                              </span>
+                              <span style={{ fontWeight: "600", color: "#1C0052" }}>{selectedPackage.speed}</span>
+                            </div>
                           </div>
                         </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <div style={{ textAlign: isRTL ? "left" : "right" }}>
+                          <p style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#E85D1F", margin: 0 }}>{selectedPackage.price}</p>
+                          <p style={{ fontSize: "0.65rem", color: "#888", margin: 0 }}>{isRTL ? "دفع لمرة واحدة" : "One-time payment"}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                  {/* Submit Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    disabled={isSubmitting}
-                    style={{
-                      width: "100%",
-                      padding: "14px 20px",
-                      background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-                      border: "none",
-                      borderRadius: "12px",
-                      color: "white",
-                      fontWeight: "600",
-                      fontSize: "1rem",
+                {/* Submit Button */}
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{
+                    width: "100%",
+                    padding: "14px 20px",
+                    background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)",
+                    border: "none",
+                    borderRadius: "10px",
+                    color: "white",
+                    fontWeight: "600",
+                    fontSize: "1rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px",
+                    cursor: isSubmitting ? "not-allowed" : "pointer",
+                    boxShadow: "0 4px 15px rgba(232, 93, 31, 0.2)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Clock size={18} className="animate-spin" />
+                      {t.submitting}
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} className={isRTL ? "ms-1" : "me-1"} />
+                      {t.submit}
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
+
+          {/* Sidebar */}
+          <motion.div
+            initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="col-lg-4"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+          >
+            {/* Features Card */}
+            <div style={{
+              background: "#ffffff",
+              borderRadius: "10px",
+              padding: "20px",
+              border: "1px solid rgba(28, 0, 82, 0.06)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.02)"
+            }}>
+              <h3 style={{
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+                color: "#1C0052",
+                marginBottom: "18px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <Award size={18} color="#E85D1F" /> {t.features.title}
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                {[
+                  { icon: Globe, bgColor: "rgba(232, 93, 31, 0.08)", iconColor: "#E85D1F", title: t.features.global, desc: t.features.globalDesc },
+                  { icon: Zap, bgColor: "rgba(28, 0, 82, 0.08)", iconColor: "#1C0052", title: t.features.fast, desc: t.features.fastDesc },
+                  { icon: DollarSign, bgColor: "rgba(232, 93, 31, 0.08)", iconColor: "#E85D1F", title: t.features.affordable, desc: t.features.affordableDesc },
+                  { icon: Headphones, bgColor: "rgba(28, 0, 82, 0.08)", iconColor: "#1C0052", title: t.features.support, desc: t.features.supportDesc },
+                ].map((feature, idx) => (
+                  <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                    <div style={{
+                      width: "36px",
+                      height: "36px",
+                      background: feature.bgColor,
+                      borderRadius: "10px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      gap: "10px",
-                      cursor: isSubmitting ? "not-allowed" : "pointer",
-                      opacity: isSubmitting ? 0.6 : 1,
-                      transition: "opacity 0.2s",
-                    }}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Clock size={18} style={{ animation: "spin 1s linear infinite" }} />
-                        {t.submitting}
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles size={18} />
-                        {t.submit}
-                        <ChevronRight size={18} />
-                      </>
-                    )}
-                  </motion.button>
-                </form>
+                      flexShrink: 0,
+                    }}>
+                      <feature.icon size={18} style={{ color: feature.iconColor }} />
+                    </div>
+                    <div>
+                      <h4 style={{ fontWeight: "600", color: "#1C0052", fontSize: "0.9rem", marginBottom: "2px" }}>{feature.title}</h4>
+                      <p style={{ fontSize: "0.8rem", color: "#666", margin: 0 }}>{feature.desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </motion.div>
+            </div>
 
-            {/* Sidebar - Features, Trust, Contact */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              style={{
+            {/* Trust Indicators */}
+            <div style={{
+              background: "#ffffff",
+              borderRadius: "10px",
+              padding: "20px",
+              border: "1px solid rgba(28, 0, 82, 0.06)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.02)"
+            }}>
+              <h3 style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#1C0052", marginBottom: "14px" }}>
+                {t.trustIndicators.title}
+              </h3>
+              <div style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "12px",
+                textAlign: "center"
+              }}>
+                <div>
+                  <div style={{ fontSize: "1.4rem", fontWeight: "bold", color: "#1C0052" }}>100K+</div>
+                  <div style={{ fontSize: "0.7rem", color: "#666" }}>{t.trustIndicators.customers}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: "1.4rem", fontWeight: "bold", color: "#E85D1F" }}>200+</div>
+                  <div style={{ fontSize: "0.7rem", color: "#666" }}>{t.trustIndicators.coverage}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: "1.4rem", fontWeight: "bold", color: "#1C0052" }}>99.9%</div>
+                  <div style={{ fontSize: "0.7rem", color: "#666" }}>{t.trustIndicators.uptime}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Info Card */}
+            <div style={{
+              background: "linear-gradient(135deg, #1C0052, #3b00a8)",
+              borderRadius: "10px",
+              padding: "20px",
+              color: "white",
+              boxShadow: "0 4px 15px rgba(28, 0, 82, 0.15)"
+            }}>
+              <h3 style={{
+                fontSize: "1.1rem",
+                fontWeight: "bold",
+                marginBottom: "16px",
                 display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              {/* Features Card */}
-              <div style={{
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(16px)",
-                borderRadius: "16px",
-                padding: "20px",
-                border: "1px solid rgba(255,255,255,0.2)"
+                alignItems: "center",
+                gap: "8px"
               }}>
-                <h3 style={{
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                  color: "white",
-                  marginBottom: "18px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
-                  <Award size={18} color="#facc15" /> {t.features.title}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                  {[
-                    { icon: Globe, color: "linear-gradient(135deg, #3b82f6, #06b6d4)", title: t.features.global, desc: t.features.globalDesc },
-                    { icon: Zap, color: "linear-gradient(135deg, #eab308, #f97316)", title: t.features.fast, desc: t.features.fastDesc },
-                    { icon: DollarSign, color: "linear-gradient(135deg, #22c55e, #10b981)", title: t.features.affordable, desc: t.features.affordableDesc },
-                    { icon: Headphones, color: "linear-gradient(135deg, #8b5cf6, #ec4899)", title: t.features.support, desc: t.features.supportDesc },
-                  ].map((feature, idx) => (
-                    <div key={idx} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
-                      <div style={{
-                        width: "34px",
-                        height: "34px",
-                        background: feature.color,
-                        borderRadius: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                        marginTop: "2px"
-                      }}>
-                        <feature.icon size={16} color="white" />
-                      </div>
-                      <div>
-                        <h4 style={{ fontWeight: "600", color: "white", fontSize: "0.9rem", marginBottom: "2px" }}>{feature.title}</h4>
-                        <p style={{ fontSize: "0.8rem", color: "#d1d5db" }}>{feature.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+                <Headphones size={18} /> {t.contactInfo}
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Clock size={16} />
+                  <div>
+                    <p style={{ fontWeight: "600", fontSize: "0.85rem", margin: 0 }}>{t.workingHours}</p>
+                    <p style={{ fontSize: "0.75rem", opacity: 0.8, margin: 0 }}>{t.workingHoursDetail}</p>
+                  </div>
                 </div>
-              </div>
-
-              {/* Trust Indicators */}
-              <div style={{
-                background: "rgba(255,255,255,0.1)",
-                backdropFilter: "blur(16px)",
-                borderRadius: "16px",
-                padding: "20px",
-                border: "1px solid rgba(255,255,255,0.2)"
-              }}>
-                <h3 style={{ fontSize: "1.1rem", fontWeight: "bold", color: "white", marginBottom: "14px" }}>
-                  {t.trustIndicators.title}
-                </h3>
-                <div style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3, 1fr)",
-                  gap: "12px",
-                  textAlign: "center"
-                }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Phone size={16} />
                   <div>
-                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#60a5fa" }}>100K+</div>
-                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.customers}</div>
+                    <p style={{ fontWeight: "600", fontSize: "0.85rem", margin: 0 }}>{t.callUs}</p>
+                    <p style={{ fontSize: "0.75rem", opacity: 0.8, margin: 0 }}>00966547305060</p>
                   </div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Globe size={16} />
                   <div>
-                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#4ade80" }}>200+</div>
-                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.coverage}</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#a78bfa" }}>99.9%</div>
-                    <div style={{ fontSize: "0.7rem", color: "#9ca3af" }}>{t.trustIndicators.uptime}</div>
+                    <p style={{ fontWeight: "600", fontSize: "0.85rem", margin: 0 }}>{t.emailUs}</p>
+                    <p style={{ fontSize: "0.75rem", opacity: 0.8, margin: 0 }}>info@tilalr.com</p>
                   </div>
                 </div>
               </div>
-
-              {/* Contact Info Card */}
-              <div style={{
-                background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-                borderRadius: "16px",
-                padding: "20px",
-                color: "white"
-              }}>
-                <h3 style={{
-                  fontSize: "1.1rem",
-                  fontWeight: "bold",
-                  marginBottom: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}>
-                  <Headphones size={18} /> {t.contactInfo}
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <Clock size={16} />
-                    <div>
-                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.workingHours}</p>
-                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>{t.workingHoursDetail}</p>
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <Phone size={16} />
-                    <div>
-                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.callUs}</p>
-                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>00966547305060</p>
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <Globe size={16} />
-                    <div>
-                      <p style={{ fontWeight: "600", fontSize: "0.9rem" }}>{t.emailUs}</p>
-                      <p style={{ fontSize: "0.75rem", opacity: 0.9 }}>info@tilalr.com</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* Add spin animation for loading state */}
-      <style>{`
+      <style jsx>{`
         @keyframes spin {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
         .animate-spin {
           animation: spin 1s linear infinite;
-        }
-        /* Responsive fine-tuning for very small screens */
-        @media (max-width: 400px) {
-          .main-wrap { padding: 16px 10px; }
-          .form-body { padding: 16px 12px; }
         }
       `}</style>
     </div>

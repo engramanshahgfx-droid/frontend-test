@@ -15,7 +15,7 @@ export default function TourismDestinationsPage() {
 
   const labels = {
     en: {
-      title: "Tourism Destinations",
+      title: "International Destinations",
       subtitle: "Discover amazing destinations around the world",
       viewDetails: "View Details",
       from: "From",
@@ -24,7 +24,7 @@ export default function TourismDestinationsPage() {
       backToHome: "Back to Home",
     },
     ar: {
-      title: "الوجهات السياحية",
+      title: "الوجهات الدولية",
       subtitle: "اكتشف وجهات مذهلة حول العالم",
       viewDetails: "عرض التفاصيل",
       from: "من",

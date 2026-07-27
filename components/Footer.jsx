@@ -10,6 +10,7 @@ import {
   FaPhone,
   FaEnvelope,
   FaWhatsapp,
+  FaFacebook,
 } from "react-icons/fa";
 import { SiX } from "react-icons/si";
 import en from "@/public/locales/en/common.json";
@@ -41,8 +42,8 @@ export default function Footer({ lang }) {
     },
     legal: {
       terms: "الشروط والأحكام",
-      privacy: " ",
-      contact: " ",
+      privacy: "الخصوصية",
+      contact: "تواصل معنا",
     },
     rightsReserved: "جميع الحقوق محفوظة.",
     address: "جده, المملكة العربية السعودية",
@@ -64,7 +65,7 @@ export default function Footer({ lang }) {
       about: "About Us",
 
       offers: "Domestic Packages",
-      archive: "Trips Archive",
+      archive: "Our Trips",
       basics: "Travel Requirements",
     },
     legal: {
@@ -135,50 +136,47 @@ export default function Footer({ lang }) {
     <footer
       className="footer lh-lg"
       style={{
-        backgroundColor: "#8A7779",
-        background: "linear-gradient(135deg, #8A7779 0%, #8A7779 100%)",
-        borderTop: "3px solid #dfa528",
+        backgroundColor: "#1C0052",
+        background: "linear-gradient(135deg, #1C0052 0%, #0F0030 100%)",
+        borderTop: "4px solid #E85D1F", /* Desert Sunset Orange */
         position: "relative",
         zIndex: 1000,
         direction: isRTL ? "rtl" : "ltr",
       }}
     >
-      <div className="container">
-        <div className="row pt-3">
-          {/* Company Info */}
+      <div className="container" style={{ maxWidth: "1200px" }}>
+        <div className="row pt-4">
           <div
-            className={`col-lg-4 col-md-6 mb-3 text-center ${
-              isRTL ? "text-md-end" : "text-md-start"
-            }`}
+            className={`col-lg-4 col-md-6 mb-3 text-center ${isRTL ? "text-md-end" : "text-md-start"}`}
           >
             <Link href={`/${lang}`}>
               <img
                 src="/logo.png"
                 alt={`${localeText.companyName} logo`}
                 style={{
-                  width: "140px",
+                  width: "120px",
                   height: "auto",
-                  marginBottom: "0.5rem",
+                  marginBottom: "0.8rem",
                   background: "rgba(255, 255, 255, 0.08)",
-                  padding: "6px",
-                  borderRadius: "10px",
+                  padding: "8px",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
                 }}
               />
             </Link>
             <p
-              className="mt-1"
-              style={{ fontSize: "14px", color: "#e0e0e0", lineHeight: "1.4" }}
+              className="mt-2"
+              style={{ fontSize: "14px", color: "#e0e0e0", lineHeight: "1.6" }}
             >
-              <span className="fw-bold" style={{ color: "#dfa528" }}>
+              <span className="fw-bold" style={{ color: "#FFC60B" }}>
                 {localeText.companyName}
               </span>{" "}
               — {localeText.description}
             </p>
             <div className="mt-2">
               <div
-                className={`d-flex align-items-center mb-1 gap-2 ${
-                  isRTL ? "flex-row-reverse justify-content-start" : ""
-                }`}
+                className={`d-flex align-items-center mb-1 gap-2 ${isRTL ? "flex-row-reverse justify-content-start" : ""
+                  }`}
               >
                 {isRTL ? (
                   <>
@@ -198,7 +196,7 @@ export default function Footer({ lang }) {
                     </a>
                     <FaMapMarkerAlt
                       size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
+                      style={{ color: "#E85D1F", flexShrink: 0 }}
                     />
                   </>
                 ) : (
@@ -206,7 +204,7 @@ export default function Footer({ lang }) {
                     <FaMapMarkerAlt
                       className="me-1"
                       size={12}
-                      style={{ color: "#dfa528", flexShrink: 0 }}
+                      style={{ color: "#E85D1F", flexShrink: 0 }}
                     />
                     <a
                       href={localeText.googleMapsUrl}
@@ -222,20 +220,18 @@ export default function Footer({ lang }) {
               </div>
 
               <div
-                className={`d-flex align-items-center mb-1 gap-2 ${
-                  isRTL ? "flex-row-reverse justify-content-start" : ""
-                }`}
+                className={`d-flex align-items-center mb-1 gap-2 ${isRTL ? "flex-row-reverse justify-content-start" : ""
+                  }`}
               ></div>
             </div>
 
             {/* Social Media Icons */}
             <div
-              className={`d-flex gap-2 mt-2 ${
-                isRTL ? "justify-content-md-end" : "justify-content-md-start"
-              } justify-content-center`}
+              className={`d-flex gap-2 mt-2 ${isRTL ? "justify-content-md-end" : "justify-content-md-start"
+                } justify-content-center`}
             >
               <a
-                href="https://www.tiktok.com/@tilalr2030"
+                href="https://www.tiktok.com/@tilalrimal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -253,7 +249,7 @@ export default function Footer({ lang }) {
                 <FaSnapchat size={16} />
               </a>
               <a
-                href="https://www.instagram.com/tilall2030?igsh=c2wyaThvcmZpb3pz/"
+                href="https://www.instagram.com/tilalrimal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -261,8 +257,18 @@ export default function Footer({ lang }) {
               >
                 <FaInstagram size={16} />
               </a>
+              {/* facebook link */}
               <a
-                href="https://x.com/tilalr2030"
+                href="https://www.facebook.com/profile.php?id=61582764150212&mibextid=wwXIfr&rdid=m0D4Mr2zTBtHWma7&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1BR4UkLx1J%2F%3Fmibextid%3DwwXIfr#"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon"
+                aria-label="Facebook"
+              >
+                <FaFacebook size={16} />
+              </a>
+              <a
+                href="https://x.com/tilalrimal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon"
@@ -279,7 +285,7 @@ export default function Footer({ lang }) {
               className="mb-1"
               style={{
                 fontWeight: "600",
-                color: "#dfa528",
+                color: "#FFC60B",
                 fontSize: "0.95rem",
               }}
             >
@@ -331,7 +337,7 @@ export default function Footer({ lang }) {
                   className="mb-1"
                   style={{
                     fontWeight: "600",
-                    color: "#dfa528",
+                    color: "#FFC60B",
                     fontSize: "0.95rem",
                   }}
                 >
@@ -372,7 +378,7 @@ export default function Footer({ lang }) {
                         : "Cancellation & Modification"}
                     </Link>
                   </div>
-                
+
                   <div>
                     <Link
                       href={`/${lang}/contact-us`}
@@ -391,7 +397,7 @@ export default function Footer({ lang }) {
                   className="mb-1"
                   style={{
                     fontWeight: "600",
-                    color: "#dfa528",
+                    color: "#FFC60B",
                     fontSize: "0.95rem",
                   }}
                 >
@@ -400,7 +406,7 @@ export default function Footer({ lang }) {
 
                 <div className="d-flex flex-column">
                   {/* Phone */}
-                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                  <div className={`contact-item ${isRTL ? "rtl" : ""} mb-2`}>
                     <FaPhone className="icon" />
                     <a href={`tel:${localeText.phone}`} className="footer-link">
                       {localeText.phone}
@@ -408,7 +414,7 @@ export default function Footer({ lang }) {
                   </div>
 
                   {/* WhatsApp - with Arabic label */}
-                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                  <div className={`contact-item ${isRTL ? "rtl" : ""} mb-2`}>
                     <FaWhatsapp className="icon whatsapp" />
                     <a
                       href={`https://wa.me/${localeText.phone}`}
@@ -420,7 +426,7 @@ export default function Footer({ lang }) {
                     </a>
                   </div>
 
-                  <div className={`contact-item ${isRTL ? "rtl" : ""}`}>
+                  <div className={`contact-item ${isRTL ? "rtl" : ""} mb-2`}>
                     <FaEnvelope className="icon" />
                     <a
                       href="https://mail.google.com/mail/?view=cm&fs=1&to=info@tilalr.com"
@@ -438,7 +444,7 @@ export default function Footer({ lang }) {
         </div>
 
         <hr
-          style={{ borderColor: "#dfa528", opacity: 0.3, margin: "0.5rem 0" }}
+          style={{ borderColor: "#E85D1F", opacity: 0.3, margin: "0.5rem 0" }}
         />
 
         {/* Footer Bottom */}
@@ -447,7 +453,7 @@ export default function Footer({ lang }) {
             <div className="d-flex flex-column justify-content-center align-items-center gap-1">
               {/* License Line */}
               <div style={{ fontSize: "12px" }}>
-                <span style={{ color: "#dfa528", fontWeight: "600" }}>
+                <span style={{ color: "#FFC60B", fontWeight: "600" }}>
                   {isRTL
                     ? "رقم الترخيص: 73106935 | التلال والرمال لتنظيم الرحلات السياحية | منظم رحلات سياحية / وكالة سفر وسياحة  "
                     : "License No: 73106935 | Tilal Rimal Tourism Company | Tourism Agent / Travel Agency "}
@@ -458,7 +464,7 @@ export default function Footer({ lang }) {
               <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-1">
                 <span style={{ fontSize: "12px" }}>
                   &copy; 2026{" "}
-                  <span style={{ color: "#dfa528" }}>
+                  <span style={{ color: "#FFC60B" }}>
                     {localeText.companyName}
                   </span>
                 </span>
@@ -500,10 +506,11 @@ export default function Footer({ lang }) {
           justify-content: flex-end;
           text-align: right;
           gap: 10px;
+          margin-bottom: 6px;
         }
         .icon {
           font-size: 12px;
-          color: #dfa528;
+          color: #E85D1F;
           flex-shrink: 0;
         }
         .icon.whatsapp {
@@ -518,7 +525,7 @@ export default function Footer({ lang }) {
         }
         .social-icon {
           transition: all 0.3s ease;
-          background: rgba(223, 165, 40, 0.1);
+          background: rgba(232, 93, 31, 0.1);
           padding: 4px;
           border-radius: 50%;
           width: 28px;
@@ -526,11 +533,11 @@ export default function Footer({ lang }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #dfa528;
+          color: #FFC60B;
         }
         .social-icon:hover {
           color: #ffffff !important;
-          background: rgba(223, 165, 40, 0.3);
+          background: rgba(232, 93, 31, 0.3);
           transform: translateY(-1px);
         }
         @media (max-width: 768px) {

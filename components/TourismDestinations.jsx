@@ -15,7 +15,7 @@ export default function TourismDestinations({ lang, region }) {
 
   const labels = {
     en: {
-      title: "Best Tourism Destinations",
+      title: "Best International Destinations",
       viewAll: "View All Destinations",
       viewDetails: "View Details",
       from: "From",
@@ -23,7 +23,7 @@ export default function TourismDestinations({ lang, region }) {
       showAll: "View All",
     },
     ar: {
-      title: "أفضل الوجهات السياحية",
+      title: "أفضل الوجهات الدولية",
       viewAll: "عرض جميع الوجهات",
       viewDetails: "عرض التفاصيل",
       from: "من",
@@ -36,7 +36,7 @@ export default function TourismDestinations({ lang, region }) {
 
   const getText = (obj, field) => {
     if (!obj) return "";
-
+    
     if (field === "title" && obj.title_en) {
       return lang === "ar" ? obj.title_ar || obj.title_en : obj.title_en;
     }
@@ -55,21 +55,22 @@ export default function TourismDestinations({ lang, region }) {
   };
 
   const getImageUrl = (destination) => {
-    const img = destination?.image_url || destination?.image;
+    if (destination?.image_url) {
+      return destination.image_url;
+    }
+    
+    const img = destination?.image;
     if (!img) return "/placeholder.png";
+    
     if (/^https?:\/\//.test(img)) return img;
+    
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-    const normalized = img.replace(/^\/+/, '');
-
-    if (normalized.startsWith('storage/')) {
-      return `${backendBase}/${normalized}`;
+    
+    if (img.startsWith("/")) {
+      return `${backendBase}${img}`;
     }
-
-    if (normalized.startsWith('tourism/')) {
-      return `${backendBase}/storage/${normalized}`;
-    }
-
-    return `${backendBase}/storage/tourism/${normalized}`;
+    
+    return `${backendBase}/storage/tourism/${img}`;
   };
 
   useEffect(() => {
@@ -82,8 +83,8 @@ export default function TourismDestinations({ lang, region }) {
         if (region) {
           apiEndpoint += `/region/${region}`;
         }
-
-        const res = await fetch(apiEndpoint, {
+        
+        const res = await fetch(apiEndpoint, { 
           signal: controller.signal,
           method: 'GET',
           headers: {
@@ -91,19 +92,19 @@ export default function TourismDestinations({ lang, region }) {
             'Content-Type': 'application/json',
           }
         });
-
+        
         const json = await res.json();
-
+        
         if (!res.ok) {
           throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
         }
-
+        
         if (!json?.success) {
           throw new Error(json?.message || 'Failed to fetch destinations');
         }
-
+        
         const data = Array.isArray(json.data) ? json.data : [];
-
+        
         if (data.length > 0) {
           setDestinations(data);
         }
@@ -122,7 +123,7 @@ export default function TourismDestinations({ lang, region }) {
   }, [region]);
 
   const handleViewAllDestinations = () => {
-    router.push(`/${currentLang}/tourism-destinations`);
+    router.push(`/${currentLang}/destinations`);
   };
 
   const handleDestinationClick = (destination) => {
@@ -187,7 +188,7 @@ export default function TourismDestinations({ lang, region }) {
   }
 
   const displayDestinations = destinations.length > 0 ? destinations : [];
-
+  
   // ✅ SHOW ONLY 4 DESTINATIONS ON HOME PAGE (when no region is selected)
   // When region is selected (on region page), show all
   const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, 4);
@@ -197,20 +198,21 @@ export default function TourismDestinations({ lang, region }) {
     return (
       <span className="price-wrapper">
         <span className="price-amount">{price}</span>
-        <Image
-          src="/saudi_riyal.png"
-          alt="SAR"
-          width={14}
-          height={14}
+        <Image 
+          src="/saudi_riyal.png" 
+          alt="SAR" 
+          width={14} 
+          height={14} 
           className="currency-icon"
         />
+        <span className="price-per">{t.perPerson}</span>
       </span>
     );
   };
 
   return (
     <section className="tourism-section">
-      <div className="container">
+      <div className="container" style={{ maxWidth: "1200px" }}>
         <div className="row">
           <div className="title text-center">
             <h2>{region ? getRegionTitle(region, lang) : t.title}</h2>
@@ -221,17 +223,17 @@ export default function TourismDestinations({ lang, region }) {
           {visibleDestinations.map((destination, index) => (
             <motion.div
               key={destination.id || index}
-              className="col-md-3"
+              className="col-lg-3 col-md-6 col-12"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
+              transition={{ 
+                duration: 0.6, 
                 delay: index * 0.1,
                 ease: "easeOut"
               }}
               viewport={{ once: true }}
             >
-              <div
+              <div 
                 className="destination-card"
                 onClick={() => handleDestinationClick(destination)}
               >
@@ -267,15 +269,16 @@ export default function TourismDestinations({ lang, region }) {
                     <span className="destination-price">
                       {destination.price ? (
                         <>
-                          {t.from}
+                          {t.from} 
                           <span className="price-amount">{destination.price}</span>
-                          <Image
-                            src="/saudi_riyal.png"
-                            alt="SAR"
-                            width={14}
-                            height={14}
+                          <Image 
+                            src="/saudi_riyal.png" 
+                            alt="SAR" 
+                            width={14} 
+                            height={14} 
                             className="currency-icon"
                           />
+                          <span className="price-per">{t.perPerson}</span>
                         </>
                       ) : ''}
                     </span>
@@ -303,27 +306,27 @@ export default function TourismDestinations({ lang, region }) {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: '#dfa528',
+                  background: '#1C0052',
                   color: '#fff',
                   padding: '12px 35px',
-                  borderRadius: '30px',
-                  fontWeight: '600',
+                  borderRadius: '10px',
+                  fontWeight: '700',
                   fontSize: '1rem',
                   border: 'none',
                   marginTop: '20px',
                   textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(223, 165, 40, 0.3)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 4px 15px rgba(28, 0, 82, 0.25)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#c98c1e';
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)';
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(223, 165, 40, 0.4)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(232, 93, 31, 0.45)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#dfa528';
+                  e.currentTarget.style.background = '#1C0052';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(223, 165, 40, 0.3)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 0, 82, 0.25)';
                 }}
               >
                 <span>{t.viewAll}</span>
@@ -337,14 +340,14 @@ export default function TourismDestinations({ lang, region }) {
       <style jsx>{`
         .tourism-section {
           padding: 60px 0;
-          background: #f8f9fa;
+          background: #FAF6F0; /* Soft Desert Sand theme variant */
           direction: ${lang === 'ar' ? 'rtl' : 'ltr'};
         }
 
         .title h2 {
           font-size: 2.5rem;
           font-weight: 700;
-          color: #2c2c2c;
+          color: #1C0052; /* Deep Heritage Purple */
           margin-bottom: 40px;
           position: relative;
           text-align: center;
@@ -358,15 +361,16 @@ export default function TourismDestinations({ lang, region }) {
           transform: translateX(-50%);
           width: 60px;
           height: 3px;
-          background: #dfa528;
+          background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange to Yellow gradient */
         }
 
         .destination-card {
           background: #fff;
-          border-radius: 12px;
+          border-radius: 10px; /* Brand standardized border radius */
           overflow: hidden;
-          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
-          transition: all 0.3s ease;
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 5px 25px rgba(28, 0, 82, 0.04);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           margin-bottom: 30px;
           cursor: pointer;
           height: 100%;
@@ -376,7 +380,8 @@ export default function TourismDestinations({ lang, region }) {
 
         .destination-card:hover {
           transform: translateY(-8px);
-          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 20px 45px rgba(28, 0, 82, 0.12);
+          border-color: rgba(232, 93, 31, 0.3);
         }
 
         .destination-image {
@@ -403,7 +408,7 @@ export default function TourismDestinations({ lang, region }) {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.5);
+          background: rgba(28, 0, 82, 0.4);
           opacity: 0;
           transition: opacity 0.3s ease;
           display: flex;
@@ -416,27 +421,28 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         .btn-view {
-          background: #dfa528;
+          background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand sunset gradient */
           color: #fff;
           border: none;
           padding: 10px 25px;
-          border-radius: 30px;
+          border-radius: 10px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
         }
 
         .btn-view:hover {
-          background: #c98c1e;
           transform: scale(1.05);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.45);
         }
 
         .destination-rating {
           position: absolute;
           top: 15px;
           right: 15px;
-          background: rgba(0, 0, 0, 0.7);
-          color: #ffd700;
+          background: rgba(28, 0, 82, 0.85); /* Deep purple backdrop */
+          color: #FFC60B; /* Golden Dune Yellow */
           padding: 4px 12px;
           border-radius: 20px;
           font-size: 0.85rem;
@@ -453,19 +459,19 @@ export default function TourismDestinations({ lang, region }) {
         .destination-content h3 {
           font-size: 1.1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052; /* Deep Heritage Purple */
           margin: 0 0 5px;
           line-height: 1.3;
         }
 
         .destination-location {
-          color: #888;
+          color: #666;
           font-size: 0.85rem;
           margin: 0 0 8px;
         }
 
         .destination-description {
-          color: #666;
+          color: #555;
           font-size: 0.9rem;
           line-height: 1.5;
           margin: 0 0 12px;
@@ -485,7 +491,7 @@ export default function TourismDestinations({ lang, region }) {
         .destination-price {
           font-size: 1rem;
           font-weight: 700;
-          color: #dfa528;
+          color: #E85D1F; /* Desert Sunset Orange */
           display: flex;
           align-items: center;
           gap: 4px;
@@ -494,7 +500,7 @@ export default function TourismDestinations({ lang, region }) {
 
         .price-amount {
           font-weight: 700;
-          color: #dfa528;
+          color: #E85D1F;
         }
 
         .currency-icon {
@@ -518,23 +524,23 @@ export default function TourismDestinations({ lang, region }) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #dfa528;
+          background: #1C0052;
           color: #fff;
           padding: 12px 35px;
-          border-radius: 30px;
+          border-radius: 10px;
           font-weight: 600;
           font-size: 1rem;
           border: none;
           margin-top: 20px;
           text-decoration: none;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(223, 165, 40, 0.3);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.2);
         }
 
         .btn-view-all:hover {
-          background: #c98c1e;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(223, 165, 40, 0.4);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
         }
 
         .btn-view-all svg {
@@ -550,10 +556,6 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         @media (max-width: 768px) {
-          .col-md-3 {
-            flex: 0 0 50%;
-            max-width: 50%;
-          }
           .title h2 {
             font-size: 2rem;
           }
@@ -564,10 +566,6 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         @media (max-width: 480px) {
-          .col-md-3 {
-            flex: 0 0 100%;
-            max-width: 100%;
-          }
           .destination-image {
             height: 180px;
           }
@@ -601,7 +599,7 @@ function getRegionTitle(region, lang) {
       america: 'الوجهات الأمريكية',
     }
   };
-
+  
   // Return the title for the given language and region, or fallback to English
   return titles[lang]?.[region] || titles.en[region] || region || '';
 }

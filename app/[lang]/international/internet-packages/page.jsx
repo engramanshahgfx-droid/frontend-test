@@ -43,5 +43,16 @@ export default async function InternetPackagesPage({ params }) {
   const { lang } = await params;
   const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'en';
   
-  return <InternetPackagesForm lang={validLang} />;
+  return (
+    <main 
+      className="min-h-screen"
+      style={{ 
+        backgroundColor: "#FAF6F0",
+        paddingTop: "150px",
+        direction: validLang === 'ar' ? 'rtl' : 'ltr'
+      }}
+    >
+      <InternetPackagesForm lang={validLang} />
+    </main>
+  );
 }

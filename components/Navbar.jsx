@@ -57,12 +57,31 @@ export default function Navbar({ lang }) {
   const [tourismDestinations, setTourismDestinations] = useState(null);
   const [dropdownError, setDropdownError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const userMenuRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
   const navRef = useRef(null);
   const dropdownRefs = useRef({});
   const isHoveringDropdown = useRef(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const isActive = (href) => {
+    if (href === "#") return false;
+    if (href === "/" && pathname === `/${lang}`) return true;
+    return pathname === `/${lang}${href}` || pathname?.startsWith(`/${lang}${href}/`);
+  };
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -187,20 +206,18 @@ export default function Navbar({ lang }) {
 
   const displayDestinations = tourismDestinations || getFallbackDestinations();
 
-  const getRegionLabel = (regionKey, data) => {
-    if (lang === "ar" && data?.ar) return data.ar;
-    if (lang === "en" && data?.en) return data.en;
+  const getRegionLabel = (regionKey) => {
     const labels = REGION_LABELS[lang] || REGION_LABELS.en;
     if (labels[regionKey]) return labels[regionKey];
     const lowerKey = regionKey?.toLowerCase();
     if (labels[lowerKey]) return labels[lowerKey];
-    return data?.ar || data?.en || regionKey;
+    return regionKey;
   };
 
   const menuItems = [
     {
       href: "#",
-      label: lang === "ar" ? "الوجهات السياحية" : "Tourism Destinations",
+      label: lang === "ar" ? "الوجهات الدولية" : "International Destinations",
       dropdown: true,
       type: "packages",
     },
@@ -274,7 +291,7 @@ export default function Navbar({ lang }) {
   ];
 
   const handleDropdownMouseEnter = (type) => {
-    if (window.innerWidth > 1024) {
+    if (window.innerWidth > 1210) {
       if (dropdownTimeoutRef.current) {
         clearTimeout(dropdownTimeoutRef.current);
         dropdownTimeoutRef.current = null;
@@ -285,7 +302,7 @@ export default function Navbar({ lang }) {
   };
 
   const handleDropdownMouseLeave = (e) => {
-    if (window.innerWidth > 1024) {
+    if (window.innerWidth > 1210) {
       const relatedTarget = e.relatedTarget;
       const isChildElement =
         relatedTarget &&
@@ -358,7 +375,7 @@ export default function Navbar({ lang }) {
   return (
     <>
       {/* Top Bar */}
-      <div className="top-bar" dir={isRTL ? "rtl" : "ltr"}>
+      <div className={`top-bar ${isScrolled ? "scrolled" : ""}`} dir={isRTL ? "rtl" : "ltr"}>
         <div className="top-bar-container">
           <div className="top-bar-left">
             <Phone className="top-bar-icon" />
@@ -398,7 +415,7 @@ export default function Navbar({ lang }) {
         </div>
       </div>
 
-      <header className="main-header" dir={isRTL ? "rtl" : "ltr"}>
+      <header className={`main-header ${isScrolled ? "scrolled" : ""}`} dir={isRTL ? "rtl" : "ltr"}>
         <div className="header-container" ref={navRef}>
           <Link href={`/${lang}`} className="logo-wrapper">
             <img src="/logo.png" alt="Logo" className="logo-image" />
@@ -428,19 +445,23 @@ export default function Navbar({ lang }) {
                 }
               >
                 {item.dropdown ? (
-                  <button
-                    className="nav-link"
+                  <Link
+                    href={item.type === "packages" ? `/${lang}/destinations` : `/${lang}${item.href}`}
+                    className={`nav-link ${isActive(item.href) ? "active" : ""}`}
                     onClick={(e) => {
-                      if (window.innerWidth <= 1024) {
+                      if (window.innerWidth <= 1210) {
                         e.preventDefault();
                         toggleMobileDropdown(item.type, e);
                       }
                     }}
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ) : (
-                  <Link href={`/${lang}${item.href}`} className="nav-link">
+                  <Link
+                    href={`/${lang}${item.href}`}
+                    className={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                  >
                     {item.label}
                   </Link>
                 )}
@@ -462,66 +483,18 @@ export default function Navbar({ lang }) {
                           <div className="dropdown-packages">
                             {Object.entries(displayDestinations).map(
                               ([regionKey, data]) => (
-                                <div
+                                <Link
                                   key={regionKey}
-                                  className="region-group"
-                                  onMouseEnter={() => {
-                                    if (dropdownTimeoutRef.current) {
-                                      clearTimeout(dropdownTimeoutRef.current);
-                                      dropdownTimeoutRef.current = null;
-                                    }
-                                    setOpenSubDropdown(regionKey);
-                                  }}
-                                  onMouseLeave={() => {
-                                    dropdownTimeoutRef.current = setTimeout(
-                                      () => {
-                                        if (!isHoveringDropdown.current) {
-                                          setOpenSubDropdown(null);
-                                        }
-                                      },
-                                      100,
-                                    );
-                                  }}
+                                  href={`/${lang}/destinations?region=${regionKey}`}
+                                  className="region-group text-decoration-none d-block"
+                                  style={{ color: "inherit" }}
                                 >
                                   <div className="region-trigger">
                                     <span>
-                                      {data.icon} {getRegionLabel(regionKey, data)}
+                                      {data.icon} {getRegionLabel(regionKey)}
                                     </span>
                                   </div>
-                                  {openSubDropdown === regionKey &&
-                                    data.countries &&
-                                    data.countries.length > 0 && (
-                                      <div
-                                        className={`sub-menu ${isRTL ? "sub-rtl" : "sub-ltr"}`}
-                                        onMouseEnter={() => {
-                                          if (dropdownTimeoutRef.current) {
-                                            clearTimeout(
-                                              dropdownTimeoutRef.current,
-                                            );
-                                            dropdownTimeoutRef.current = null;
-                                          }
-                                        }}
-                                        onMouseLeave={() => {
-                                          dropdownTimeoutRef.current =
-                                            setTimeout(() => {
-                                              if (!isHoveringDropdown.current) {
-                                                setOpenSubDropdown(null);
-                                              }
-                                            }, 100);
-                                        }}
-                                      >
-                                        {data.countries.map((c) => (
-                                          <Link
-                                            key={c.slug}
-                                            href={`/${lang}/destinations/${c.slug}`}
-                                            className="sub-item"
-                                          >
-                                            {lang === "ar" ? c.ar : c.en}
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    )}
-                                </div>
+                                </Link>
                               ),
                             )}
                           </div>
@@ -631,64 +604,34 @@ export default function Navbar({ lang }) {
                           <div className="mobile-nested-menu">
                             {item.type === "packages"
                               ? Object.entries(displayDestinations).map(
-                                  ([regionKey, data]) => (
-                                    <div
-                                      key={regionKey}
-                                      className="mobile-region-section"
-                                    >
-                                      <button
-                                        className="mobile-region-btn"
-                                        onClick={(e) =>
-                                          toggleSubDropdown(regionKey, e)
-                                        }
-                                      >
-                                        {data.icon} {getRegionLabel(regionKey, data)}
-                                        {openSubDropdown === regionKey ? (
-                                          <FaChevronUp
-                                            size={10}
-                                            className="mobile-arrow"
-                                          />
-                                        ) : (
-                                          <FaChevronDown
-                                            size={10}
-                                            className="mobile-arrow"
-                                          />
-                                        )}
-                                      </button>
-                                      {openSubDropdown === regionKey &&
-                                        data.countries &&
-                                        data.countries.length > 0 && (
-                                          <div className="mobile-country-list">
-                                            {data.countries.map((c) => (
-                                              <Link
-                                                key={c.slug}
-                                                href={`/${lang}/destinations/${c.slug}`}
-                                                onClick={() =>
-                                                  setMobileMenuOpen(false)
-                                                }
-                                                className="mobile-country-item"
-                                              >
-                                                {lang === "ar" ? c.ar : c.en}
-                                              </Link>
-                                            ))}
-                                          </div>
-                                        )}
-                                    </div>
-                                  ),
-                                )
-                              : getDropdownData(item.type).map((d, idx) => (
-                                  <Link
-                                    key={idx}
-                                    href={`/${lang}${d.href}`}
-                                    className="mobile-dropdown-link"
-                                    onClick={() => setMobileMenuOpen(false)}
+                                ([regionKey, data]) => (
+                                  <div
+                                    key={regionKey}
+                                    className="mobile-region-section"
                                   >
-                                    <span className="mobile-link-icon">
-                                      {d.icon}
-                                    </span>
-                                    {localize(d.title)}
-                                  </Link>
-                                ))}
+                                    <Link
+                                      href={`/${lang}/destinations?region=${regionKey}`}
+                                      className="mobile-region-btn text-decoration-none"
+                                      onClick={() => setMobileMenuOpen(false)}
+                                    >
+                                      {data.icon} {getRegionLabel(regionKey)}
+                                    </Link>
+                                  </div>
+                                ),
+                              )
+                              : getDropdownData(item.type).map((d, idx) => (
+                                <Link
+                                  key={idx}
+                                  href={`/${lang}${d.href}`}
+                                  className="mobile-dropdown-link"
+                                  onClick={() => setMobileMenuOpen(false)}
+                                >
+                                  <span className="mobile-link-icon">
+                                    {d.icon}
+                                  </span>
+                                  {localize(d.title)}
+                                </Link>
+                              ))}
                           </div>
                         )}
                       </>
@@ -709,472 +652,6 @@ export default function Navbar({ lang }) {
         )}
       </AnimatePresence>
 
-      <style jsx global>{`
-        :root {
-          --gold: #dfa528;
-          --navy: #1a1a2e;
-          --white: #ffffff;
-          --border: #e8e6e1;
-          --z-topbar: 1001;
-          --z-header: 1000;
-          --z-overlay: 1050;
-          --z-sidebar: 1060;
-          --z-dropdown: 1100;
-          --z-submenu: 1110;
-          --z-user-menu: 1120;
-        }
-
-        .top-bar {
-          background: var(--navy);
-          color: white;
-          padding: 6px 0;
-          font-size: 12px;
-          position: fixed;
-          top: 0;
-          width: 100%;
-          z-index: var(--z-topbar);
-        }
-        .top-bar-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          justify-content: space-between;
-          padding: 0 20px;
-        }
-        .social-icons {
-          display: flex;
-          gap: 10px;
-        }
-        .social-icon {
-          color: white;
-          opacity: 0.8;
-          transition: opacity 0.2s;
-        }
-        .social-icon:hover {
-          opacity: 1;
-        }
-
-        .main-header {
-          background: white;
-          border-bottom: 1px solid var(--border);
-          position: fixed;
-          top: 30px;
-          width: 100%;
-          z-index: var(--z-header);
-          height: 70px;
-        }
-        .header-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          height: 100%;
-          padding: 0 20px;
-        }
-
-        .logo-wrapper {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          text-decoration: none;
-        }
-        .logo-image {
-          height: 45px;
-        }
-        .logo-text {
-          display: flex;
-          flex-direction: column;
-        }
-        .logo-title {
-          font-weight: bold;
-          color: var(--navy);
-          font-size: 16px;
-        }
-        .logo-subtitle {
-          color: var(--gold);
-          font-size: 10px;
-          letter-spacing: 2px;
-        }
-
-        .desktop-nav {
-          display: none;
-          gap: 15px; /* Increased gap for better readability */
-          align-items: center;
-        }
-        @media (min-width: 1024px) {
-          .desktop-nav {
-            display: flex;
-          }
-        }
-
-        .nav-item-wrapper {
-          position: relative;
-          z-index: 1;
-          padding: 0 3px; /* Additional padding around each item */
-        }
-
-        .nav-link {
-          background: none;
-          border: none;
-          padding: 10px 16px; /* Increased padding */
-          color: var(--navy);
-          font-weight: 500;
-          cursor: pointer;
-          font-size: 14px;
-          text-decoration: none;
-          display: flex;
-          align-items: center;
-          transition: color 0.2s;
-          white-space: nowrap;
-          letter-spacing: 0.2px;
-        }
-        .dropdown-menu-wrapper {
-          position: absolute;
-          top: calc(100% + 5px);
-          background: white;
-          border: 1px solid var(--border);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-          min-width: 260px;
-          padding: 8px;
-          z-index: var(--z-dropdown);
-        }
-
-        .dropdown-ltr {
-          left: 0;
-          right: auto;
-        }
-
-        .dropdown-rtl {
-          right: 0;
-          left: auto;
-        }
-
-        .dropdown-packages {
-          min-width: 220px;
-        }
-        .dropdown-list {
-          min-width: 220px;
-        }
-
-        .dropdown-item {
-          display: flex;
-          align-items: center;
-          padding: 10px 12px;
-          text-decoration: none;
-          color: var(--navy);
-          border-radius: 5px;
-          gap: 10px;
-          transition: background 0.15s;
-        }
-        .dropdown-item:hover {
-          background: #f9f9f9;
-          color: var(--gold);
-        }
-
-        .region-group {
-          position: relative;
-          padding: 8px 12px;
-          cursor: pointer;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-radius: 5px;
-          transition: background 0.15s;
-          z-index: 1;
-        }
-        .region-group:hover {
-          background: #f9f9f9;
-        }
-        .region-group:has(.sub-menu:hover) {
-          background: #f9f9f9;
-        }
-        .region-trigger {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          font-weight: 500;
-        }
-        .region-trigger span {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-        }
-
-        .sub-menu {
-          position: absolute;
-          top: -5px;
-          background: white;
-          border: 1px solid var(--border);
-          min-width: 200px;
-          border-radius: 8px;
-          box-shadow: 10px 0 30px rgba(0, 0, 0, 0.08);
-          padding: 5px;
-          z-index: var(--z-submenu);
-        }
-
-        .sub-ltr {
-          left: calc(100% + 8px);
-          right: auto;
-        }
-
-        .sub-rtl {
-          right: calc(100% + 8px);
-          left: auto;
-        }
-
-        .sub-item {
-          display: block;
-          padding: 8px 15px;
-          text-decoration: none;
-          color: var(--navy);
-          font-size: 13px;
-          border-radius: 4px;
-          transition:
-            background 0.15s,
-            color 0.15s;
-        }
-        .sub-item:hover {
-          background: #fff9eb;
-          color: var(--gold);
-        }
-
-        .mobile-toggle {
-          background: none;
-          border: none;
-          color: var(--navy);
-          cursor: pointer;
-          padding: 8px;
-          display: flex;
-          align-items: center;
-        }
-        .mobile-toggle:hover {
-          color: var(--gold);
-        }
-
-        .mobile-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0, 0, 0, 0.5);
-          z-index: var(--z-overlay);
-        }
-        .mobile-sidebar {
-          position: fixed;
-          top: 0;
-          bottom: 0;
-          width: 320px;
-          background: white;
-          z-index: var(--z-sidebar);
-          padding: 20px;
-          overflow-y: auto;
-          box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-        }
-        [dir="ltr"] .mobile-sidebar {
-          right: 0;
-        }
-        [dir="rtl"] .mobile-sidebar {
-          left: 0;
-        }
-
-        .mobile-sidebar-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 25px;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #f0f0f0;
-        }
-        .mobile-logo {
-          height: 40px;
-        }
-        .mobile-sidebar-header button {
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: #666;
-          padding: 4px;
-        }
-        .mobile-sidebar-header button:hover {
-          color: var(--navy);
-        }
-
-        .mobile-link-toggle {
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 14px 0;
-          border: none;
-          background: none;
-          border-bottom: 1px solid #f0f0f0;
-          font-weight: 600;
-          color: var(--navy);
-          text-decoration: none;
-          font-size: 16px;
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .mobile-link-toggle:hover {
-          color: var(--gold);
-        }
-        .mobile-arrow {
-          color: #999;
-          margin-left: 8px;
-        }
-        [dir="rtl"] .mobile-arrow {
-          margin-left: 0;
-          margin-right: 8px;
-        }
-
-        .mobile-nested-menu {
-          background: #fafafa;
-          padding: 5px 10px;
-          border-radius: 6px;
-          margin-bottom: 5px;
-        }
-        .mobile-region-section {
-          margin-bottom: 8px;
-        }
-        .mobile-region-btn {
-          width: 100%;
-          text-align: start;
-          padding: 10px 12px;
-          background: #f5f5f5;
-          border: none;
-          border-radius: 6px;
-          font-weight: 500;
-          margin-bottom: 4px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          cursor: pointer;
-          transition: background 0.15s;
-        }
-        .mobile-region-btn:hover {
-          background: #eeeeee;
-        }
-        .mobile-country-list {
-          padding: 5px 15px;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        .mobile-country-item {
-          text-decoration: none;
-          color: #555;
-          font-size: 14px;
-          padding: 6px 10px;
-          border-radius: 4px;
-          transition:
-            background 0.15s,
-            color 0.15s;
-        }
-        .mobile-country-item:hover {
-          background: #f0f0f0;
-          color: var(--gold);
-        }
-        .mobile-dropdown-link {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 10px 12px;
-          text-decoration: none;
-          color: #555;
-          border-bottom: 1px dashed #f0f0f0;
-          transition:
-            background 0.15s,
-            color 0.15s;
-          border-radius: 4px;
-        }
-        .mobile-dropdown-link:hover {
-          background: #f5f5f5;
-          color: var(--gold);
-        }
-        .mobile-link-icon {
-          font-size: 18px;
-        }
-
-        .header-actions {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .user-menu {
-          position: relative;
-          z-index: var(--z-user-menu);
-        }
-        .user-trigger {
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: var(--navy);
-          padding: 4px;
-          display: flex;
-          align-items: center;
-          transition: color 0.2s;
-        }
-        .user-trigger:hover {
-          color: var(--gold);
-        }
-        .user-dropdown {
-          position: absolute;
-          right: 0;
-          top: calc(100% + 8px);
-          background: white;
-          border: 1px solid var(--border);
-          border-radius: 8px;
-          min-width: 180px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-          padding: 5px;
-          z-index: var(--z-user-menu);
-        }
-        .user-link {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 10px 15px;
-          text-decoration: none;
-          color: var(--navy);
-          border: none;
-          background: none;
-          width: 100%;
-          cursor: pointer;
-          border-radius: 4px;
-          transition:
-            background 0.15s,
-            color 0.15s;
-          font-size: 14px;
-        }
-        .user-link:hover {
-          background: #f9f9f9;
-          color: var(--gold);
-        }
-        .user-link.logout:hover {
-          color: #dc3545;
-          background: #fff5f5;
-        }
-
-        .dropdown-menu-wrapper .dropdown-menu-wrapper {
-          z-index: calc(var(--z-dropdown) + 1);
-        }
-
-        .nav-item-wrapper:has(.dropdown-menu-wrapper) {
-          z-index: 1;
-        }
-
-        .nav-item-wrapper:has(.dropdown-menu-wrapper:hover) {
-          z-index: 3;
-        }
-
-        .dropdown-menu-wrapper {
-          overflow: visible;
-        }
-
-        .dropdown-packages {
-          overflow: visible;
-        }
-      `}</style>
     </>
   );
 }

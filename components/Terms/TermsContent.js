@@ -311,7 +311,7 @@ export default function TermsContent({ lang }) {
       </section>
 
       {/* Intro Content */}
-      <section className="intro-section">
+      <section className="intro-section" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div className="container">
           <div className="intro-card">
             <p className="lead text-center m-0">{t.intro}</p>
@@ -324,7 +324,7 @@ export default function TermsContent({ lang }) {
       </section>
 
       {/* Terms Grid */}
-      <section className="terms-content py-5">
+      <section className="terms-content py-5" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <div className="container">
           <div className="row g-4">
             {t.sections.map((section) => (
@@ -348,7 +348,7 @@ export default function TermsContent({ lang }) {
 
       <style jsx>{`
         .terms-page {
-          background: #f8f9fa;
+          background: #FAF6F0;
           font-family: "Tajawal", sans-serif;
           min-height: 100vh;
         }
@@ -356,9 +356,9 @@ export default function TermsContent({ lang }) {
         /* Hero Section */
         .terms-hero {
           position: relative;
-          padding: 120px 0 80px;
+          padding: 150px 0 80px;
           background-image: url("/bg.webp"),
-            linear-gradient(135deg, #2c3e50 0%, #8a7779 100%);
+            linear-gradient(135deg, #1C0052 0%, #0F0030 100%);
           background-size: cover;
           background-position: center;
           margin-bottom: 50px;
@@ -370,7 +370,7 @@ export default function TermsContent({ lang }) {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.3);
+          background: rgba(28, 0, 82, 0.4);
           z-index: 1;
         }
 
@@ -385,6 +385,7 @@ export default function TermsContent({ lang }) {
           margin: 0 auto;
           backdrop-filter: blur(5px);
           border: 1px solid rgba(255, 255, 255, 0.3);
+          color: #FFC60B;
         }
 
         /* Animations */
@@ -416,18 +417,19 @@ export default function TermsContent({ lang }) {
         .intro-card {
           background: white;
           padding: 40px;
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-          color: #5d6d7e;
-          border-bottom: 4px solid #8a7779;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+          color: #555;
+          border-bottom: 4px solid #E85D1F;
+          border: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .warning-note {
-          background: #fff3cd;
-          border: 1px solid #ffeaa7;
-          border-radius: 8px;
+          background: rgba(232, 93, 31, 0.08);
+          border: 1px solid rgba(232, 93, 31, 0.15);
+          border-radius: 10px;
           padding: 15px;
-          color: #856404;
+          color: #E85D1F;
           display: flex;
           align-items: flex-start;
         }
@@ -435,18 +437,18 @@ export default function TermsContent({ lang }) {
         /* Terms Cards */
         .term-card {
           background: white;
-          border-radius: 16px;
+          border-radius: 10px;
           padding: 30px;
           height: 100%;
-          border: 1px solid #e9ecef;
+          border: 1px solid rgba(28, 0, 82, 0.06);
           transition: all 0.3s ease;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
 
         .term-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
-          border-color: #8a7779;
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.12);
+          border-color: rgba(232, 93, 31, 0.3);
         }
 
         .term-header {
@@ -455,15 +457,15 @@ export default function TermsContent({ lang }) {
           gap: 15px;
           margin-bottom: 20px;
           padding-bottom: 15px;
-          border-bottom: 1px solid #f0f0f0;
+          border-bottom: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .term-icon {
-          color: #8a7779;
-          background: rgba(138, 119, 121, 0.1);
+          color: #E85D1F;
+          background: rgba(232, 93, 31, 0.08);
           width: 50px;
           height: 50px;
-          border-radius: 12px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -473,7 +475,7 @@ export default function TermsContent({ lang }) {
         .term-title {
           font-size: 1.3rem;
           font-weight: 700;
-          color: #2c3e50;
+          color: #1C0052;
           margin: 0;
         }
 
@@ -487,13 +489,13 @@ export default function TermsContent({ lang }) {
           position: relative;
           padding-inline-start: 20px;
           margin-bottom: 12px;
-          color: #5d6d7e;
+          color: #555;
           line-height: 1.6;
         }
 
         .term-points li::before {
           content: "•";
-          color: #8a7779;
+          color: #E85D1F;
           font-weight: bold;
           position: absolute;
           inset-inline-start: 0;

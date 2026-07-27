@@ -8,8 +8,8 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
   const { openReservationModal } = useUI();
 
   // Ensure servicesData is always an array
-  const safeServicesData = Array.isArray(servicesData) && servicesData.length > 0 
-    ? servicesData 
+  const safeServicesData = Array.isArray(servicesData) && servicesData.length > 0
+    ? servicesData
     : [];
 
   console.log('🎨 NewServices component received:', {
@@ -30,10 +30,10 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
       bookNow: "حجز رحلات دولية",
     },
 
-      zh: {
-    viewDetails: "本地预订",
-    bookNow: "国际预订",
-  },
+    zh: {
+      viewDetails: "本地预订",
+      bookNow: "国际预订",
+    },
   };
 
   const t = translations[lang] || translations.en;
@@ -105,7 +105,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
         }}
       >
         {/* Dark Overlay */}
-        <div 
+        <div
           className="position-absolute top-0 start-0 w-100 h-100"
           style={{
             backgroundColor: "rgba(0, 0, 0, 0.7)",
@@ -113,7 +113,11 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
           }}
         ></div>
 
-        <div className="container position-relative" style={{ zIndex: 1 }}>
+        <div className="container position-relative"
+          style={{
+            zIndex: 1,
+            maxWidth: "1200px"
+          }}>
           {/* Section Header */}
           <motion.div
             className="text-center mb-5"
@@ -122,24 +126,25 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="fw-bold text-white mb-3" style={{ fontSize: "1.75rem" }}>
+            <h2 className="fw-bold text-white mb-3" style={{ fontSize: "2rem", letterSpacing: "0.5px" }}>
               {sectionTitle}
             </h2>
             <div
               className="mx-auto mb-4"
-              style={{ 
-                width: "100px", 
-                height: "4px", 
-                background: "linear-gradient(90deg, #ceac24 0%, #d4b445 100%)",
+              style={{
+                width: "80px",
+                height: "4px",
+                background: "linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%)",
                 borderRadius: '2px'
               }}
             ></div>
-            <p 
+            <p
               className="lead text-light mx-auto"
-              style={{ 
+              style={{
                 maxWidth: "600px",
-                color: "#e0e0e0",
-                lineHeight: "1.6"
+                color: "#f0f0f0",
+                lineHeight: "1.7",
+                fontSize: "1.1rem"
               }}
             >
               {sectionDescription}
@@ -156,93 +161,96 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
           >
             {safeServicesData.length > 0 ? (
               safeServicesData.map((service, index) => (
-              <motion.div
-                key={index}
-                className="col-lg-4 col-md-6"
-                variants={itemVariants}
-              >
                 <motion.div
-                  className="card h-100 border-0 rounded-4 overflow-hidden shadow-lg"
-                  style={{
-                    background: "rgba(26, 26, 26, 0.8)",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(206, 172, 36, 0.3)",
-                    transition: "all 0.3s ease",
-                  }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    borderColor: "rgba(206, 172, 36, 0.6)",
-                    boxShadow: "0 20px 40px rgba(206, 172, 36, 0.3)"
-                  }}
+                  key={index}
+                  className="col-lg-4 col-md-6"
+                  variants={itemVariants}
                 >
-                  {/* Service Image */}
-                  <div 
-                    className="position-relative overflow-hidden"
-                    style={{ height: "250px" }}
+                  <motion.div
+                    className="card h-100 border-0 overflow-hidden shadow-lg"
+                    style={{
+                      background: "rgba(28, 0, 82, 0.45)", /* Glassmorphic brand backdrop */
+                      backdropFilter: "blur(12px)",
+                      border: "1px solid rgba(249, 229, 210, 0.15)", /* Soft Desert Sand border */
+                      borderRadius: "10px",
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    }}
+                    whileHover={{
+                      scale: 1.03,
+                      borderColor: "rgba(232, 93, 31, 0.5)", /* Accent orange */
+                      boxShadow: "0 20px 40px rgba(232, 93, 31, 0.25)"
+                    }}
                   >
-                    <Image
-                      src={service.image}
-                      alt={localize(service.title)}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      className="transition-transform duration-300 hover:scale-110"
-                    />
-                    {/* Overlay */}
-                    <div 
-                      className="position-absolute top-0 start-0 w-100 h-100"
-                      style={{
-                        background: "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%)"
-                      }}
-                    ></div>
-                  </div>
-
-                  {/* Service Content */}
-                  <div className="card-body p-4 d-flex flex-column">
-                    <h5 
-                      className="card-title fw-bold mb-3"
-                      style={{ color: "#ceac24" }}
+                    {/* Service Image */}
+                    <div
+                      className="position-relative overflow-hidden"
+                      style={{ height: "240px" }}
                     >
-                      {localize(service.title)}
-                    </h5>
-                    <p 
-                      className="card-text flex-grow-1 mb-4"
-                      style={{ 
-                        color: "#e0e0e0",
-                        lineHeight: "1.6"
-                      }}
-                    >
-                      {localize(service.description)}
-                    </p>
-                    <div className="mt-auto">
-                      <button
-                        onClick={() => handleReservation(service)}
-                        className="btn"
+                      <Image
+                        src={service.image}
+                        alt={localize(service.title)}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        className="transition-transform duration-300 hover:scale-110"
+                      />
+                      {/* Overlay */}
+                      <div
+                        className="position-absolute top-0 start-0 w-100 h-100"
                         style={{
-                          background: "#EFC8AE",
-                          color: "#000000",
-                          border: "none",
-                          borderRadius: "25px",
-                          fontWeight: "600",
-                          padding: "0.75rem 1.5rem",
-                          transition: "all 0.3s ease",
-                          width: "100%"
+                          background: "linear-gradient(to bottom, transparent 40%, rgba(27, 0, 82, 0.41) 100%)"
                         }}
-                        onMouseEnter={(e) => {
-                          e.target.style.transform = "translateY(-2px)";
-                          e.target.style.boxShadow = "0 8px 25px rgba(206, 172, 36, 0.4)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.transform = "translateY(0)";
-                          e.target.style.boxShadow = "none";
+                      ></div>
+                    </div>
+
+                    {/* Service Content */}
+                    <div className="card-body p-4 d-flex flex-column">
+                      <h5
+                        className="card-title fw-bold mb-3"
+                        style={{ color: "#FFC60B", fontSize: "1.25rem" }} /* Golden Dune Yellow */
+                      >
+                        {localize(service.title)}
+                      </h5>
+                      <p
+                        className="card-text flex-grow-1 mb-4"
+                        style={{
+                          color: "#e0e0e0",
+                          lineHeight: "1.6",
+                          fontSize: "0.95rem"
                         }}
                       >
-                        {t.viewDetails}
-                      </button>
+                        {localize(service.description)}
+                      </p>
+                      <div className="mt-auto">
+                        <button
+                          onClick={() => handleReservation(service)}
+                          className="btn"
+                          style={{
+                            background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)", /* Brand Orange to Yellow gradient */
+                            color: "#FFFFFF",
+                            border: "none",
+                            borderRadius: "10px",
+                            fontWeight: "700",
+                            padding: "0.8rem 1.5rem",
+                            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                            width: "100%",
+                            boxShadow: "0 4px 15px rgba(232, 93, 31, 0.25)"
+                          }}
+                          onMouseEnter={(e) => {
+                            e.target.style.transform = "translateY(-2px)";
+                            e.target.style.boxShadow = "0 8px 25px rgba(232, 93, 31, 0.5)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.target.style.transform = "translateY(0)";
+                            e.target.style.boxShadow = "0 4px 15px rgba(232, 93, 31, 0.25)";
+                          }}
+                        >
+                          {t.viewDetails}
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            ))
+              ))
             ) : (
               <div className="col-12 text-center">
                 <p style={{ color: "#e0e0e0", fontSize: "1rem" }}>
@@ -252,7 +260,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
             )}
           </motion.div>
 
-      
+
         </div>
 
         <style jsx>{`

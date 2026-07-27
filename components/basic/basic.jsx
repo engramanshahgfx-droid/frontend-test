@@ -19,7 +19,7 @@ export default function JanuaryOffers({ lang }) {
       mostPopular: "Most Popular",
       honeymoonSpecial: "Honeymoon Special",
       newYearOffer: "New Year Special",
-      
+
       offers: [
         {
           id: 1,
@@ -157,7 +157,7 @@ export default function JanuaryOffers({ lang }) {
           highlights: ["Private Beach", "Snorkeling", "Spa Treatments", "Sunset Cruises"]
         }
       ],
-      
+
       categories: {
         all: "All Offers",
         honeymoon: "Honeymoon",
@@ -165,7 +165,7 @@ export default function JanuaryOffers({ lang }) {
         luxury: "Luxury",
         popular: "Popular"
       },
-      
+
       additionalInfo: [
         {
           icon: "✈️",
@@ -204,7 +204,7 @@ export default function JanuaryOffers({ lang }) {
       mostPopular: "الأكثر شيوعاً",
       honeymoonSpecial: "عرض شهر العسل",
       newYearOffer: "عرض رأس السنة",
-      
+
       offers: [
         {
           id: 1,
@@ -342,7 +342,7 @@ export default function JanuaryOffers({ lang }) {
           highlights: ["شاطئ خاص", "الغطس", "علاجات سبا", "رحلات غروب الشمس"]
         }
       ],
-      
+
       categories: {
         all: "جميع العروض",
         honeymoon: "شهر العسل",
@@ -350,7 +350,7 @@ export default function JanuaryOffers({ lang }) {
         luxury: "فاخر",
         popular: "الأكثر شيوعاً"
       },
-      
+
       additionalInfo: [
         {
           icon: "✈️",
@@ -389,7 +389,7 @@ export default function JanuaryOffers({ lang }) {
       mostPopular: "最受欢迎",
       honeymoonSpecial: "蜜月特别",
       newYearOffer: "新年特别",
-      
+
       offers: [
         {
           id: 1,
@@ -527,7 +527,7 @@ export default function JanuaryOffers({ lang }) {
           highlights: ["私人海滩", "浮潜", "水疗护理", "日落游轮"]
         }
       ],
-      
+
       categories: {
         all: "所有优惠",
         honeymoon: "蜜月",
@@ -535,7 +535,7 @@ export default function JanuaryOffers({ lang }) {
         luxury: "奢华",
         popular: "最受欢迎"
       },
-      
+
       additionalInfo: [
         {
           icon: "✈️",
@@ -588,12 +588,12 @@ export default function JanuaryOffers({ lang }) {
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="offers-page">
       {/* Hero Section with Video Background */}
-      <section className="offers-hero">
+      <section className="offers-hero" >
         <div className="video-background">
-          <video 
-            autoPlay 
-            muted 
-            loop 
+          <video
+            autoPlay
+            muted
+            loop
             playsInline
             className="background-video"
           >
@@ -603,7 +603,7 @@ export default function JanuaryOffers({ lang }) {
           </video>
           <div className="video-overlay"></div>
         </div>
-        
+
         <div className="container">
           <div className="row align-items-center min-vh-100">
             <div className="col-lg-10 mx-auto text-center text-white">
@@ -623,7 +623,7 @@ export default function JanuaryOffers({ lang }) {
       </section>
 
       {/* Info Cards Section */}
-      <section className="info-section py-5">
+      <section className="info-section py-2" style={{maxWidth: "1200px", margin: "0 auto"}}>
         <div className="container">
           <div className="row g-4">
             {t.additionalInfo.map((info, index) => (
@@ -640,7 +640,7 @@ export default function JanuaryOffers({ lang }) {
       </section>
 
       {/* Offers Grid Section */}
-      <section className="offers-section py-5">
+      <section className="offers-section py-5" style={{maxWidth: "1200px", margin: "0 auto"}}>
         <div className="container">
           <div className="text-center mb-5">
             <h2 className="section-title mb-3">{t.featuredOffers}</h2>
@@ -674,8 +674,8 @@ export default function JanuaryOffers({ lang }) {
 
                   {/* Offer Image */}
                   <div className="offer-image">
-                    <img 
-                      src={offer.image} 
+                    <img
+                      src={offer.image}
                       alt={offer.title}
                       className="img-fluid"
                       onError={(e) => {
@@ -748,7 +748,7 @@ export default function JanuaryOffers({ lang }) {
                       <div className="cta-buttons">
                         <a
                           href={`https://wa.me/+966547305060?text=${encodeURIComponent(
-                            isRTL 
+                            isRTL
                               ? `أرغب في الحصول على معلومات عن: ${offer.title} - ${offer.duration}`
                               : `I'm interested in: ${offer.title} - ${offer.duration}`
                           )}`}
@@ -773,8 +773,8 @@ export default function JanuaryOffers({ lang }) {
               <div className="d-flex align-items-center">
                 <FaStar className="me-3" />
                 <div>
-                  <strong>{isRTL ? "ملاحظة:" : "Note:"}</strong> 
-                  {isRTL 
+                  <strong>{isRTL ? "ملاحظة:" : "Note:"}</strong>
+                  {isRTL
                     ? " جميع العروض تشمل الاستقبال في المطار مع الورد وشرائح الإنترنت المجانية. الأسعار قابلة للتغيير حسب التوافر."
                     : " All offers include airport reception with flowers and free internet SIM cards. Prices subject to availability."
                   }
@@ -793,7 +793,7 @@ export default function JanuaryOffers({ lang }) {
               {isRTL ? "احجز عرضك الآن" : "Book Your Package Now"}
             </h3>
             <p className="cta-text mb-4">
-              {isRTL 
+              {isRTL
                 ? "تواصل معنا للحصول على أفضل الأسعار والمزايا الحصرية لشهر يناير"
                 : "Contact us for best prices and exclusive January benefits"
               }
@@ -813,25 +813,22 @@ export default function JanuaryOffers({ lang }) {
 
       <style jsx>{`
         .offers-page {
-          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-          font-family: 'Tajawal', sans-serif;
+          background: #FAF6F0;
         }
-
         .offers-hero {
           position: relative;
-          padding: 120px 0 80px;
-          min-height: 70vh;
+          padding: 80px 0 0 0;
+          min-height: 40vh;
           display: flex;
           align-items: center;
           overflow: hidden;
         }
-
         .video-background {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
-          height: 100%;
+          height: 100vh;
           z-index: 1;
         }
 
@@ -849,8 +846,8 @@ export default function JanuaryOffers({ lang }) {
           height: 100%;
           background: linear-gradient(
             135deg, 
-            rgba(138, 119, 121, 0.6) 0%, 
-            rgba(239, 200, 174, 0.9) 100%
+            rgba(28, 0, 82, 0.9) 0%, 
+            rgba(249, 229, 210, 0.8) 100%
           );
           z-index: 2;
         }
@@ -871,15 +868,15 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .month-badge {
-          background: linear-gradient(45deg, #e74c3c, #c0392b);
+          background: #E85D1F;
           color: white;
           padding: 12px 30px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 700;
           font-size: 1.1rem;
           text-transform: uppercase;
           letter-spacing: 2px;
-          box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.3);
           border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
@@ -899,20 +896,20 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .discount-badge {
-          background: linear-gradient(45deg, #ffd700, #ffed4e);
-          color: #000;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+          color: white;
           padding: 18px 35px;
-          border-radius: 50px;
+          border-radius: 10px;
           display: inline-block;
           font-weight: bold;
           font-size: 1.3rem;
-          box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+          box-shadow: 0 10px 30px rgba(232, 93, 31, 0.3);
           border: 3px solid rgba(255,255,255,0.3);
           margin-top: 20px;
         }
 
         .info-section {
-          background: white;
+          background: #FAF6F0;
           padding: 60px 0;
         }
 
@@ -920,16 +917,16 @@ export default function JanuaryOffers({ lang }) {
           text-align: center;
           padding: 30px 20px;
           background: white;
-          border-radius: 15px;
-          box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.04);
           transition: transform 0.3s ease;
           height: 100%;
-          border: 1px solid #f0f0f0;
+          border: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .info-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.1);
         }
 
         .info-icon {
@@ -938,32 +935,33 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .info-card h5 {
-          color: #2c3e50;
+          color: #1C0052;
           margin-bottom: 10px;
           font-weight: 700;
         }
 
         .info-card p {
-          color: #7f8c8d;
+          color: #666;
           font-size: 0.9rem;
           margin: 0;
         }
-
         .offer-card {
           background: white;
-          border-radius: 20px;
+          border-radius: 10px;
           overflow: hidden;
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           transition: all 0.3s ease;
           position: relative;
           height: 100%;
-          border: 1px solid #e9ecef;
+          border: 1px solid rgba(28, 0, 82, 0.06);
           margin-bottom: 30px;
+          display: flex;
+          flex-direction: column;
         }
-
         .offer-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.12);
+          border-color: rgba(232, 93, 31, 0.3);
         }
 
         .offer-category {
@@ -972,10 +970,10 @@ export default function JanuaryOffers({ lang }) {
           left: 15px;
           background: rgba(255, 255, 255, 0.95);
           padding: 5px 12px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: 0.75rem;
           font-weight: 600;
-          color: #8a7779;
+          color: #E85D1F;
           z-index: 2;
           backdrop-filter: blur(5px);
         }
@@ -985,11 +983,10 @@ export default function JanuaryOffers({ lang }) {
           top: 15px;
           ${isRTL ? 'right: 15px;' : 'left: 15px;'}
           padding: 10px 18px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-size: 0.85rem;
           font-weight: 700;
           z-index: 2;
-          text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
           display: flex;
           align-items: center;
           gap: 8px;
@@ -1031,7 +1028,7 @@ export default function JanuaryOffers({ lang }) {
           position: absolute;
           top: 20px;
           ${isRTL ? 'left: -35px;' : 'right: -35px;'}
-          background: linear-gradient(45deg, #e74c3c, #c0392b);
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           color: white;
           padding: 10px 45px;
           font-weight: bold;
@@ -1064,23 +1061,24 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .offer-card:hover .offer-image img {
-          transform: scale(1.1);
+          transform: scale(1.08);
         }
-
         .offer-content {
           padding: 25px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
-
         .offer-title {
           font-size: 1.4rem;
           font-weight: 800;
-          color: #2c3e50;
+          color: #1C0052;
           margin-bottom: 10px;
           line-height: 1.3;
         }
 
         .offer-description {
-          color: #5d6d7e;
+          color: #666;
           margin-bottom: 15px;
           line-height: 1.6;
           font-size: 0.95rem;
@@ -1088,15 +1086,15 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .itinerary-section {
-          background: #f8f9fa;
+          background: rgba(28, 0, 82, 0.03);
           padding: 15px;
           border-radius: 10px;
           margin-bottom: 15px;
-          border-left: 4px solid #8a7779;
+          border-left: 4px solid #E85D1F;
         }
 
         .itinerary-title {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 700;
           font-size: 0.9rem;
           margin-bottom: 10px;
@@ -1112,7 +1110,7 @@ export default function JanuaryOffers({ lang }) {
 
         .itinerary-item {
           font-size: 0.85rem;
-          color: #5d6d7e;
+          color: #555;
           display: flex;
           align-items: center;
         }
@@ -1125,13 +1123,13 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .highlight-tag {
-          background: linear-gradient(45deg, #8a7779, #a89294);
-          color: white;
+          background: rgba(232, 93, 31, 0.08);
+          color: #E85D1F;
+          border: 1px solid rgba(232, 93, 31, 0.15);
           padding: 4px 12px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: 0.75rem;
           font-weight: 600;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .offer-details {
@@ -1139,8 +1137,8 @@ export default function JanuaryOffers({ lang }) {
           justify-content: space-between;
           margin-bottom: 15px;
           padding: 15px 0;
-          border-top: 1px solid #ecf0f1;
-          border-bottom: 1px solid #ecf0f1;
+          border-top: 1px solid rgba(28, 0, 82, 0.06);
+          border-bottom: 1px solid rgba(28, 0, 82, 0.06);
           flex-wrap: wrap;
           gap: 10px;
         }
@@ -1149,18 +1147,18 @@ export default function JanuaryOffers({ lang }) {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #7f8c8d;
+          color: #666;
           font-size: 0.85rem;
           font-weight: 500;
         }
 
         .detail-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 1rem;
         }
 
         .features-list h6 {
-          color: #2c3e50;
+          color: #1C0052;
           margin-bottom: 10px;
           font-weight: 700;
           font-size: 0.9rem;
@@ -1180,24 +1178,23 @@ export default function JanuaryOffers({ lang }) {
           align-items: center;
           gap: 8px;
           font-size: 0.85rem;
-          color: #5d6d7e;
+          color: #555;
           font-weight: 500;
         }
 
         .feature-icon {
-          color: #f39c12;
+          color: #E85D1F;
           font-size: 0.8rem;
           flex-shrink: 0;
         }
-
         .offer-footer {
           display: flex;
           justify-content: center;
           align-items: center;
           padding-top: 20px;
-          border-top: 1px solid #ecf0f1;
+          border-top: 1px solid rgba(28, 0, 82, 0.06);
+          margin-top: auto;
         }
-
         .cta-buttons {
           display: flex;
           gap: 10px;
@@ -1205,30 +1202,30 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .btn-book {
-          background: #EFC8AE;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           border: none;
           padding: 10px 20px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 700;
-          color: #000;
+          color: white;
           text-decoration: none;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
           font-size: 0.9rem;
-          box-shadow: 0 4px 15px rgba(223, 165, 40, 0.3);
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
           flex: 1;
         }
 
         .btn-book:hover {
           transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(223, 165, 40, 0.5);
-          color: #000;
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.35);
+          color: white;
         }
 
         .section-title {
-          color: #5a4606ff;
+          color: #1C0052;
           font-weight: 800;
           font-size: 2.2rem;
           position: relative;
@@ -1238,21 +1235,21 @@ export default function JanuaryOffers({ lang }) {
         .section-divider {
           width: 80px;
           height: 4px;
-          background: linear-gradient(45deg, #8a7779, #efc8ae);
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           margin: 0 auto;
           border-radius: 2px;
         }
 
         .special-note .alert {
-          background: linear-gradient(45deg, #fff9e6, #fff3cd);
+          background: linear-gradient(135deg, #fff9e6, #fff3cd);
           border: 1px solid #ffeaa7;
           color: #856404;
-          border-radius: 15px;
+          border-radius: 10px;
           padding: 20px;
         }
 
         .cta-section {
-          background: linear-gradient(135deg, #8a7779, #a89294);
+          background: linear-gradient(135deg, #1C0052 0%, #0F0030 100%);
           padding: 60px 0;
           color: white;
         }
@@ -1275,27 +1272,27 @@ export default function JanuaryOffers({ lang }) {
         }
 
         .btn-success {
-          background: #EFC8AE;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           border: none;
-          color: #000 !important;
+          color: white !important;
           padding: 15px 35px;
-          border-radius: 30px;
+          border-radius: 10px;
           font-weight: 700;
           font-size: 1.1rem;
-          box-shadow: 0 8px 25px rgba(223, 165, 40, 0.4);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.3);
           transition: all 0.3s ease;
         }
 
         .btn-success:hover {
           transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(223, 165, 40, 0.6);
-          color: #000 !important;
+          box-shadow: 0 12px 30px rgba(232, 93, 31, 0.45);
+          color: white !important;
         }
 
         @media (max-width: 992px) {
           .offers-hero {
             padding: 100px 0 60px;
-            min-height: 60vh;
+            min-height: 35vh;
           }
 
           .hero-content h1 {

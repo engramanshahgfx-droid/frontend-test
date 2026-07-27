@@ -243,7 +243,12 @@ export default function PrivateJetRequestForm({ lang }) {
   };
 
   return (
-    <div className="container py-5" style={{ direction: isRTL ? "rtl" : "ltr", overflow: "visible" }}>
+    <div className="container" style={{ 
+      direction: isRTL ? "rtl" : "ltr", 
+      overflow: "visible",
+      paddingBottom: "5rem",
+      maxWidth: "1200px"
+      }}>
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -251,13 +256,7 @@ export default function PrivateJetRequestForm({ lang }) {
         transition={{ duration: 0.6 }}
         className="text-center mb-5"
       >
-        <div className="d-inline-flex align-items-center gap-2 bg-warning bg-opacity-10 px-4 py-2 rounded-pill mb-4">
-          <Plane size={20} className="text-warning" />
-          <span className="text-warning fw-semibold small text-uppercase">
-            {t.premiumBadge}
-          </span>
-        </div>
-        <h1 className="display-4 fw-bold mb-3" style={{ color: "#1a1a2e" }}>
+        <h1 className="display-4 fw-bold mb-3" style={{ color: "#1C0052" }}>
           {t.title}
         </h1>
         <p className="lead text-muted mx-auto" style={{ maxWidth: "650px" }}>
@@ -274,8 +273,21 @@ export default function PrivateJetRequestForm({ lang }) {
           className="col-lg-7"
           style={{ overflow: "visible" }}
         >
-          <div className="card border-0 shadow-lg rounded-4 overflow-visible">
-            <div className="card-header bg-dark text-white py-4 px-4 border-0">
+          <div 
+            className="card border-0 shadow-sm overflow-visible"
+            style={{
+              borderRadius: "10px",
+              border: "1px solid rgba(28, 0, 82, 0.06)",
+              backgroundColor: "#ffffff"
+            }}
+          >
+            <div 
+              className="card-header text-white py-4 px-4 border-0"
+              style={{
+                backgroundColor: "#1C0052",
+                borderRadius: "10px 10px 0 0"
+              }}
+            >
               <h3 className="h4 mb-0 fw-semibold">{t.formTitle}</h3>
               <p className="text-white-50 small mt-1 mb-0">
                 {t.formHelper}
@@ -285,8 +297,8 @@ export default function PrivateJetRequestForm({ lang }) {
               <form onSubmit={handleSubmit} style={{ overflow: "visible" }}>
                 <div className="row g-3" style={{ overflow: "visible" }}>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Users size={16} className="me-1" /> {t.name}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Users size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.name}
                     </label>
                     <input
                       type="text"
@@ -295,12 +307,13 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       placeholder={t.namePlaceholder}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Mail size={16} className="me-1" /> {t.email}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Mail size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.email}
                     </label>
                     <input
                       type="email"
@@ -309,12 +322,13 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       placeholder={t.emailPlaceholder}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Phone size={16} className="me-1" /> {t.phone}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Phone size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.phone}
                     </label>
                     <input
                       type="tel"
@@ -323,20 +337,26 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       placeholder={t.phonePlaceholder}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Plane size={16} className="me-1" /> {t.clientType}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Plane size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.clientType}
                     </label>
                     <select
                       name="clientType"
                       value={formData.clientType}
                       onChange={handleChange}
                       required
-                      className={`form-select form-select-lg rounded-3 pj-select ${isRTL ? 'text-end' : 'text-start'}`}
-                      style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+                      className={`form-select form-select-lg pj-select ${isRTL ? 'text-end' : 'text-start'}`}
+                      style={{ 
+                        direction: isRTL ? 'rtl' : 'ltr',
+                        borderRadius: "10px",
+                        borderColor: "rgba(28, 0, 82, 0.15)",
+                        fontSize: "0.95rem"
+                      }}
                     >
                       <option value="" disabled>
                         {t.clientTypePlaceholder}
@@ -350,8 +370,8 @@ export default function PrivateJetRequestForm({ lang }) {
                     </select>
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Calendar size={16} className="me-1" /> {t.date}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Calendar size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.date}
                     </label>
                     <input
                       type="date"
@@ -359,24 +379,26 @@ export default function PrivateJetRequestForm({ lang }) {
                       value={formData.date}
                       onChange={handleChange}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Calendar size={16} className="me-1" /> {t.returnDate}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Calendar size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.returnDate}
                     </label>
                     <input
                       type="date"
                       name="returnDate"
                       value={formData.returnDate}
                       onChange={handleChange}
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <MapPin size={16} className="me-1" /> {t.departure}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <MapPin size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.departure}
                     </label>
                     <input
                       type="text"
@@ -385,12 +407,13 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       placeholder={t.departurePlaceholder}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <MapPin size={16} className="me-1" /> {t.destination}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <MapPin size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.destination}
                     </label>
                     <input
                       type="text"
@@ -399,12 +422,13 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       placeholder={t.destinationPlaceholder}
                       required
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Users size={16} className="me-1" /> {t.passengers}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Users size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.passengers}
                     </label>
                     <input
                       type="number"
@@ -414,20 +438,26 @@ export default function PrivateJetRequestForm({ lang }) {
                       placeholder={t.passengersPlaceholder}
                       required
                       min="1"
-                      className="form-control form-control-lg rounded-3"
+                      className="form-control form-control-lg"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-md-6">
-                    <label className="form-label fw-semibold">
-                      <Plane size={16} className="me-1" /> {t.aircraftType}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <Plane size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.aircraftType}
                     </label>
                     <select
                       name="aircraftType"
                       value={formData.aircraftType}
                       onChange={handleChange}
                       required
-                      className={`form-select form-select-lg rounded-3 pj-select ${isRTL ? 'text-end' : 'text-start'}`}
-                      style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+                      className={`form-select form-select-lg pj-select ${isRTL ? 'text-end' : 'text-start'}`}
+                      style={{ 
+                        direction: isRTL ? 'rtl' : 'ltr',
+                        borderRadius: "10px",
+                        borderColor: "rgba(28, 0, 82, 0.15)",
+                        fontSize: "0.95rem"
+                      }}
                     >
                       <option value="" disabled hidden>
                         {t.selectAircraftType}
@@ -440,8 +470,8 @@ export default function PrivateJetRequestForm({ lang }) {
                     </select>
                   </div>
                   <div className="col-12">
-                    <label className="form-label fw-semibold">
-                      <MessageCircle size={16} className="me-1" /> {t.specialRequests}
+                    <label className="form-label fw-semibold" style={{ color: "#1C0052" }}>
+                      <MessageCircle size={16} className={isRTL ? "ms-1" : "me-1"} /> {t.specialRequests}
                     </label>
                     <textarea
                       name="specialRequests"
@@ -449,19 +479,21 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       rows="4"
                       placeholder={t.specialRequestsPlaceholder}
-                      className="form-control rounded-3"
+                      className="form-control"
+                      style={{ borderRadius: "10px", borderColor: "rgba(28, 0, 82, 0.15)", fontSize: "0.95rem" }}
                     />
                   </div>
                   <div className="col-12 mt-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="btn btn-warning btn-lg w-100 rounded-3 fw-semibold"
+                      className="btn btn-lg w-100 fw-semibold text-white transition-all"
                       style={{
-                        background: "linear-gradient(135deg, #f5af19 0%, #f12711 100%)",
+                        background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)",
                         border: "none",
-                        color: "#fff",
                         padding: "14px",
+                        borderRadius: "10px",
+                        boxShadow: "0 4px 15px rgba(232, 93, 31, 0.2)"
                       }}
                     >
                       {isSubmitting ? (
@@ -471,19 +503,19 @@ export default function PrivateJetRequestForm({ lang }) {
                         </>
                       ) : (
                         <>
-                          <Send size={18} className="me-2" /> {t.submit}
+                          <Send size={18} className={isRTL ? "ms-2" : "me-2"} /> {t.submit}
                         </>
                       )}
                     </button>
                   </div>
                   {submitStatus === "success" && (
-                    <div className="alert alert-success rounded-3 d-flex align-items-center gap-2">
+                    <div className="alert alert-success d-flex align-items-center gap-2" style={{ borderRadius: "10px" }}>
                       <CheckCircle size={18} />
                       {t.submitSuccess}
                     </div>
                   )}
                   {submitStatus === "error" && (
-                    <div className="alert alert-danger rounded-3">{t.submitError}</div>
+                    <div className="alert alert-danger" style={{ borderRadius: "10px" }}>{t.submitError}</div>
                   )}
                 </div>
               </form>
@@ -498,64 +530,119 @@ export default function PrivateJetRequestForm({ lang }) {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="col-lg-5"
         >
-          <div className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
-            <div className="card-header bg-dark text-white py-3 px-4 border-0">
+          <div 
+            className="card border-0 shadow-sm mb-4 overflow-hidden"
+            style={{
+              borderRadius: "10px",
+              border: "1px solid rgba(28, 0, 82, 0.06)",
+              backgroundColor: "#ffffff"
+            }}
+          >
+            <div 
+              className="card-header text-white py-3 px-4 border-0"
+              style={{
+                backgroundColor: "#1C0052"
+              }}
+            >
               <h4 className="h5 mb-0 fw-semibold">{t.featuresTitle}</h4>
             </div>
             <div className="card-body p-4">
               <div className="d-flex gap-3 mb-4">
-                <div className="bg-warning bg-opacity-10 rounded-3 p-3" style={{ width: "50px", height: "50px" }}>
-                  <Plane size={24} className="text-warning" />
+                <div 
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    backgroundColor: "rgba(232, 93, 31, 0.08)",
+                    borderRadius: "10px",
+                    width: "50px",
+                    height: "50px",
+                    flexShrink: 0
+                  }}
+                >
+                  <Plane size={24} style={{ color: "#E85D1F" }} />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.luxury}</h6>
+                  <h6 className="fw-bold mb-1" style={{ color: "#1C0052" }}>{t.luxury}</h6>
                   <p className="text-muted small mb-0">{t.luxuryDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
-                <div className="bg-warning bg-opacity-10 rounded-3 p-3" style={{ width: "50px", height: "50px" }}>
-                  <MapPin size={24} className="text-warning" />
+                <div 
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    backgroundColor: "rgba(28, 0, 82, 0.08)",
+                    borderRadius: "10px",
+                    width: "50px",
+                    height: "50px",
+                    flexShrink: 0
+                  }}
+                >
+                  <MapPin size={24} style={{ color: "#1C0052" }} />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.global}</h6>
+                  <h6 className="fw-bold mb-1" style={{ color: "#1C0052" }}>{t.global}</h6>
                   <p className="text-muted small mb-0">{t.globalDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
-                <div className="bg-warning bg-opacity-10 rounded-3 p-3" style={{ width: "50px", height: "50px" }}>
-                  <Clock size={24} className="text-warning" />
+                <div 
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    backgroundColor: "rgba(232, 93, 31, 0.08)",
+                    borderRadius: "10px",
+                    width: "50px",
+                    height: "50px",
+                    flexShrink: 0
+                  }}
+                >
+                  <Clock size={24} style={{ color: "#E85D1F" }} />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.flexibility}</h6>
+                  <h6 className="fw-bold mb-1" style={{ color: "#1C0052" }}>{t.flexibility}</h6>
                   <p className="text-muted small mb-0">{t.flexibilityDesc}</p>
                 </div>
               </div>
               <div className="d-flex gap-3">
-                <div className="bg-warning bg-opacity-10 rounded-3 p-3" style={{ width: "50px", height: "50px" }}>
-                  <CheckCircle size={24} className="text-warning" />
+                <div 
+                  className="d-flex align-items-center justify-content-center"
+                  style={{
+                    backgroundColor: "rgba(28, 0, 82, 0.08)",
+                    borderRadius: "10px",
+                    width: "50px",
+                    height: "50px",
+                    flexShrink: 0
+                  }}
+                >
+                  <CheckCircle size={24} style={{ color: "#1C0052" }} />
                 </div>
                 <div>
-                  <h6 className="fw-bold mb-1">{t.safety}</h6>
+                  <h6 className="fw-bold mb-1" style={{ color: "#1C0052" }}>{t.safety}</h6>
                   <p className="text-muted small mb-0">{t.safetyDesc}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
+          <div 
+            className="card border-0 shadow-sm overflow-hidden"
+            style={{
+              borderRadius: "10px",
+              border: "1px solid rgba(28, 0, 82, 0.06)",
+              backgroundColor: "#ffffff"
+            }}
+          >
             <div className="card-body p-4">
-              <h5 className="fw-bold mb-3">{t.contactInfo}</h5>
-              <div className="border-bottom pb-3 mb-3">
+              <h5 className="fw-bold mb-3" style={{ color: "#1C0052" }}>{t.contactInfo}</h5>
+              <div className="border-bottom pb-3 mb-3" style={{ borderColor: "rgba(28, 0, 82, 0.06)" }}>
                 <p className="text-muted small mb-1">{t.workingHours}</p>
-                <p className="fw-semibold mb-0">{t.workingHoursDetail}</p>
+                <p className="fw-semibold mb-0" style={{ color: "#1C0052" }}>{t.workingHoursDetail}</p>
               </div>
-              <div className="border-bottom pb-3 mb-3">
+              <div className="border-bottom pb-3 mb-3" style={{ borderColor: "rgba(28, 0, 82, 0.06)" }}>
                 <p className="text-muted small mb-1">{t.callUs}</p>
-                <p className="fw-semibold mb-0">966547305060</p>
+                <p className="fw-semibold mb-0" style={{ color: "#E85D1F" }}>966547305060</p>
               </div>
               <div>
                 <p className="text-muted small mb-1">{t.emailUs}</p>
-                <p className="fw-semibold mb-0">info@tilalr.com</p>
+                <p className="fw-semibold mb-0" style={{ color: "#E85D1F" }}>info@tilalr.com</p>
               </div>
             </div>
           </div>
@@ -565,7 +652,7 @@ export default function PrivateJetRequestForm({ lang }) {
         .pj-select {
           background-color: #ffffff !important;
           color: #1a1a1a !important;
-          border-color: #ced4da !important;
+          border-color: rgba(28, 0, 82, 0.15) !important;
           box-shadow: none !important;
           appearance: menulist !important;
         }
@@ -576,9 +663,9 @@ export default function PrivateJetRequestForm({ lang }) {
         }
 
         .pj-select:focus {
-          border-color: #86b7fe !important;
+          border-color: #E85D1F !important;
           outline: 0 !important;
-          box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25) !important;
+          box-shadow: 0 0 0 0.2rem rgba(232, 93, 31, 0.15) !important;
         }
       `}</style>
     </div>

@@ -42,14 +42,14 @@ const Saudi = ({ lang = "ar" }) => {
   // 1. Text Content
   const content = {
     en: {
-      title: "Welcome to Tilal Rimal. We provide high-quality, competitively priced tourism experiences that combine enjoyment with local expertise to create unforgettable memories. Our dedicated team plans every trip with care.",
-      subtitle: "",
+      title: "Welcome to Tilal Rimal.",
+      subtitle: "We provide high-quality, competitively priced tourism experiences that combine enjoyment with local expertise to create unforgettable memories. Our dedicated team plans every trip with care.",
       desc: "Let us plan while you enjoy the journey.",
       button: "Discover More",
     },
     ar: {
-      title: "مرحبًا بكم في التلال رمال. نقدم تجارب سياحية عالية الجودة وبأسعار تنافسية تجمع بين المتعة والخبرة المحلية لصنع ذكريات لا تُنسى. فريقنا المتفاني يخطط لكل رحلة بعناية — اكتشف السعودية بمنظور جديد.",
-      subtitle: "",
+      title: "مرحبًا بكم في التلال رمال.",
+      subtitle: " نقدم تجارب سياحية عالية الجودة وبأسعار تنافسية تجمع بين المتعة والخبرة المحلية لصنع ذكريات لا تُنسى. فريقنا المتفاني يخطط لكل رحلة بعناية — اكتشف السعودية بمنظور جديد.",
       desc: "دعنا نخطط بينما تستمتع بالرحلة.",
       button: "اكتشف المزيد",
     },
@@ -220,37 +220,38 @@ const Saudi = ({ lang = "ar" }) => {
       >
         {/* Text Section */}
         <div className={styles.textSection}>
-          <h1 className={`${styles.mainTitle} whitespace-nowrap overflow-hidden text-white`} style={{ fontSize: "1.75rem" }}>
+          <h1 className={styles.mainTitle}>
             {t.title}
           </h1>
-          <h2 className={`${styles.subTitle} text-yellow-400 text-[8px] md:text-[10px] whitespace-nowrap`}>
+          <h2 className={styles.subTitle}>
             {t.subtitle}
           </h2>
-          <p className={`${styles.description} text-white text-[20px] md:text-[20px] mt-1`}>
+          <p className={styles.description}>
             {t.desc}
           </p>
           <Link href={`/${lang}/tousimoffers`}>
             <button 
               style={{
-                background: "linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%)",
+                background: "linear-gradient(135deg, #E85D1F 0%, #dba800ff 100%)",
                 marginTop: "24px",
-                padding: "12px 32px",
+                padding: "14px 36px",
                 fontSize: "16px",
-                fontWeight: "bold",
-                color: "#1a1a1a",
+                fontWeight: "700",
+                color: "#FFFFFF",
                 border: "none",
                 borderRadius: "8px",
                 cursor: "pointer",
-                transition: "all 0.3s ease",
-                boxShadow: "0 4px 15px rgba(223, 165, 40, 0.3)",
-                textTransform: "capitalize"
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: "0 4px 20px rgba(232, 93, 31, 0.3)",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px"
               }}
               onMouseEnter={(e) => {
-                e.target.style.boxShadow = "0 8px 25px rgba(223, 165, 40, 0.5)";
-                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 8px 30px rgba(232, 93, 31, 0.5)";
+                e.target.style.transform = "translateY(-3px)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.boxShadow = "0 4px 15px rgba(223, 165, 40, 0.3)";
+                e.target.style.boxShadow = "0 4px 20px rgba(232, 93, 31, 0.3)";
                 e.target.style.transform = "translateY(0)";
               }}
             >

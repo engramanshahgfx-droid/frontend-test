@@ -2,34 +2,34 @@
 
 .page {
   min-height: 100vh;
-  background: radial-gradient(circle at top, #fff7ea 0%, #fdfdfd 45%, #f2f5f8 100%);
-  padding-top: 120px;
+  background: #FAF6F0;
+  padding-top: 150px;
   padding-left: 16px;
   padding-right: 16px;
   padding-bottom: 56px;
-  color: #122230;
+  color: #1C0052;
   overflow-x: hidden;
 }
 
 /* Hero */
 .hero {
   max-width: 1100px;
-  margin: 50 auto 20px;
-  background: linear-gradient(120deg, #1f4e5f 0%, #2a6f83 100%);
-  border-radius: 18px;
-  padding: 24px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, #1C0052 0%, #0F0030 100%);
+  border-radius: 10px;
+  padding: 32px 24px;
   color: #ffffff;
-  box-shadow: 0 16px 36px rgba(13, 52, 69, 0.24);
+  box-shadow: 0 4px 20px rgba(28, 0, 82, 0.15);
 }
 
 .badge {
   display: inline-block;
-  background: #f2c264;
-  color: #2d2103;
-  border-radius: 999px;
+  background: #E85D1F;
+  color: #ffffff;
+  border-radius: 10px;
   padding: 6px 14px;
   font-size: 0.84rem;
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   font-weight: 700;
 }
 
@@ -37,12 +37,15 @@
   margin: 0;
   font-size: clamp(1.45rem, 2.6vw, 2.2rem);
   line-height: 1.35;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 800;
 }
 
 .subtitle {
-  margin: 10px 0 0;
+  margin: 12px 0 0;
   font-size: 1rem;
-  opacity: 0.95;
+  opacity: 0.9;
+  font-family: 'Tajawal', sans-serif;
 }
 
 /* Content */
@@ -50,29 +53,31 @@
   max-width: 1100px;
   margin: 0 auto;
   display: grid;
-  gap: 16px;
+  gap: 24px;
 }
 
 /* Section Cards - Used by all child components */
 .sectionCard {
   background: #ffffff;
-  border: 1px solid #e4eaef;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(18, 34, 48, 0.06);
+  border: 1px solid rgba(28, 0, 82, 0.06);
+  border-radius: 10px;
+  padding: 30px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
 .sectionTitle {
-  margin: 0 0 8px 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #1f4e5f;
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1C0052;
+  font-family: 'Tajawal', sans-serif;
 }
 
 .sectionLead {
-  margin: 0 0 16px 0;
-  color: #365367;
+  margin: 0 0 20px 0;
+  color: #666;
   font-size: 1rem;
+  font-family: 'Tajawal', sans-serif;
 }
 
 /* Form Styles */
@@ -96,7 +101,8 @@
 .field label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #17384d;
+  color: #1C0052;
+  font-family: 'Tajawal', sans-serif;
 }
 
 .field input,
@@ -104,21 +110,21 @@
 .field textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #c8d4de;
+  border: 1px solid rgba(28, 0, 82, 0.15);
   border-radius: 10px;
   font-size: 0.95rem;
   background: #ffffff;
   color: #102736;
   box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: #78adc9;
-  box-shadow: 0 0 0 3px rgba(120, 173, 201, 0.2);
+  border-color: #E85D1F;
+  box-shadow: 0 0 0 3px rgba(232, 93, 31, 0.1);
 }
 
 .field input:disabled,
@@ -130,18 +136,19 @@
 
 /* Attachments */
 .attachmentsBox {
-  border: 2px dashed #a8bfce;
-  border-radius: 12px;
+  border: 2px dashed rgba(232, 93, 31, 0.25);
+  border-radius: 10px;
   padding: 20px;
-  background: #f8fbfd;
+  background: rgba(232, 93, 31, 0.02);
   margin-top: 8px;
 }
 
 .attachmentsTitle {
   margin: 0 0 16px 0;
   font-size: 1rem;
-  font-weight: 600;
-  color: #0f394f;
+  font-weight: 700;
+  color: #1C0052;
+  font-family: 'Tajawal', sans-serif;
 }
 
 /* Services Grid */
@@ -153,8 +160,8 @@
 }
 
 .serviceItem {
-  background: #f5f9fc;
-  border: 1px solid #d6e2ea;
+  background: rgba(28, 0, 82, 0.03);
+  border: 1px solid rgba(28, 0, 82, 0.06);
   border-radius: 10px;
   padding: 12px 16px;
   display: flex;
@@ -164,15 +171,15 @@
 }
 
 .checkMark {
-  color: #0f6b2c;
+  color: #E85D1F;
   font-weight: 800;
   font-size: 1.1rem;
 }
 
 /* Submit Button */
 .submitButton {
-  background: linear-gradient(135deg, #d29a2f 0%, #efc880 100%);
-  color: #2b1c00;
+  background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+  color: white;
   border: none;
   border-radius: 10px;
   padding: 14px 32px;
@@ -181,12 +188,12 @@
   cursor: pointer;
   transition: all 0.3s ease;
   justify-self: start;
+  box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
 }
 
 .submitButton:hover {
-  filter: brightness(1.05);
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(210, 154, 47, 0.3);
+  box-shadow: 0 6px 20px rgba(232, 93, 31, 0.35);
 }
 
 .submitButton:disabled {
@@ -209,7 +216,7 @@
 /* Mobile Responsive */
 @media (max-width: 880px) {
   .page {
-    padding-top: 100px !important;
+    padding-top: 130px !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
     padding-bottom: 40px !important;
@@ -225,21 +232,21 @@
   }
 
   .sectionCard {
-    padding: 18px;
+    padding: 20px 18px;
   }
 }
 
 @media (max-width: 580px) {
   .page {
-    padding-top: 90px !important;
+    padding-top: 120px !important;
     padding-left: 12px !important;
     padding-right: 12px !important;
     padding-bottom: 32px !important;
   }
 
   .hero {
-    padding: 18px !important;
-    border-radius: 14px !important;
+    padding: 20px 18px !important;
+    border-radius: 10px !important;
     margin-top: 0 !important;
   }
 
@@ -253,16 +260,16 @@
 
   .badge {
     font-size: 0.75rem !important;
-    padding: 20px 30px !important;
+    padding: 6px 14px !important;
   }
 
   .sectionCard {
-    padding: 14px !important;
-    border-radius: 14px !important;
+    padding: 18px 14px !important;
+    border-radius: 10px !important;
   }
 
   .sectionTitle {
-    font-size: 1.1rem !important;
+    font-size: 1.15rem !important;
   }
 
   .serviceGrid {
@@ -289,7 +296,7 @@
 
 @media (max-width: 380px) {
   .page {
-    padding-top: 80px !important;
+    padding-top: 110px !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
     padding-bottom: 24px !important;

@@ -36,7 +36,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     package_id: "",
     package_code: "",
     notes: "",
-    guests: 1,
+    guests: 2,
     special_requests: "",
     booking_type: bookingType,
   });
@@ -64,51 +64,21 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     return parseJsonField(packageData?.basic_info, {});
   };
 
-  const getRoomRate = (roomType) => {
-    const basicInfo = getPackageBasicInfo();
-    const defaultPrice = Number(packageData?.price) || 0;
+  const calculateTotalPrice = () => {
+    const guests = Number(formData.guests) || 1;
+    const packagePrice = Number(packageData?.price ?? 0);
+    const singleSupplementPrice = Number(packageData?.single_room_price ?? packagePrice);
 
-    const rawRate =
-      roomType === "DoubleRoom"
-        ? packageData?.double_room_price ??
-          basicInfo.double_room ??
-          basicInfo.doubleRoom ??
-          packageData?.price
-        : packageData?.single_room_price ??
-          basicInfo.single_room ??
-          basicInfo.singleRoom ??
-          packageData?.double_room_price ??
-          basicInfo.double_room ??
-          basicInfo.doubleRoom ??
-          packageData?.price;
+    const evenPackages = Math.floor(guests / 2);
+    const singleSupplementCount = guests % 2;
 
-    return Number(rawRate) || defaultPrice;
+    return (evenPackages * packagePrice) + (singleSupplementCount * singleSupplementPrice);
   };
-
-  const getBasePrice = () => getRoomRate(formData.room_type);
 
   const packageTitle =
     lang === "ar"
       ? packageData?.title_ar ?? packageData?.title_en ?? packageData?.title
       : packageData?.title_en ?? packageData?.title_ar ?? packageData?.title;
-
-  // Calculate total price based on room type and guests
-  const calculateTotalPrice = () => {
-    const basePrice = getBasePrice();
-    const guests = formData.guests || 1;
-    const roomType = formData.room_type;
-
-    if (roomType === "DoubleRoom") {
-      if (guests <= 2) {
-        return basePrice;
-      } else {
-        const extraGuests = guests - 2;
-        return basePrice + extraGuests * basePrice * 0.5;
-      }
-    } else {
-      return basePrice * guests;
-    }
-  };
 
   // Update total amount when form data changes
   useEffect(() => {
@@ -174,10 +144,10 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       newErrors.travel_date = isRTL
         ? "تاريخ السفر مطلوب"
         : "The Travel Date field is required.";
-    if (!formData.guests || formData.guests < 1)
+    if (!formData.guests || formData.guests < 2)
       newErrors.guests = isRTL
-        ? "يرجى اختيار ضيف واحد على الأقل"
-        : "Please select at least 1 guest";
+        ? "يرجى اختيار ضيفين على الأقل"
+        : "Please select at least 2 guests";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -216,7 +186,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       package_code: packageCode,
       notes: formData.notes || "",
       payment_method: "credit_card",
-      booking_type: formData.booking_type || bookingType,
+      booking_type: "destination",
       guests: formData.guests || 1,
       special_requests: formData.special_requests || "",
       total_amount: calculatedTotal,
@@ -287,9 +257,9 @@ const initiatePayment = async (bookingId, amount) => {
       package_id: "",
       package_code: "",
       notes: "",
-      guests: 1,
+      guests: 2,
       special_requests: "",
-      booking_type: bookingType,
+      booking_type: "destination",
     });
     setErrors({});
     setIsRedirecting(false);
@@ -391,36 +361,24 @@ const initiatePayment = async (bookingId, amount) => {
 
   // Get price breakdown for display
   const getPriceBreakdown = () => {
-    const basePrice = getBasePrice();
     const guests = formData.guests || 1;
-    const roomType = formData.room_type;
+    const packagePrice = Number(packageData?.price ?? 0);
+    const singleSupplementPrice = Number(packageData?.single_room_price ?? packagePrice);
 
-    if (roomType === "DoubleRoom") {
-      if (guests <= 2) {
-        return {
-          basePrice: basePrice,
-          extraCost: 0,
-          total: basePrice,
-          description: t.roomPrice,
-        };
-      } else {
-        const extraGuests = guests - 2;
-        const extraCost = extraGuests * basePrice * 0.5;
-        return {
-          basePrice: basePrice,
-          extraCost: extraCost,
-          total: basePrice + extraCost,
-          description: `${t.roomPrice} + ${extraGuests} ${t.additionalGuests}`,
-        };
-      }
-    } else {
-      return {
-        basePrice: basePrice * guests,
-        extraCost: 0,
-        total: basePrice * guests,
-        description: `${guests} × ${t.pricePerPerson}`,
-      };
+    const evenPackages = Math.floor(guests / 2);
+    const singleSupplementCount = guests % 2;
+    const total = (evenPackages * packagePrice) + (singleSupplementCount * singleSupplementPrice);
+    
+    let description = `${evenPackages} × ${packagePrice} SAR (${isRTL ? "باقة لشخصين" : "Package for 2 Persons"})`;
+    if (singleSupplementCount > 0) {
+      description += ` + ${singleSupplementCount} × ${singleSupplementPrice} SAR (${isRTL ? "ترقية مفردة لشخص" : "Single Supplement for 1 Person"})`;
     }
+    return {
+      basePrice: packagePrice,
+      extraCost: singleSupplementCount * singleSupplementPrice,
+      total: total,
+      description: description,
+    };
   };
 
   return (
@@ -941,53 +899,6 @@ const initiatePayment = async (bookingId, amount) => {
                       )}
                     </div>
 
-                    {/* Room Type */}
-                    <div style={{ gridColumn: "1 / -1" }}>
-                      <label
-                        style={{
-                          display: "block",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          marginBottom: "6px",
-                          color: "#333",
-                        }}
-                      >
-                        {t.roomType} <span style={{ color: "#dc3545" }}>*</span>
-                      </label>
-                      <div style={{ position: "relative" }}>
-                        <Bed
-                          size={18}
-                          style={{
-                            position: "absolute",
-                            [isRTL ? "right" : "left"]: "12px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            color: "#999",
-                          }}
-                        />
-                        <select
-                          name="room_type"
-                          value={formData.room_type}
-                          onChange={handleChange}
-                          style={{
-                            width: "100%",
-                            padding: isRTL
-                              ? "10px 40px 10px 12px"
-                              : "10px 12px 10px 40px",
-                            border: "2px solid #e0e0e0",
-                            borderRadius: "8px",
-                            fontSize: "14px",
-                            outline: "none",
-                            background: "#fff",
-                            textAlign: isRTL ? "right" : "left",
-                          }}
-                        >
-                          <option value="DoubleRoom">{t.doubleRoom}</option>
-                          <option value="SingleRoom">{t.singleRoom}</option>
-                        </select>
-                      </div>
-                    </div>
-
                     {/* Guests Input */}
                     <div style={{ gridColumn: "1 / -1" }}>
                       <label
@@ -1017,7 +928,7 @@ const initiatePayment = async (bookingId, amount) => {
                           name="guests"
                           value={formData.guests}
                           onChange={handleChange}
-                          min="1"
+                          min="2"
                           max="20"
                           style={{
                             width: "100%",

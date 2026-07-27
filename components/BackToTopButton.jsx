@@ -37,7 +37,7 @@ const BackToTopButton = () => {
     <div
       className={`${styles["back-to-top"]} ${
         isActive ? styles.active : ""
-      } primary-bg`}
+      }`}
       onClick={handleBackToTop}
     >
       <FaArrowUp className={styles.icon} />

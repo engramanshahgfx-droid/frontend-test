@@ -305,31 +305,21 @@ export default function Contact({ lang }) {
         </div>
       </section>
 
-      {/* WhatsApp Float Button */}
-      <a
-        href={`https://wa.me/+966547305060`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="whatsapp-float"
-      >
-        <FaWhatsapp size={24} />
-      </a>
-
       <style jsx>{`
         .contact-page {
           font-family: "Tajawal", sans-serif;
           min-height: 100vh;
-          padding: 60px 0;
-          background: #f8f9fa;
+          padding: 0;
+          background: #FAF6F0;
         }
 
         .banner {
-          padding: 120px 0 60px;
+          padding: 150px 0 60px;
           position: relative;
           overflow: visible;
-          border-bottom-left-radius: 28px;
-          border-bottom-right-radius: 28px;
-          background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 70%);
+          border-bottom-left-radius: 10px;
+          border-bottom-right-radius: 10px;
+          background: linear-gradient(135deg, #1C0052 0%, #0F0030 100%);
           color: #fff;
           box-shadow: 0 6px 24px rgba(0,0,0,0.06) inset;
         }
@@ -343,7 +333,7 @@ export default function Contact({ lang }) {
         }
 
         .banner-inner {
-          max-width: 1100px;
+          max-width: 1200px;
           margin: 0 auto;
           padding: 0 1rem;
           text-align: ${isRTL ? "right" : "left"};
@@ -364,39 +354,29 @@ export default function Contact({ lang }) {
           font-size: 1.1rem;
         }
 
-        :global(.navbar) {
-          background: rgba(255, 255, 255, 0.92) !important;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-          backdrop-filter: blur(6px);
-          z-index: 1100;
-        }
-
-        :global(.navbar .nav-link),
-        :global(.navbar .navbar-brand),
-        :global(.navbar .nav-item .nav-link) {
-          color: var(--dark-color) !important;
-        }
-
         .contact-section {
-          padding: 30px 0;
+          padding: 40px 0;
         }
 
         .contact-wrapper {
-          margin-top: -100px;
+          margin-top: -80px;
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 3rem;
           align-items: start;
+          max-width: 1200px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .form-container {
           background: white;
-          border-radius: 20px;
+          border-radius: 10px;
           padding: 2.5rem;
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           position: relative;
           z-index: 3;
-          border-top: 6px solid rgba(138,119,121,0.06);
+          border: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .form-header {
@@ -405,14 +385,14 @@ export default function Contact({ lang }) {
         }
 
         .form-header h2 {
-          color: #835004ff;
+          color: #1C0052;
           font-weight: 800;
           font-size: 2rem;
           margin-bottom: 0.5rem;
         }
 
         .form-header p {
-          color: #5d6d7e;
+          color: #555;
           font-size: 1rem;
         }
 
@@ -423,7 +403,7 @@ export default function Contact({ lang }) {
         .form-control {
           width: 100%;
           border: 2px solid #e9ecef;
-          border-radius: 12px;
+          border-radius: 10px;
           padding: 12px 15px;
           font-size: 1rem;
           transition: all 0.3s ease;
@@ -432,8 +412,8 @@ export default function Contact({ lang }) {
 
         .form-control:focus {
           outline: none;
-          border-color: #8a7779;
-          box-shadow: 0 0 0 0.2rem rgba(138, 119, 121, 0.25);
+          border-color: #E85D1F;
+          box-shadow: 0 0 0 0.2rem rgba(232, 93, 31, 0.15);
         }
 
         .form-control::placeholder {
@@ -466,11 +446,11 @@ export default function Contact({ lang }) {
 
         .btn-submit {
           width: 100%;
-          background: linear-gradient(135deg, #7f5f60, #a89294);
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           color: white;
           border: none;
           padding: 14px 30px;
-          border-radius: 12px;
+          border-radius: 10px;
           font-weight: 700;
           font-size: 1.05rem;
           cursor: pointer;
@@ -479,12 +459,12 @@ export default function Contact({ lang }) {
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          box-shadow: 0 8px 20px rgba(138, 119, 121, 0.12);
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
         }
 
         .btn-submit:hover:not(:disabled) {
           transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(138, 119, 121, 0.25);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.35);
         }
 
         .btn-submit:disabled {
@@ -495,7 +475,7 @@ export default function Contact({ lang }) {
         .alert {
           margin-top: 1.5rem;
           padding: 1rem;
-          border-radius: 8px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           gap: 0.5rem;
@@ -513,14 +493,14 @@ export default function Contact({ lang }) {
           border: 1px solid #f5c6cb;
         }
 
-        /* FIXED: Info container with proper styling to not show behind banner */
         .info-container {
           background: white;
-          border-radius: 20px;
+          border-radius: 10px;
           padding: 2.5rem;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           position: relative;
           z-index: 3;
+          border: 1px solid rgba(28, 0, 82, 0.06);
         }
 
         .contact-info {
@@ -540,18 +520,18 @@ export default function Contact({ lang }) {
         }
 
         .contact-item:hover {
-          background: #f8f9fa;
+          background: rgba(28, 0, 82, 0.03);
         }
 
         .contact-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 1.5rem;
           flex-shrink: 0;
         }
 
         .contact-item strong {
           display: block;
-          color: #2c3e50;
+          color: #1C0052;
           font-size: 1rem;
           margin-bottom: 0.25rem;
           font-weight: 700;
@@ -559,11 +539,10 @@ export default function Contact({ lang }) {
 
         .contact-item span {
           display: block;
-          color: #6c7a8a;
+          color: #555;
           font-size: 0.85rem;
         }
 
-        /* WhatsApp Float Button */
         .whatsapp-float {
           position: fixed;
           bottom: 2rem;
@@ -588,7 +567,6 @@ export default function Contact({ lang }) {
           color: white;
         }
 
-        /* Responsive Design */
         @media (max-width: 968px) {
           .contact-wrapper {
             margin-top: -40px;

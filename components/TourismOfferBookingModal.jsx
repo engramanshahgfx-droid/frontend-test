@@ -91,62 +91,14 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     return offerData.title_en || offerData.title_ar || offerData.title || 'Tourism Offer';
   };
 
-  // Helper to get the selected room rate from the offer data
   const getOfferPrice = () => {
     if (!offerData) return 0;
-
-    const basicInfo = (() => {
-      if (!offerData.basic_info) return {};
-      if (typeof offerData.basic_info === 'string') {
-        try {
-          return JSON.parse(offerData.basic_info);
-        } catch {
-          return {};
-        }
-      }
-      return offerData.basic_info;
-    })();
-
-    const doubleRoomPrice = Number(
-      offerData.double_room_price ??
-        basicInfo.double_room ??
-        basicInfo.doubleRoom ??
-        offerData.price ??
-        offerData.original_price ??
-        0
-    );
-
-    const singleRoomPrice = Number(
-      offerData.single_room_price ??
-        basicInfo.single_room ??
-        basicInfo.singleRoom ??
-        offerData.double_room_price ??
-        basicInfo.double_room ??
-        basicInfo.doubleRoom ??
-        offerData.price ??
-        offerData.original_price ??
-        0
-    );
-
-    return formData.room_type === 'DoubleRoom' ? doubleRoomPrice : singleRoomPrice;
+    return Number(offerData.price ?? offerData.original_price ?? 0);
   };
 
   const calculateOfferTotal = () => {
-    const price = getOfferPrice();
     const guests = Number(formData.guests) || 1;
-
-    if (!price || guests < 1) {
-      return 0;
-    }
-
-    if (formData.room_type === 'DoubleRoom') {
-      if (guests <= 2) {
-        return price;
-      }
-      const extraGuests = guests - 2;
-      return price + extraGuests * price * 0.5;
-    }
-
+    const price = getOfferPrice();
     return price * guests;
   };
 
@@ -186,8 +138,7 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     setErrors({});
 
     try {
-      // Get the offer price
-      const offerPrice = getOfferPrice();
+      const offerPrice = Number(offerData?.price ?? offerData?.original_price ?? 0);
       const totalAmount = calculateOfferTotal();
 
       if (!offerPrice || totalAmount <= 0) {
@@ -529,38 +480,6 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                           {errors.travel_date}
                         </span>
                       )}
-                    </div>
-
-                    <div style={{ gridColumn: '1 / -1' }}>
-                      <label style={{ display: 'block', fontSize: '14px', fontWeight: '600', marginBottom: '6px', color: '#333' }}>
-                        {t.roomType} <span style={{ color: '#dc3545' }}>*</span>
-                      </label>
-                      <div style={{ position: 'relative' }}>
-                        <Bed size={18} style={{
-                          position: 'absolute',
-                          left: '12px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          color: '#999'
-                        }} />
-                        <select
-                          name="room_type"
-                          value={formData.room_type}
-                          onChange={handleChange}
-                          style={{
-                            width: '100%',
-                            padding: '10px 12px 10px 40px',
-                            border: '2px solid #e0e0e0',
-                            borderRadius: '8px',
-                            fontSize: '14px',
-                            outline: 'none',
-                            background: '#fff'
-                          }}
-                        >
-                          <option value="DoubleRoom">{t.doubleRoom}</option>
-                          <option value="SingleRoom">{t.singleRoom}</option>
-                        </select>
-                      </div>
                     </div>
 
                     <div style={{ gridColumn: '1 / -1' }}>

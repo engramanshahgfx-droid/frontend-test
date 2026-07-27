@@ -104,7 +104,7 @@ export default function Transportation({ lang }) {
           features: ["Affordable Flights", "Multiple Destinations", "Direct Flights", "Fast Service"]
         },
         {
-          name: "Adele Airlines",
+          name: "Flyadeal Airlines",
           description: "Offers daily flights to the most important cities and tourist destinations in Saudi Arabia, with international flights also available.",
           image: "/Adele.jpg",
           features: ["Daily Flights", "Local Destinations", "Competitive Prices", "Premium Service"]
@@ -241,7 +241,7 @@ export default function Transportation({ lang }) {
             playsInline
             className="background-video"
           >
-            <source src="/desert3.mp4" type="video/mp4" />
+            <source src="/desert2.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <div className="video-overlay"></div>
@@ -432,14 +432,13 @@ export default function Transportation({ lang }) {
 
       <style jsx>{`
         .transportation-page {
-          background: #f8f9fa;
-          font-family: 'Tajawal', sans-serif;
+          background: #FAF6F0;
         }
 
         .transportation-hero {
           position: relative;
-          padding: 120px 0 80px;
-          min-height: 60vh;
+          padding: 150px 0 0 0;
+          min-height: 40vh;
           display: flex;
           align-items: center;
           overflow: hidden;
@@ -450,7 +449,7 @@ export default function Transportation({ lang }) {
           top: 0;
           left: 0;
           width: 100%;
-          height: 100%;
+          height: 100vh;
           z-index: 1;
         }
 
@@ -466,9 +465,11 @@ export default function Transportation({ lang }) {
           left: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(135deg, 
-            rgba(138, 119, 121, 0.95) 0%, 
-            rgba(239, 200, 174, 0.85) 100%);
+          background: linear-gradient(
+            135deg, 
+            rgba(28, 0, 82, 0.9) 0%, 
+            rgba(249, 229, 210, 0.8) 100%
+          );
           z-index: 2;
         }
 
@@ -505,10 +506,12 @@ export default function Transportation({ lang }) {
 
         .intro-section, .flights-section, .cars-section, .trains-section, .contact-section {
           padding: 80px 0;
+          max-width: 1200px;
+          margin: 0 auto;
         }
 
         .section-title {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 800;
           font-size: 2.5rem;
           position: relative;
@@ -517,7 +520,7 @@ export default function Transportation({ lang }) {
         }
 
         .section-description {
-          color: #5d6d7e;
+          color: #555;
           font-size: 1.1rem;
           max-width: 700px;
           margin: 0 auto;
@@ -526,23 +529,20 @@ export default function Transportation({ lang }) {
         }
 
         .flights-subtitle {
-          color: #8a7779;
+          color: #E85D1F;
           font-weight: 600;
           margin-top: 1rem;
           font-family: 'Tajawal', sans-serif;
         }
 
         .intro-content h2, .cars-content h2 {
-          color: #2c3e50;
-          background: linear-gradient(135deg, #8a7779, #2c3e50);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #1C0052;
           font-family: 'Tajawal', sans-serif;
+          font-weight: 800;
         }
 
         .intro-description, .cars-description {
-          color: #5d6d7e;
+          color: #555;
           line-height: 1.8;
           font-size: 1.1rem;
           font-family: 'Tajawal', sans-serif;
@@ -550,18 +550,21 @@ export default function Transportation({ lang }) {
 
         .airline-card, .train-card {
           background: white;
-          border-radius: 20px;
+          border-radius: 10px;
           overflow: hidden;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           transition: all 0.3s ease;
           height: 100%;
-          border: 1px solid #e9ecef;
+          border: 1px solid rgba(28, 0, 82, 0.06);
           font-family: 'Tajawal', sans-serif;
+          display: flex;
+          flex-direction: column;
         }
 
         .airline-card:hover, .train-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          transform: translateY(-8px);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.12);
+          border-color: rgba(232, 93, 31, 0.3);
         }
 
         .airline-image, .train-image {
@@ -573,21 +576,24 @@ export default function Transportation({ lang }) {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.3s ease;
+          transition: transform 0.5s ease;
         }
 
         .airline-card:hover .airline-image img,
         .train-card:hover .train-image img {
-          transform: scale(1.1);
+          transform: scale(1.08);
         }
 
         .airline-content, .train-content {
           padding: 25px;
           font-family: 'Tajawal', sans-serif;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .airline-name, .train-name {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 700;
           margin-bottom: 15px;
           font-size: 1.3rem;
@@ -595,7 +601,7 @@ export default function Transportation({ lang }) {
         }
 
         .airline-description, .train-description {
-          color: #5d6d7e;
+          color: #555;
           margin-bottom: 20px;
           line-height: 1.6;
           font-family: 'Tajawal', sans-serif;
@@ -605,20 +611,25 @@ export default function Transportation({ lang }) {
           display: flex;
           flex-direction: column;
           gap: 8px;
+          margin-top: auto;
         }
 
         .feature-tag {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #8a7779;
+          background: rgba(232, 93, 31, 0.08);
+          color: #E85D1F;
+          border: 1px solid rgba(232, 93, 31, 0.15);
+          padding: 4px 12px;
+          border-radius: 10px;
           font-size: 0.9rem;
           font-weight: 500;
           font-family: 'Tajawal', sans-serif;
         }
 
         .feature-icon {
-          color: #f39c12;
+          color: #E85D1F;
           font-size: 0.8rem;
         }
 
@@ -632,13 +643,13 @@ export default function Transportation({ lang }) {
           display: flex;
           align-items: center;
           gap: 12px;
-          color: #5d6d7e;
+          color: #555;
           font-weight: 500;
           font-family: 'Tajawal', sans-serif;
         }
 
         .car-feature-item .feature-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 1.1rem;
         }
 
@@ -646,8 +657,12 @@ export default function Transportation({ lang }) {
           margin-bottom: 20px;
         }
 
+        .train-routes {
+          margin-top: auto;
+        }
+
         .train-routes h6, .train-features h6 {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 600;
           margin-bottom: 10px;
           font-family: 'Tajawal', sans-serif;
@@ -657,14 +672,14 @@ export default function Transportation({ lang }) {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: #5d6d7e;
+          color: #555;
           font-size: 0.9rem;
           margin-bottom: 5px;
           font-family: 'Tajawal', sans-serif;
         }
 
         .route-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 0.8rem;
         }
 
@@ -675,10 +690,11 @@ export default function Transportation({ lang }) {
         }
 
         .train-feature-tag {
-          background: rgba(138, 119, 121, 0.1);
-          color: #8a7779;
+          background: rgba(232, 93, 31, 0.08);
+          color: #E85D1F;
+          border: 1px solid rgba(232, 93, 31, 0.15);
           padding: 4px 12px;
-          border-radius: 15px;
+          border-radius: 10px;
           font-size: 0.8rem;
           font-weight: 500;
           font-family: 'Tajawal', sans-serif;
@@ -687,41 +703,42 @@ export default function Transportation({ lang }) {
         .contact-cta {
           background: white;
           padding: 50px;
-          border-radius: 25px;
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-          border: 2px solid #ecf0f1;
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+          border: 1px solid rgba(28, 0, 82, 0.06);
           font-family: 'Tajawal', sans-serif;
         }
 
         .contact-cta h3 {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 700;
           font-size: 1.8rem;
           font-family: 'Tajawal', sans-serif;
         }
 
         .contact-cta p {
-          color: #5d6d7e;
+          color: #555;
           font-size: 1.1rem;
           line-height: 1.6;
           font-family: 'Tajawal', sans-serif;
         }
 
         .btn-primary {
-          background: linear-gradient(45deg, #8a7779, #a89294);
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
           border: none;
+          color: white !important;
           padding: 15px 35px;
-          border-radius: 25px;
+          border-radius: 10px;
           font-weight: 600;
           transition: all 0.3s ease;
           font-size: 1.1rem;
-          box-shadow: 0 4px 15px rgba(138, 119, 121, 0.3);
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
           font-family: 'Tajawal', sans-serif;
         }
 
         .btn-primary:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(138, 119, 121, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(232, 93, 31, 0.35);
         }
 
         @media (max-width: 768px) {

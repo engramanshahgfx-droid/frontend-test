@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
 import Image from "next/image";
+import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage } from "lucide-react";
 
 export default function TourismOfferDetails() {
   const params = useParams();
@@ -338,27 +339,38 @@ export default function TourismOfferDetails() {
     return `${backendBase}/storage/${img}`;
   };
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Text copied to clipboard: " + text);
+      })
+      .catch((err) => {
+        console.error("Unable to copy text to clipboard", err);
+      });
+  };
+
   const handleBookNow = () => {
     console.log("Opening booking modal for offer:", offer);
     setShowBookingModal(true);
   };
-
   if (loading) {
     return (
-      <div
-        className="container"
-        style={{ padding: "100px 0", textAlign: "center" }}
-      >
-        <div className="spinner-border text-warning" role="status">
-          <span className="visually-hidden">Loading...</span>
+      <div className="offer-details">
+        <div
+          className="container"
+          style={{ padding: "100px 0", textAlign: "center" }}
+        >
+          <div className="spinner-border text-warning" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p style={{ marginTop: "20px", color: "#666" }}>
+            {t.loading}
+          </p>
         </div>
-        <p style={{ marginTop: "20px", color: "#666" }}>
-          {t.loading}
-        </p>
       </div>
     );
   }
-
   if (error || !offer) {
     return (
       <div
@@ -389,14 +401,41 @@ export default function TourismOfferDetails() {
   const includes = getFeatures("includes");
   const notIncludes = getFeatures("not_includes");
   const itinerary = getItinerary();
-  const contactInfo = getContactInfo();
-  const paymentMethods = getPaymentMethods();
+  const rawContactInfo = getContactInfo();
+  const contactInfo = {
+    address: rawContactInfo.address || (lang === "ar" ? "حي الربوة، جدة" : "Al Rabwa District, Jeddah"),
+    phone: rawContactInfo.phone || "+966547305060",
+    whatsapp: rawContactInfo.whatsapp || "+966547305060",
+    email: rawContactInfo.email || "info@tilalr.com"
+  };
+
+  const rawPaymentMethods = getPaymentMethods();
+  const paymentMethods = rawPaymentMethods.length > 0 ? rawPaymentMethods.map(method => ({
+    ...method,
+    name: getLocalizedText(method, "name") || method.name || method.name_en || method.name_ar || "",
+    account_no: method.account_no || method.accountNo || "",
+    iban: method.iban || ""
+  })) : [
+    {
+      name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
+      account_no: "11111111",
+      iban: "SA1111111111111",
+    },
+    {
+      name: lang === "ar" ? "إس تي سي باي" : "STC Pay",
+      account_no: "22222222",
+      iban: "SA2222222222222",
+    }
+  ];
   const basicInfo = getBasicInfo();
 
   return (
     <>
       <div className="offer-details" dir={lang === "ar" ? "rtl" : "ltr"}>
-        <div className="container">
+        <div className="container" style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}>
           {/* Breadcrumb */}
           <nav className="breadcrumb">
             <a href={`/${lang}`}>{t.home}</a>
@@ -407,12 +446,12 @@ export default function TourismOfferDetails() {
           </nav>
 
           {/* Back Button */}
-          <button
+          {/* <button
             className="btn-back"
             onClick={() => router.push(`/${lang}/tousimoffers`)}
           >
             {t.back}
-          </button>
+          </button> */}
 
           {/* Header */}
           <div className="offer-header">
@@ -458,16 +497,21 @@ export default function TourismOfferDetails() {
             )}
 
           {/* Description */}
-          <div className="section">
-            <h2>{t.description}</h2>
-            <p>
-              {getText(offer, "long_description") ||
-                getText(offer, "description")}
-            </p>
+          <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+            <div className="panel-header">
+              <FileText size={18} color="#fff" />
+              <h4>{t.description}</h4>
+            </div>
+            <div className="panel-body">
+              <p style={{ margin: 0 }}>
+                {getText(offer, "long_description") ||
+                  getText(offer, "description")}
+              </p>
+            </div>
           </div>
 
           {/* Quick Info */}
-          <div className="quick-info">
+          <div className="quick-info" style={{ marginBottom: "30px" }}>
             <div className="info-item">
               <span className="label">{t.price}</span>
               <span className="value">
@@ -518,178 +562,273 @@ export default function TourismOfferDetails() {
 
           {/* Features */}
           {features.length > 0 && (
-            <div className="section">
-              <h2>{t.features}</h2>
-              <ul className="features-list">
-                {features.map((item, index) => (
-                  <li key={index}>
-                    {getLocalizedText(item, typeof item === "string" ? item : "")}
-                  </li>
-                ))}
-              </ul>
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <Star size={18} color="#fff" />
+                <h4>{t.features}</h4>
+              </div>
+              <div className="panel-body">
+                <ul className="features-list">
+                  {features.map((item, index) => (
+                    <li key={index}>
+                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {/* Includes */}
           {includes.length > 0 && (
-            <div className="section">
-              <h2>{t.includes}</h2>
-              <ul className="includes-list">
-                {includes.map((item, index) => (
-                  <li key={index}>
-                    ✓{" "}
-                    {getLocalizedText(item, typeof item === "string" ? item : "")}
-                  </li>
-                ))}
-              </ul>
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <CheckCircle size={18} color="#fff" />
+                <h4>{t.includes}</h4>
+              </div>
+              <div className="panel-body">
+                <ul className="includes-list">
+                  {includes.map((item, index) => (
+                    <li key={index}>
+                      ✓{" "}
+                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {/* Not Includes */}
           {notIncludes.length > 0 && (
-            <div className="section">
-              <h2>{t.notIncludes}</h2>
-              <ul className="not-includes-list">
-                {notIncludes.map((item, index) => (
-                  <li key={index}>
-                    ✗{" "}
-                    {getLocalizedText(item, typeof item === "string" ? item : "")}
-                  </li>
-                ))}
-              </ul>
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <XCircle size={18} color="#fff" />
+                <h4>{t.notIncludes}</h4>
+              </div>
+              <div className="panel-body">
+                <ul className="not-includes-list">
+                  {notIncludes.map((item, index) => (
+                    <li key={index}>
+                      ✗{" "}
+                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {/* Itinerary */}
           {itinerary.length > 0 && (
-            <div className="section">
-              <h2>{t.itinerary}</h2>
-              <div className="itinerary">
-                {itinerary.map((day, index) => (
-                  <motion.div
-                    key={index}
-                    className="day-card"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <h4>
-                      {t.day} {day.day}: {getLocalizedText(day.title, day.title) || getLocalizedText(day, "title") || day.title || "Title"}
-                    </h4>
-                    <p>{getLocalizedText(day.description, day.description) || getLocalizedText(day, "description") || day.description || "Description"}</p>
-                    {day.image && (
-                      <img
-                        src={getImageUrl(day.image)}
-                        alt={`Day ${day.day}`}
-                        onError={(e) => {
-                          e.target.src = "/placeholder.png";
-                        }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <Calendar size={18} color="#fff" />
+                <h4>{t.itinerary}</h4>
+              </div>
+              <div className="panel-body">
+                <div className="itinerary">
+                  {itinerary.map((day, index) => (
+                    <motion.div
+                      key={index}
+                      className="day-card"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <h4>
+                        {t.day} {day.day}: {getLocalizedText(day.title, day.title) || getLocalizedText(day, "title") || day.title || "Title"}
+                      </h4>
+                      <p>{getLocalizedText(day.description, day.description) || getLocalizedText(day, "description") || day.description || "Description"}</p>
+                      {day.image && (
+                        <img
+                          src={getImageUrl(day.image)}
+                          alt={`Day ${day.day}`}
+                          onError={(e) => {
+                            e.target.src = "/placeholder.png";
+                          }}
+                        />
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {/* Basic Info */}
           {Object.keys(basicInfo).length > 0 && (
-            <div className="section">
-              <h2>{t.details}</h2>
-              <div className="contact-grid">
-                {basicInfo.trip_code && (
-                  <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
-                )}
-                {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
-                {basicInfo.destination_name && (
-                  <div>📍 {t.destination}: {getLocalizedText(basicInfo, "destination_name") || basicInfo.destination_name}</div>
-                )}
-                {basicInfo.available_to && (
-                  <div>📆 {t.availableTo}: {basicInfo.available_to}</div>
-                )}
-                {basicInfo.double_room && (
-                  <div>
-                    🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
-                    <Image 
-                      src="/saudi_riyal.png" 
-                      alt="SAR" 
-                      width={12} 
-                      height={12} 
-                      className="currency-icon"
-                    />
-                  </div>
-                )}
-                {basicInfo.single_room && (
-                  <div>
-                    🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
-                    <Image 
-                      src="/saudi_riyal.png" 
-                      alt="SAR" 
-                      width={12} 
-                      height={12} 
-                      className="currency-icon"
-                    />
-                  </div>
-                )}
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <Luggage size={18} color="#fff" />
+                <h4>{t.details}</h4>
+              </div>
+              <div className="panel-body">
+                <div className="contact-grid">
+                  {basicInfo.trip_code && (
+                    <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
+                  )}
+                  {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
+                  {basicInfo.destination_name && (
+                    <div>📍 {t.destination}: {getLocalizedText(basicInfo, "destination_name") || basicInfo.destination_name}</div>
+                  )}
+                  {basicInfo.available_to && (
+                    <div>📆 {t.availableTo}: {basicInfo.available_to}</div>
+                  )}
+                  {basicInfo.double_room && (
+                    <div>
+                      🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
+                      <Image 
+                        src="/saudi_riyal.png" 
+                        alt="SAR" 
+                        width={12} 
+                        height={12} 
+                        className="currency-icon"
+                      />
+                    </div>
+                  )}
+                  {basicInfo.single_room && (
+                    <div>
+                      🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
+                      <Image 
+                        src="/saudi_riyal.png" 
+                        alt="SAR" 
+                        width={12} 
+                        height={12} 
+                        className="currency-icon"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
 
           {/* Contact Info */}
           {Object.keys(contactInfo).length > 0 && (
-            <div className="section">
-              <h2>{t.contact}</h2>
-              <div className="contact-grid">
-                {contactInfo.address && <div>📍 {getLocalizedText(contactInfo, "address") || contactInfo.address}</div>}
-                {contactInfo.phone && (
-                  <div>
-                    📞{" "}
-                    <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
-                  </div>
-                )}
-                {contactInfo.whatsapp && (
-                  <div>
-                    💬{" "}
-                    <a
-                      href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`}
-                    >
-                      {contactInfo.whatsapp}
-                    </a>
-                  </div>
-                )}
-                {contactInfo.email && (
-                  <div>
-                    ✉️{" "}
-                    <a href={`mailto:${contactInfo.email}`}>
-                      {contactInfo.email}
-                    </a>
-                  </div>
-                )}
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <Headphones size={18} color="#fff" />
+                <h4>{t.contact}</h4>
+              </div>
+              <div className="panel-body">
+                <ul className="contact-list">
+                  {contactInfo.address && (
+                    <li>
+                      <MapPin size={16} color="#E85D1F" />
+                      <a href="https://maps.app.goo.gl/WakCAhdZsZERp1M97" target="_blank" rel="noopener noreferrer">
+                        <span>{contactInfo.address}</span>
+                      </a>
+                    </li>
+                  )}
+                  {contactInfo.phone && (
+                    <>
+                      <li className="divider"></li>
+                      <li>
+                        <Phone size={16} color="#E85D1F" />
+                        <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
+                      </li>
+                    </>
+                  )}
+                  {contactInfo.whatsapp && (
+                    <>
+                      <li className="divider"></li>
+                      <li>
+                        <MessageSquare size={16} color="#E85D1F" />
+                        <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`} target="_blank" rel="noopener noreferrer">
+                          {contactInfo.whatsapp}
+                        </a>
+                      </li>
+                    </>
+                  )}
+                  {contactInfo.email && (
+                    <>
+                      <li className="divider"></li>
+                      <li>
+                        <Mail size={16} color="#E85D1F" />
+                        <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                      </li>
+                    </>
+                  )}
+                </ul>
               </div>
             </div>
           )}
 
           {/* Payment Methods */}
           {paymentMethods.length > 0 && (
-            <div className="section">
-              <h2>{t.paymentMethods}</h2>
-              <div className="payment-grid">
-                {paymentMethods.map((method, index) => (
-                  <div key={index} className="payment-card">
-                    {method.logo && (
-                      <img
-                        src={method.logo}
-                        alt={method.name}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                      />
-                    )}
-                    <h5>{getLocalizedText(method, "name") || method.name}</h5>
-                    {method.account_no && <p>{t.account}: {method.account_no}</p>}
-                    {method.iban && <p>{t.iban}: {method.iban}</p>}
-                  </div>
-                ))}
+            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+              <div className="panel-header">
+                <CreditCard size={18} color="#fff" />
+                <h4>{t.paymentMethods}</h4>
+              </div>
+              <div className="panel-body">
+                <h5 className="payment-title">1. {t.bankTransfer}</h5>
+                {paymentMethods.map((method, index) => {
+                  const getBankLogoUrl = (logo) => {
+                    if (!logo) return "";
+                    if (/^https?:\/\//.test(logo)) return logo;
+                    return `https://travelerclub.sa.com/images/banks-logos/${logo}`;
+                  };
+
+                  return (
+                    <div key={index} className="bank-item">
+                      {method.logo && (
+                        <img
+                          className="bank-logo"
+                          src={getBankLogoUrl(method.logo)}
+                          alt={method.name}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                          }}
+                        />
+                      )}
+                      <div className="bank-details">
+                        <div className="bank-row">
+                          <span className="bank-label">{lang === "ar" ? "الاسم" : "Name"} :</span>
+                          <span className="bank-number">{method.name}</span>
+                        </div>
+                        {method.account_no && (
+                          <div className="bank-row">
+                            <span className="bank-label">Account No. :</span>
+                            <span className="bank-number">{method.account_no}</span>
+                            <button
+                              className="copy-btn"
+                              onClick={() => copyToClipboard(method.account_no)}
+                              title="Copy Account"
+                            >
+                              <Copy size={14} />
+                            </button>
+                          </div>
+                        )}
+                        {method.iban && (
+                          <div className="bank-row">
+                            <span className="bank-label">IBAN :</span>
+                            <span className="bank-number">{method.iban}</span>
+                            <button
+                              className="copy-btn"
+                              onClick={() => copyToClipboard(method.iban)}
+                              title="Copy IBAN"
+                            >
+                              <Copy size={14} />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {index < paymentMethods.length - 1 && (
+                        <div className="divider"></div>
+                      )}
+                    </div>
+                  );
+                })}
+                <div className="divider"></div>
+                <h5 className="payment-title">2. {t.electronicPayment}</h5>
+                <p className="electronic-text">{t.electronicPaymentDesc}</p>
+                <img
+                  className="payment-logos"
+                  src="https://travelerclub.sa.com/images/verified.webp"
+                  alt="Payment Methods"
+                />
               </div>
             </div>
           )}
@@ -717,34 +856,40 @@ export default function TourismOfferDetails() {
 
       <style jsx>{`
         .offer-details {
-          padding: 80px 0 60px;
-          background: #f8f9fa;
+          padding: 150px 0 60px; /* Clear floating navbar */
+          background: #FAF6F0; /* Soft Desert Sand theme variant */
           min-height: 100vh;
         }
 
         .breadcrumb {
-          padding: 40px 0 20px;
+          padding: 10px 0 20px;
           font-size: 0.95rem;
           color: #666;
         }
 
         .breadcrumb a {
-          color: #dfa528;
+          color: #1C0052; /* Deep Heritage Purple */
           text-decoration: none;
+          font-weight: 500;
+        }
+
+        .breadcrumb a:hover {
+          text-decoration: underline;
         }
 
         .breadcrumb .current {
-          color: #333;
+          color: #666;
         }
 
         .btn-back {
           background: transparent;
           border: none;
-          color: #dfa528;
+          color: #1C0052;
           font-size: 1rem;
           cursor: pointer;
           margin-bottom: 20px;
           padding: 8px 0;
+          font-weight: 600;
         }
 
         .btn-back:hover {
@@ -761,7 +906,7 @@ export default function TourismOfferDetails() {
         .offer-header h1 {
           font-size: 2.5rem;
           font-weight: 700;
-          color: #2c2c2c;
+          color: #1C0052; /* Deep Heritage Purple */
           margin: 0;
         }
 
@@ -774,7 +919,7 @@ export default function TourismOfferDetails() {
 
         .main-image {
           position: relative;
-          border-radius: 12px;
+          border-radius: 10px; /* 10px rounded corners */
           overflow: hidden;
           margin-bottom: 30px;
         }
@@ -789,7 +934,7 @@ export default function TourismOfferDetails() {
           position: absolute;
           top: 20px;
           right: 20px;
-          background: #ff6b6b;
+          background: #E85D1F; /* Desert Sunset Orange */
           color: white;
           padding: 8px 20px;
           border-radius: 30px;
@@ -808,21 +953,22 @@ export default function TourismOfferDetails() {
           width: 100%;
           height: 150px;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: 10px;
         }
 
         .section {
           background: white;
           padding: 30px;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 30px;
-          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .section h2 {
           font-size: 1.5rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 15px;
         }
 
@@ -838,9 +984,10 @@ export default function TourismOfferDetails() {
           gap: 20px;
           background: white;
           padding: 25px;
-          border-radius: 12px;
+          border-radius: 10px;
           margin-bottom: 30px;
-          box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
         }
 
         .info-item {
@@ -857,7 +1004,7 @@ export default function TourismOfferDetails() {
         .info-item .value {
           font-size: 1.1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -880,7 +1027,7 @@ export default function TourismOfferDetails() {
         }
 
         .current-price {
-          color: #dfa528;
+          color: #E85D1F; /* Desert Sunset Orange */
           font-size: 1.3rem;
           font-weight: 700;
           display: flex;
@@ -909,7 +1056,7 @@ export default function TourismOfferDetails() {
         .not-includes-list li {
           padding: 8px 12px;
           background: #f8f9fa;
-          border-radius: 6px;
+          border-radius: 10px;
           color: #555;
         }
 
@@ -922,14 +1069,14 @@ export default function TourismOfferDetails() {
         .day-card {
           padding: 20px;
           background: #f8f9fa;
-          border-radius: 8px;
-          border-left: 4px solid #dfa528;
+          border-radius: 10px;
+          border-left: 4px solid #E85D1F; /* Sunset Orange border marker */
         }
 
         .day-card h4 {
           font-size: 1.1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 10px;
         }
 
@@ -944,35 +1091,140 @@ export default function TourismOfferDetails() {
           width: 100%;
           max-height: 200px;
           object-fit: cover;
-          border-radius: 8px;
+          border-radius: 10px;
         }
 
-        .contact-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-          gap: 15px;
+        .sidebar-panel {
+          background: #fff;
+          border-radius: 10px;
+          border: 1px solid rgba(28, 0, 82, 0.06);
+          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.04);
+          overflow: hidden;
         }
 
-        .contact-grid a {
-          color: #dfa528;
+        .panel-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 15px 20px;
+          background: #1C0052; /* Deep Heritage Purple header */
+        }
+
+        .panel-header h4 {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #fff;
+          margin: 0;
+        }
+
+        .panel-body {
+          padding: 18px 20px;
+        }
+
+        .contact-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .contact-list li {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 8px 0;
+          font-size: 0.9rem;
+          color: #555;
+        }
+
+        .contact-list li a {
+          color: #555;
           text-decoration: none;
+          transition: color 0.3s ease;
         }
 
-        .contact-grid a:hover {
-          text-decoration: underline;
+        .contact-list li a:hover {
+          color: #E85D1F;
         }
 
-        .payment-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-          gap: 20px;
+        .payment-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1C0052;
+          margin: 10px 0 15px;
         }
 
-        .payment-card {
-          padding: 20px;
+        .bank-item {
+          margin-bottom: 15px;
+          padding: 12px;
           background: #f8f9fa;
-          border-radius: 8px;
-          text-align: center;
+          border-radius: 10px;
+          text-align: left;
+        }
+
+        .bank-item:last-child {
+          margin-bottom: 0;
+        }
+
+        .bank-logo {
+          max-height: 35px;
+          margin-bottom: 8px;
+          display: block;
+        }
+
+        .bank-details {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .bank-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .bank-label {
+          font-size: 0.85rem;
+          color: #888;
+          font-weight: 500;
+          min-width: 90px;
+        }
+
+        .bank-number {
+          font-size: 0.85rem;
+          color: #2c2c2c;
+          font-weight: 600;
+          word-break: break-all;
+        }
+
+        .copy-btn {
+          background: transparent;
+          border: none;
+          color: #E85D1F;
+          cursor: pointer;
+          padding: 2px 5px;
+          transition: color 0.3s ease;
+        }
+
+        .copy-btn:hover {
+          color: #FFC60B;
+        }
+
+        .electronic-text {
+          font-size: 0.85rem;
+          color: #555;
+          line-height: 1.6;
+          margin: 10px 0;
+          text-align: left;
+        }
+
+        .payment-logos {
+          max-height: 40px;
+          margin-top: 10px;
+          display: block;
+        }ext-align: center;
+          border: 1px solid rgba(28, 0, 82, 0.05);
         }
 
         .payment-card img {
@@ -983,7 +1235,7 @@ export default function TourismOfferDetails() {
         .payment-card h5 {
           font-size: 1rem;
           font-weight: 600;
-          color: #2c2c2c;
+          color: #1C0052;
           margin-bottom: 8px;
         }
 
@@ -999,22 +1251,21 @@ export default function TourismOfferDetails() {
         }
 
         .btn-book-now {
-          background: #dfa528;
+          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%); /* Sunset to Dune gradient */
           color: white;
           border: none;
           padding: 14px 50px;
-          border-radius: 30px;
+          border-radius: 10px; /* 10px border radius */
           font-weight: 700;
           font-size: 1.2rem;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 20px rgba(223, 165, 40, 0.3);
+          box-shadow: 0 4px 20px rgba(232, 93, 31, 0.25);
         }
 
         .btn-book-now:hover {
-          background: #c98c1e;
           transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(223, 165, 40, 0.4);
+          box-shadow: 0 8px 30px rgba(232, 93, 31, 0.45);
         }
 
         @media (max-width: 768px) {

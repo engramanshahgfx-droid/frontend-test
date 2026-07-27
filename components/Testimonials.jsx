@@ -8,64 +8,64 @@ export default function Testimonials({ lang = "en" }) {
   const testimonialsContent = {
     en: [
       {
-        name: "righteous",
+        name: "Ahmed",
         quote: "Our trip to the Hail Mountains was a wonderful experience! Everything was excellently organized, and the staff was very helpful.",
         rating: 5,
       },
       {
-        name: "pleasant",
+        name: "Mohamed",
         quote: "Tourism in Saudi Arabia with your team is different, like you've never seen it before. Thank you, Hills and Sands team.",
         rating: 5,
       },
       {
-        name: "immortal",
+        name: "Khaled",
         quote: "Special thanks to Omar for his attention to the smallest details of the adventure and to the cooperative team; a truly unique experience.",
         rating: 5,
       },
       {
-        name: "satisfied",
+        name: "Yassin",
         quote: "Amazing service and unforgettable memories. The attention to detail and customer care was exceptional throughout our journey.",
         rating: 5,
       },
       {
-        name: "adventurer",
+        name: "Rady",
         quote: "The desert safari experience was breathtaking! Professional guides and well-planned itinerary made our trip memorable.",
         rating: 5,
       },
       {
-        name: "explorer",
+        name: "Seif",
         quote: "From start to finish, everything was perfectly arranged. We felt safe and well taken care of during our entire Saudi adventure.",
         rating: 5,
       },
     ],
     ar: [
       {
-        name: "الصالح",
+        name: "أحمد",
         quote: "رحلتنا إلى جبال حائل كانت تجربة رائعة! كل شيء كان منظمًا بشكل ممتاز، والطاقم كان مفيدًا جدًا.",
         rating: 5,
       },
       {
-        name: "الممتع",
+        name: "محمد",
         quote: "السياحة في السعودية مع فريقكم مختلفة، مثلما لم ترها من قبل. شكرًا لكم فريق التلال والرمال.",
         rating: 5,
       },
       {
-        name: "الخالد",
+        name: "خالد",
         quote: "شكر خاص لعمر على اهتمامه بأدق تفاصيل المغامرة وإلى الفريق المتعاون؛ تجربة فريدة حقًا.",
         rating: 5,
       },
       {
-        name: "الراضي",
+        name: "راضي",
         quote: "خدمة مذهلة وذكريات لا تنسى. الاهتمام بالتفاصيل والرعاية للعملاء كان استثنائيًا طوال رحلتنا.",
         rating: 5,
       },
       {
-        name: "المغامر",
+        name: "سيف",
         quote: "تجربة سفاري الصحراء كانت رائعة! المرشدون المحترفون والبرنامج المُخطط جيدًا جعلوا رحلتنا لا تُنسى.",
         rating: 5,
       },
       {
-        name: "المستكشف",
+        name: "ياسين",
         quote: "من البداية إلى النهاية، كل شيء كان مُرتبًا بشكل مثالي. شعرنا بالأمان والرعاية الجيدة خلال مغامرتنا في السعودية.",
         rating: 5,
       },
@@ -179,17 +179,15 @@ export default function Testimonials({ lang = "en" }) {
               </div>
             ))}
           </div>
-
           {/* Navigation Arrows */}
           <div className="slider-nav">
-            <button className="nav-btn prev" onClick={prevSlide}>
-              <FaAngleLeft />
+            <button className="nav-btn prev" onClick={prevSlide} aria-label="Previous">
+              {lang === "ar" ? <FaAngleRight /> : <FaAngleLeft />}
             </button>
-            <button className="nav-btn next" onClick={nextSlide}>
-              <FaAngleRight />
+            <button className="nav-btn next" onClick={nextSlide} aria-label="Next">
+              {lang === "ar" ? <FaAngleLeft /> : <FaAngleRight />}
             </button>
           </div>
-
           {/* Dots */}
           <div className="slider-dots">
             {Array.from({ length: testimonials.length - slidesToShow + 1 }).map((_, index) => (
@@ -208,19 +206,19 @@ export default function Testimonials({ lang = "en" }) {
       <style jsx>{`
         .testimonials-section {
           padding: 80px 0;
-          background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+          background: #FAF6F0;
           font-family: 'Tajawal', sans-serif;
         }
 
         .section-title {
-          color: #2c3e50;
+          color: #1C0052;
           font-weight: 800;
           font-size: 2.5rem;
           margin-bottom: 1rem;
         }
 
         .section-subtitle {
-          color: #5d6d7e;
+          color: #555;
           font-size: 1.1rem;
           max-width: 600px;
           margin: 0 auto;
@@ -247,12 +245,12 @@ export default function Testimonials({ lang = "en" }) {
         .testimonial-card {
           background: white;
           padding: 2rem;
-          border-radius: 15px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          border-radius: 10px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
           text-align: center;
           transition: all 0.3s ease;
           height: 100%;
-          border: 1px solid rgba(138, 119, 121, 0.1);
+          border: 1px solid rgba(28, 0, 82, 0.06);
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -260,11 +258,12 @@ export default function Testimonials({ lang = "en" }) {
 
         .testimonial-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 12px 30px rgba(28, 0, 82, 0.1);
+          border-color: rgba(232, 93, 31, 0.3);
         }
 
         .evaluate {
-          color: #2c3e50;
+          color: #555;
           font-size: 1rem;
           line-height: 1.6;
           margin-bottom: 1.5rem;
@@ -280,7 +279,7 @@ export default function Testimonials({ lang = "en" }) {
         }
 
         .name-job h6 {
-          color: #8a7779;
+          color: #E85D1F;
           font-weight: 700;
           font-size: 1rem;
           margin: 0;
@@ -298,7 +297,7 @@ export default function Testimonials({ lang = "en" }) {
         }
 
         .star-full {
-          color: #ffd700;
+          color: #FFC60B;
           font-size: 1rem;
         }
 
@@ -311,7 +310,7 @@ export default function Testimonials({ lang = "en" }) {
         }
 
         .nav-btn {
-          background: #8a7779;
+          background: #1C0052;
           color: white;
           border: none;
           width: 40px;
@@ -326,7 +325,7 @@ export default function Testimonials({ lang = "en" }) {
         }
 
         .nav-btn:hover {
-          background: #a89294;
+          background: #E85D1F;
           transform: scale(1.1);
         }
 
@@ -348,7 +347,7 @@ export default function Testimonials({ lang = "en" }) {
         }
 
         .dot.active {
-          background: #8a7779;
+          background: #E85D1F;
           transform: scale(1.2);
         }
 

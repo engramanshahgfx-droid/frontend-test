@@ -66,7 +66,7 @@ export default function RegionDropdown({ lang, selectedRegion, onSelect }) {
           minWidth: '200px'
         }}>
           <div style={{ padding: '8px 20px', fontWeight: 'bold', borderBottom: '1px solid #eee' }}>
-            {isRTL ? 'الوجهات السياحية' : 'Tourism Destinations'}
+            {isRTL ? 'الوجهات الدولية' : 'International Destinations'}
           </div>
           {regions.map(region => (
             <div
