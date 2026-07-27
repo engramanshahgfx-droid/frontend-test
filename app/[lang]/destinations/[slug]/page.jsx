@@ -526,7 +526,7 @@ export default function DestinationDetails() {
                         height={14}
                         className="currency-icon"
                       />
-                      {` ${t.perPerson}`}
+                      {/* {` ${t.perPerson}`} */}
                     </span>
                   </li>
                   <li className="divider"></li>
@@ -542,7 +542,7 @@ export default function DestinationDetails() {
                         height={14}
                         className="currency-icon"
                       />
-                      {` ${t.perPerson}`}
+                      {/* {` ${t.perPerson}`} */}
                     </span>
                   </li>
                 </ul>
