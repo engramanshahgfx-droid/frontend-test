@@ -263,7 +263,7 @@ select.form-control option {
 
 /* Navbar Redesign Styles */
 .top-bar {
-  background: var(--primary-color);
+  background: #E85D1F;
   color: white;
   padding: 8px 0;
   font-size: 13px;
@@ -381,7 +381,7 @@ select.form-control option {
   line-height: 1.2;
 }
 .logo-subtitle {
-  color: var(--accent-color);
+  color: #2F057F;;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 1.5px;

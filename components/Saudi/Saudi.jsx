@@ -11,15 +11,8 @@ const Saudi = ({ lang = "ar" }) => {
   const [showEidPopup, setShowEidPopup] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
 
-  // Check if Eid popup has been closed before
-  // useEffect(() => {
-  //   const hasClosedEidPopup = localStorage.getItem('eidPopupClosed');
-  //   if (hasClosedEidPopup) {
-  //     setShowEidPopup(false);
-  //   }
-  // }, []);
 
-  // Auto-hide popup after 15 seconds
+
   useEffect(() => {
     if (showEidPopup && !isClosing) {
       const timer = setTimeout(() => {
@@ -58,134 +51,134 @@ const Saudi = ({ lang = "ar" }) => {
   const t = content[lang] || content.ar;
 
   // 2. Cities Data with positions matching actual Saudi Arabia geography
-  const citiesData = [
-    {
-      id: 1,
-      cityKey: "arar",
-      nameEn: "Arar",
-      nameAr: "عرعر",
-      img: "/cities/Arar.jpeg",
-      top: 12,
-      left: 38,
-    },
-    {
-      id: 2,
-      cityKey: "sakaka",
-      nameEn: "Sakaka",
-      nameAr: "سكاكا",
-      img: "/cities/Sakaka.jpeg",
-      top: 20,
-      left: 42,
-    },
-    {
-      id: 3,
-      cityKey: "tabuk",
-      nameEn: "Tabuk",
-      nameAr: "تبوك",
-      img: "/cities/tabuk.jpeg",
-      top: 26,
-      left: 22,
-    },
-    {
-      id: 4,
-      cityKey: "alula",
-      nameEn: "AlUla",
-      nameAr: "العلا",
-      img: "/cities/alula.jpg",
-      top: 32,
-      left: 28,
-    },
-    {
-      id: 5,
-      cityKey: "hail",
-      nameEn: "Hail",
-      nameAr: "حائل",
-      img: "/cities/hail.jpeg",
-      top: 28,
-      left: 42,
-    },
-    {
-      id: 7,
-      cityKey: "madina",
-      nameEn: "Madina",
-      nameAr: "المدينة",
-      img: "/madina.png",
-      top: 40,
-      left: 26,
-    },
-    {
-      id: 8,
-      cityKey: "makkah",
-      nameEn: "Makkah",
-      nameAr: "مكة",
-      img: "/cities/makkah.jpeg",
-      top: 60,
-      left: 40,
-    },
-    {
-      id: 9,
-      cityKey: "jeddah",
-      nameEn: "Jeddah",
-      nameAr: "جدة",
-      img: "/cities/jeddah.png",
-      top: 62,
-      left: 33,
-    },
-    {
-      id: 11,
-      cityKey: "qassim",
-      nameEn: "Qassim",
-      nameAr: "القصيم",
-      img: "/cities/qassim.jpeg",
-      top: 36,
-      left: 46,
-    },
-    {
-      id: 12,
-      cityKey: "riyadh",
-      nameEn: "Riyadh",
-      nameAr: "الرياض",
-      img: "/cities/Riyadh.jpeg",
-      top: 52,
-      left: 54,
-    },
-    {
-      id: 13,
-      cityKey: "dammam",
-      nameEn: "Dammam",
-      nameAr: "الدمام",
-      img: "/cities/dammam.png",
-      top: 42,
-      left: 64,
-    },
-    {
-      id: 15,
-      cityKey: "abha",
-      nameEn: "Abha",
-      nameAr: "أبها",
-      img: "/cities/abha.png",
-      top: 70,
-      left: 39,
-    },
-    {
-      id: 16,
-      cityKey: "najran",
-      nameEn: "Najran",
-      nameAr: "نجران",
-      img: "/cities/Najran.jpeg",
-      top: 86,
-      left: 54,
-    },
-    {
-      id: 17,
-      cityKey: "jizan",
-      nameEn: "Jizan",
-      nameAr: "جيزان",
-      img: "/cities/jizan.webp",
-      top: 90,
-      left: 42,
-    },
-  ];
+const citiesData = [
+  {
+    id: 1,
+    cityKey: "arar",
+    nameEn: "Arar",
+    nameAr: "عرعر",
+    img: "/cities/Arar.jpeg",
+    top: 8,
+    left: 40,
+  },
+  {
+    id: 2,
+    cityKey: "sakaka",
+    nameEn: "Sakaka",
+    nameAr: "سكاكا",
+    img: "/cities/Sakaka.jpeg",
+    top: 16,
+    left: 44,
+  },
+  {
+    id: 3,
+    cityKey: "tabuk",
+    nameEn: "Tabuk",
+    nameAr: "تبوك",
+    img: "/cities/tabuk.jpeg",
+    top: 22,
+    left: 22,
+  },
+  {
+    id: 4,
+    cityKey: "alula",
+    nameEn: "AlUla",
+    nameAr: "العلا",
+    img: "/cities/alula.jpg",
+    top: 30,
+    left: 28,
+  },
+  {
+    id: 5,
+    cityKey: "hail",
+    nameEn: "Hail",
+    nameAr: "حائل",
+    img: "/cities/hail.jpeg",
+    top: 32,
+    left: 48,
+  },
+  {
+    id: 6,
+    cityKey: "qassim",
+    nameEn: "Qassim",
+    nameAr: "القصيم",
+    img: "/cities/qassim.jpeg",
+    top: 40,
+    left: 52,
+  },
+  {
+    id: 7,
+    cityKey: "madina",
+    nameEn: "Madina",
+    nameAr: "المدينة",
+    img: "/madina.png",
+    top: 44,
+    left: 30,
+  },
+  {
+    id: 8,
+    cityKey: "dammam",
+    nameEn: "Dammam",
+    nameAr: "الدمام",
+    img: "/cities/dammam.png",
+    top: 46,
+    left: 72,
+  },
+  {
+    id: 9,
+    cityKey: "riyadh",
+    nameEn: "Riyadh",
+    nameAr: "الرياض",
+    img: "/cities/Riyadh.jpeg",
+    top: 52,
+    left: 60,
+  },
+  {
+    id: 10,
+    cityKey: "makkah",
+    nameEn: "Makkah",
+    nameAr: "مكة",
+    img: "/cities/makkah.jpeg",
+    top: 58,
+    left: 40,
+  },
+  {
+    id: 11,
+    cityKey: "jeddah",
+    nameEn: "Jeddah",
+    nameAr: "جدة",
+    img: "/cities/jeddah.png",
+    top: 62,
+    left: 32,
+  },
+  {
+    id: 12,
+    cityKey: "abha",
+    nameEn: "Abha",
+    nameAr: "أبها",
+    img: "/cities/abha.png",
+    top: 74,
+    left: 42,
+  },
+  {
+    id: 13,
+    cityKey: "najran",
+    nameEn: "Najran",
+    nameAr: "نجران",
+    img: "/cities/Najran.jpeg",
+    top: 82,
+    left: 56,
+  },
+  {
+    id: 14,
+    cityKey: "jizan",
+    nameEn: "Jizan",
+    nameAr: "جيزان",
+    img: "/cities/jizan.webp",
+    top: 88,
+    left: 44,
+  },
+];
 
   // Function to get city name based on language
   const getCityName = (city) => {
