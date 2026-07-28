@@ -278,7 +278,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
         <div className="container" style={{ maxWidth: "1200px" }}>
           <div className="row">
             <div className="col-12 text-center">
-              <h2 className="section-title">{t.title}</h2>
+              <h2 className="section-title">
+                {lang === "ar" ? (
+                  <>أفضل عروض <span className="highlight-green">السعودية</span></>
+                ) : (
+                  <>Best <span className="highlight-green">Saudi</span> Offers</>
+                )}
+              </h2>
               <p className="section-subtitle">{t.subtitle}</p>
             </div>
           </div>
@@ -394,7 +400,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    background: '#1C0052',
+                    background: '#E85D1F',
                     color: '#fff',
                     padding: '12px 35px',
                     borderRadius: '10px',
@@ -404,15 +410,15 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                     marginTop: '20px',
                     textDecoration: 'none',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    boxShadow: '0 4px 15px rgba(28, 0, 82, 0.25)',
+                    boxShadow: '0 4px 15px rgba(255, 123, 0, 0.41)',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)';
+                    e.currentTarget.style.background = '#1C0052';
                     e.currentTarget.style.transform = 'translateY(-3px)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(232, 93, 31, 0.45)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 15, 151, 0.45)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#1C0052';
+                    e.currentTarget.style.background = '#E85D1F';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 0, 82, 0.25)';
                   }}
@@ -430,15 +436,17 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             padding: 60px 0;
             background: #FAF6F0; /* Soft Desert Sand theme variant */
           }
-
           .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #1C0052; /* Deep Heritage Purple */
+            color: #E85D1F; /* Desert Sunset Orange */
             position: relative;
             margin-bottom: 10px;
           }
 
+          .highlight-green {
+            color: #006C35; /* Premium Saudi Flag Green */
+          }
           .section-title:after {
             content: "";
             position: absolute;
@@ -447,7 +455,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange to Yellow gradient */
+            background: #E85D1F;
           }
 
           .section-subtitle {
@@ -489,15 +497,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             object-fit: cover;
             transition: transform 0.6s ease;
           }
-
           .offer-card:hover .offer-image img {
             transform: scale(1.08);
           }
-
           .badges-container {
             position: absolute;
             top: 15px;
-            right: 15px;
+            inset-inline-start: 15px;
             display: flex;
             flex-direction: column;
             gap: 8px;
@@ -505,7 +511,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           .discount-badge {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            background: #ee5a24;
             color: #fff;
             padding: 6px 14px;
             border-radius: 20px;
@@ -515,32 +521,31 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             animation: pulse 2s infinite;
             text-align: center;
             width: fit-content;
-            align-self: flex-end;
-            }
+            align-self: flex-start;
+          }
             
-            .popular-badge {
-              width: fit-content;
-              background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand sunset orange to yellow */
-              color: #fff;
-              padding: 6px 14px;
-              border-radius: 20px;
-              font-size: 0.75rem;
-              font-weight: 700;
-              text-align: center;
-              align-self: flex-end;
-              }
-              
-          .limited-badge {
-            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+          .popular-badge {
+            width: fit-content;
+            background: #E85D1F; /* Brand sunset orange to yellow */
             color: #fff;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 700;
             text-align: center;
-            align-self: flex-end;
+            align-self: flex-start;
           }
-
+              
+          .limited-badge {
+            background: #1C0052;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-align: center;
+            align-self: flex-start;
+          }
           @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -616,15 +621,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             margin-bottom: 10px;
             gap: 10px;
           }
-
           .offer-header h3 {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #1C0052; /* Deep Heritage Purple */
+            color: #E85D1F; /* Desert Sunset Orange */
             margin: 0;
             flex: 1;
           }
-
           .rating {
             display: flex;
             align-items: center;
@@ -649,7 +652,6 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            color: #555;
           }
 
           .offer-meta {
@@ -664,7 +666,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             align-items: center;
             gap: 5px;
             font-size: 0.85rem;
-            color: #666;
+            color: #1C0052;
           }
 
           .offer-footer {
@@ -721,7 +723,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           }
 
           .btn-book {
-            background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand Orange to Yellow gradient */
+            background: #1C0052; /* Brand Orange to Yellow gradient */
             color: #fff;
             border: none;
             padding: 10px 24px;
@@ -731,16 +733,16 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             transition: all 0.3s ease;
             cursor: pointer;
             white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 45, 104, 0.25);
           }
 
           .btn-book:hover {
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(232, 93, 31, 0.45);
+            box-shadow: 0 8px 25px rgba(31, 118, 232, 0.45);
           }
 
           .btn-view-all {
-            background: #1C0052;
+            background: #E85D1F;
             color: #fff;
             border: none;
             padding: 12px 35px;
@@ -753,13 +755,13 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(28, 0, 82, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 145, 0, 1);
           }
 
           .btn-view-all:hover {
-            background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+            background: #1C0052;
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
+            box-shadow: 0 8px 25px rgba(31, 78, 232, 0.4);
           }
 
           .btn-view-all svg {

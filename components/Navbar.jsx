@@ -384,7 +384,7 @@ export default function Navbar({ lang }) {
               className="top-bar-phone"
               style={{ color: "#fff", textDecoration: "none" }}
             >
-              00966547305060
+              +966547305060
             </a>
           </div>
           <div className="top-bar-right">

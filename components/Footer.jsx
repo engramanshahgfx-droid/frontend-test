@@ -136,14 +136,15 @@ export default function Footer({ lang }) {
     <footer
       className="footer lh-lg"
       style={{
-        backgroundColor: "#1C0052",
-        background: "linear-gradient(135deg, #1C0052 0%, #0F0030 100%)",
-        borderTop: "4px solid #E85D1F", /* Desert Sunset Orange */
+        backgroundColor: "#E85D1F",
+        background: "linear-gradient(135deg, #E85D1F 0%, #E85D1F 100%)",
         position: "relative",
-        zIndex: 1000,
+        zIndex: 1,
         direction: isRTL ? "rtl" : "ltr",
       }}
     >
+      {/* Sand Wave Divider */}
+      <div className="footer-wave" />
       <div className="container" style={{ maxWidth: "1200px" }}>
         <div className="row pt-4">
           <div
@@ -157,10 +158,10 @@ export default function Footer({ lang }) {
                   width: "120px",
                   height: "auto",
                   marginBottom: "0.8rem",
-                  background: "rgba(255, 255, 255, 0.08)",
+                  background: "#1C0052",
                   padding: "8px",
                   borderRadius: "12px",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  border: "1px solid #1C0052",
                 }}
               />
             </Link>
@@ -168,7 +169,7 @@ export default function Footer({ lang }) {
               className="mt-2"
               style={{ fontSize: "14px", color: "#e0e0e0", lineHeight: "1.6" }}
             >
-              <span className="fw-bold" style={{ color: "#FFC60B" }}>
+              <span className="fw-bold" style={{ color: "#1C0052" }}>
                 {localeText.companyName}
               </span>{" "}
               — {localeText.description}
@@ -204,7 +205,7 @@ export default function Footer({ lang }) {
                     <FaMapMarkerAlt
                       className="me-1"
                       size={12}
-                      style={{ color: "#E85D1F", flexShrink: 0 }}
+                      style={{ color: "#1C0052", flexShrink: 0 }}
                     />
                     <a
                       href={localeText.googleMapsUrl}
@@ -285,7 +286,7 @@ export default function Footer({ lang }) {
               className="mb-1"
               style={{
                 fontWeight: "600",
-                color: "#FFC60B",
+                color: "#1C0052",
                 fontSize: "0.95rem",
               }}
             >
@@ -337,7 +338,7 @@ export default function Footer({ lang }) {
                   className="mb-1"
                   style={{
                     fontWeight: "600",
-                    color: "#FFC60B",
+                    color: "#1C0052",
                     fontSize: "0.95rem",
                   }}
                 >
@@ -397,7 +398,7 @@ export default function Footer({ lang }) {
                   className="mb-1"
                   style={{
                     fontWeight: "600",
-                    color: "#FFC60B",
+                    color: "#1C0052",
                     fontSize: "0.95rem",
                   }}
                 >
@@ -453,7 +454,7 @@ export default function Footer({ lang }) {
             <div className="d-flex flex-column justify-content-center align-items-center gap-1">
               {/* License Line */}
               <div style={{ fontSize: "12px" }}>
-                <span style={{ color: "#FFC60B", fontWeight: "600" }}>
+                <span style={{ color: "#1C0052", fontWeight: "600" }}>
                   {isRTL
                     ? "رقم الترخيص: 73106935 | التلال والرمال لتنظيم الرحلات السياحية | منظم رحلات سياحية / وكالة سفر وسياحة  "
                     : "License No: 73106935 | Tilal Rimal Tourism Company | Tourism Agent / Travel Agency "}
@@ -464,7 +465,7 @@ export default function Footer({ lang }) {
               <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-1">
                 <span style={{ fontSize: "12px" }}>
                   &copy; 2026{" "}
-                  <span style={{ color: "#FFC60B" }}>
+                  <span style={{ color: "#1C0052" }}>
                     {localeText.companyName}
                   </span>
                 </span>
@@ -516,6 +517,22 @@ export default function Footer({ lang }) {
         .icon.whatsapp {
           color: #25d366;
         }
+        .footer-wave {
+          position: absolute;
+          top: -100px; /* Reduced negative offset to push it further down and overlap the solid region */
+          left: -5%;
+          width: 110%;
+          height: 180px; /* Tall wave element */
+          background-color: #E85D1F; /* Matches the orange footer background exactly */
+          -webkit-mask-image: url("/newIdentity/Png/R-for-footer.png");
+          mask-image: url("/newIdentity/Png/R-for-footer.png");
+          -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+          -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+          z-index: 10;
+        }
+
         .footer-link:hover {
           color: #ffffff !important;
           background: none !important;
@@ -533,7 +550,7 @@ export default function Footer({ lang }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #FFC60B;
+          color: #1C0052;
         }
         .social-icon:hover {
           color: #ffffff !important;

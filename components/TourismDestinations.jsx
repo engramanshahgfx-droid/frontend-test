@@ -306,7 +306,7 @@ export default function TourismDestinations({ lang, region }) {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  background: '#1C0052',
+                  background: '#E85D1F',
                   color: '#fff',
                   padding: '12px 35px',
                   borderRadius: '10px',
@@ -316,17 +316,18 @@ export default function TourismDestinations({ lang, region }) {
                   marginTop: '20px',
                   textDecoration: 'none',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0 4px 15px rgba(28, 0, 82, 0.25)',
+                  boxShadow: '0 4px 15px rgba(209, 112, 0, 0.25)',
+                  marginBottom: '100px',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)';
+                  e.currentTarget.style.background = '#1C0052';
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(232, 93, 31, 0.45)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(31, 95, 232, 0.45)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#1C0052';
+                  e.currentTarget.style.background = '#E85D1F';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 0, 82, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 123, 0, 0.25)';
                 }}
               >
                 <span>{t.viewAll}</span>
@@ -347,7 +348,7 @@ export default function TourismDestinations({ lang, region }) {
         .title h2 {
           font-size: 2.5rem;
           font-weight: 700;
-          color: #1C0052; /* Deep Heritage Purple */
+          color: #E85D1F;
           margin-bottom: 40px;
           position: relative;
           text-align: center;
@@ -361,7 +362,7 @@ export default function TourismDestinations({ lang, region }) {
           transform: translateX(-50%);
           width: 60px;
           height: 3px;
-          background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange to Yellow gradient */
+          background: #E85D1F;
         }
 
         .destination-card {
@@ -441,8 +442,8 @@ export default function TourismDestinations({ lang, region }) {
           position: absolute;
           top: 15px;
           right: 15px;
-          background: rgba(28, 0, 82, 0.85); /* Deep purple backdrop */
-          color: #FFC60B; /* Golden Dune Yellow */
+          background: #E85D1F;
+          color: #fff; /* Golden Dune Yellow */
           padding: 4px 12px;
           border-radius: 20px;
           font-size: 0.85rem;
@@ -459,13 +460,13 @@ export default function TourismDestinations({ lang, region }) {
         .destination-content h3 {
           font-size: 1.1rem;
           font-weight: 600;
-          color: #1C0052; /* Deep Heritage Purple */
+          color: #E85D1F;
           margin: 0 0 5px;
           line-height: 1.3;
         }
 
         .destination-location {
-          color: #666;
+          color: #1C0052;
           font-size: 0.85rem;
           margin: 0 0 8px;
         }
@@ -510,7 +511,7 @@ export default function TourismDestinations({ lang, region }) {
 
         .price-per {
           font-size: 0.7rem;
-          color: #888;
+          color: #1C0052;
           font-weight: 400;
         }
 
@@ -524,8 +525,8 @@ export default function TourismDestinations({ lang, region }) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #1C0052;
-          color: #fff;
+          background: #E85D1F !important;
+          color: #fff !important;
           padding: 12px 35px;
           border-radius: 10px;
           font-weight: 600;
@@ -535,6 +536,7 @@ export default function TourismDestinations({ lang, region }) {
           text-decoration: none;
           transition: all 0.3s ease;
           box-shadow: 0 4px 15px rgba(28, 0, 82, 0.2);
+          margin-bottom: 100px;
         }
 
         .btn-view-all:hover {
