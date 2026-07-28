@@ -127,6 +127,7 @@ const WhatsAppButton = ({ lang = "en" }) => {
       <style jsx>{`
         .whatsapp-button:hover {
           cursor: pointer;
+          z-index:10000 !important
         }
 
         .whatsapp-button:focus-visible {
