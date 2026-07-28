@@ -5,7 +5,21 @@ import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
 import Image from "next/image";
-import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage } from "lucide-react";
+import {
+  Headphones,
+  CreditCard,
+  Copy,
+  Phone,
+  MessageSquare,
+  Mail,
+  MapPin,
+  FileText,
+  Star,
+  CheckCircle,
+  XCircle,
+  Calendar,
+  Luggage,
+} from "lucide-react";
 
 export default function TourismOfferDetails() {
   const params = useParams();
@@ -124,7 +138,7 @@ export default function TourismOfferDetails() {
     // Check for Arabic version first if lang is Arabic
     if (lang === "ar") {
       // Try various Arabic field names
-      const arValue = 
+      const arValue =
         value.ar ||
         value.arabic ||
         value.title_ar ||
@@ -147,13 +161,14 @@ export default function TourismOfferDetails() {
         value.label ||
         value.address ||
         value.value;
-      
+
       // If we found an Arabic value, return it
       if (arValue && typeof arValue === "string") return arValue;
-      if (arValue && typeof arValue === "object") return JSON.stringify(arValue);
-      
+      if (arValue && typeof arValue === "object")
+        return JSON.stringify(arValue);
+
       // Fallback to English if no Arabic found
-      const enValue = 
+      const enValue =
         value.en ||
         value.english ||
         value.title_en ||
@@ -166,11 +181,11 @@ export default function TourismOfferDetails() {
         value.label_en ||
         value.address_en ||
         value.value_en;
-      
+
       return enValue || fallback;
     } else {
       // English version
-      const enValue = 
+      const enValue =
         value.en ||
         value.english ||
         value.title_en ||
@@ -193,12 +208,13 @@ export default function TourismOfferDetails() {
         value.label ||
         value.address ||
         value.value;
-      
+
       if (enValue && typeof enValue === "string") return enValue;
-      if (enValue && typeof enValue === "object") return JSON.stringify(enValue);
-      
+      if (enValue && typeof enValue === "object")
+        return JSON.stringify(enValue);
+
       // Fallback to Arabic if no English found
-      const arValue = 
+      const arValue =
         value.ar ||
         value.arabic ||
         value.title_ar ||
@@ -211,14 +227,14 @@ export default function TourismOfferDetails() {
         value.label_ar ||
         value.address_ar ||
         value.value_ar;
-      
+
       return arValue || fallback;
     }
   };
 
   const getText = (obj, field) => {
     if (!obj) return "";
-    
+
     // Handle specific fields with priority
     if (field === "title") {
       if (lang === "ar") {
@@ -226,45 +242,63 @@ export default function TourismOfferDetails() {
       }
       return obj.title_en || obj.title_ar || obj.title || "";
     }
-    
+
     if (field === "description") {
       if (lang === "ar") {
-        return obj.description_ar || obj.description_en || obj.description || "";
+        return (
+          obj.description_ar || obj.description_en || obj.description || ""
+        );
       }
       return obj.description_en || obj.description_ar || obj.description || "";
     }
-    
+
     if (field === "long_description") {
       if (lang === "ar") {
-        return obj.long_description_ar || obj.long_description_en || obj.long_description || "";
+        return (
+          obj.long_description_ar ||
+          obj.long_description_en ||
+          obj.long_description ||
+          ""
+        );
       }
-      return obj.long_description_en || obj.long_description_ar || obj.long_description || "";
+      return (
+        obj.long_description_en ||
+        obj.long_description_ar ||
+        obj.long_description ||
+        ""
+      );
     }
-    
+
     if (field === "duration") {
       if (lang === "ar") {
         return obj.duration_ar || obj.duration_en || obj.duration || "";
       }
       return obj.duration_en || obj.duration_ar || obj.duration || "";
     }
-    
+
     if (field === "location") {
       if (lang === "ar") {
         return obj.location_ar || obj.location_en || obj.location || "";
       }
       return obj.location_en || obj.location_ar || obj.location || "";
     }
-    
+
     if (field === "group_size") {
       if (lang === "ar") {
         return obj.group_size_ar || obj.group_size_en || obj.group_size || "";
       }
       return obj.group_size_en || obj.group_size_ar || obj.group_size || "";
     }
-    
+
     // Generic field handling
     const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
-    return obj[fieldKey] || obj[`${field}_en`] || obj[`${field}_ar`] || obj[field] || "";
+    return (
+      obj[fieldKey] ||
+      obj[`${field}_en`] ||
+      obj[`${field}_ar`] ||
+      obj[field] ||
+      ""
+    );
   };
 
   // Helper to safely parse JSON fields
@@ -364,9 +398,7 @@ export default function TourismOfferDetails() {
           <div className="spinner-border text-warning" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <p style={{ marginTop: "20px", color: "#666" }}>
-            {t.loading}
-          </p>
+          <p style={{ marginTop: "20px", color: "#666" }}>{t.loading}</p>
         </div>
       </div>
     );
@@ -403,39 +435,52 @@ export default function TourismOfferDetails() {
   const itinerary = getItinerary();
   const rawContactInfo = getContactInfo();
   const contactInfo = {
-    address: rawContactInfo.address || (lang === "ar" ? "حي الربوة، جدة" : "Al Rabwa District, Jeddah"),
+    address:
+      rawContactInfo.address ||
+      (lang === "ar" ? "حي الربوة، جدة" : "Al Rabwa District, Jeddah"),
     phone: rawContactInfo.phone || "+966547305060",
     whatsapp: rawContactInfo.whatsapp || "+966547305060",
-    email: rawContactInfo.email || "info@tilalr.com"
+    email: rawContactInfo.email || "info@tilalr.com",
   };
 
   const rawPaymentMethods = getPaymentMethods();
-  const paymentMethods = rawPaymentMethods.length > 0 ? rawPaymentMethods.map(method => ({
-    ...method,
-    name: getLocalizedText(method, "name") || method.name || method.name_en || method.name_ar || "",
-    account_no: method.account_no || method.accountNo || "",
-    iban: method.iban || ""
-  })) : [
-    {
-      name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
-      account_no: "11111111",
-      iban: "SA1111111111111",
-    },
-    {
-      name: lang === "ar" ? "إس تي سي باي" : "STC Pay",
-      account_no: "22222222",
-      iban: "SA2222222222222",
-    }
-  ];
+  const paymentMethods =
+    rawPaymentMethods.length > 0
+      ? rawPaymentMethods.map((method) => ({
+          ...method,
+          name:
+            getLocalizedText(method, "name") ||
+            method.name ||
+            method.name_en ||
+            method.name_ar ||
+            "",
+          account_no: method.account_no || method.accountNo || "",
+          iban: method.iban || "",
+        }))
+      : [
+          {
+            name: lang === "ar" ? "بنك الإنماء" : "Alinma Bank",
+            account_no: "68205990876000",
+            iban: "SA3705000068205990876000",
+          },
+          {
+            name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
+            account_no: "189608010004821",
+            iban: "SA6780000189608010004821",
+          },
+        ];
   const basicInfo = getBasicInfo();
 
   return (
     <>
       <div className="offer-details" dir={lang === "ar" ? "rtl" : "ltr"}>
-        <div className="container" style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}>
+        <div
+          className="container"
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
           {/* Breadcrumb */}
           <nav className="breadcrumb">
             <a href={`/${lang}`}>{t.home}</a>
@@ -518,22 +563,22 @@ export default function TourismOfferDetails() {
                 {offer.original_price && (
                   <span className="original-price">
                     {offer.original_price}{" "}
-                    <Image 
-                      src="/saudi_riyal.png" 
-                      alt="SAR" 
-                      width={14} 
-                      height={14} 
+                    <Image
+                      src="/saudi_riyal.png"
+                      alt="SAR"
+                      width={14}
+                      height={14}
                       className="currency-icon"
                     />
                   </span>
                 )}
                 <span className="current-price">
                   {offer.price}{" "}
-                  <Image 
-                    src="/saudi_riyal.png" 
-                    alt="SAR" 
-                    width={16} 
-                    height={16} 
+                  <Image
+                    src="/saudi_riyal.png"
+                    alt="SAR"
+                    width={16}
+                    height={16}
                     className="currency-icon"
                   />
                 </span>
@@ -571,7 +616,10 @@ export default function TourismOfferDetails() {
                 <ul className="features-list">
                   {features.map((item, index) => (
                     <li key={index}>
-                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                      {getLocalizedText(
+                        item,
+                        typeof item === "string" ? item : "",
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -591,7 +639,10 @@ export default function TourismOfferDetails() {
                   {includes.map((item, index) => (
                     <li key={index}>
                       ✓{" "}
-                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                      {getLocalizedText(
+                        item,
+                        typeof item === "string" ? item : "",
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -611,7 +662,10 @@ export default function TourismOfferDetails() {
                   {notIncludes.map((item, index) => (
                     <li key={index}>
                       ✗{" "}
-                      {getLocalizedText(item, typeof item === "string" ? item : "")}
+                      {getLocalizedText(
+                        item,
+                        typeof item === "string" ? item : "",
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -637,9 +691,18 @@ export default function TourismOfferDetails() {
                       transition={{ delay: index * 0.1 }}
                     >
                       <h4>
-                        {t.day} {day.day}: {getLocalizedText(day.title, day.title) || getLocalizedText(day, "title") || day.title || "Title"}
+                        {t.day} {day.day}:{" "}
+                        {getLocalizedText(day.title, day.title) ||
+                          getLocalizedText(day, "title") ||
+                          day.title ||
+                          "Title"}
                       </h4>
-                      <p>{getLocalizedText(day.description, day.description) || getLocalizedText(day, "description") || day.description || "Description"}</p>
+                      <p>
+                        {getLocalizedText(day.description, day.description) ||
+                          getLocalizedText(day, "description") ||
+                          day.description ||
+                          "Description"}
+                      </p>
                       {day.image && (
                         <img
                           src={getImageUrl(day.image)}
@@ -666,23 +729,35 @@ export default function TourismOfferDetails() {
               <div className="panel-body">
                 <div className="contact-grid">
                   {basicInfo.trip_code && (
-                    <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
+                    <div>
+                      🆔 {t.tripCode}: {basicInfo.trip_code}
+                    </div>
                   )}
-                  {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
+                  {basicInfo.days_num && (
+                    <div>
+                      📅 {t.days}: {basicInfo.days_num}
+                    </div>
+                  )}
                   {basicInfo.destination_name && (
-                    <div>📍 {t.destination}: {getLocalizedText(basicInfo, "destination_name") || basicInfo.destination_name}</div>
+                    <div>
+                      📍 {t.destination}:{" "}
+                      {getLocalizedText(basicInfo, "destination_name") ||
+                        basicInfo.destination_name}
+                    </div>
                   )}
                   {basicInfo.available_to && (
-                    <div>📆 {t.availableTo}: {basicInfo.available_to}</div>
+                    <div>
+                      📆 {t.availableTo}: {basicInfo.available_to}
+                    </div>
                   )}
                   {basicInfo.double_room && (
                     <div>
                       🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={12} 
-                        height={12} 
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={12}
+                        height={12}
                         className="currency-icon"
                       />
                     </div>
@@ -690,11 +765,11 @@ export default function TourismOfferDetails() {
                   {basicInfo.single_room && (
                     <div>
                       🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={12} 
-                        height={12} 
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={12}
+                        height={12}
                         className="currency-icon"
                       />
                     </div>
@@ -716,7 +791,11 @@ export default function TourismOfferDetails() {
                   {contactInfo.address && (
                     <li>
                       <MapPin size={16} color="#E85D1F" />
-                      <a href="https://maps.app.goo.gl/WakCAhdZsZERp1M97" target="_blank" rel="noopener noreferrer">
+                      <a
+                        href="https://maps.app.goo.gl/WakCAhdZsZERp1M97"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <span>{contactInfo.address}</span>
                       </a>
                     </li>
@@ -726,7 +805,9 @@ export default function TourismOfferDetails() {
                       <li className="divider"></li>
                       <li>
                         <Phone size={16} color="#E85D1F" />
-                        <a href={`tel:${contactInfo.phone}`}>{contactInfo.phone}</a>
+                        <a href={`tel:${contactInfo.phone}`}>
+                          {contactInfo.phone}
+                        </a>
                       </li>
                     </>
                   )}
@@ -735,7 +816,11 @@ export default function TourismOfferDetails() {
                       <li className="divider"></li>
                       <li>
                         <MessageSquare size={16} color="#E85D1F" />
-                        <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={`https://wa.me/${contactInfo.whatsapp.replace(/\s/g, "")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {contactInfo.whatsapp}
                         </a>
                       </li>
@@ -746,7 +831,9 @@ export default function TourismOfferDetails() {
                       <li className="divider"></li>
                       <li>
                         <Mail size={16} color="#E85D1F" />
-                        <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+                        <a href={`mailto:${contactInfo.email}`}>
+                          {contactInfo.email}
+                        </a>
                       </li>
                     </>
                   )}
@@ -785,13 +872,17 @@ export default function TourismOfferDetails() {
                       )}
                       <div className="bank-details">
                         <div className="bank-row">
-                          <span className="bank-label">{lang === "ar" ? "الاسم" : "Name"} :</span>
+                          <span className="bank-label">
+                            {lang === "ar" ? "الاسم" : "Name"} :
+                          </span>
                           <span className="bank-number">{method.name}</span>
                         </div>
                         {method.account_no && (
                           <div className="bank-row">
                             <span className="bank-label">Account No. :</span>
-                            <span className="bank-number">{method.account_no}</span>
+                            <span className="bank-number">
+                              {method.account_no}
+                            </span>
                             <button
                               className="copy-btn"
                               onClick={() => copyToClipboard(method.account_no)}

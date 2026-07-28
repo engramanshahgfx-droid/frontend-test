@@ -526,18 +526,18 @@ export default function DestinationDetails() {
   }));
 
   const defaultPaymentMethods = [
-    {
-      name_en: "Al Rajhi Bank",
-      name_ar: "مصرف الراجحي",
-      account_no: "11111111",
-      iban: "SA1111111111111",
-    },
-    {
-      name_en: "STC Pay",
-      name_ar: "إس تي سي باي",
-      account_no: "22222222",
-      iban: "SA2222222222222",
-    }
+   {
+  name_en: "Alinma Bank",
+  name_ar: "بنك الإنماء",
+  account_no: "68205990876000",
+  iban: "SA3705000068205990876000",
+},
+{
+  name_en: "Al Rajhi Bank",
+  name_ar: "مصرف الراجحي",
+  account_no: "SA6780000189608010004821",
+  iban: "SA6780000189608010004821",
+},
   ];
 
   const displayPaymentMethods =
