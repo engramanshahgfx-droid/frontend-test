@@ -279,7 +279,7 @@ export default async function Home({ params }) {
       {/* <SpecialOffers lang={lang} /> */}
       <TourismOffers lang={lang} maxItems={3} />
 
-      <TourismDestinations lang={lang} />
+      <TourismDestinations lang={lang} maxItems={3} />
 
 
     </>
