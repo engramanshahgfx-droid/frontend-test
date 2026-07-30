@@ -202,7 +202,6 @@ export default function TravelReservationModal({
       required: "هذا الحقل مطلوب",
     },
   };
-
   const t = labels[lang] || labels.en;
 
   const getFieldValue = (field) => {

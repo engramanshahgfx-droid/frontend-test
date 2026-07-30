@@ -10,7 +10,7 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 
-export default function TripsArchive({ lang }) {
+export default function TripsArchive({ lang, hideHero = false }) {
   const content = {
     en: {
       heroTitle: "The Magic of Nature As You've Never Seen Before",
@@ -271,34 +271,35 @@ const staticTrips = [
 
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="trips-archive-page">
-      {/* Hero Section with Video Background */}
-      <section className="trips-hero">
-        <div className="video-background">
-          <video 
-            autoPlay 
-            muted 
-            loop 
-            playsInline
-            className="background-video"
-          >
-            <source src="/desert2.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div className="video-overlay"></div>
-        </div>
-        
-        <div className="container">
-          <div className="row align-items-center min-vh-80">
-            <div className="col-lg-8 mx-auto text-center text-white">
-              <div className="hero-content">
-                <h1 className="display-4 fw-bold mb-4">{t.heroTitle}</h1>
-                <p className="lead mb-3">{t.heroSubtitle}</p>
-                <p className="hero-description">{t.heroDescription}</p>
+      {!hideHero && (
+        <section className="trips-hero">
+          <div className="video-background">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="background-video"
+            >
+              <source src="/desert2.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="video-overlay"></div>
+          </div>
+          
+          <div className="container">
+            <div className="row align-items-center min-vh-80">
+              <div className="col-lg-8 mx-auto text-center text-white">
+                <div className="hero-content">
+                  <h1 className="display-4 fw-bold mb-4">{t.heroTitle}</h1>
+                  <p className="lead mb-3">{t.heroSubtitle}</p>
+                  <p className="hero-description">{t.heroDescription}</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Trips Grid Section */}
       <section className="trips-section py-5">
@@ -540,7 +541,7 @@ const staticTrips = [
         }
 
         .section-title {
-          color: #1C0052;
+          color: #E85D1F;
           font-weight: 800;
           font-size: 2.5rem;
           position: relative;

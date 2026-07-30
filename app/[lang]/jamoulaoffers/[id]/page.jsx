@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
 import Image from "next/image";
-import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage } from "lucide-react";
+import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage, Clock } from "lucide-react";
 
-export default function TourismOfferDetails() {
+export default function JamoulaOfferDetails() {
   const params = useParams();
   const router = useRouter();
   const lang = params?.lang || "en";
@@ -40,7 +40,7 @@ export default function TourismOfferDetails() {
       offerNotFound: "Offer not found",
       failedToLoad: "Failed to load offer",
       home: "Home",
-      tourismOffers: "Tourism Offers",
+      jamoulaOffers: "Jamoula Offers",
       day: "Day",
       tripCode: "Trip Code",
       days: "Days",
@@ -50,6 +50,9 @@ export default function TourismOfferDetails() {
       singleRoom: "Single Room",
       account: "Account",
       iban: "IBAN",
+      bankTransfer: "Bank Transfer",
+      electronicPayment: "Electronic Payment",
+      electronicPaymentDesc: "Secure online payment with credit card, Apple Pay or Mada."
     },
     ar: {
       back: " ← العودة للعروض",
@@ -72,7 +75,7 @@ export default function TourismOfferDetails() {
       offerNotFound: "العرض غير موجود",
       failedToLoad: "فشل تحميل العرض",
       home: "الرئيسية",
-      tourismOffers: "العروض السياحية",
+      jamoulaOffers: "عروض جامولا",
       day: "اليوم",
       tripCode: "رمز الرحلة",
       days: "الأيام",
@@ -82,6 +85,9 @@ export default function TourismOfferDetails() {
       singleRoom: "غرفة مفردة",
       account: "الحساب",
       iban: "رقم الآيبان",
+      bankTransfer: "تحويل بنكي",
+      electronicPayment: "الدفع الإلكتروني",
+      electronicPaymentDesc: "دفع إلكتروني آمن بواسطة بطاقة الائتمان، أبل باي أو مدى."
     },
   };
 
@@ -95,7 +101,7 @@ export default function TourismOfferDetails() {
 
   const fetchOffer = async () => {
     try {
-      const response = await fetch(`${API_URL}/tourism-offers/${id}`);
+      const response = await fetch(`${API_URL}/jamoula-offers/${id}`);
       const data = await response.json();
       if (data.success) {
         setOffer(data.data);
@@ -354,6 +360,7 @@ export default function TourismOfferDetails() {
     console.log("Opening booking modal for offer:", offer);
     setShowBookingModal(true);
   };
+
   if (loading) {
     return (
       <div className="offer-details">
@@ -371,6 +378,7 @@ export default function TourismOfferDetails() {
       </div>
     );
   }
+
   if (error || !offer) {
     return (
       <div
@@ -379,7 +387,7 @@ export default function TourismOfferDetails() {
       >
         <p style={{ color: "#ff6b6b" }}>{error || t.offerNotFound}</p>
         <button
-          onClick={() => router.push(`/${lang}/tousimoffers`)}
+          onClick={() => router.push(`/${lang}/jamoulaoffers`)}
           className="btn-back"
           style={{
             marginTop: "20px",
@@ -440,18 +448,10 @@ export default function TourismOfferDetails() {
           <nav className="breadcrumb">
             <a href={`/${lang}`}>{t.home}</a>
             <span> / </span>
-            <a href={`/${lang}/tousimoffers`}>{t.tourismOffers}</a>
+            <a href={`/${lang}/jamoulaoffers`}>{t.jamoulaOffers}</a>
             <span> / </span>
             <span className="current">{getText(offer, "title")}</span>
           </nav>
-
-          {/* Back Button */}
-          {/* <button
-            className="btn-back"
-            onClick={() => router.push(`/${lang}/tousimoffers`)}
-          >
-            {t.back}
-          </button> */}
 
           {/* Header */}
           <div className="offer-header">
@@ -666,7 +666,7 @@ export default function TourismOfferDetails() {
               <div className="panel-body">
                 <div className="contact-grid">
                   {basicInfo.trip_code && (
-                    <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
+                     <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
                   )}
                   {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
                   {basicInfo.destination_name && (
@@ -851,7 +851,7 @@ export default function TourismOfferDetails() {
         }}
         packageData={offer}
         lang={lang}
-        bookingType="tourism_offer"
+        bookingType="jamoula_offer"
       />
 
       <style jsx>{`
@@ -1223,8 +1223,6 @@ export default function TourismOfferDetails() {
           max-height: 40px;
           margin-top: 10px;
           display: block;
-        }ext-align: center;
-          border: 1px solid rgba(28, 0, 82, 0.05);
         }
 
         .payment-card img {

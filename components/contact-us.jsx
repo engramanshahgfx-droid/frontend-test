@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 
-export default function Contact({ lang }) {
+export default function Contact({ lang, hideHero = false }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -156,22 +156,26 @@ export default function Contact({ lang }) {
   return (
     <div dir={isRTL ? "rtl" : "ltr"} className="contact-page">
       {/* Banner */}
-      <header className="banner">
-        <div className="banner-inner">
-          <h1 className="banner-title">{t.contactTitle}</h1>
-          <p className="banner-subtitle">{t.contactSubtitle}</p>
-        </div>
-      </header>
+      {!hideHero && (
+        <header className="banner">
+          <div className="banner-inner">
+            <h1 className="banner-title">{t.contactTitle}</h1>
+            <p className="banner-subtitle">{t.contactSubtitle}</p>
+          </div>
+        </header>
+      )}
 
       {/* Contact Section */}
       <section className="contact-section">
         <div className="container">
           <div className="contact-wrapper">
             <div className="form-container">
-              <div className="form-header">
-                <h2>{t.contactTitle}</h2>
-                <p>{t.contactSubtitle}</p>
-              </div>
+              {!hideHero && (
+                <div className="form-header">
+                  <h2>{t.contactTitle}</h2>
+                  <p>{t.contactSubtitle}</p>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="contact-form">
                 <div className="form-group">

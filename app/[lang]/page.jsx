@@ -13,6 +13,11 @@ import Saudi from '@/components/Saudi/Saudi';
 import TourismDestinations from "@/components/TourismDestinations";
 import TourismOffers from "@/components/TourismOffers";
 import SpecialOffers from "@/components/SpecialOffer/SpecialOffers";
+import PromoBanners from "@/components/PromoBanners";
+import AgencyPros from "@/components/AgencyPros";
+import PartnerCarousel from "@/components/PartnerCarousel";
+import ModernTestimonials from "@/components/ModernTestimonials";
+import Contact from "@/components/contact-us";
 import { getApiUrl } from '@/config/api';
 
 export const dynamic = 'force-dynamic';
@@ -276,10 +281,46 @@ export default async function Home({ params }) {
         sectionDescription={discoverDescription}
       />
 
+      <AgencyPros lang={lang} />
+
+      <PartnerCarousel lang={lang} />
+
       {/* <SpecialOffers lang={lang} /> */}
       <TourismOffers lang={lang} maxItems={3} />
 
-      <TourismDestinations lang={lang} maxItems={3} />
+      <PromoBanners lang={lang} index={0} />
+
+      <TourismDestinations lang={lang} />
+
+      <PromoBanners lang={lang} index={1} />
+
+      <ModernTestimonials lang={lang} />
+
+      <div className="section-header-contact" style={{ textAlign: "center", padding: "50px", backgroundColor: "#faf6f0" }}>
+        <span className="accent-tag" style={{
+          fontSize: "0.85rem",
+          fontWeight: "700",
+          letterSpacing: "2px",
+          color: "#E85D1F",
+          display: "inline-block",
+          marginBottom: "12px",
+          fontFamily: "'Tajawal', sans-serif"
+        }}>
+          {lang === "ar" ? "اتصل بنا" : "CONTACT US"}
+        </span>
+        <h2 style={{
+          fontSize: "2.5rem",
+          fontWeight: "800",
+          color: "#1C0052",
+          margin: "0",
+          paddingBottom: "50px",
+          fontFamily: "'Tajawal', sans-serif"
+        }}>
+          {lang === "ar" ? "تواصل معنا اليوم" : "Get In Touch With Us"}
+        </h2>
+      </div>
+
+      <Contact lang={lang} hideHero={true} />
 
 
     </>

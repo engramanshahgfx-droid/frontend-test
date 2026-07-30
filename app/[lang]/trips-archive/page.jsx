@@ -1,18 +1,7 @@
-import TripsArchive from "@/components/TripsArchive/TripsArchive";
-import Testimonials from "@/components/Testimonials"; // Add @/ prefix
+import { redirect } from "next/navigation";
 
 export default async function TripsArchivePage({ params }) {
-  try {
-    const { lang } = await params;
-    const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
-    return (
-      <>
-        <TripsArchive lang={validLang} />
-        <Testimonials lang={validLang} />
-      </>
-    );
-  } catch (error) {
-    console.error('Error in TripsArchivePage:', error);
-    return <TripsArchive lang="ar" />;
-  }
+  const { lang } = await params;
+  const validLang = ['ar', 'en', 'zh'].includes(lang) ? lang : 'ar';
+  redirect(`/${validLang}/about-us`);
 }

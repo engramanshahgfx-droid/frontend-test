@@ -7,7 +7,7 @@ import { API_URL } from "@/lib/api";
 import Image from "next/image";
 import BookingModal from "@/components/BookingModal";
 
-export default function TourismOffersPage() {
+export default function JamoulaOffersPage() {
   const params = useParams();
   const router = useRouter();
   const lang = params?.lang || "en";
@@ -19,13 +19,13 @@ export default function TourismOffersPage() {
 
   const labels = {
     en: {
-      title: "Saudi Offers",
-      subtitle: "Discover amazing deals and unforgettable experiences",
+      title: "Jamoula Offers",
+      subtitle: "Discover amazing Jamoula deals and unforgettable experiences",
       viewDetails: "View Details",
       bookNow: "Book Now",
       from: "From",
       perPerson: "per person",
-      noOffers: "No offers available",
+      noOffers: "No Jamoula offers available",
       backToHome: "Back to Home",
       loading: "Loading offers...",
       popular: "Popular",
@@ -33,13 +33,13 @@ export default function TourismOffersPage() {
       off: "OFF",
     },
     ar: {
-      title: "عروض السعوديه",
-      subtitle: "اكتشف الصفقات المذهلة والتجارب التي لا تنسى",
+      title: "عروض جامولا",
+      subtitle: "اكتشف صفقات جامولا المذهلة والتجارب التي لا تنسى",
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
       from: "من",
       perPerson: "للفرد",
-      noOffers: "لا توجد عروض متاحة",
+      noOffers: "لا توجد عروض جامولا متاحة",
       backToHome: "العودة للرئيسية",
       loading: "جارٍ تحميل العروض...",
       popular: "الأكثر شهرة",
@@ -56,7 +56,7 @@ export default function TourismOffersPage() {
 
   const fetchOffers = async () => {
     try {
-      const response = await fetch(`${API_URL}/tourism-offers`);
+      const response = await fetch(`${API_URL}/jamoula-offers`);
       const data = await response.json();
       if (data.success) {
         setOffers(data.data || []);
@@ -88,14 +88,16 @@ export default function TourismOffersPage() {
     if (img.startsWith("/")) return `${backendBase}${img}`;
     return `${backendBase}/storage/${img}`;
   };
+
   const handleViewDetails = (offer) => {
-    router.push(`/${lang}/tousimoffers/${offer.id}`);
+    router.push(`/${lang}/jamoulaoffers/${offer.id}`);
   };
 
   const handleBookNow = (offer) => {
     setSelectedOffer(offer);
     setShowBookingModal(true);
   };
+
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating || 0);
     return Array.from({ length: 5 }, (_, i) => (
@@ -144,153 +146,153 @@ export default function TourismOffersPage() {
 
   return (
     <div className="offers-page" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-        <div className="container" style={{ maxWidth: "1200px" }}>
-          <div className="page-header">
-            <h1 style={{ padding: "0" }}>
-              {lang === "ar" ? (
-                <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">السعودية</span></>
-              ) : (
-                <><span className="highlight-orange">Discover</span> <span className="highlight-green">Saudi Arabia</span></>
-              )}
-            </h1>
-            <p>{t.subtitle}</p>
+      <div className="container" style={{ maxWidth: "1200px" }}>
+        <div className="page-header">
+          <h1 style={{ padding: "0" }}>
+            {lang === "ar" ? (
+              <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">جامولا</span></>
+            ) : (
+              <><span className="highlight-orange">Discover</span> <span className="highlight-green">Jamoula</span></>
+            )}
+          </h1>
+          <p>{t.subtitle}</p>
+        </div>
+        {offers.length === 0 ? (
+          <div className="text-center" style={{ padding: "60px 0" }}>
+            <p>{t.noOffers}</p>
+            <button
+              onClick={() => router.push(`/${lang}`)}
+              style={{
+                marginTop: "20px",
+                padding: "10px 30px",
+                background: "#dfa528",
+                color: "#fff",
+                border: "none",
+                borderRadius: "25px",
+                cursor: "pointer",
+              }}
+            >
+              {t.backToHome}
+            </button>
           </div>
-          {offers.length === 0 ? (
-            <div className="text-center" style={{ padding: "60px 0" }}>
-              <p>{t.noOffers}</p>
-              <button
-                onClick={() => router.push(`/${lang}`)}
-                style={{
-                  marginTop: "20px",
-                  padding: "10px 30px",
-                  background: "#dfa528",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "25px",
-                  cursor: "pointer",
-                }}
+        ) : (
+          <div className="offers-grid">
+            {offers.map((offer, index) => (
+              <motion.div
+                key={offer.id || index}
+                className="offer-card"
+                style={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                onClick={() => handleViewDetails(offer)}
               >
-                {t.backToHome}
-              </button>
-            </div>
-          ) : (
-            <div className="offers-grid">
-              {offers.map((offer, index) => (
-                <motion.div
-                  key={offer.id || index}
-                  className="offer-card"
-                  style={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  onClick={() => handleViewDetails(offer)}
-                >
-                  <div className="offer-image">
-                    <img
-                      src={getImageUrl(offer.image)}
-                      alt={getText(offer, "title")}
-                      onError={(e) => { e.target.src = "/placeholder.png"; }}
-                    />
-                    <div className="badges-container">
-                      {offer.discount && (
-                        <span className="discount-badge">{offer.discount}% {t.off}</span>
-                      )}
-                      {offer.popular && <span className="popular-badge">{t.popular}</span>}
-                      {offer.limited && <span className="limited-badge">{t.limited || "Limited"}</span>}
-                    </div>
-                    <div className="offer-overlay">
-                      <button className="btn-quick-view" onClick={(e) => {
-                        e.stopPropagation();
-                        handleViewDetails(offer);
-                      }}>
-                        <Eye size={20} />
-                      </button>
-                      <button className="btn-favorite" onClick={(e) => {
-                        e.stopPropagation();
-                      }}>
-                        <Heart size={20} />
-                      </button>
+                <div className="offer-image">
+                  <img
+                    src={getImageUrl(offer.image)}
+                    alt={getText(offer, "title")}
+                    onError={(e) => { e.target.src = "/placeholder.png"; }}
+                  />
+                  <div className="badges-container">
+                    {offer.discount && (
+                      <span className="discount-badge">{offer.discount}% {t.off}</span>
+                    )}
+                    {offer.popular && <span className="popular-badge">{t.popular}</span>}
+                    {offer.limited && <span className="limited-badge">{t.limited || "Limited"}</span>}
+                  </div>
+                  <div className="offer-overlay">
+                    <button className="btn-quick-view" onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewDetails(offer);
+                    }}>
+                      <Eye size={20} />
+                    </button>
+                    <button className="btn-favorite" onClick={(e) => {
+                      e.stopPropagation();
+                    }}>
+                      <Heart size={20} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="offer-content">
+                  <div className="offer-header">
+                    <h3>{getText(offer, "title")}</h3>
+                    <div className="rating">
+                      {renderStars(offer.rating)}
+                      <span className="rating-value">{offer.rating || 0}</span>
                     </div>
                   </div>
 
-                  <div className="offer-content">
-                    <div className="offer-header">
-                      <h3>{getText(offer, "title")}</h3>
-                      <div className="rating">
-                        {renderStars(offer.rating)}
-                        <span className="rating-value">{offer.rating || 0}</span>
-                      </div>
-                    </div>
+                  <p className="offer-description">
+                    {getText(offer, "description")}
+                  </p>
 
-                    <p className="offer-description">
-                      {getText(offer, "description")}
-                    </p>
+                  <div className="offer-meta">
+                    {getText(offer, "location") && (
+                      <span><MapPin size={14} /> {getText(offer, "location")}</span>
+                    )}
+                    {getText(offer, "duration") && (
+                      <span><Clock size={14} /> {getText(offer, "duration")}</span>
+                    )}
+                  </div>
 
-                    <div className="offer-meta">
-                      {getText(offer, "location") && (
-                        <span><MapPin size={14} /> {getText(offer, "location")}</span>
-                      )}
-                      {getText(offer, "duration") && (
-                        <span><Clock size={14} /> {getText(offer, "duration")}</span>
-                      )}
-                    </div>
-
-                    <div className="offer-footer">
-                      <div className="offer-price">
-                        {offer.original_price && (
-                          <span className="price-original">
-                            {offer.original_price}
-                            <Image
-                              src="/saudi_riyal.png"
-                              alt="SAR"
-                              width={12}
-                              height={12}
-                              className="currency-icon-small"
-                            />
-                          </span>
-                        )}
-                        <div className="price-amount-wrapper">
-                          <span className="price-amount">{offer.price}</span>
+                  <div className="offer-footer">
+                    <div className="offer-price">
+                      {offer.original_price && (
+                        <span className="price-original">
+                          {offer.original_price}
                           <Image
                             src="/saudi_riyal.png"
                             alt="SAR"
-                            width={16}
-                            height={16}
-                            className="currency-icon"
+                            width={12}
+                            height={12}
+                            className="currency-icon-small"
                           />
-                        </div>
-                        <span className="price-per">{t.perPerson}</span>
+                        </span>
+                      )}
+                      <div className="price-amount-wrapper">
+                        <span className="price-amount">{offer.price}</span>
+                        <Image
+                          src="/saudi_riyal.png"
+                          alt="SAR"
+                          width={16}
+                          height={16}
+                          className="currency-icon"
+                        />
                       </div>
-                      <button
-                        className="btn-book"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleBookNow(offer);
-                        }}
-                      >
-                        {t.bookNow}
-                      </button>
+                      <span className="price-per">{t.perPerson}</span>
                     </div>
+                    <button
+                      className="btn-book"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBookNow(offer);
+                      }}
+                    >
+                      {t.bookNow}
+                    </button>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
 
-        <BookingModal
-          isOpen={showBookingModal}
-          onClose={() => {
-            setShowBookingModal(false);
-            setSelectedOffer(null);
-          }}
-          packageData={selectedOffer}
-          lang={lang}
-          bookingType="tourism_offer"
-        />
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          setShowBookingModal(false);
+          setSelectedOffer(null);
+        }}
+        packageData={selectedOffer}
+        lang={lang}
+        bookingType="jamoula_offer"
+      />
 
-        <style jsx>{`
+      <style jsx>{`
         .offers-page {
           padding: 150px 0 150px; /* Clear floating navbar */
           background: #FAF6F0; /* Soft Desert Sand theme variant */
@@ -349,8 +351,6 @@ export default function TourismOffersPage() {
           display: flex;
           flex-direction: column;
           height: 100%;
-          border-radius: 5px !important;
-          border-color: red;
         }
 
         .offer-card:hover {
@@ -501,51 +501,46 @@ export default function TourismOffersPage() {
           gap: 10px;
         }
         .offer-header h3 {
-          font-size: 1.1rem;
+          font-size: 1.15rem;
           font-weight: 600;
-          color: #E85D1F; /* Desert Sunset Orange */
+          color: #1C0052;
           margin: 0;
-          flex: 1;
-        }
-        .rating {
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          flex-shrink: 0;
+          line-height: 1.4;
+          font-family: 'Tajawal', sans-serif;
         }
 
         .rating-value {
-          color: #666;
           font-size: 0.85rem;
-          margin-left: 4px;
-          font-weight: 500;
+          color: #666;
+          font-weight: 600;
         }
 
         .offer-description {
-          color: #666;
           font-size: 0.9rem;
+          color: #666;
           line-height: 1.6;
-          margin: 10px 0 15px;
-          flex: 1;
+          margin: 10px 0 20px;
           display: -webkit-box;
-          -webkit-line-clamp: 2;
+          -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
+          font-family: 'Tajawal', sans-serif;
         }
 
         .offer-meta {
           display: flex;
           gap: 15px;
-          margin-bottom: 15px;
-          flex-wrap: wrap;
+          font-size: 0.85rem;
+          color: #888;
+          margin-bottom: 20px;
+          border-top: 1px dashed rgba(28, 0, 82, 0.1);
+          padding-top: 15px;
         }
 
         .offer-meta span {
           display: flex;
           align-items: center;
           gap: 5px;
-          font-size: 0.85rem;
-          color: #1C0052;
         }
 
         .offer-footer {
@@ -640,6 +635,6 @@ export default function TourismOffersPage() {
           }
         }
       `}</style>
-      </div>
-    );
+    </div>
+  );
 }

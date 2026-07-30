@@ -141,6 +141,7 @@ export default function Footer({ lang }) {
         position: "relative",
         zIndex: 1,
         direction: isRTL ? "rtl" : "ltr",
+        paddingTop: "20px"
       }}
     >
       {/* Sand Wave Divider */}
@@ -158,13 +159,12 @@ export default function Footer({ lang }) {
                   width: "120px",
                   height: "auto",
                   marginBottom: "0.8rem",
-                  background: "#ffffff",
+                  background: "#ffffffff",
                   padding: "8px",
                   borderRadius: "12px",
                 }}
               />
             </Link>
-
             <p
               className="mt-2"
               style={{ fontSize: "14px", color: "#e0e0e0", lineHeight: "1.6" }}
@@ -176,9 +176,8 @@ export default function Footer({ lang }) {
             </p>
             <div className="mt-2">
               <div
-                className={`d-flex align-items-center mb-1 gap-2 ${
-                  isRTL ? "flex-row-reverse justify-content-start" : ""
-                }`}
+                className={`d-flex align-items-center mb-1 gap-2 ${isRTL ? "flex-row-reverse justify-content-start" : ""
+                  }`}
               >
                 {isRTL ? (
                   <>
@@ -222,17 +221,15 @@ export default function Footer({ lang }) {
               </div>
 
               <div
-                className={`d-flex align-items-center mb-1 gap-2 ${
-                  isRTL ? "flex-row-reverse justify-content-start" : ""
-                }`}
+                className={`d-flex align-items-center mb-1 gap-2 ${isRTL ? "flex-row-reverse justify-content-start" : ""
+                  }`}
               ></div>
             </div>
 
             {/* Social Media Icons */}
             <div
-              className={`d-flex gap-2 mt-2 ${
-                isRTL ? "justify-content-md-end" : "justify-content-md-start"
-              } justify-content-center`}
+              className={`d-flex gap-2 mt-2 ${isRTL ? "justify-content-md-end" : "justify-content-md-start"
+                } justify-content-center`}
             >
               <a
                 href="https://www.tiktok.com/@tilalrimal"
@@ -514,7 +511,7 @@ export default function Footer({ lang }) {
         }
         .icon {
           font-size: 12px;
-          color: #e85d1f;
+          color: #E85D1F;
           flex-shrink: 0;
         }
         .icon.whatsapp {
@@ -526,7 +523,7 @@ export default function Footer({ lang }) {
           left: -5%;
           width: 110%;
           height: 180px; /* Tall wave element */
-          background-color: #e85d1f; /* Matches the orange footer background exactly */
+          background-color: #E85D1F; /* Matches the orange footer background exactly */
           -webkit-mask-image: url("/newIdentity/Png/R-for-footer.png");
           mask-image: url("/newIdentity/Png/R-for-footer.png");
           -webkit-mask-size: 100% 100%;
@@ -553,7 +550,7 @@ export default function Footer({ lang }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #1c0052;
+          color: #1C0052;
         }
         .social-icon:hover {
           color: #ffffff !important;

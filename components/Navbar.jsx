@@ -217,13 +217,17 @@ export default function Navbar({ lang }) {
   const menuItems = [
     {
       href: "#",
-      label: lang === "ar" ? "الوجهات الدولية" : "International Destinations",
+      label: lang === "ar" ? "الرحلات الدولية" : "International Trips",
       dropdown: true,
       type: "packages",
     },
     {
       href: "/tousimoffers",
-      label: lang === "ar" ? "عروض السعودية" : "Saudi Offers",
+      label: lang === "ar" ? "اكتشف السعودية" : "Discover Saudi",
+    },
+    {
+      href: "/jamoulaoffers",
+      label: lang === "ar" ? "عروض جامولا" : "Jamoula Offers",
     },
     {
       href: "#",
@@ -231,13 +235,7 @@ export default function Navbar({ lang }) {
       dropdown: true,
       type: "services",
     },
-    { href: "/trips-archive", label: t("nav.ourTrips") },
-    {
-      href: "/visa",
-      label: lang === "ar" ? "التأشيرات" : "Visa Services",
-      dropdown: true,
-      type: "visa",
-    },
+    { href: "/about-us", label: t("nav.about") },
     {
       href: "/basic",
       label: lang === "ar" ? "متطلبات السفر" : "Travel Requirements",
@@ -287,6 +285,15 @@ export default function Navbar({ lang }) {
       },
       icon: "🌐",
       href: "/international/internet-packages",
+    },
+    {
+      title: { en: "Visa Services", ar: "خدمات التأشيرات" },
+      description: {
+        en: "Apply for tourist and Schengen visas",
+        ar: "التقديم على التأشيرات السياحية والشنغن",
+      },
+      icon: "📋",
+      href: "/visa",
     },
   ];
 

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FaStar, FaQuoteRight, FaHandshake, FaMapMarkedAlt, FaAward, FaUsers, FaHeart } from "react-icons/fa";
+import TripsArchive from "../TripsArchive/TripsArchive";
 
 export default function About({ lang }) {
   const content = {
@@ -51,7 +52,8 @@ export default function About({ lang }) {
 
       ctaButtons: {
         contact: "تواصل معنا",
-        book: "إحجز رحلتك الان"
+        book: "إحجز رحلتك الان",
+        profile: "الملف التعريفي للشركة"
       }
     },
     en: {
@@ -100,7 +102,8 @@ export default function About({ lang }) {
 
       ctaButtons: {
         contact: "Contact Us",
-        book: "Book Your Trip Now"
+        book: "Book Your Trip Now",
+        profile: "Company Profile"
       }
     }
   };
@@ -138,7 +141,7 @@ export default function About({ lang }) {
         </div>
         
         <div className="container">
-          <div className="row align-items-center min-vh-100">
+          <div className="row align-items-center">
             <div className="col-lg-8 mx-auto text-center text-white">
               <div className="hero-content">
                 <h1 className="display-4 fw-bold mb-4">{t.heroTitle}</h1>
@@ -189,7 +192,7 @@ export default function About({ lang }) {
                     href={`https://wa.me/+966547305060`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-primary btn-lg me-3"
+                    className="btn btn-primary btn-lg"
                   >
                     {t.ctaButtons.contact}
                   </a>
@@ -201,7 +204,7 @@ export default function About({ lang }) {
       </section>
 
       {/* Vision Section */}
-      <section className="vision-section py-5 bg-light">
+      <section className="vision-section py-5">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6 order-2 order-lg-1">
@@ -223,6 +226,22 @@ export default function About({ lang }) {
           </div>
         </div>
       </section>
+
+      {/* Company Profile Download Section */}
+      <section className="profile-download-section py-5 text-center">
+        <div className="container">
+          <a
+            href="/pdfs/company profile.pdf"
+            download="Company Profile.pdf"
+            className="btn btn-primary btn-lg px-5 shadow-sm"
+          >
+            {t.ctaButtons.profile}
+          </a>
+        </div>
+      </section>
+
+      {/* Our Previous Trips Section */}
+      <TripsArchive lang={lang} hideHero={true} />
 
       {/* Testimonials Section */}
       <section className="testimonials-section py-5">
@@ -256,6 +275,7 @@ export default function About({ lang }) {
       <style jsx>{`
         .about-page {
           font-family: 'Tajawal', sans-serif;
+          background-color: #FAF6F0;
         }
 
         .about-hero {
@@ -264,6 +284,7 @@ export default function About({ lang }) {
           min-height: 80vh;
           display: flex;
           align-items: center;
+          justify-content: center;
           overflow: hidden;
         }
 
@@ -289,8 +310,8 @@ export default function About({ lang }) {
           width: 100%;
           height: 100%;
           background: linear-gradient(135deg, 
-            rgba(138, 119, 121, 0.95) 0%, 
-            rgba(239, 200, 174, 0.85) 100%);
+            rgba(28, 0, 82, 0.9) 0%, 
+            rgba(232, 93, 31, 0.7) 100%);
           z-index: 2;
         }
 
@@ -324,17 +345,17 @@ export default function About({ lang }) {
           color: rgba(255,255,255,0.9);
           font-family: 'Tajawal', sans-serif;
         }
+        
+        .testimonials-section{
+          padding-bottom: 200px !important;
+        }
 
         .welcome-section, .vision-section, .testimonials-section {
           padding: 80px 0;
         }
 
         .welcome-content h2 {
-          color: #2c3e50;
-          background: linear-gradient(135deg, #8a7779, #2c3e50);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #E85D1F;
           font-family: 'Tajawal', sans-serif;
         }
 
@@ -347,15 +368,15 @@ export default function About({ lang }) {
         }
 
         .feature-icon {
-          color: #8a7779;
+          color: #E85D1F;
           padding: 15px;
           border-radius: 50%;
-          background: rgba(138, 119, 121, 0.1);
+          background: rgba(232, 93, 31, 0.1);
           transition: all 0.3s ease;
         }
 
         .feature-item:hover .feature-icon {
-          background: rgba(138, 119, 121, 0.2);
+          background: rgba(232, 93, 31, 0.2);
           transform: scale(1.1);
         }
 
@@ -368,23 +389,24 @@ export default function About({ lang }) {
         }
 
         .btn-primary {
-          background: linear-gradient(45deg, #8a7779, #a89294);
+          background: linear-gradient(45deg, #1C0052, #E85D1F);
           border: none;
           padding: 12px 30px;
           border-radius: 25px;
           font-weight: 600;
           transition: all 0.3s ease;
           font-family: 'Tajawal', sans-serif;
+          color: white;
         }
 
         .btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(138, 119, 121, 0.4);
+          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
         }
 
         .btn-outline-primary {
-          border: 2px solid #8a7779;
-          color: #8a7779;
+          border: 2px solid #1C0052;
+          color: #1C0052;
           padding: 12px 30px;
           border-radius: 25px;
           font-weight: 600;
@@ -393,17 +415,18 @@ export default function About({ lang }) {
         }
 
         .btn-outline-primary:hover {
-          background: #8a7779;
+          background: #1C0052;
           color: white;
           transform: translateY(-2px);
         }
 
         .vision-content h2 {
-          color: #2c3e50;
-          background: linear-gradient(135deg, #8a7779, #2c3e50);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #E85D1F;
+          font-family: 'Tajawal', sans-serif;
+        }
+
+        .testimonials-section h2 {
+          color: #E85D1F;
           font-family: 'Tajawal', sans-serif;
         }
 
@@ -432,7 +455,7 @@ export default function About({ lang }) {
         }
 
         .quote-icon {
-          color: #8a7779;
+          color: #E85D1F;
           font-size: 2rem;
           margin-bottom: 20px;
           opacity: 0.7;
