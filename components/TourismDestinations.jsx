@@ -249,20 +249,28 @@ export default function TourismDestinations({ lang, region }) {
                   </p>
                   <div className="destination-footer">
                     <span className="destination-price">
-                      {destination.price ? (
-                        <>
-                          {t.from} 
-                          <span className="price-amount">{destination.price}</span>
-                          <Image 
-                            src="/saudi_riyal.png" 
-                            alt="SAR" 
-                            width={14} 
-                            height={14} 
-                            className="currency-icon"
-                          />
-                          <span className="price-per">{t.perPerson}</span>
-                        </>
-                      ) : ''}
+                      {(() => {
+                        let displayPrice = destination.price;
+                        if (destination.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0) {
+                          const prices = destination.person_prices.map(p => Number(p.price)).filter(p => !isNaN(p) && p > 0);
+                          if (prices.length > 0) displayPrice = Math.min(...prices);
+                        }
+                        if (!displayPrice) return '';
+                        return (
+                          <>
+                            {t.from} 
+                            <span className="price-amount">{displayPrice}</span>
+                            <Image 
+                              src="/saudi_riyal.png" 
+                              alt="SAR" 
+                              width={14} 
+                              height={14} 
+                              className="currency-icon"
+                            />
+                            <span className="price-per">{t.perPerson}</span>
+                          </>
+                        );
+                      })()}
                     </span>
                     <span className="destination-duration">
                       {getText(destination, 'duration')}

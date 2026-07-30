@@ -360,7 +360,16 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                           </span>
                         )}
                         <div className="price-amount-wrapper">
-                          <span className="price-amount">{destination.price}</span>
+                          <span className="price-amount">
+                            {(() => {
+                              let displayPrice = destination.price;
+                              if (destination.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0) {
+                                const prices = destination.person_prices.map(p => Number(p.price)).filter(p => !isNaN(p) && p > 0);
+                                if (prices.length > 0) displayPrice = Math.min(...prices);
+                              }
+                              return displayPrice;
+                            })()}
+                          </span>
                           <Image
                             src="/saudi_riyal.png"
                             alt="SAR"

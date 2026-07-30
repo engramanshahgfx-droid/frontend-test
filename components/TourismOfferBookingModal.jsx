@@ -98,6 +98,12 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
 
   const calculateOfferTotal = () => {
     const guests = Number(formData.guests) || 1;
+    if (offerData?.person_prices && Array.isArray(offerData.person_prices) && offerData.person_prices.length > 0) {
+      const matched = offerData.person_prices.find(p => Number(p.persons) === guests);
+      if (matched && matched.price !== undefined && matched.price !== null) {
+        return Number(matched.price);
+      }
+    }
     const price = getOfferPrice();
     return price * guests;
   };

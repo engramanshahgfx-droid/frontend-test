@@ -1,11 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 import Image from "next/image";
 import {
+  Sparkles,
   Luggage,
   Laptop,
   Clock,
@@ -32,11 +34,19 @@ export default function DestinationDetails() {
   const lang = params?.lang || "en";
   const slug = params?.slug;
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
 
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [countryTours, setCountryTours] = useState(null);
+  const [selectedPersons, setSelectedPersons] = useState(1);
+
+  useEffect(() => {
+    if (destination?.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0) {
+      setSelectedPersons(Number(destination.person_prices[0].persons) || 1);
+    }
+  }, [destination]);
 
   const isRTL = lang === "ar";
 
@@ -526,18 +536,18 @@ export default function DestinationDetails() {
   }));
 
   const defaultPaymentMethods = [
-   {
-  name_en: "Alinma Bank",
-  name_ar: "بنك الإنماء",
-  account_no: "68205990876000",
-  iban: "SA3705000068205990876000",
-},
-{
-  name_en: "Al Rajhi Bank",
-  name_ar: "مصرف الراجحي",
-  account_no: "SA6780000189608010004821",
-  iban: "SA6780000189608010004821",
-},
+    {
+      name_en: "Alinma Bank",
+      name_ar: "بنك الإنماء",
+      account_no: "68205990876000",
+      iban: "SA3705000068205990876000",
+    },
+    {
+      name_en: "Al Rajhi Bank",
+      name_ar: "مصرف الراجحي",
+      account_no: "SA6780000189608010004821",
+      iban: "SA6780000189608010004821",
+    },
   ];
 
   const displayPaymentMethods =
@@ -727,37 +737,93 @@ export default function DestinationDetails() {
                     <span className="value">{availableTo}</span>
                   </li>
                   <li className="divider"></li>
-                  <li>
-                    <Users size={16} color="#dfa528" />
-                    <span className="label">{t.doubleRoom} :</span>
-                    <span className="value highlight">
-                      {doubleRoomRate ?? t.na}
-                      <Image
-                        src="/saudi_riyal.png"
-                        alt="SAR"
-                        width={14}
-                        height={14}
-                        className="currency-icon"
-                      />
-                      {` ${t.perPerson}`}
-                    </span>
-                  </li>
-                  <li className="divider"></li>
-                  <li>
-                    <User size={16} color="#dfa528" />
-                    <span className="label">{t.singleRoom} :</span>
-                    <span className="value highlight">
-                      {singleRoomRate ?? t.na}
-                      <Image
-                        src="/saudi_riyal.png"
-                        alt="SAR"
-                        width={14}
-                        height={14}
-                        className="currency-icon"
-                      />
-                      {` ${t.perPerson}`}
-                    </span>
-                  </li>
+                  {destination?.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0 ? (
+                    <>
+                      <li>
+                        <Users size={16} color="#dfa528" />
+                        <span className="label">
+                          {lang === "ar" ? "العروض المتاحة :" : "Available Offers :"}
+                        </span>
+                      </li>
+                      <li style={{ marginTop: "6px", marginBottom: "12px" }}>
+                        <select
+                          value={selectedPersons}
+                          onChange={(e) => {
+                            if (e.target.value === "custom") {
+                              setShowTravelReservationModal(true);
+                            } else {
+                              setSelectedPersons(Number(e.target.value));
+                            }
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            border: "2px solid #dfa528",
+                            backgroundColor: "#fff",
+                            color: "#1C0052",
+                            fontWeight: "600",
+                            fontSize: "0.95rem",
+                            cursor: "pointer",
+                            outline: "none",
+                            boxShadow: "0 2px 8px rgba(223, 165, 40, 0.15)",
+                            transition: "all 0.2s ease",
+                          }}
+                        >
+                          {destination.person_prices.map((offer, idx) => (
+                            <option key={idx} value={offer.persons}>
+                              {lang === "ar"
+                                ? `عرض ${offer.persons} ${Number(offer.persons) === 1 ? "فرد" : "أفراد"} - (${offer.price} ر.س)`
+                                : `${offer.persons} ${Number(offer.persons) > 1 ? "Persons" : "Person"} Offer - (${offer.price} SAR)`}
+                            </option>
+                          ))}
+                          <option value="custom" style={{ fontWeight: "700", color: "#dfa528" }}>
+                            {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
+                          </option>
+                        </select>
+
+
+                      </li>
+                      <li>
+                        <span className="label">
+                          {lang === "ar" ? "سعر العرض المحدد :" : "Selected Offer Price :"}
+                        </span>
+                        <span className="value highlight" style={{ fontSize: "1.15rem", fontWeight: "700" }}>
+                          {(() => {
+                            const matched = destination.person_prices.find(p => Number(p.persons) === selectedPersons);
+                            return matched ? matched.price : destination.price;
+                          })()}
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={14}
+                            height={14}
+                            className="currency-icon"
+                          />
+                        </span>
+                      </li>
+                      <li className="divider"></li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <Users size={16} color="#dfa528" />
+                        <span className="label">{lang === "ar" ? "السعر :" : "Price :"}</span>
+                        <span className="value highlight">
+                          {destination?.price ?? t.na}
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={14}
+                            height={14}
+                            className="currency-icon"
+                          />
+                          {` ${t.perPerson}`}
+                        </span>
+                      </li>
+                      <li className="divider"></li>
+                    </>
+                  )}
                 </ul>
                 <button
                   className="complete-reservation-btn"
@@ -896,6 +962,15 @@ export default function DestinationDetails() {
       <BookingModal
         isOpen={showBookingModal}
         onClose={() => setShowBookingModal(false)}
+        packageData={destination}
+        lang={lang}
+        initialGuests={selectedPersons}
+      />
+
+      {/* Travel Reservation Modal (Custom Offer Request) */}
+      <TravelReservationModal
+        isOpen={showTravelReservationModal}
+        onClose={() => setShowTravelReservationModal(false)}
         packageData={destination}
         lang={lang}
       />

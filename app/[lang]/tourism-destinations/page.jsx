@@ -194,7 +194,15 @@ export default function TourismDestinationsPage() {
                   </div>
                   <div className="destination-footer">
                     <span className="destination-price">
-                      {destination.price ? `${t.from} ${destination.price} ${t.perPerson}` : ''}
+                      {(() => {
+                        let displayPrice = destination.price;
+                        if (destination.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0) {
+                          const prices = destination.person_prices.map(p => Number(p.price)).filter(p => !isNaN(p) && p > 0);
+                          if (prices.length > 0) displayPrice = Math.min(...prices);
+                        }
+                        if (!displayPrice) return '';
+                        return `${t.from} ${displayPrice} ${t.perPerson}`;
+                      })()}
                     </span>
                     <button className="btn-view" onClick={(e) => {
                       e.stopPropagation();

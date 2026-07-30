@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "@/lib/api";
 
-export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination" }) {
+export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination", initialGuests = 1 }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [bookingId, setBookingId] = useState(null);
@@ -67,12 +67,15 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
   const calculateTotalPrice = () => {
     const guests = Number(formData.guests) || 1;
     const packagePrice = Number(packageData?.price ?? 0);
-    const singleSupplementPrice = Number(packageData?.single_room_price ?? packagePrice);
 
-    const evenPackages = Math.floor(guests / 2);
-    const singleSupplementCount = guests % 2;
+    if (packageData?.person_prices && Array.isArray(packageData.person_prices) && packageData.person_prices.length > 0) {
+      const offer = packageData.person_prices.find(p => Number(p.persons) === guests);
+      if (offer && offer.price !== undefined && offer.price !== null) {
+        return Number(offer.price);
+      }
+    }
 
-    return (evenPackages * packagePrice) + (singleSupplementCount * singleSupplementPrice);
+    return packagePrice * guests;
   };
 
   const packageTitle =
@@ -91,6 +94,15 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       booking_type: bookingType,
     }));
   }, [bookingType]);
+
+  useEffect(() => {
+    if (isOpen && initialGuests) {
+      setFormData((prev) => ({
+        ...prev,
+        guests: Number(initialGuests) || 1,
+      }));
+    }
+  }, [isOpen, initialGuests]);
 
   useEffect(() => {
     if (packageData) {
@@ -361,22 +373,28 @@ const initiatePayment = async (bookingId, amount) => {
 
   // Get price breakdown for display
   const getPriceBreakdown = () => {
-    const guests = formData.guests || 1;
+    const guests = Number(formData.guests) || 1;
     const packagePrice = Number(packageData?.price ?? 0);
-    const singleSupplementPrice = Number(packageData?.single_room_price ?? packagePrice);
 
-    const evenPackages = Math.floor(guests / 2);
-    const singleSupplementCount = guests % 2;
-    const total = (evenPackages * packagePrice) + (singleSupplementCount * singleSupplementPrice);
-    
-    let description = `${evenPackages} × ${packagePrice} SAR (${isRTL ? "باقة لشخصين" : "Package for 2 Persons"})`;
-    if (singleSupplementCount > 0) {
-      description += ` + ${singleSupplementCount} × ${singleSupplementPrice} SAR (${isRTL ? "ترقية مفردة لشخص" : "Single Supplement for 1 Person"})`;
+    let description = "";
+    if (packageData?.person_prices && Array.isArray(packageData.person_prices) && packageData.person_prices.length > 0) {
+      const offer = packageData.person_prices.find(p => Number(p.persons) === guests);
+      if (offer && offer.price !== undefined && offer.price !== null) {
+        description = isRTL
+          ? `عرض مخصص لـ ${guests} ${guests === 1 ? "فرد" : "أفراد"}: ${offer.price} ر.س`
+          : `Offer tier for ${guests} ${guests > 1 ? "Persons" : "Person"}: ${offer.price} SAR`;
+      }
     }
+
+    if (!description) {
+      description = isRTL
+        ? `${guests} × ${packagePrice} ر.س`
+        : `${guests} × ${packagePrice} SAR (${guests > 1 ? `${guests} Persons` : "1 Person"})`;
+    }
+
     return {
       basePrice: packagePrice,
-      extraCost: singleSupplementCount * singleSupplementPrice,
-      total: total,
+      total: totalAmount,
       description: description,
     };
   };
@@ -928,7 +946,7 @@ const initiatePayment = async (bookingId, amount) => {
                           name="guests"
                           value={formData.guests}
                           onChange={handleChange}
-                          min="2"
+                          min="1"
                           max="20"
                           style={{
                             width: "100%",
