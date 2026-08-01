@@ -4,44 +4,45 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 
-export default function PromoBanners({ lang, index = 0, page, height, minHeight }) {
+export default function HeaderBanners({ lang, index = 0, page, height, minHeight }) {
   const router = useRouter();
   const [banner, setBanner] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchBanners();
+    fetchHeaderBanners();
   }, [index, page]);
 
-  const fetchBanners = async () => {
+  const fetchHeaderBanners = async () => {
     try {
-      const response = await fetch(`${API_URL}/banners`);
+      const endpoint = page
+        ? `${API_URL}/headerbanners?page=${encodeURIComponent(page)}`
+        : `${API_URL}/headerbanners`;
+      const response = await fetch(endpoint);
       const data = await response.json();
-      console.log("PromoBanners index:", index, "page:", page, "fetched data:", data);
+      console.log("HeaderBanners index:", index, "page:", page, "fetched data:", data);
 
       if (data.success && Array.isArray(data.data) && data.data.length > 0) {
         let selectedBanner = null;
 
         if (page) {
           selectedBanner = data.data.find(
-            (b) => b.page && b.page.toLowerCase() === page.toLowerCase()
-          );
-        }
-
-        if (!selectedBanner && data.data.length > index) {
+            (b) => b.page && b.page.trim().toLowerCase() === page.trim().toLowerCase()
+          ) || data.data[0]; // If endpoint was ?page=..., data[0] is already the matched page
+        } else if (index !== undefined && index !== null && data.data.length > index) {
           selectedBanner = data.data[index];
-        }
-
-        if (!selectedBanner) {
+        } else {
           selectedBanner = data.data[0];
         }
 
         setBanner(selectedBanner);
       } else {
-        console.warn("No banner found for index/page:", index, page);
+        setBanner(null);
+        console.warn("No header banner found for index/page:", index, page);
       }
     } catch (error) {
-      console.error("Error fetching banners:", error);
+      console.error("Error fetching header banners:", error);
+      setBanner(null);
     } finally {
       setLoading(false);
     }
@@ -83,10 +84,10 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
   };
 
   return (
-    <section className="promo-banners-section">
+    <section className="header-banners-section">
       <div className="container" style={{ maxWidth: "1200px", margin: "0 auto" }}>
         <motion.div
-          className="banner-card"
+          className="headerbanner-card"
           style={customStyle}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -94,12 +95,12 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           viewport={{ once: true }}
           onClick={() => router.push(targetUrl)}
         >
-          <div className="banner-overlay"></div>
-          <div className="banner-content">
-            <h3 className="banner-sentence">{sentence}</h3>
+          <div className="headerbanner-overlay"></div>
+          <div className="headerbanner-content">
+            <h3 className="headerbanner-sentence">{sentence}</h3>
             {buttonText && (
               <button
-                className="banner-button"
+                className="headerbanner-button"
                 onClick={(e) => {
                   e.stopPropagation();
                   router.push(targetUrl);
@@ -113,15 +114,15 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
       </div>
 
       <style jsx>{`
-        .promo-banners-section {
+        .header-banners-section {
           padding: 30px 20px;
           background: #FAF6F0;
         }
 
-        :global(.banner-card) {
+        :global(.headerbanner-card) {
           position: relative;
-          height: var(--banner-custom-height, 400px) !important;
-          min-height: var(--banner-custom-min-height, var(--banner-custom-height, 400px)) !important;
+          height: var(--banner-custom-height, 300px) !important;
+          min-height: var(--banner-custom-min-height, var(--banner-custom-height, 300px)) !important;
           border-radius: 12px;
           background-image: var(--bg-pc) !important;
           background-size: cover;
@@ -141,27 +142,25 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           -webkit-mask-image: -webkit-radial-gradient(white, black);
         }
 
-        :global(.banner-card:hover) {
+        :global(.headerbanner-card:hover) {
           transform: translateY(-4px);
           box-shadow: 0 15px 35px rgba(28, 0, 82, 0.15);
         }
 
-        :global(.banner-overlay) {
+        :global(.headerbanner-overlay) {
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(0deg, rgba(28, 0, 82, 0.65) 0%, rgba(28, 0, 82, 0.55) 100%);
           transition: opacity 0.3s ease;
           border-radius: 12px;
         }
 
-        :global(.banner-card:hover .banner-overlay) {
-          background: linear-gradient(0deg, rgba(28, 0, 82, 0.75) 0%, rgba(28, 0, 82, 0.65) 100%);
+        :global(.headerbanner-card:hover .headerbanner-overlay) {
         }
 
-        :global(.banner-content) {
+        :global(.headerbanner-content) {
           position: relative;
           z-index: 3;
           width: 100%;
@@ -177,7 +176,7 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           padding: 40px;
         }
 
-        :global(.banner-sentence) {
+        :global(.headerbanner-sentence) {
           font-size: 1.6rem;
           font-weight: 700;
           line-height: 1.5;
@@ -186,7 +185,7 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           font-family: 'Tajawal', sans-serif;
         }
 
-        :global(.banner-button) {
+        :global(.headerbanner-button) {
           background: #E85D1F;
           color: white;
           border: none;
@@ -200,130 +199,101 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           font-family: 'Tajawal', sans-serif;
         }
 
-        :global(.banner-button:hover) {
+        :global(.headerbanner-button:hover) {
           background: #FFC60B;
           color: #1C0052;
           transform: scale(1.05);
         }
 
-        /* ===== RESPONSIVE HEIGHTS & BACKGROUND IMAGES ===== */
+        /* ===== RESPONSIVE BACKGROUND IMAGES & SIZES ===== */
 
-        /* Large Screen / Laptop */
-        @media (max-width: 1200px) {
-          :global(.banner-card) {
-            background-image: var(--bg-pc) !important;
-            height: var(--banner-custom-height, 340px) !important;
-            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 340px)) !important;
-          }
-
-          :global(.banner-sentence) {
-            font-size: 1.45rem;
-          }
-        }
-
-        /* Tablet */
+        /* Tablet View (max-width: 1024px) */
         @media (max-width: 1024px) {
-          :global(.banner-card) {
+          :global(.headerbanner-card) {
             background-image: var(--bg-tablet, var(--bg-pc)) !important;
-            height: var(--banner-custom-height, 300px) !important;
-            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 300px)) !important;
+            height: var(--banner-custom-height, 260px) !important;
+            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 260px)) !important;
           }
-
-          :global(.banner-sentence) {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-          }
-
-          :global(.banner-content) {
+          :global(.headerbanner-content) {
             padding: 30px;
           }
-
-          :global(.banner-button) {
-            padding: 10px 26px;
+          :global(.headerbanner-sentence) {
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+          }
+          :global(.headerbanner-button) {
+            padding: 10px 24px;
             font-size: 0.9rem;
           }
         }
 
         /* Mobile View (max-width: 768px) */
         @media (max-width: 768px) {
-          .promo-banners-section {
+          .header-banners-section {
             padding: 20px 15px;
           }
 
-          :global(.banner-card) {
+          :global(.headerbanner-card) {
             background-image: var(--bg-mobile, var(--bg-tablet, var(--bg-pc))) !important;
-            height: var(--banner-custom-height, 240px) !important;
-            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 240px)) !important;
+            height: var(--banner-custom-height, 220px) !important;
+            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 220px)) !important;
             padding: 20px;
             border-radius: 10px !important;
           }
 
-          :global(.banner-overlay) {
+          :global(.headerbanner-overlay) {
             border-radius: 10px !important;
           }
 
-          :global(.banner-content) {
+          :global(.headerbanner-content) {
             padding: 20px;
           }
 
-          :global(.banner-sentence) {
-            font-size: 1.2rem;
-            margin-bottom: 18px;
+          :global(.headerbanner-sentence) {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
             line-height: 1.4;
           }
 
-          :global(.banner-button) {
-            padding: 10px 24px;
+          :global(.headerbanner-button) {
+            padding: 8px 20px;
             font-size: 0.85rem;
             border-radius: 6px;
           }
         }
 
-        /* Mobile Small (Phones <= 480px) */
+        /* Mobile Small (max-width: 480px) */
         @media (max-width: 480px) {
-          .promo-banners-section {
+          .header-banners-section {
             padding: 15px 10px;
           }
 
-          :global(.banner-card) {
+          :global(.headerbanner-card) {
             background-image: var(--bg-mobile, var(--bg-tablet, var(--bg-pc))) !important;
-            height: var(--banner-custom-height, 200px) !important;
-            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 200px)) !important;
+            height: var(--banner-custom-height, 180px) !important;
+            min-height: var(--banner-custom-min-height, var(--banner-custom-height, 180px)) !important;
             padding: 15px;
             border-radius: 8px !important;
           }
 
-          :global(.banner-overlay) {
+          :global(.headerbanner-overlay) {
             border-radius: 8px !important;
           }
 
-          :global(.banner-content) {
+          :global(.headerbanner-content) {
             padding: 15px;
           }
 
-          :global(.banner-sentence) {
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-            line-height: 1.4;
-          }
-
-          :global(.banner-button) {
-            padding: 10px 22px;
-            font-size: 0.85rem;
-            border-radius: 6px;
-          }
-        }
-
-        /* Extra Small Phone tweaking */
-        @media (max-width: 360px) {
-          :global(.banner-sentence) {
+          :global(.headerbanner-sentence) {
             font-size: 0.95rem;
             margin-bottom: 12px;
+            line-height: 1.3;
           }
 
-          :global(.banner-button) {
-            padding: 8px 18px;
-            font-size: 0.8rem;
+          :global(.headerbanner-button) {
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            border-radius: 5px;
           }
         }
       `}</style>

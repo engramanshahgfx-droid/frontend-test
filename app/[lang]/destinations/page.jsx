@@ -5,6 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Globe, ArrowRight } from "lucide-react";
 import { API_URL } from "@/lib/api";
+import HeaderBanners from "@/components/HeaderBanners";
 
 export default function DestinationsPage() {
   const params = useParams();
@@ -151,8 +152,9 @@ export default function DestinationsPage() {
       background: "#FAF6F0",
       padding:"150px 0px"}}>
       <div className="container" style={{ maxWidth: "1200px" }}>
+        <HeaderBanners lang={lang} page="destinations" index={2} />
         {/* Page Header */}
-        <div className="text-center mb-5">
+        <div className="text-center mb-5" style={{ marginTop: "20px" }}>
           <h1 className="fw-bold mb-3" style={{ fontSize: "2.5rem", color: "#1C0052" }}>
             {t.title}
           </h1>

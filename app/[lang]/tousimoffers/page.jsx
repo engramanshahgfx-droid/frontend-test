@@ -6,6 +6,7 @@ import { Star, MapPin, Clock, Eye, Heart } from "lucide-react";
 import { API_URL } from "@/lib/api";
 import Image from "next/image";
 import BookingModal from "@/components/BookingModal";
+import HeaderBanners from "@/components/HeaderBanners";
 
 export default function TourismOffersPage() {
   const params = useParams();
@@ -145,7 +146,8 @@ export default function TourismOffersPage() {
   return (
     <div className="offers-page" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <div className="container" style={{ maxWidth: "1200px" }}>
-          <div className="page-header">
+          <HeaderBanners lang={lang} page="offers" index={1} />
+          <div className="page-header" style={{ marginTop: "20px" }}>
             <h1 style={{ padding: "0" }}>
               {lang === "ar" ? (
                 <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">السعودية</span></>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import HeaderBanners from "@/components/HeaderBanners";
 import SchengenRequirementsSection from "./SchengenRequirementsSection";
 import SchengenApplicationForm from "./SchengenApplicationForm";
 import SchengenServiceSummary from "./SchengenServiceSummary";
@@ -38,6 +39,10 @@ export default function SchengenVisaPage({ lang = "ar" }) {
       {/* Fixed Top Bar - Black */}
       <div className={styles.topBar}></div>
       
+      <div className="container" style={{ maxWidth: "1200px", margin: "0 auto", paddingTop: "20px" }}>
+        <HeaderBanners lang={locale} page="visa" index={1} />
+      </div>
+
       <div className={styles.hero}>
         <p className={styles.badge}>{t.badge}</p>
         <h1 className={styles.title}>{t.title}</h1>

@@ -1,5 +1,6 @@
 // app/[lang]/international/internet-packages/page.jsx
 import InternetPackagesForm from "@/components/international/InternetPackagesForm";
+import HeaderBanners from "@/components/HeaderBanners";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -52,6 +53,7 @@ export default async function InternetPackagesPage({ params }) {
         direction: validLang === 'ar' ? 'rtl' : 'ltr'
       }}
     >
+      <HeaderBanners lang={validLang} page="internet-packages" index={0} />
       <InternetPackagesForm lang={validLang} />
     </main>
   );

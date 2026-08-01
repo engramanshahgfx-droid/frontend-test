@@ -1,4 +1,5 @@
 import PrivateJetRequestForm from "@/components/international/PrivateJetRequestForm";
+import HeaderBanners from "@/components/HeaderBanners";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -51,6 +52,7 @@ export default async function PrivateJetPage({ params }) {
         direction: validLang === 'ar' ? 'rtl' : 'ltr'
       }}
     >
+      <HeaderBanners lang={validLang} page="private-jet" index={3} />
       <PrivateJetRequestForm lang={validLang} />
     </main>
   );
