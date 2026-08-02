@@ -188,7 +188,7 @@ export default function ModernTestimonials({ lang }) {
 
       <style jsx>{`
         .modern-testimonials-section {
-          padding: 100px 0;
+          padding: 40px 0;
           background: #FAF6F0; /* Soft Desert Sand */
           overflow: hidden;
           position: relative;
@@ -196,7 +196,7 @@ export default function ModernTestimonials({ lang }) {
 
         .section-header {
           text-align: center;
-          margin-bottom: 50px;
+          margin-bottom: 30px;
           padding: 0 20px;
         }
 

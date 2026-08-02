@@ -253,7 +253,7 @@ export default function Navbar({ lang }) {
       label:
         lang === "ar" ? (
           <>
-            عروض <span style={{ color: "#FF0000", fontWeight: "700" }}>جمولة</span>
+            <span style={{ color: "#FF0000", fontWeight: "700" }}>عروض جمولة </span>
           </>
         ) : (
           <>
@@ -473,104 +473,133 @@ export default function Navbar({ lang }) {
 
           {/* Desktop Nav */}
           <nav className="desktop-nav">
-            {menuItems.map((item, idx) => (
-              <div
-                key={idx}
-                className="nav-item-wrapper"
-                onMouseEnter={() =>
-                  item.dropdown && handleDropdownMouseEnter(item.type)
-                }
-                onMouseLeave={(e) =>
-                  item.dropdown && handleDropdownMouseLeave(e)
-                }
-              >
-                {item.dropdown ? (
-                  <Link
-                    href={item.type === "packages" ? `/${lang}/destinations` : `/${lang}${item.href}`}
-                    className={`nav-link ${isActive(item.href) ? "active" : ""} ${openDesktopDropdown === item.type ? "dropdown-open" : ""}`}
-                    onClick={(e) => {
-                      if (window.innerWidth <= 1210) {
-                        e.preventDefault();
-                        toggleMobileDropdown(item.type, e);
-                      }
-                    }}
-                  >
-                    <span>{item.label}</span>
-                    <ChevronDown
-                      size={14}
-                      className={`nav-dropdown-arrow ${openDesktopDropdown === item.type ? "rotate-arrow" : ""}`}
-                    />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/${lang}${item.href}`}
-                    className={`nav-link ${isActive(item.href) ? "active" : ""}`}
-                  >
-                    {item.label}
-                  </Link>
-                )}
+            {menuItems.map((item, idx) => {
+              const isItemActive = item.dropdown 
+                ? false // Dropdown items don't have active state on the parent link
+                : isActive(item.href);
+              
+              return (
+                <div
+                  key={idx}
+                  className="nav-item-wrapper"
+                  onMouseEnter={() =>
+                    item.dropdown && handleDropdownMouseEnter(item.type)
+                  }
+                  onMouseLeave={(e) =>
+                    item.dropdown && handleDropdownMouseLeave(e)
+                  }
+                >
+                  {item.dropdown ? (
+                    <Link
+                      href={item.type === "packages" ? `/${lang}/destinations` : `/${lang}${item.href}`}
+                      className={`nav-link ${openDesktopDropdown === item.type ? "dropdown-open" : ""}`}
+                      style={{
+                        position: "relative",
+                        textDecoration: "none",
+                        paddingBottom: "12px", // Increased padding for lower underline
+                      }}
+                      onClick={(e) => {
+                        if (window.innerWidth <= 1210) {
+                          e.preventDefault();
+                          toggleMobileDropdown(item.type, e);
+                        }
+                      }}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        size={14}
+                        className={`nav-dropdown-arrow ${openDesktopDropdown === item.type ? "rotate-arrow" : ""}`}
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/${lang}${item.href}`}
+                      className={`nav-link ${isItemActive ? "active" : ""}`}
+                      style={{
+                        position: "relative",
+                        textDecoration: "none",
+                        paddingBottom: "12px", // Increased padding for lower underline
+                      }}
+                    >
+                      {item.label}
+                      {isItemActive && (
+                        <span
+                          style={{
+                            position: "absolute",
+                            bottom: "0px", // Position at bottom of padding
+                            left: "0",
+                            width: "100%",
+                            height: "3px",
+                            borderRadius: "2px",
+                            transition: "all 0.3s ease",
+                          }}
+                        />
+                      )}
+                    </Link>
+                  )}
 
-                {item.dropdown && (
-                  <AnimatePresence>
-                    {openDesktopDropdown === item.type && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                        className={`dropdown-menu-wrapper ${isRTL ? "dropdown-rtl" : "dropdown-ltr"}`}
-                        onMouseEnter={handleDropdownMouseEnterContainer}
-                        onMouseLeave={handleDropdownMouseLeaveContainer}
-                        style={{ zIndex: 1000 }}
-                      >
-                        {item.type === "packages" ? (
-                          <div className="dropdown-packages">
-                            {Object.entries(displayDestinations).map(
-                              ([regionKey, data]) => (
+                  {item.dropdown && (
+                    <AnimatePresence>
+                      {openDesktopDropdown === item.type && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                          transition={{ duration: 0.18, ease: "easeOut" }}
+                          className={`dropdown-menu-wrapper ${isRTL ? "dropdown-rtl" : "dropdown-ltr"}`}
+                          onMouseEnter={handleDropdownMouseEnterContainer}
+                          onMouseLeave={handleDropdownMouseLeaveContainer}
+                          style={{ zIndex: 1000 }}
+                        >
+                          {item.type === "packages" ? (
+                            <div className="dropdown-packages">
+                              {Object.entries(displayDestinations).map(
+                                ([regionKey, data]) => (
+                                  <Link
+                                    key={regionKey}
+                                    href={`/${lang}/destinations?region=${regionKey}`}
+                                    className="region-group text-decoration-none d-block"
+                                  >
+                                    <div className="region-trigger">
+                                      <span className="region-icon-wrapper">
+                                        {data.icon || "🌍"}
+                                      </span>
+                                      <span>{getRegionLabel(regionKey)}</span>
+                                    </div>
+                                  </Link>
+                                ),
+                              )}
+                            </div>
+                          ) : (
+                            <div className="dropdown-list">
+                              {getDropdownData(item.type).map((d, i) => (
                                 <Link
-                                  key={regionKey}
-                                  href={`/${lang}/destinations?region=${regionKey}`}
-                                  className="region-group text-decoration-none d-block"
+                                  key={i}
+                                  href={`/${lang}${d.href}`}
+                                  className="dropdown-item"
                                 >
-                                  <div className="region-trigger">
-                                    <span className="region-icon-wrapper">
-                                      {data.icon || "🌍"}
-                                    </span>
-                                    <span>{getRegionLabel(regionKey)}</span>
+                                  <div className="dropdown-item-icon">
+                                    {d.icon || "✨"}
+                                  </div>
+                                  <div className="dropdown-item-content">
+                                    <div className="dropdown-item-title">
+                                      {localize(d.title)}
+                                    </div>
+                                    <div className="dropdown-item-desc">
+                                      {localize(d.description)}
+                                    </div>
                                   </div>
                                 </Link>
-                              ),
-                            )}
-                          </div>
-                        ) : (
-                          <div className="dropdown-list">
-                            {getDropdownData(item.type).map((d, i) => (
-                              <Link
-                                key={i}
-                                href={`/${lang}${d.href}`}
-                                className="dropdown-item"
-                              >
-                                <div className="dropdown-item-icon">
-                                  {d.icon || "✨"}
-                                </div>
-                                <div className="dropdown-item-content">
-                                  <div className="dropdown-item-title">
-                                    {localize(d.title)}
-                                  </div>
-                                  <div className="dropdown-item-desc">
-                                    {localize(d.description)}
-                                  </div>
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-              </div>
-            ))}
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           <div className="header-actions">
@@ -698,6 +727,84 @@ export default function Navbar({ lang }) {
         )}
       </AnimatePresence>
 
+      {/* Add global styles for the underline effect */}
+      <style jsx>{`
+        /* Desktop nav link styles - ensures consistent underline positioning */
+        .nav-link {
+          position: relative;
+          text-decoration: none !important;
+          padding-bottom: 12px !important;
+          display: inline-block;
+          transition: color 0.3s ease;
+        }
+
+        /* Active underline for non-dropdown items */
+        .nav-link.active::after {
+          content: '';
+          position: absolute;
+          bottom: 0px;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          border-radius: 2px;
+          transition: all 0.3s ease;
+        }
+
+        /* Hover underline for all nav links */
+        .nav-link::before {
+          content: '';
+          position: absolute;
+          bottom: 0px;
+          left: 0;
+          width: 0%;
+          height: 3px;
+          border-radius: 2px;
+          transition: width 0.3s ease;
+          opacity: 0.5;
+        }
+
+        .nav-link:hover::before {
+          width: 100%;
+        }
+
+        /* Active state - override hover */
+        .nav-link.active::before {
+          display: none;
+        }
+
+        /* Dropdown open state - remove underline */
+        .nav-link.dropdown-open::before {
+          display: none;
+        }
+        .nav-link.dropdown-open::after {
+          display: none;
+        }
+
+        /* Remove underline for dropdown items that are active */
+        .nav-item-wrapper .nav-link.active {
+          text-decoration: none !important;
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 1210px) {
+          .nav-link {
+            padding-bottom: 4px !important;
+          }
+          .nav-link.active::after {
+            bottom: -2px;
+          }
+          .nav-link::before {
+            bottom: -2px;
+          }
+        }
+
+        /* RTL support */
+        [dir="rtl"] .nav-link.active::after,
+        [dir="rtl"] .nav-link::before {
+          left: auto;
+          right: 0;
+        }
+      `}</style>
     </>
   );
 }

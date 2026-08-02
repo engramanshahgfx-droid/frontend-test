@@ -93,8 +93,9 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
     <>
       <section
         id="discover-destinations"
-        className="py-5 position-relative"
+        className="position-relative"
         style={{
+          padding: "40px 0",
           backgroundImage: "url('/bg3.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",

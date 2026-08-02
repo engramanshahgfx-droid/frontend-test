@@ -296,7 +296,7 @@ export default async function Home({ params }) {
 
       <ModernTestimonials lang={lang} />
 
-      <div className="section-header-contact" style={{ textAlign: "center", padding: "50px", backgroundColor: "#faf6f0" }}>
+      <div className="section-header-contact" style={{ textAlign: "center", padding: "0 20px 15px 20px", backgroundColor: "#faf6f0" }}>
         <span className="accent-tag" style={{
           fontSize: "0.85rem",
           fontWeight: "700",
@@ -313,7 +313,7 @@ export default async function Home({ params }) {
           fontWeight: "800",
           color: "#1C0052",
           margin: "0",
-          paddingBottom: "50px",
+          paddingBottom: "0",
           fontFamily: "'Tajawal', sans-serif"
         }}>
           {lang === "ar" ? "تواصل معنا اليوم" : "Get In Touch With Us"}

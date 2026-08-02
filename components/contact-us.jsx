@@ -333,11 +333,11 @@ export default function Contact({ lang, hideHero = false }) {
         }
 
         .contact-section {
-          padding: 40px 0;
+          padding: ${hideHero ? "0 0 40px 0" : "30px 0"};
         }
 
         .contact-wrapper {
-          margin-top: -80px;
+          margin-top: ${hideHero ? "0" : "-80px"};
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 3rem;

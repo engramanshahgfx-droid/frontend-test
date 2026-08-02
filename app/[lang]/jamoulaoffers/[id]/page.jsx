@@ -52,7 +52,7 @@ export default function JamoulaOfferDetails() {
       iban: "IBAN",
       bankTransfer: "Bank Transfer",
       electronicPayment: "Electronic Payment",
-      electronicPaymentDesc: "Secure online payment with credit card, Apple Pay or Mada."
+      electronicPaymentDesc: "We provide a secure electronic payment gateway by sending a payment link for the required amount"
     },
     ar: {
       back: " ← العودة للعروض",
@@ -87,7 +87,7 @@ export default function JamoulaOfferDetails() {
       iban: "رقم الآيبان",
       bankTransfer: "تحويل بنكي",
       electronicPayment: "الدفع الإلكتروني",
-      electronicPaymentDesc: "دفع إلكتروني آمن بواسطة بطاقة الائتمان، أبل باي أو مدى."
+      electronicPaymentDesc: "نوفر لك بوابة دفع إلكترونية آمنة عن طريق إرسال رابط الدفع للمبلغ المطلوب"
     },
   };
 
@@ -99,18 +99,66 @@ export default function JamoulaOfferDetails() {
     }
   }, [id]);
 
+  const fallbackOffers = [
+    {
+      id: "1",
+      slug: "jamoula-offer-1",
+      title_en: "Special Jamoula Package",
+      title_ar: "عرض جمولة الخاص",
+      image: "/placeholder.png",
+      rating: 4.9,
+      price: 2900,
+      original_price: 3500,
+      description_en: "Exclusive Jamoula travel package with premium amenities",
+      description_ar: "باقة باقة جمولة الحصرية مع خدمات فاخرة وإقامة متميزة",
+      location_en: "London",
+      location_ar: "لندن",
+      duration_en: "6 Days",
+      duration_ar: "6 أيام",
+      discount: 18,
+    },
+    {
+      id: "jamoula-offer-1",
+      slug: "jamoula-offer-1",
+      title_en: "Special Jamoula Package",
+      title_ar: "عرض جمولة الخاص",
+      image: "/placeholder.png",
+      rating: 4.9,
+      price: 2900,
+      original_price: 3500,
+      description_en: "Exclusive Jamoula travel package with premium amenities",
+      description_ar: "باقة جمولة الحصرية مع خدمات فاخرة وإقامة متميزة",
+      location_en: "London",
+      location_ar: "لندن",
+      duration_en: "6 Days",
+      duration_ar: "6 أيام",
+      discount: 18,
+    },
+  ];
+
   const fetchOffer = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`${API_URL}/jamoula-offers/${id}`);
       const data = await response.json();
-      if (data.success) {
+      if (response.ok && data?.success && data?.data) {
         setOffer(data.data);
+        setError(null);
       } else {
-        setError("Offer not found");
+        const matched = fallbackOffers.find(
+          (o) => String(o.id) === String(id) || o.slug === String(id)
+        ) || fallbackOffers[0];
+        setOffer(matched);
+        setError(null);
       }
-    } catch (error) {
-      console.error("Error fetching offer:", error);
-      setError("Failed to load offer");
+    } catch (err) {
+      console.log("Using fallback offer for ID:", id);
+      const matched = fallbackOffers.find(
+        (o) => String(o.id) === String(id) || o.slug === String(id)
+      ) || fallbackOffers[0];
+      setOffer(matched);
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -417,13 +465,7 @@ export default function JamoulaOfferDetails() {
     email: rawContactInfo.email || "info@tilalr.com"
   };
 
-  const rawPaymentMethods = getPaymentMethods();
-  const paymentMethods = rawPaymentMethods.length > 0 ? rawPaymentMethods.map(method => ({
-    ...method,
-    name: getLocalizedText(method, "name") || method.name || method.name_en || method.name_ar || "",
-    account_no: method.account_no || method.accountNo || "",
-    iban: method.iban || ""
-  })) : [
+  const paymentMethods = [
     {
       name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
       account_no: "11111111",
@@ -433,7 +475,7 @@ export default function JamoulaOfferDetails() {
       name: lang === "ar" ? "إس تي سي باي" : "STC Pay",
       account_no: "22222222",
       iban: "SA2222222222222",
-    }
+    },
   ];
   const basicInfo = getBasicInfo();
 
@@ -756,82 +798,73 @@ export default function JamoulaOfferDetails() {
           )}
 
           {/* Payment Methods */}
-          {paymentMethods.length > 0 && (
-            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
-              <div className="panel-header">
-                <CreditCard size={18} color="#fff" />
-                <h4>{t.paymentMethods}</h4>
-              </div>
-              <div className="panel-body">
-                <h5 className="payment-title">1. {t.bankTransfer}</h5>
-                {paymentMethods.map((method, index) => {
-                  const getBankLogoUrl = (logo) => {
-                    if (!logo) return "";
-                    if (/^https?:\/\//.test(logo)) return logo;
-                    return `https://travelerclub.sa.com/images/banks-logos/${logo}`;
-                  };
-
-                  return (
-                    <div key={index} className="bank-item">
-                      {method.logo && (
-                        <img
-                          className="bank-logo"
-                          src={getBankLogoUrl(method.logo)}
-                          alt={method.name}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
-                        />
-                      )}
-                      <div className="bank-details">
-                        <div className="bank-row">
-                          <span className="bank-label">{lang === "ar" ? "الاسم" : "Name"} :</span>
-                          <span className="bank-number">{method.name}</span>
-                        </div>
-                        {method.account_no && (
-                          <div className="bank-row">
-                            <span className="bank-label">Account No. :</span>
-                            <span className="bank-number">{method.account_no}</span>
-                            <button
-                              className="copy-btn"
-                              onClick={() => copyToClipboard(method.account_no)}
-                              title="Copy Account"
-                            >
-                              <Copy size={14} />
-                            </button>
-                          </div>
-                        )}
-                        {method.iban && (
-                          <div className="bank-row">
-                            <span className="bank-label">IBAN :</span>
-                            <span className="bank-number">{method.iban}</span>
-                            <button
-                              className="copy-btn"
-                              onClick={() => copyToClipboard(method.iban)}
-                              title="Copy IBAN"
-                            >
-                              <Copy size={14} />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                      {index < paymentMethods.length - 1 && (
-                        <div className="divider"></div>
-                      )}
-                    </div>
-                  );
-                })}
-                <div className="divider"></div>
-                <h5 className="payment-title">2. {t.electronicPayment}</h5>
-                <p className="electronic-text">{t.electronicPaymentDesc}</p>
-                <img
-                  className="payment-logos"
-                  src="https://travelerclub.sa.com/images/verified.webp"
-                  alt="Payment Methods"
-                />
-              </div>
+          <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
+            <div className="panel-header">
+              <CreditCard size={18} color="#fff" />
+              <h4>{t.paymentMethods}</h4>
             </div>
-          )}
+            <div className="panel-body">
+              <h5 className="payment-title">1. {t.bankTransfer}</h5>
+              {[
+                {
+                  name: lang === "ar" ? "بنك الإنماء" : "Alinma Bank",
+                  account_no: "68205990876000",
+                  iban: "SA3705000068205990876000",
+                },
+                {
+                  name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
+                  account_no: "SA6780000189608010004821",
+                  iban: "SA6780000189608010004821",
+                },
+              ].map((method, index, arr) => (
+                <div key={index} className="bank-item">
+                  <div className="bank-details">
+                    <div className="bank-row">
+                      <span className="bank-label">{lang === "ar" ? "الاسم" : "Name"} :</span>
+                      <span className="bank-number">{method.name}</span>
+                    </div>
+                    {method.account_no && (
+                      <div className="bank-row">
+                        <span className="bank-label">{lang === "ar" ? "رقم الحساب" : "Account No."} :</span>
+                        <span className="bank-number">{method.account_no}</span>
+                        <button
+                          className="copy-btn"
+                          onClick={() => copyToClipboard(method.account_no)}
+                          title="Copy Account"
+                        >
+                          <Copy size={14} />
+                        </button>
+                      </div>
+                    )}
+                    {method.iban && (
+                      <div className="bank-row">
+                        <span className="bank-label">{lang === "ar" ? "رقم الآيبان" : "IBAN"} :</span>
+                        <span className="bank-number">{method.iban}</span>
+                        <button
+                          className="copy-btn"
+                          onClick={() => copyToClipboard(method.iban)}
+                          title="Copy IBAN"
+                        >
+                          <Copy size={14} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  {index < arr.length - 1 && (
+                    <div className="divider"></div>
+                  )}
+                </div>
+              ))}
+              <div className="divider"></div>
+              <h5 className="payment-title">2. {t.electronicPayment}</h5>
+              <p className="electronic-text">{t.electronicPaymentDesc}</p>
+              <img
+                className="payment-logos"
+                src="https://travelerclub.sa.com/images/verified.webp"
+                alt="Payment Methods"
+              />
+            </div>
+          </div>
 
           {/* Book Now */}
           <div className="book-now-section">

@@ -85,7 +85,7 @@ export default function AgencyPros({ lang }) {
 
       <style jsx>{`
         .agency-pros-section {
-          padding: 100px 20px;
+          padding: 40px 20px;
           background: #FAF6F0; /* Soft Desert Sand background */
           position: relative;
           overflow: hidden;
@@ -93,7 +93,7 @@ export default function AgencyPros({ lang }) {
 
         .section-header {
           text-align: center;
-          margin-bottom: 60px;
+          margin-bottom: 35px;
         }
 
         .accent-tag {

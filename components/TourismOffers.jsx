@@ -290,7 +290,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row g-4">
             {displayDestinations.map((destination, index) => (
               <motion.div
                 key={destination.id || index}
@@ -408,7 +408,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                     fontWeight: '700',
                     fontSize: '1rem',
                     border: 'none',
-                    marginTop: '20px',
+                    marginTop: '0px',
                     textDecoration: 'none',
                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                     boxShadow: '0 4px 15px rgba(255, 123, 0, 0.41)',
@@ -434,7 +434,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
 
         <style jsx>{`
           .offers-section {
-            padding: 60px 0;
+            padding: 40px 0;
             background: #FAF6F0; /* Soft Desert Sand theme variant */
           }
           .section-title {
@@ -476,7 +476,6 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             border: 1px solid rgba(28, 0, 82, 0.06); /* Accent border */
             box-shadow: 0 5px 25px rgba(28, 0, 82, 0.04);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: 30px;
             height: 100%;
             display: flex;
             flex-direction: column;

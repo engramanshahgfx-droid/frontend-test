@@ -63,7 +63,7 @@ export default function PartnerCarousel({ lang }) {
 
       <style jsx>{`
         .partner-carousel-section {
-          padding: 50px 0 60px;
+          padding: 40px 0;
           background: #ffffff; /* Clean white contrast background */
           border-top: 1px solid rgba(28, 0, 82, 0.05);
           overflow: hidden;
@@ -71,7 +71,7 @@ export default function PartnerCarousel({ lang }) {
 
         .section-title {
           text-align: center;
-          margin-bottom: 35px;
+          margin-bottom: 25px;
         }
 
         .section-title h3 {

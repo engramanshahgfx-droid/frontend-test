@@ -314,7 +314,7 @@ export default function JamoulaOffersPage() {
         }
         
         .highlight-green {
-          color: #FF0000; /* Premium Saudi Flag Green */
+          color: #E85D1F; /* Premium Saudi Flag Green */
         }
 
         .highlight-orange {

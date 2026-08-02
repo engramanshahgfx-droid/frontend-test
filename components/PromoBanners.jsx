@@ -114,7 +114,7 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
 
       <style jsx>{`
         .promo-banners-section {
-          padding: 30px 20px;
+          padding: 40px 20px;
           background: #FAF6F0;
         }
 
