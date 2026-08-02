@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "@/lib/api";
 
-export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination", initialGuests = 1 }) {
+export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination", initialGuests = 1, onOpenCustomModal }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [bookingId, setBookingId] = useState(null);
@@ -64,8 +64,8 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     return parseJsonField(packageData?.basic_info, {});
   };
 
-  const calculateTotalPrice = () => {
-    const guests = Number(formData.guests) || 1;
+  const calculateTotalPrice = (customGuests = null) => {
+    const guests = Number(customGuests !== null && customGuests !== undefined ? customGuests : formData.guests) || 1;
     const packagePrice = Number(packageData?.price ?? 0);
 
     if (packageData?.person_prices && Array.isArray(packageData.person_prices) && packageData.person_prices.length > 0) {
@@ -88,45 +88,40 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     setTotalAmount(calculateTotalPrice());
   }, [formData.guests, formData.room_type, packageData]);
 
+  // Sync initialGuests and packageData on modal open
   useEffect(() => {
-    setFormData((prev) => ({
-      ...prev,
-      booking_type: bookingType,
-    }));
-  }, [bookingType]);
-
-  useEffect(() => {
-    if (isOpen && initialGuests) {
-      setFormData((prev) => ({
-        ...prev,
-        guests: Number(initialGuests) || 1,
-      }));
-    }
-  }, [isOpen, initialGuests]);
-
-  useEffect(() => {
-    if (packageData) {
+    if (isOpen) {
+      const targetGuests = Number(initialGuests) || 1;
       const packageCode =
-        packageData.basic_info?.trip_code ||
-        packageData.trip_code ||
-        packageData.code ||
-        packageData.package_code ||
-        `PKG-${packageData.id}`;
+        packageData?.basic_info?.trip_code ||
+        packageData?.trip_code ||
+        packageData?.code ||
+        packageData?.package_code ||
+        `PKG-${packageData?.id || "1"}`;
 
       setFormData((prev) => ({
         ...prev,
-        package_id: String(packageData.id || packageData.slug || ""),
+        guests: targetGuests,
+        booking_type: bookingType,
+        package_id: String(packageData?.id || packageData?.slug || ""),
         package_code: String(packageCode),
       }));
 
-      setTotalAmount(calculateTotalPrice());
+      setTotalAmount(calculateTotalPrice(targetGuests));
     }
-  }, [packageData]);
+  }, [isOpen, initialGuests, packageData, bookingType]);
 
   if (!isOpen) return null;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "guests" && value === "custom") {
+      handleClose();
+      if (typeof onOpenCustomModal === "function") {
+        onOpenCustomModal();
+      }
+      return;
+    }
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -939,30 +934,67 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                             top: "50%",
                             transform: "translateY(-50%)",
                             color: "#999",
+                            zIndex: 2,
                           }}
                         />
-                        <input
-                          type="number"
-                          name="guests"
-                          value={formData.guests}
-                          onChange={handleChange}
-                          min="1"
-                          max="20"
-                          style={{
-                            width: "100%",
-                            padding: isRTL
-                              ? "10px 40px 10px 12px"
-                              : "10px 12px 10px 40px",
-                            border: errors.guests
-                              ? "2px solid #dc3545"
-                              : "2px solid #e0e0e0",
-                            borderRadius: "8px",
-                            fontSize: "14px",
-                            outline: "none",
-                            transition: "all 0.2s",
-                            textAlign: isRTL ? "right" : "left",
-                          }}
-                        />
+                        {packageData?.person_prices && Array.isArray(packageData.person_prices) && packageData.person_prices.length > 0 ? (
+                          <select
+                            name="guests"
+                            value={formData.guests}
+                            onChange={handleChange}
+                            style={{
+                              width: "100%",
+                              padding: isRTL
+                                ? "10px 40px 10px 12px"
+                                : "10px 12px 10px 40px",
+                              border: errors.guests
+                                ? "2px solid #dc3545"
+                                : "2px solid #e0e0e0",
+                              borderRadius: "8px",
+                              fontSize: "14px",
+                              outline: "none",
+                              backgroundColor: "#ffffff",
+                              fontWeight: "600",
+                              color: "#1C0052",
+                              cursor: "pointer",
+                              textAlign: isRTL ? "right" : "left",
+                            }}
+                          >
+                            {packageData.person_prices.map((offer, idx) => (
+                              <option key={idx} value={offer.persons}>
+                                {lang === "ar"
+                                  ? `عرض ${offer.persons} ${Number(offer.persons) === 1 ? "فرد" : "أفراد"} - (${offer.price} ر.س)`
+                                  : `${offer.persons} ${Number(offer.persons) > 1 ? "Persons" : "Person"} Offer - (${offer.price} SAR)`}
+                              </option>
+                            ))}
+                            <option value="custom" style={{ fontWeight: "700", color: "#E85D1F" }}>
+                              {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
+                            </option>
+                          </select>
+                        ) : (
+                          <input
+                            type="number"
+                            name="guests"
+                            value={formData.guests}
+                            onChange={handleChange}
+                            min="1"
+                            max="20"
+                            style={{
+                              width: "100%",
+                              padding: isRTL
+                                ? "10px 40px 10px 12px"
+                                : "10px 12px 10px 40px",
+                              border: errors.guests
+                                ? "2px solid #dc3545"
+                                : "2px solid #e0e0e0",
+                              borderRadius: "8px",
+                              fontSize: "14px",
+                              outline: "none",
+                              transition: "all 0.2s",
+                              textAlign: isRTL ? "right" : "left",
+                            }}
+                          />
+                        )}
                       </div>
                       {errors.guests && (
                         <span

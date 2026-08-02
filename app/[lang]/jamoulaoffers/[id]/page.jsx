@@ -75,7 +75,7 @@ export default function JamoulaOfferDetails() {
       offerNotFound: "العرض غير موجود",
       failedToLoad: "فشل تحميل العرض",
       home: "الرئيسية",
-      jamoulaOffers: "عروض جامولا",
+      jamoulaOffers: "عروض جمولة",
       day: "اليوم",
       tripCode: "رمز الرحلة",
       days: "الأيام",
@@ -130,7 +130,7 @@ export default function JamoulaOfferDetails() {
     // Check for Arabic version first if lang is Arabic
     if (lang === "ar") {
       // Try various Arabic field names
-      const arValue = 
+      const arValue =
         value.ar ||
         value.arabic ||
         value.title_ar ||
@@ -153,13 +153,13 @@ export default function JamoulaOfferDetails() {
         value.label ||
         value.address ||
         value.value;
-      
+
       // If we found an Arabic value, return it
       if (arValue && typeof arValue === "string") return arValue;
       if (arValue && typeof arValue === "object") return JSON.stringify(arValue);
-      
+
       // Fallback to English if no Arabic found
-      const enValue = 
+      const enValue =
         value.en ||
         value.english ||
         value.title_en ||
@@ -172,11 +172,11 @@ export default function JamoulaOfferDetails() {
         value.label_en ||
         value.address_en ||
         value.value_en;
-      
+
       return enValue || fallback;
     } else {
       // English version
-      const enValue = 
+      const enValue =
         value.en ||
         value.english ||
         value.title_en ||
@@ -199,12 +199,12 @@ export default function JamoulaOfferDetails() {
         value.label ||
         value.address ||
         value.value;
-      
+
       if (enValue && typeof enValue === "string") return enValue;
       if (enValue && typeof enValue === "object") return JSON.stringify(enValue);
-      
+
       // Fallback to Arabic if no English found
-      const arValue = 
+      const arValue =
         value.ar ||
         value.arabic ||
         value.title_ar ||
@@ -217,14 +217,14 @@ export default function JamoulaOfferDetails() {
         value.label_ar ||
         value.address_ar ||
         value.value_ar;
-      
+
       return arValue || fallback;
     }
   };
 
   const getText = (obj, field) => {
     if (!obj) return "";
-    
+
     // Handle specific fields with priority
     if (field === "title") {
       if (lang === "ar") {
@@ -232,42 +232,42 @@ export default function JamoulaOfferDetails() {
       }
       return obj.title_en || obj.title_ar || obj.title || "";
     }
-    
+
     if (field === "description") {
       if (lang === "ar") {
         return obj.description_ar || obj.description_en || obj.description || "";
       }
       return obj.description_en || obj.description_ar || obj.description || "";
     }
-    
+
     if (field === "long_description") {
       if (lang === "ar") {
         return obj.long_description_ar || obj.long_description_en || obj.long_description || "";
       }
       return obj.long_description_en || obj.long_description_ar || obj.long_description || "";
     }
-    
+
     if (field === "duration") {
       if (lang === "ar") {
         return obj.duration_ar || obj.duration_en || obj.duration || "";
       }
       return obj.duration_en || obj.duration_ar || obj.duration || "";
     }
-    
+
     if (field === "location") {
       if (lang === "ar") {
         return obj.location_ar || obj.location_en || obj.location || "";
       }
       return obj.location_en || obj.location_ar || obj.location || "";
     }
-    
+
     if (field === "group_size") {
       if (lang === "ar") {
         return obj.group_size_ar || obj.group_size_en || obj.group_size || "";
       }
       return obj.group_size_en || obj.group_size_ar || obj.group_size || "";
     }
-    
+
     // Generic field handling
     const fieldKey = lang === "ar" ? `${field}_ar` : `${field}_en`;
     return obj[fieldKey] || obj[`${field}_en`] || obj[`${field}_ar`] || obj[field] || "";
@@ -518,22 +518,22 @@ export default function JamoulaOfferDetails() {
                 {offer.original_price && (
                   <span className="original-price">
                     {offer.original_price}{" "}
-                    <Image 
-                      src="/saudi_riyal.png" 
-                      alt="SAR" 
-                      width={14} 
-                      height={14} 
+                    <Image
+                      src="/saudi_riyal.png"
+                      alt="SAR"
+                      width={14}
+                      height={14}
                       className="currency-icon"
                     />
                   </span>
                 )}
                 <span className="current-price">
                   {offer.price}{" "}
-                  <Image 
-                    src="/saudi_riyal.png" 
-                    alt="SAR" 
-                    width={16} 
-                    height={16} 
+                  <Image
+                    src="/saudi_riyal.png"
+                    alt="SAR"
+                    width={16}
+                    height={16}
                     className="currency-icon"
                   />
                 </span>
@@ -666,7 +666,7 @@ export default function JamoulaOfferDetails() {
               <div className="panel-body">
                 <div className="contact-grid">
                   {basicInfo.trip_code && (
-                     <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
+                    <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
                   )}
                   {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
                   {basicInfo.destination_name && (
@@ -678,11 +678,11 @@ export default function JamoulaOfferDetails() {
                   {basicInfo.double_room && (
                     <div>
                       🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={12} 
-                        height={12} 
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={12}
+                        height={12}
                         className="currency-icon"
                       />
                     </div>
@@ -690,11 +690,11 @@ export default function JamoulaOfferDetails() {
                   {basicInfo.single_room && (
                     <div>
                       🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
-                      <Image 
-                        src="/saudi_riyal.png" 
-                        alt="SAR" 
-                        width={12} 
-                        height={12} 
+                      <Image
+                        src="/saudi_riyal.png"
+                        alt="SAR"
+                        width={12}
+                        height={12}
                         className="currency-icon"
                       />
                     </div>

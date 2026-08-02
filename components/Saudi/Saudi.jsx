@@ -207,9 +207,8 @@ const Saudi = ({ lang = "ar" }) => {
 
       {/* Main Content Wrapper */}
       <div
-        className={`${styles.mainWrapper} ${
-          lang === "en" ? styles.wrapperEn : styles.wrapperAr
-        }`}
+        className={`${styles.mainWrapper} ${lang === "en" ? styles.wrapperEn : styles.wrapperAr
+          }`}
       >
         {/* Text Section */}
         <div className={styles.textSection}>
@@ -220,7 +219,7 @@ const Saudi = ({ lang = "ar" }) => {
             <button
               style={{
                 background:
-                  "linear-gradient(135deg, #E85D1F 0%, #dba800ff 100%)",
+                  " #E85D1F ",
                 marginTop: "24px",
                 padding: "14px 36px",
                 fontSize: "16px",
@@ -235,10 +234,12 @@ const Saudi = ({ lang = "ar" }) => {
                 letterSpacing: "0.5px",
               }}
               onMouseEnter={(e) => {
-                e.target.style.boxShadow = "0 8px 30px rgba(232, 93, 31, 0.5)";
+                e.target.style.background = "#1C0052";
+                e.target.style.boxShadow = "0 8px 30px rgba(28, 0, 82, 0.5)";
                 e.target.style.transform = "translateY(-3px)";
               }}
               onMouseLeave={(e) => {
+                e.target.style.background = "#E85D1F";
                 e.target.style.boxShadow = "0 4px 20px rgba(232, 93, 31, 0.3)";
                 e.target.style.transform = "translateY(0)";
               }}

@@ -407,8 +407,8 @@ export default function TravelReservationModal({
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Top Decorative Gold Bar */}
-          <div style={{ height: "5px", background: "linear-gradient(90deg, #DFA528 0%, #F3D082 50%, #DFA528 100%)" }} />
+          {/* Top Decorative Sunset Accent Bar */}
+          <div style={{ height: "5px", background: "#E85D1F" }} />
 
           {/* Modal Header */}
           <div
@@ -422,7 +422,7 @@ export default function TravelReservationModal({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Plane size={22} color="#DFA528" />
+              <Plane size={22} color="#E85D1F" />
               <h3 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 700, color: "#1C0052" }}>
                 {step === 1 && t.step1Title}
                 {step === 2 && t.step2Title}
@@ -444,7 +444,7 @@ export default function TravelReservationModal({
                 color: "#1C0052",
                 transition: "all 0.2s ease",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(223, 165, 40, 0.2)")}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(232, 93, 31, 0.2)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28, 0, 82, 0.05)")}
             >
               <X size={20} />
@@ -461,7 +461,7 @@ export default function TravelReservationModal({
                       width: "28px",
                       height: "28px",
                       borderRadius: "50%",
-                      backgroundColor: step >= s ? "#DFA528" : "#e5e7eb",
+                      backgroundColor: step >= s ? "#E85D1F" : "#e5e7eb",
                       color: step >= s ? "#ffffff" : "#6b7280",
                       display: "flex",
                       alignItems: "center",
@@ -1047,7 +1047,7 @@ export default function TravelReservationModal({
                       style={{
                         width: "18px",
                         height: "18px",
-                        accentColor: "#DFA528",
+                        accentColor: "#E85D1F",
                         cursor: "pointer",
                       }}
                     />
@@ -1081,19 +1081,26 @@ export default function TravelReservationModal({
                     style={{
                       flex: 1,
                       padding: "12px 24px",
-                      backgroundColor: "#DFA528",
+                      backgroundColor: "#E85D1F",
                       color: "#ffffff",
                       border: "none",
                       borderRadius: "10px",
                       fontSize: "1rem",
                       fontWeight: 700,
                       cursor: loading ? "not-allowed" : "pointer",
-                      boxShadow: "0 4px 14px rgba(223, 165, 40, 0.3)",
+                      boxShadow: "0 4px 14px rgba(232, 93, 31, 0.3)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       gap: "8px",
                       opacity: loading ? 0.7 : 1,
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!loading) e.currentTarget.style.backgroundColor = "#1C0052";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!loading) e.currentTarget.style.backgroundColor = "#E85D1F";
                     }}
                   >
                     {loading ? (
@@ -1137,7 +1144,7 @@ export default function TravelReservationModal({
                   {t.step3Title}
                 </h3>
 
-                <p style={{ fontSize: "1rem", fontWeight: 600, color: "#DFA528", margin: "0 0 14px" }}>
+                <p style={{ fontSize: "1rem", fontWeight: 600, color: "#E85D1F", margin: "0 0 14px" }}>
                   {t.thankYou}
                 </p>
 
@@ -1157,7 +1164,7 @@ export default function TravelReservationModal({
                   <div
                     style={{
                       backgroundColor: "#FAF6F0",
-                      border: "2px dashed #DFA528",
+                      border: "2px dashed #E85D1F",
                       borderRadius: "12px",
                       padding: "16px 24px",
                       display: "inline-block",

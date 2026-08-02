@@ -485,7 +485,7 @@ select.form-control option {
   left: 0;
   right: 0;
   height: 3.5px;
-  background: linear-gradient(90deg, #DFA528 0%, #F3D082 50%, #DFA528 100%);
+  background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 50%, #E85D1F 100%);
 }
 
 .dropdown-ltr {
@@ -522,8 +522,8 @@ select.form-control option {
   width: 40px !important;
   height: 40px !important;
   border-radius: 10px !important;
-  background: rgba(223, 165, 40, 0.12) !important;
-  color: #DFA528 !important;
+  background: rgba(232, 93, 31, 0.12) !important;
+  color: #E85D1F !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -567,13 +567,13 @@ select.form-control option {
 }
 
 .dropdown-item:hover .dropdown-item-icon {
-  background: linear-gradient(135deg, #DFA528 0%, #c98c1e 100%) !important;
+  background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(223, 165, 40, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(232, 93, 31, 0.35) !important;
 }
 
 .dropdown-item:hover .dropdown-item-title {
-  color: #DFA528 !important;
+  color: #E85D1F !important;
 }
 
 .region-group {
@@ -581,13 +581,10 @@ select.form-control option {
   flex-direction: row !important;
   align-items: center !important;
   padding: 12px 14px !important;
-  cursor: pointer !important;
   border-radius: 12px !important;
+  gap: 14px !important;
+  cursor: pointer !important;
   transition: all 0.22s ease-in-out !important;
-  color: #1C0052 !important;
-  background: transparent;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .region-group:hover {
@@ -595,36 +592,78 @@ select.form-control option {
   transform: translateY(-2px) !important;
 }
 
-.region-trigger {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  font-weight: 700 !important;
-  font-size: 14px !important;
-  color: #1C0052 !important;
-}
-
-.region-group:hover .region-trigger {
-  color: #DFA528 !important;
-}
-
-.region-icon-wrapper {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 10px !important;
-  background: rgba(223, 165, 40, 0.12) !important;
+.region-icon {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  background: rgba(232, 93, 31, 0.12) !important;
+  color: #E85D1F !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 18px !important;
-  color: #DFA528 !important;
+  font-size: 20px !important;
+  flex-shrink: 0 !important;
   transition: all 0.22s ease-in-out !important;
 }
 
-.region-group:hover .region-icon-wrapper {
-  background: linear-gradient(135deg, #DFA528 0%, #c98c1e 100%) !important;
+.region-group:hover .region-icon {
+  background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(223, 165, 40, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(232, 93, 31, 0.35) !important;
+}
+
+.region-title {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: #1C0052 !important;
+  transition: color 0.2s ease !important;
+}
+
+.region-group:hover .region-title {
+  color: #E85D1F !important;
+}
+
+/* Brand Button Utilities: #E85D1F Default -> #1C0052 Hover */
+.btn-brand-primary {
+  background: #1C0052 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-brand-primary:hover {
+  background: #E85D1F !important;
+  color: #ffffff !important;
+}
+
+.btn-brand-accent,
+.btn-main,
+.btn-book,
+.btn-book-now,
+.btn-view-all,
+.btn-view,
+.complete-reservation-btn,
+.btn-primary:not(.btn-outline-light):not(.btn-secondary) {
+  background-color: #E85D1F !important;
+  background: #E85D1F !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn-brand-accent:hover,
+.btn-main:hover,
+.btn-book:hover,
+.btn-book-now:hover,
+.btn-view-all:hover,
+.btn-view:hover,
+.complete-reservation-btn:hover,
+.btn-primary:not(.btn-outline-light):not(.btn-secondary):hover {
+  background-color: #1C0052 !important;
+  background: #1C0052 !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45) !important;
 }
 
 .sub-menu {

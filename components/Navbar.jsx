@@ -237,11 +237,29 @@ export default function Navbar({ lang }) {
     },
     {
       href: "/tousimoffers",
-      label: lang === "ar" ? "اكتشف السعودية" : "Discover Saudi",
+      label:
+        lang === "ar" ? (
+          <>
+            اكتشف <span style={{ color: "#006C35", fontWeight: "700" }}>السعودية</span>
+          </>
+        ) : (
+          <>
+            Discover <span style={{ color: "#006C35", fontWeight: "700" }}>Saudi</span>
+          </>
+        ),
     },
     {
       href: "/jamoulaoffers",
-      label: lang === "ar" ? "عروض جامولا" : "Jamoula Offers",
+      label:
+        lang === "ar" ? (
+          <>
+            عروض <span style={{ color: "#FF0000", fontWeight: "700" }}>جمولة</span>
+          </>
+        ) : (
+          <>
+            <span style={{ color: "#FF0000", fontWeight: "700" }}>Jamoula</span> Offers
+          </>
+        ),
     },
     {
       href: "#",

@@ -418,13 +418,13 @@ export default function ReservationModal() {
         {/* Header Bar */}
         <div
           style={{
-            background: "linear-gradient(135deg, #1C0052 0%, #2D006B 100%)",
+            background: "linear-gradient(135deg, #1C0052 0%, #2F057F 100%)",
             color: "#ffffff",
             padding: "18px 24px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            borderBottom: "3.5px solid #DFA528",
+            borderBottom: "3.5px solid #E85D1F",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -433,12 +433,12 @@ export default function ReservationModal() {
                 width: "42px",
                 height: "42px",
                 borderRadius: "12px",
-                backgroundColor: "rgba(223, 165, 40, 0.15)",
-                border: "1.5px solid #DFA528",
+                backgroundColor: "rgba(232, 93, 31, 0.15)",
+                border: "1.5px solid #E85D1F",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#F3D082",
+                color: "#FFC60B",
               }}
             >
               <Compass size={22} />
@@ -447,7 +447,7 @@ export default function ReservationModal() {
               <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#ffffff" }}>
                 {isRTL ? "طلب حجز رحلة سياحية" : "Travel Reservation Form"}
               </h3>
-              <p style={{ margin: 0, fontSize: "0.78rem", color: "#F3D082" }}>
+              <p style={{ margin: 0, fontSize: "0.78rem", color: "#FFC60B" }}>
                 {destination?.title ? destination.title : (isRTL ? "شركة التلال والرمال لتنظيم الرحلات" : "Tilal Rimal Tourism Organization")}
               </p>
             </div>
@@ -486,7 +486,7 @@ export default function ReservationModal() {
                   style={{
                     fontSize: "0.82rem",
                     fontWeight: currentStep === idx + 1 ? 700 : 500,
-                    color: currentStep === idx + 1 ? "#DFA528" : currentStep > idx + 1 ? "#10b981" : "#6b7280",
+                    color: currentStep === idx + 1 ? "#E85D1F" : currentStep > idx + 1 ? "#10b981" : "#6b7280",
                   }}
                 >
                   {stepLabel}
@@ -498,7 +498,7 @@ export default function ReservationModal() {
                 style={{
                   width: `${(currentStep / 3) * 100}%`,
                   height: "100%",
-                  background: "linear-gradient(90deg, #DFA528, #F3D082)",
+                  background: "linear-gradient(90deg, #E85D1F, #FFC60B)",
                   transition: "width 0.3s ease",
                 }}
               />
@@ -558,7 +558,7 @@ export default function ReservationModal() {
                   style={{
                     display: "inline-block",
                     backgroundColor: "#FAF6F0",
-                    border: "1.5px dashed #DFA528",
+                    border: "1.5px dashed #E85D1F",
                     padding: "10px 20px",
                     borderRadius: "12px",
                     fontWeight: 700,
@@ -587,9 +587,9 @@ export default function ReservationModal() {
                       style={{
                         padding: "14px",
                         borderRadius: "14px",
-                        border: bookingLocation === "local" ? "2px solid #DFA528" : "1.5px solid #EFE4D2",
+                        border: bookingLocation === "local" ? "2px solid #E85D1F" : "1.5px solid #EFE4D2",
                         backgroundColor: bookingLocation === "local" ? "#FAF6F0" : "#ffffff",
-                        color: bookingLocation === "local" ? "#DFA528" : "#4b5563",
+                        color: bookingLocation === "local" ? "#E85D1F" : "#4b5563",
                         fontWeight: 700,
                         fontSize: "0.92rem",
                         cursor: "pointer",
@@ -609,9 +609,9 @@ export default function ReservationModal() {
                       style={{
                         padding: "14px",
                         borderRadius: "14px",
-                        border: bookingLocation === "international" ? "2px solid #DFA528" : "1.5px solid #EFE4D2",
+                        border: bookingLocation === "international" ? "2px solid #E85D1F" : "1.5px solid #EFE4D2",
                         backgroundColor: bookingLocation === "international" ? "#FAF6F0" : "#ffffff",
-                        color: bookingLocation === "international" ? "#DFA528" : "#4b5563",
+                        color: bookingLocation === "international" ? "#E85D1F" : "#4b5563",
                         fontWeight: 700,
                         fontSize: "0.92rem",
                         cursor: "pointer",
@@ -821,9 +821,9 @@ export default function ReservationModal() {
                           style={{
                             padding: "8px 14px",
                             borderRadius: "20px",
-                            border: formData.selectedActivities.includes(act.id) ? "1.5px solid #DFA528" : "1.5px solid #EFE4D2",
+                            border: formData.selectedActivities.includes(act.id) ? "1.5px solid #E85D1F" : "1.5px solid #EFE4D2",
                             backgroundColor: formData.selectedActivities.includes(act.id) ? "#FAF6F0" : "#ffffff",
-                            color: formData.selectedActivities.includes(act.id) ? "#DFA528" : "#4b5563",
+                            color: formData.selectedActivities.includes(act.id) ? "#E85D1F" : "#4b5563",
                             fontSize: "0.82rem",
                             fontWeight: 600,
                             cursor: "pointer",
@@ -979,7 +979,7 @@ export default function ReservationModal() {
                     borderRadius: "12px",
                     border: "none",
                     background: isStepValid()
-                      ? "linear-gradient(135deg, #DFA528 0%, #c98c1e 100%)"
+                      ? "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)"
                       : "#e5e7eb",
                     color: "#ffffff",
                     fontWeight: 700,
@@ -988,7 +988,7 @@ export default function ReservationModal() {
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    boxShadow: isStepValid() ? "0 4px 14px rgba(223, 165, 40, 0.35)" : "none",
+                    boxShadow: isStepValid() ? "0 4px 14px rgba(232, 93, 31, 0.35)" : "none",
                   }}
                 >
                   <span>

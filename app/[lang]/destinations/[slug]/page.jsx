@@ -450,7 +450,7 @@ export default function DestinationDetails() {
                         onClick={() => router.push(`/${lang}/destinations/${tour.slug}`)}
                         className="btn px-4 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm"
                         style={{
-                          background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)",
+                          background: "#E85D1F",
                           color: "#FFFFFF",
                           border: "none",
                           borderRadius: "10px",
@@ -459,10 +459,12 @@ export default function DestinationDetails() {
                           boxShadow: "0 4px 15px rgba(232, 93, 31, 0.25)"
                         }}
                         onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "#1C0052";
                           e.currentTarget.style.transform = "translateY(-2px)";
-                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(232, 93, 31, 0.45)";
+                          e.currentTarget.style.boxShadow = "0 8px 25px rgba(28, 0, 82, 0.45)";
                         }}
                         onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "#E85D1F";
                           e.currentTarget.style.transform = "translateY(0)";
                           e.currentTarget.style.boxShadow = "0 4px 15px rgba(232, 93, 31, 0.25)";
                         }}
@@ -712,7 +714,7 @@ export default function DestinationDetails() {
               <div className="panel-body">
                 <ul className="info-list">
                   <li>
-                    <Laptop size={16} color="#dfa528" />
+                    <Laptop size={16} color="#E85D1F" />
                     <span className="label">{t.tripCode} :</span>
                     <span className="value">
                       {tripCode}
@@ -720,19 +722,19 @@ export default function DestinationDetails() {
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Clock size={16} color="#dfa528" />
+                    <Clock size={16} color="#E85D1F" />
                     <span className="label">{t.daysNum} :</span>
                     <span className="value">{daysNum}</span>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Globe size={16} color="#dfa528" />
+                    <Globe size={16} color="#E85D1F" />
                     <span className="label">{t.destinationName} :</span>
                     <span className="value">{destinationName}</span>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Calendar size={16} color="#dfa528" />
+                    <Calendar size={16} color="#E85D1F" />
                     <span className="label">{t.availableTo} :</span>
                     <span className="value">{availableTo}</span>
                   </li>
@@ -740,7 +742,7 @@ export default function DestinationDetails() {
                   {destination?.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0 ? (
                     <>
                       <li>
-                        <Users size={16} color="#dfa528" />
+                        <Users size={16} color="#E85D1F" />
                         <span className="label">
                           {lang === "ar" ? "العروض المتاحة :" : "Available Offers :"}
                         </span>
@@ -759,14 +761,14 @@ export default function DestinationDetails() {
                             width: "100%",
                             padding: "10px 14px",
                             borderRadius: "8px",
-                            border: "2px solid #dfa528",
+                            border: "2px solid #E85D1F",
                             backgroundColor: "#fff",
                             color: "#1C0052",
                             fontWeight: "600",
                             fontSize: "0.95rem",
                             cursor: "pointer",
                             outline: "none",
-                            boxShadow: "0 2px 8px rgba(223, 165, 40, 0.15)",
+                            boxShadow: "0 2px 8px rgba(232, 93, 31, 0.15)",
                             transition: "all 0.2s ease",
                           }}
                         >
@@ -777,7 +779,7 @@ export default function DestinationDetails() {
                                 : `${offer.persons} ${Number(offer.persons) > 1 ? "Persons" : "Person"} Offer - (${offer.price} SAR)`}
                             </option>
                           ))}
-                          <option value="custom" style={{ fontWeight: "700", color: "#dfa528" }}>
+                          <option value="custom" style={{ fontWeight: "700", color: "#E85D1F" }}>
                             {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
                           </option>
                         </select>
@@ -807,7 +809,7 @@ export default function DestinationDetails() {
                   ) : (
                     <>
                       <li>
-                        <Users size={16} color="#dfa528" />
+                        <Users size={16} color="#E85D1F" />
                         <span className="label">{lang === "ar" ? "السعر :" : "Price :"}</span>
                         <span className="value highlight">
                           {destination?.price ?? t.na}
@@ -844,7 +846,7 @@ export default function DestinationDetails() {
               <div className="panel-body">
                 <ul className="contact-list">
                   <li>
-                    <MapPin size={16} color="#dfa528" />
+                    <MapPin size={16} color="#E85D1F" />
                     <a href="https://maps.app.goo.gl/WakCAhdZsZERp1M97" target="_blank" rel="noopener noreferrer">
                       <span>
                         {localizedContactInfo.address || "Al Rabwa District, Jeddah"}
@@ -853,14 +855,14 @@ export default function DestinationDetails() {
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Phone size={16} color="#dfa528" />
+                    <Phone size={16} color="#E85D1F" />
                     <a href={`tel:${localizedContactInfo.phone || "0114562097"}`}>
                       {localizedContactInfo.phone || "+966547305060"}
                     </a>
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <MessageSquare size={16} color="#dfa528" />
+                    <MessageSquare size={16} color="#25D366" />
                     <a
                       href={`https://wa.me/${(
                         localizedContactInfo.whatsapp || "+966547305060"
@@ -873,7 +875,7 @@ export default function DestinationDetails() {
                   </li>
                   <li className="divider"></li>
                   <li>
-                    <Mail size={16} color="#dfa528" />
+                    <Mail size={16} color="#E85D1F" />
                     <a
                       href={`mailto:${localizedContactInfo.email || "info@tilalr.com"
                         }`}
@@ -965,6 +967,7 @@ export default function DestinationDetails() {
         packageData={destination}
         lang={lang}
         initialGuests={selectedPersons}
+        onOpenCustomModal={() => setShowTravelReservationModal(true)}
       />
 
       {/* Travel Reservation Modal (Custom Offer Request) */}
@@ -1168,7 +1171,7 @@ export default function DestinationDetails() {
         }
 
         .btn-book-now {
-          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange gradient */
+          background: #E85D1F;
           color: #fff;
           border: none;
           padding: 14px 45px;
@@ -1182,8 +1185,9 @@ export default function DestinationDetails() {
         }
 
         .btn-book-now:hover {
+          background: #1C0052;
           transform: translateY(-3px);
-          box-shadow: 0 8px 30px rgba(232, 93, 31, 0.45);
+          box-shadow: 0 8px 30px rgba(28, 0, 82, 0.45);
         }
 
         .sidebar-panel {
@@ -1266,7 +1270,7 @@ export default function DestinationDetails() {
           width: 100%;
           padding: 12px;
           margin-top: 15px;
-          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%); /* Brand Orange gradient */
+          background: #E85D1F;
           color: #fff;
           border: none;
           border-radius: 10px;
@@ -1282,8 +1286,9 @@ export default function DestinationDetails() {
         }
 
         .complete-reservation-btn:hover {
+          background: #1C0052;
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
+          box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45);
         }
 
         .contact-list {

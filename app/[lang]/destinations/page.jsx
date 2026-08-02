@@ -180,7 +180,7 @@ export default function DestinationsPage() {
                 router.push(`${window.location.pathname}?${newParams.toString()}`, { scroll: false });
               }}
               style={{
-                background: selectedRegion === region.key ? "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)" : "#FFFFFF",
+                background: selectedRegion === region.key ? "#E85D1F" : "#FFFFFF",
                 color: selectedRegion === region.key ? "#FFFFFF" : "#1C0052",
                 border: selectedRegion === region.key ? "none" : "1px solid rgba(28, 0, 82, 0.15)",
                 boxShadow: selectedRegion === region.key ? "0 4px 15px rgba(232, 93, 31, 0.25)" : "none",
@@ -189,6 +189,16 @@ export default function DestinationsPage() {
                 fontWeight: "600",
                 cursor: "pointer",
                 transition: "all 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#FFC60B";
+                e.currentTarget.style.color = "#ffffff";
+                e.currentTarget.style.boxShadow = "0 6px 20px rgba(255, 198, 11, 0.4)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = selectedRegion === region.key ? "#E85D1F" : "#FFFFFF";
+                e.currentTarget.style.color = selectedRegion === region.key ? "#FFFFFF" : "#1C0052";
+                e.currentTarget.style.boxShadow = selectedRegion === region.key ? "0 4px 15px rgba(232, 93, 31, 0.25)" : "none";
               }}
             >
               {region.label}
@@ -227,7 +237,7 @@ export default function DestinationsPage() {
                           background: "linear-gradient(to top, rgba(28, 0, 82, 0.95) 0%, rgba(28, 0, 82, 0.3) 65%, transparent 100%)"
                         }}
                       >
-                        <span className="badge align-self-start mb-2 px-3 py-2 fw-bold text-uppercase" style={{ fontSize: "0.75rem", background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)", color: "#FFFFFF", borderRadius: "10px" }}>
+                        <span className="badge align-self-start mb-2 px-3 py-2 fw-bold text-uppercase" style={{ fontSize: "0.75rem", background: "#E85D1F", color: "#FFFFFF", borderRadius: "10px" }}>
                           {country.region}
                         </span>
                         <h3 className="text-white fw-bold m-0" style={{ fontSize: "1.5rem" }}>

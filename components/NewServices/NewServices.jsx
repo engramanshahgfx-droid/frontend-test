@@ -139,16 +139,16 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
               }}
             ></div>
             <p
-              className="lead text-light mx-auto"
-              style={{
-                maxWidth: "600px",
-                color: "#f0f0f0",
-                lineHeight: "1.7",
-                fontSize: "1.1rem"
-              }}
-            >
-              {sectionDescription}
-            </p>
+  className="lead text-light mx-auto"
+  style={{
+    maxWidth: "600px",
+    // color: "#f5f5f5 !important", // Changed from #d71111
+    lineHeight: "1.7",
+    fontSize: "1.1rem"
+  }}
+>
+  {sectionDescription}
+</p>
           </motion.div>
 
           {/* Services Grid */}
@@ -168,13 +168,12 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
                 >
                   <motion.div
                     className="card h-100 border-0 overflow-hidden shadow-lg"
-                    style={{
-                      background: "rgba(28, 0, 82, 0.45)", /* Glassmorphic brand backdrop */
-                      backdropFilter: "blur(12px)",
-                      border: "1px solid rgba(249, 229, 210, 0.15)", /* Soft Desert Sand border */
-                      borderRadius: "10px",
-                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                    }}
+style={{
+  background: "#f9e5d2", // Solid, no transparency
+  border: "1px solid rgba(249, 229, 210, 0.15)",
+  borderRadius: "10px",
+  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+}}
                     whileHover={{
                       scale: 1.03,
                       borderColor: "rgba(232, 93, 31, 0.5)", /* Accent orange */
@@ -206,14 +205,14 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
                     <div className="card-body p-4 d-flex flex-column">
                       <h5
                         className="card-title fw-bold mb-3"
-                        style={{ color: "#FFC60B", fontSize: "1.25rem" }} /* Golden Dune Yellow */
+                        style={{ color: "#E85D1F", fontSize: "1.25rem" }} /* Golden Dune Yellow */
                       >
                         {localize(service.title)}
                       </h5>
                       <p
                         className="card-text flex-grow-1 mb-4"
                         style={{
-                          color: "#e0e0e0",
+                          // color: "#d71111 !important",
                           lineHeight: "1.6",
                           fontSize: "0.95rem"
                         }}
@@ -225,7 +224,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
                           onClick={() => handleReservation(service)}
                           className="btn"
                           style={{
-                            background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)", /* Brand Orange to Yellow gradient */
+                            background: "#E85D1F", /* Brand Orange to Yellow gradient */
                             color: "#FFFFFF",
                             border: "none",
                             borderRadius: "10px",
@@ -236,10 +235,12 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
                             boxShadow: "0 4px 15px rgba(232, 93, 31, 0.25)"
                           }}
                           onMouseEnter={(e) => {
+                            e.target.style.background = "#1C0052";
                             e.target.style.transform = "translateY(-2px)";
-                            e.target.style.boxShadow = "0 8px 25px rgba(232, 93, 31, 0.5)";
+                            e.target.style.boxShadow = "0 8px 25px rgba(28, 0, 82, 0.5)";
                           }}
                           onMouseLeave={(e) => {
+                            e.target.style.background = "#E85D1F";
                             e.target.style.transform = "translateY(0)";
                             e.target.style.boxShadow = "0 4px 15px rgba(232, 93, 31, 0.25)";
                           }}

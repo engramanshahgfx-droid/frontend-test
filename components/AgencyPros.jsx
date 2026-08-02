@@ -9,19 +9,19 @@ export default function AgencyPros({ lang }) {
       subtitle: "Discover the premium advantages that make your journeys with us truly exceptional.",
       pros: [
         {
-          index: "01",
+          index: "",
           icon: <Compass size={28} className="pro-icon" />,
           title: "Expert Travel Designers",
           description: "Fully tailor-made tours planned by local experts to match your personal interests and travel style.",
         },
         {
-          index: "02",
+          index: "",
           icon: <ShieldCheck size={28} className="pro-icon" />,
           title: "Authentic Local Access",
           description: "Exclusive entry to Saudi Arabia's hidden gems, heritage sites, and authentic cultural experiences.",
         },
         {
-          index: "03",
+          index: "",
           icon: <HeartHandshake size={28} className="pro-icon" />,
           title: "Seamless VIP Care",
           description: "Dedicated 24/7 assistance, logistics management, and premium support throughout your entire journey.",

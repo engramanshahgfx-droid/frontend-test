@@ -350,12 +350,12 @@ export default function ChatAssistant({ lang = "en" }) {
           whileTap={{ scale: 0.94 }}
           onClick={() => setIsOpen(true)}
           style={{
-            background: "linear-gradient(135deg, #1C0052 0%, #3B0082 100%)",
+            background: "#1C0052",
             color: "#ffffff",
-            border: "2px solid #DFA528",
+            border: "2px solid #E85D1F",
             borderRadius: "50px",
             padding: "10px 18px",
-            boxShadow: "0 12px 35px rgba(28, 0, 82, 0.35), 0 0 0 4px rgba(223, 165, 40, 0.2)",
+            boxShadow: "0 12px 35px rgba(28, 0, 82, 0.35), 0 0 0 4px rgba(232, 93, 31, 0.2)",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
@@ -370,12 +370,12 @@ export default function ChatAssistant({ lang = "en" }) {
               width: "32px",
               height: "32px",
               borderRadius: "50%",
-              backgroundColor: "rgba(223, 165, 40, 0.2)",
-              border: "1px solid #DFA528",
+              backgroundColor: "rgba(232, 93, 31, 0.2)",
+              border: "1px solid #E85D1F",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#F3D082",
+              color: "#FFC60B",
               flexShrink: 0,
             }}
           >
@@ -385,11 +385,11 @@ export default function ChatAssistant({ lang = "en" }) {
             <span style={{ color: "#ffffff", fontSize: "0.88rem", fontWeight: 700 }}>
               {isRTL ? "مستشار التلال والرمال" : "Tilal Rimal Concierge"}
             </span>
-            <span style={{ color: "#F3D082", fontSize: "0.72rem", fontWeight: 500 }}>
+            <span style={{ color: "#FFC60B", fontSize: "0.72rem", fontWeight: 500 }}>
               {isRTL ? "خدمة العملاء والحجوزات" : "Travel & Booking Support"}
             </span>
           </div>
-          <Sparkles size={16} color="#DFA528" style={{ marginLeft: "4px" }} />
+          <Sparkles size={16} color="#FFC60B" style={{ marginLeft: "4px" }} />
         </motion.button>
       </div>
 
@@ -411,7 +411,7 @@ export default function ChatAssistant({ lang = "en" }) {
               maxHeight: "88vh",
               backgroundColor: "#ffffff",
               borderRadius: "22px",
-              boxShadow: "0 25px 65px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(223, 165, 40, 0.35)",
+              boxShadow: "0 25px 65px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(232, 93, 31, 0.35)",
               zIndex: 99999,
               display: "flex",
               flexDirection: "column",
@@ -422,13 +422,13 @@ export default function ChatAssistant({ lang = "en" }) {
             {/* Professional Header Bar */}
             <div
               style={{
-                background: "linear-gradient(135deg, #1C0052 0%, #2D006B 100%)",
+                background: "#1C0052",
                 color: "#ffffff",
                 padding: "16px 20px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                borderBottom: "3.5px solid #DFA528",
+                borderBottom: "3.5px solid #E85D1F",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>

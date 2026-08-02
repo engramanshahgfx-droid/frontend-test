@@ -421,7 +421,7 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         .btn-view {
-          background: linear-gradient(135deg, #E85D1F, #FFC60B); /* Brand sunset gradient */
+          background: #E85D1F;
           color: #fff;
           border: none;
           padding: 10px 25px;
@@ -433,8 +433,9 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         .btn-view:hover {
-          transform: scale(1.05);
-          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.45);
+          background: #1C0052;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45);
         }
 
         .destination-rating {

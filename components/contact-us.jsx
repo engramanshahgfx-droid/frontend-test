@@ -77,33 +77,7 @@ export default function Contact({ lang, hideHero = false }) {
         hours: "Open 24/7",
       },
     },
-    zh: {
-      contactTitle: "联系我们",
-      contactSubtitle: "我们在这里帮助您规划完美的旅程",
 
-      form: {
-        name: "全名",
-        email: "电子邮件地址",
-        phone: "电话号码",
-        tripType: "行程类型",
-        message: "告诉我们您理想的旅程",
-        submit: "发送请求",
-        tripTypes: [
-          "家庭旅行",
-          "企业旅行",
-          "学校旅行",
-          "个人旅行",
-          "团体旅行",
-        ],
-      },
-
-      contactInfo: {
-        address: "法赫德国王路，六十街，吉达 21454",
-        phone: "966547305060",
-        email: "info@tilalr.com",
-        hours: "24/7 开放",
-      },
-    },
   };
   // Ensure Chinese fallback exists
   if (!content.zh) content.zh = content.en;
@@ -122,7 +96,7 @@ export default function Contact({ lang, hideHero = false }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitStatus({ state: 'loading', message: '' });
-    
+
     try {
       await contactAPI.submit({
         name: formData.name,
@@ -131,12 +105,12 @@ export default function Contact({ lang, hideHero = false }) {
         subject: formData.tripType,
         message: formData.message,
       });
-      
-      setSubmitStatus({ 
-        state: 'success', 
-        message: isRTL ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.' : 'Message sent successfully! We will contact you soon.' 
+
+      setSubmitStatus({
+        state: 'success',
+        message: isRTL ? 'تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.' : 'Message sent successfully! We will contact you soon.'
       });
-      
+
       // Reset form
       setFormData({
         name: "",
@@ -146,9 +120,9 @@ export default function Contact({ lang, hideHero = false }) {
         message: "",
       });
     } catch (error) {
-      setSubmitStatus({ 
-        state: 'error', 
-        message: isRTL ? 'فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.' : 'Failed to send message. Please try again.' 
+      setSubmitStatus({
+        state: 'error',
+        message: isRTL ? 'فشل في إرسال الرسالة. يرجى المحاولة مرة أخرى.' : 'Failed to send message. Please try again.'
       });
     }
   };
@@ -244,14 +218,14 @@ export default function Contact({ lang, hideHero = false }) {
                   ></textarea>
                 </div>
 
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="btn-submit"
                   disabled={submitStatus.state === 'loading'}
                 >
                   <FiSend className="me-2" />
-                  {submitStatus.state === 'loading' 
-                    ? (isRTL ? 'جاري الإرسال...' : 'Sending...') 
+                  {submitStatus.state === 'loading'
+                    ? (isRTL ? 'جاري الإرسال...' : 'Sending...')
                     : t.form.submit}
                 </button>
 
@@ -450,7 +424,7 @@ export default function Contact({ lang, hideHero = false }) {
 
         .btn-submit {
           width: 100%;
-          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+          background: #E85D1F;
           color: white;
           border: none;
           padding: 14px 30px;
@@ -466,7 +440,9 @@ export default function Contact({ lang, hideHero = false }) {
           box-shadow: 0 4px 15px rgba(232, 93, 31, 0.2);
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .btn-submit:hover {
+          background: #1C0052;
+
           transform: translateY(-3px);
           box-shadow: 0 8px 25px rgba(232, 93, 31, 0.35);
         }

@@ -34,13 +34,13 @@ export default function JamoulaOffersPage() {
       off: "OFF",
     },
     ar: {
-      title: "عروض جامولا",
-      subtitle: "اكتشف صفقات جامولا المذهلة والتجارب التي لا تنسى",
+      title: "عروض جمولة",
+      subtitle: "اكتشف صفقات جمولة المذهلة والتجارب التي لا تنسى",
       viewDetails: "عرض التفاصيل",
       bookNow: "احجز الآن",
       from: "من",
       perPerson: "للفرد",
-      noOffers: "لا توجد عروض جامولا متاحة",
+      noOffers: "لا توجد عروض جمولة متاحة",
       backToHome: "العودة للرئيسية",
       loading: "جارٍ تحميل العروض...",
       popular: "الأكثر شهرة",
@@ -152,7 +152,7 @@ export default function JamoulaOffersPage() {
         <div className="page-header" style={{ marginTop: "20px" }}>
           <h1 style={{ padding: "0" }}>
             {lang === "ar" ? (
-              <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">جامولا</span></>
+              <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">جمولة</span></>
             ) : (
               <><span className="highlight-orange">Discover</span> <span className="highlight-green">Jamoula</span></>
             )}
@@ -314,7 +314,7 @@ export default function JamoulaOffersPage() {
         }
         
         .highlight-green {
-          color: #006C35; /* Premium Saudi Flag Green */
+          color: #FF0000; /* Premium Saudi Flag Green */
         }
 
         .highlight-orange {
