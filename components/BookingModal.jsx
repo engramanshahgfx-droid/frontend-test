@@ -156,10 +156,10 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       newErrors.travel_date = isRTL
         ? "تاريخ السفر مطلوب"
         : "The Travel Date field is required.";
-    if (!formData.guests || formData.guests < 2)
+    if (!formData.guests || formData.guests < 1)
       newErrors.guests = isRTL
-        ? "يرجى اختيار ضيفين على الأقل"
-        : "Please select at least 2 guests";
+        ? "يرجى اختيار ضيف واحد على الأقل"
+        : "Please select at least 1 guest";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -269,7 +269,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       package_id: "",
       package_code: "",
       notes: "",
-      guests: 2,
+      guests: 1,
       special_requests: "",
       booking_type: "destination",
     });
