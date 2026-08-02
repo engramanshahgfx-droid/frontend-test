@@ -478,15 +478,6 @@ select.form-control option {
   overflow: hidden;
 }
 
-.dropdown-menu-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3.5px;
-  background: linear-gradient(90deg, #E85D1F 0%, #FFC60B 50%, #E85D1F 100%);
-}
 
 .dropdown-ltr {
   left: 0;

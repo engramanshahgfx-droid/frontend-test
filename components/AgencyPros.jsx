@@ -9,19 +9,16 @@ export default function AgencyPros({ lang }) {
       subtitle: "Discover the premium advantages that make your journeys with us truly exceptional.",
       pros: [
         {
-          index: "",
           icon: <Compass size={28} className="pro-icon" />,
           title: "Expert Travel Designers",
           description: "Fully tailor-made tours planned by local experts to match your personal interests and travel style.",
         },
         {
-          index: "",
           icon: <ShieldCheck size={28} className="pro-icon" />,
           title: "Authentic Local Access",
           description: "Exclusive entry to Saudi Arabia's hidden gems, heritage sites, and authentic cultural experiences.",
         },
         {
-          index: "",
           icon: <HeartHandshake size={28} className="pro-icon" />,
           title: "Seamless VIP Care",
           description: "Dedicated 24/7 assistance, logistics management, and premium support throughout your entire journey.",
@@ -33,19 +30,16 @@ export default function AgencyPros({ lang }) {
       subtitle: "اكتشف المزايا الاستثنائية التي تجعل رحلتك معنا تجربة لا تُنسى.",
       pros: [
         {
-          index: "٠١",
           icon: <Compass size={28} className="pro-icon" />,
           title: "تصميم رحلات خبير",
           description: "رحلات سياحية مخصصة بالكامل تم التخطيط لها بواسطة خبراء محليين لتناسب اهتماماتك الخاصة.",
         },
         {
-          index: "٠٢",
           icon: <ShieldCheck size={28} className="pro-icon" />,
           title: "وصول محلي أصيل",
           description: "دخول حصري لأبرز معالم وجواهر المملكة المخفية، وتجارب ثقافية وتراثية حقيقية.",
         },
         {
-          index: "٠٣",
           icon: <HeartHandshake size={28} className="pro-icon" />,
           title: "رعاية راقية متكاملة",
           description: "متابعة مستمرة على مدار الساعة، وإدارة لوجستية متكاملة لضمان راحتك وأمانك طوال الرحلة.",

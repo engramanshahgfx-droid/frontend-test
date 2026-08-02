@@ -262,7 +262,7 @@ export default function TourismOffersPage() {
                             className="currency-icon"
                           />
                         </div>
-                        <span className="price-per">{t.perPerson}</span>
+                        {/* <span className="price-per">{t.perPerson}</span> */}
                       </div>
                       <button
                         className="btn-book"

@@ -2,32 +2,48 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import {
+  Star,
+  MapPin,
+  Clock,
+  Eye,
+  Heart,
+  ChevronRight,
+} from "lucide-react";
 import { API_URL } from "../lib/api";
+import BookingModal from "@/components/BookingModal";
 
-export default function TourismDestinations({ lang, region }) {
+export default function TourismDestinations({ lang, region, maxItems = 3 }) {
   const router = useRouter();
   const currentLang = lang || "en";
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedDestination, setSelectedDestination] = useState(null);
 
   const labels = {
     en: {
       title: "Best International Destinations",
       viewAll: "View All Destinations",
       viewDetails: "View Details",
+      bookNow: "Book Now",
       from: "From",
       perPerson: "per person",
+      popular: "Popular",
+      limited: "Limited Offer",
       showAll: "View All",
     },
     ar: {
       title: "أفضل الوجهات الدولية",
       viewAll: "عرض جميع الوجهات",
       viewDetails: "عرض التفاصيل",
+      bookNow: "احجز الآن",
       from: "من",
       perPerson: "للفرد",
+      popular: "الأكثر شهرة",
+      limited: "عرض محدود",
       showAll: "عرض الكل",
     }
   };
@@ -131,13 +147,33 @@ export default function TourismDestinations({ lang, region }) {
     router.push(`/${currentLang}/destinations/${slug}`);
   };
 
+  const handleBookNow = (destination) => {
+    setSelectedDestination(destination);
+    setShowBookingModal(true);
+  };
+
+  const renderStars = (rating) => {
+    const val = rating || 4.8;
+    const fullStars = Math.floor(val);
+    const hasHalfStar = val - fullStars >= 0.5;
+    return Array.from({ length: 5 }, (_, i) => {
+      if (i < fullStars) {
+        return <Star key={i} size={16} fill="#FFC60B" color="#FFC60B" style={{ display: "inline" }} />;
+      } else if (i === fullStars && hasHalfStar) {
+        return <Star key={i} size={16} fill="#FFC60B" color="#FFC60B" style={{ display: "inline", opacity: 0.5 }} />;
+      } else {
+        return <Star key={i} size={16} fill="none" color="#ddd" style={{ display: "inline" }} />;
+      }
+    });
+  };
+
   if (loading) {
     return (
       <section className="tourism-section">
-        <div className="container">
+        <div className="container" style={{ maxWidth: "1200px" }}>
           <div className="row">
             <div className="title text-center">
-              <h2>{t.title}</h2>
+              <h2>{region ? getRegionTitle(region, lang) : t.title}</h2>
             </div>
           </div>
           <div className="row text-center" style={{ padding: "60px 0" }}>
@@ -156,10 +192,10 @@ export default function TourismDestinations({ lang, region }) {
   if (error) {
     return (
       <section className="tourism-section">
-        <div className="container">
+        <div className="container" style={{ maxWidth: "1200px" }}>
           <div className="row">
             <div className="title text-center">
-              <h2>{t.title}</h2>
+              <h2>{region ? getRegionTitle(region, lang) : t.title}</h2>
             </div>
           </div>
           <div className="row text-center" style={{ padding: "60px 0" }}>
@@ -171,10 +207,10 @@ export default function TourismDestinations({ lang, region }) {
                 style={{
                   marginTop: "20px",
                   padding: "10px 30px",
-                  background: "#dfa528",
+                  background: "#E85D1F",
                   color: "#fff",
                   border: "none",
-                  borderRadius: "25px",
+                  borderRadius: "10px",
                   cursor: "pointer",
                 }}
               >
@@ -189,33 +225,21 @@ export default function TourismDestinations({ lang, region }) {
 
   const displayDestinations = destinations.length > 0 ? destinations : [];
   
-  // ✅ SHOW ONLY 4 DESTINATIONS ON HOME PAGE (when no region is selected)
+  // SHOW maxItems DESTINATIONS ON HOME PAGE (when no region is selected)
   // When region is selected (on region page), show all
-  const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, 4);
+  const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, maxItems);
 
-  // Helper function to format price with icon
-  const formatPriceWithIcon = (price) => {
-    return (
-      <span className="price-wrapper">
-        <span className="price-amount">{price}</span>
-        <Image 
-          src="/saudi_riyal.png" 
-          alt="SAR" 
-          width={14} 
-          height={14} 
-          className="currency-icon"
-        />
-        <span className="price-per">{t.perPerson}</span>
-      </span>
-    );
-  };
+  // Column class: 3 items per row when maxItems === 3 (matching TourismOffers), else 4 items
+  const cardColClass = (!region && maxItems === 3) ? "col-lg-4 col-md-6 col-12" : "col-lg-3 col-md-6 col-12";
 
   return (
-    <section className="tourism-section">
+    <section className="tourism-section" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container" style={{ maxWidth: "1200px" }}>
         <div className="row">
-          <div className="title text-center">
-            <h2>{region ? getRegionTitle(region, lang) : t.title}</h2>
+          <div className="col-12 text-center">
+            <h2 className="section-title">
+              {region ? getRegionTitle(region, lang) : t.title}
+            </h2>
           </div>
         </div>
 
@@ -223,7 +247,7 @@ export default function TourismDestinations({ lang, region }) {
           {visibleDestinations.map((destination, index) => (
             <motion.div
               key={destination.id || index}
-              className="col-lg-3 col-md-6 col-12"
+              className={cardColClass}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ 
@@ -246,45 +270,82 @@ export default function TourismDestinations({ lang, region }) {
                       e.target.src = '/placeholder.png';
                     }}
                   />
+                  <div className="badges-container">
+                    {destination.discount && (
+                      <span className="discount-badge">{destination.discount}% OFF</span>
+                    )}
+                    {destination.popular && <span className="popular-badge">{t.popular}</span>}
+                    {destination.limited && <span className="limited-badge">{t.limited}</span>}
+                  </div>
                   <div className="destination-overlay">
-                    <button className="btn-view">
-                      {t.viewDetails}
+                    <button className="btn-quick-view" onClick={(e) => { e.stopPropagation(); handleDestinationClick(destination); }}>
+                      <Eye size={20} />
+                    </button>
+                    <button className="btn-favorite" onClick={(e) => e.stopPropagation()}>
+                      <Heart size={20} />
                     </button>
                   </div>
-                  {destination.rating && (
-                    <div className="destination-rating">
-                      <span> {destination.rating}</span>
-                    </div>
-                  )}
                 </div>
+
                 <div className="destination-content">
-                  <h3>{getText(destination, 'title')}</h3>
-                  <p className="destination-location">
-                    📍 {getText(destination, 'location')}
-                  </p>
+                  <div className="destination-header">
+                    <h3>{getText(destination, 'title')}</h3>
+                    <div className="rating">
+                      {renderStars(destination.rating)}
+                      <span className="rating-value">{destination.rating || 4.8}</span>
+                    </div>
+                  </div>
+
                   <p className="destination-description">
                     {getText(destination, 'description')?.substring(0, 80)}...
                   </p>
+
+                  <div className="destination-meta">
+                    {getText(destination, 'location') && (
+                      <span><MapPin size={14} /> {getText(destination, 'location')}</span>
+                    )}
+                    {getText(destination, 'duration') && (
+                      <span><Clock size={14} /> {getText(destination, 'duration')}</span>
+                    )}
+                  </div>
+
                   <div className="destination-footer">
-                    <span className="destination-price">
+                    <div className="destination-price">
+                      {destination.original_price && (
+                        <span className="price-original">
+                          {destination.original_price}
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={12}
+                            height={12}
+                            className="currency-icon-small"
+                          />
+                        </span>
+                      )}
                       {destination.price ? (
-                        <>
-                          {t.from} 
+                        <div className="price-amount-wrapper">
                           <span className="price-amount">{destination.price}</span>
-                          <Image 
-                            src="/saudi_riyal.png" 
-                            alt="SAR" 
-                            width={14} 
-                            height={14} 
+                          <Image
+                            src="/saudi_riyal.png"
+                            alt="SAR"
+                            width={16}
+                            height={16}
                             className="currency-icon"
                           />
-                          <span className="price-per">{t.perPerson}</span>
-                        </>
-                      ) : ''}
-                    </span>
-                    <span className="destination-duration">
-                      {getText(destination, 'duration')}
-                    </span>
+                        </div>
+                      ) : null}
+                      {/* <span className="price-per">{t.perPerson}</span> */}
+                    </div>
+                    <button
+                      className="btn-book"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBookNow(destination);
+                      }}
+                    >
+                      {t.bookNow}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -292,8 +353,7 @@ export default function TourismDestinations({ lang, region }) {
           ))}
         </div>
 
-        {/* ✅ Show "View All" button ONLY on home page (when no region) AND if there are more than 4 destinations */}
-        {!region && displayDestinations.length > 4 && (
+        {!region && displayDestinations.length > maxItems && (
           <div className="row text-center">
             <div className="col-12 d-flex justify-content-center">
               <motion.button
@@ -316,17 +376,17 @@ export default function TourismDestinations({ lang, region }) {
                   marginTop: '20px',
                   textDecoration: 'none',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: '0 4px 15px rgba(209, 112, 0, 0.25)',
+                  boxShadow: '0 4px 15px rgba(255, 123, 0, 0.41)',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#1C0052';
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(31, 95, 232, 0.45)';
+                  e.currentTarget.style.boxShadow = '0 8px 25px rgba(0, 15, 151, 0.45)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = '#E85D1F';
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(255, 123, 0, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(28, 0, 82, 0.25)';
                 }}
               >
                 <span>{t.viewAll}</span>
@@ -341,20 +401,19 @@ export default function TourismDestinations({ lang, region }) {
         .tourism-section {
           padding: 60px 0;
           background: #FAF6F0; /* Soft Desert Sand theme variant */
-          direction: ${lang === 'ar' ? 'rtl' : 'ltr'};
         }
 
-        .title h2 {
+        .section-title {
           font-size: 2.5rem;
           font-weight: 700;
-          color: #E85D1F;
-          margin-bottom: 40px;
+          color: #E85D1F; /* Desert Sunset Orange */
           position: relative;
+          margin-bottom: 40px;
           text-align: center;
         }
 
-        .title h2:after {
-          content: '';
+        .section-title:after {
+          content: "";
           position: absolute;
           bottom: -10px;
           left: 50%;
@@ -366,16 +425,16 @@ export default function TourismDestinations({ lang, region }) {
 
         .destination-card {
           background: #fff;
-          border-radius: 10px; /* Brand standardized border radius */
+          border-radius: 10px;
           overflow: hidden;
           border: 1px solid rgba(28, 0, 82, 0.06);
           box-shadow: 0 5px 25px rgba(28, 0, 82, 0.04);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           margin-bottom: 30px;
-          cursor: pointer;
           height: 100%;
           display: flex;
           flex-direction: column;
+          cursor: pointer;
         }
 
         .destination-card:hover {
@@ -389,17 +448,71 @@ export default function TourismDestinations({ lang, region }) {
           overflow: hidden;
           height: 220px;
           flex-shrink: 0;
+          background: #f0f0f0;
         }
 
         .destination-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: transform 0.5s ease;
+          transition: transform 0.6s ease;
         }
 
         .destination-card:hover .destination-image img {
-          transform: scale(1.05);
+          transform: scale(1.08);
+        }
+
+        .badges-container {
+          position: absolute;
+          top: 15px;
+          inset-inline-start: 15px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          z-index: 2;
+        }
+
+        .discount-badge {
+          background: #ee5a24;
+          color: #fff;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          animation: pulse 2s infinite;
+          text-align: center;
+          width: fit-content;
+          align-self: flex-start;
+        }
+          
+        .popular-badge {
+          width: fit-content;
+          background: #E85D1F;
+          color: #fff;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-align: center;
+          align-self: flex-start;
+        }
+            
+        .limited-badge {
+          background: #1C0052;
+          color: #fff;
+          padding: 6px 14px;
+          border-radius: 20px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-align: center;
+          align-self: flex-start;
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
         }
 
         .destination-overlay {
@@ -410,96 +523,150 @@ export default function TourismDestinations({ lang, region }) {
           height: 100%;
           background: rgba(28, 0, 82, 0.4);
           opacity: 0;
-          transition: opacity 0.3s ease;
+          transition: opacity 0.4s ease;
           display: flex;
           align-items: center;
           justify-content: center;
+          gap: 15px;
+          backdrop-filter: blur(4px);
         }
 
         .destination-card:hover .destination-overlay {
           opacity: 1;
         }
 
-        .btn-view {
+        .btn-quick-view,
+        .btn-favorite {
+          background: #fff;
+          border: none;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #1C0052;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          transform: translateY(20px) scale(0.8);
+          opacity: 0;
+        }
+
+        .destination-card:hover .btn-quick-view,
+        .destination-card:hover .btn-favorite {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+
+        .btn-quick-view:hover {
           background: #E85D1F;
           color: #fff;
-          border: none;
-          padding: 10px 25px;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
+          transform: scale(1.1);
         }
 
-        .btn-view:hover {
-          background: #1C0052;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45);
-        }
-
-        .destination-rating {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          background: #E85D1F;
-          color: #fff; /* Golden Dune Yellow */
-          padding: 4px 12px;
-          border-radius: 20px;
-          font-size: 0.85rem;
-          font-weight: 600;
+        .btn-favorite:hover {
+          background: #ff6b6b;
+          color: #fff;
+          transform: scale(1.1);
         }
 
         .destination-content {
-          padding: 18px;
+          padding: 20px;
           flex: 1;
           display: flex;
           flex-direction: column;
         }
 
-        .destination-content h3 {
+        .destination-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 10px;
+          gap: 10px;
+        }
+
+        .destination-header h3 {
           font-size: 1.1rem;
           font-weight: 600;
           color: #E85D1F;
-          margin: 0 0 5px;
-          line-height: 1.3;
+          margin: 0;
+          flex: 1;
         }
 
-        .destination-location {
-          color: #1C0052;
+        .rating {
+          display: flex;
+          align-items: center;
+          gap: 2px;
+          flex-shrink: 0;
+        }
+
+        .rating-value {
+          color: #666;
           font-size: 0.85rem;
-          margin: 0 0 8px;
+          margin-left: 4px;
+          font-weight: 500;
         }
 
         .destination-description {
-          color: #555;
+          color: #666;
           font-size: 0.9rem;
-          line-height: 1.5;
-          margin: 0 0 12px;
+          line-height: 1.6;
+          margin: 10px 0 15px;
           flex: 1;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .destination-meta {
+          display: flex;
+          gap: 15px;
+          margin-bottom: 15px;
+          flex-wrap: wrap;
+        }
+
+        .destination-meta span {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          font-size: 0.85rem;
+          color: #1C0052;
         }
 
         .destination-footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding-top: 12px;
+          padding-top: 15px;
           border-top: 1px solid #eee;
-          flex-wrap: wrap;
-          gap: 8px;
+          margin-top: auto;
+          gap: 10px;
         }
 
         .destination-price {
-          font-size: 1rem;
-          font-weight: 700;
-          color: #E85D1F; /* Desert Sunset Orange */
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .price-original {
+          font-size: 0.8rem;
+          color: #999;
+          text-decoration: line-through;
+          display: flex;
+          align-items: center;
+          gap: 3px;
+        }
+
+        .price-amount-wrapper {
           display: flex;
           align-items: center;
           gap: 4px;
-          flex-wrap: wrap;
         }
 
         .price-amount {
+          font-size: 1.3rem;
           font-weight: 700;
           color: #E85D1F;
         }
@@ -509,15 +676,35 @@ export default function TourismDestinations({ lang, region }) {
           vertical-align: middle;
         }
 
-        .price-per {
-          font-size: 0.7rem;
-          color: #1C0052;
-          font-weight: 400;
+        .currency-icon-small {
+          display: inline-block;
+          vertical-align: middle;
+          opacity: 0.7;
         }
 
-        .destination-duration {
-          font-size: 0.85rem;
+        .price-per {
+          font-size: 0.7rem;
           color: #888;
+        }
+
+        .btn-book {
+          background: #E85D1F;
+          color: #fff;
+          border: none;
+          padding: 10px 24px;
+          border-radius: 10px;
+          font-weight: 600;
+          font-size: 0.85rem;
+          transition: all 0.3s ease;
+          cursor: pointer;
+          white-space: nowrap;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
+        }
+
+        .btn-book:hover {
+          background: #1C0052;
+          transform: translateY(-2px) scale(1.02);
+          box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45);
         }
 
         .btn-view-all {
@@ -525,8 +712,8 @@ export default function TourismDestinations({ lang, region }) {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          background: #E85D1F !important;
-          color: #fff !important;
+          background: #E85D1F;
+          color: #fff;
           padding: 12px 35px;
           border-radius: 10px;
           font-weight: 600;
@@ -535,14 +722,13 @@ export default function TourismDestinations({ lang, region }) {
           margin-top: 20px;
           text-decoration: none;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(28, 0, 82, 0.2);
-          margin-bottom: 100px;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
         }
 
         .btn-view-all:hover {
-          background: linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%);
+          background: #1C0052;
           transform: translateY(-3px);
-          box-shadow: 0 8px 25px rgba(232, 93, 31, 0.4);
+          box-shadow: 0 8px 25px rgba(28, 0, 82, 0.45);
         }
 
         .btn-view-all svg {
@@ -558,12 +744,8 @@ export default function TourismDestinations({ lang, region }) {
         }
 
         @media (max-width: 768px) {
-          .title h2 {
+          .section-title {
             font-size: 2rem;
-          }
-          .destination-footer {
-            flex-direction: column;
-            align-items: flex-start;
           }
         }
 
@@ -571,19 +753,36 @@ export default function TourismDestinations({ lang, region }) {
           .destination-image {
             height: 180px;
           }
+          .destination-footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+          }
+          .btn-book {
+            width: 100%;
+            text-align: center;
+          }
           .btn-view-all {
-            padding: 12px 25px;
-            font-size: 0.9rem;
             width: 100%;
             justify-content: center;
           }
         }
       `}</style>
+
+      <BookingModal
+        isOpen={showBookingModal}
+        onClose={() => {
+          setShowBookingModal(false);
+          setSelectedDestination(null);
+        }}
+        packageData={selectedDestination}
+        lang={lang}
+        bookingType="destination"
+      />
     </section>
   );
 }
 
-// ✅ FIXED: Region titles with proper lowercase keys matching database values
 function getRegionTitle(region, lang) {
   const titles = {
     en: {
@@ -602,6 +801,5 @@ function getRegionTitle(region, lang) {
     }
   };
   
-  // Return the title for the given language and region, or fallback to English
   return titles[lang]?.[region] || titles.en[region] || region || '';
 }

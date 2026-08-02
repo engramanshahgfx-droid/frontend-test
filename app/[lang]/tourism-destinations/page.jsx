@@ -201,7 +201,7 @@ export default function TourismDestinationsPage() {
                           if (prices.length > 0) displayPrice = Math.min(...prices);
                         }
                         if (!displayPrice) return '';
-                        return `${t.from} ${displayPrice} ${t.perPerson}`;
+                        return `${t.from} ${displayPrice} `;
                       })()}
                     </span>
                     <button className="btn-view" onClick={(e) => {

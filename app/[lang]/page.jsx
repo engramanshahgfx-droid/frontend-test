@@ -290,7 +290,7 @@ export default async function Home({ params }) {
 
       <PromoBanners lang={lang} index={0} />
 
-      <TourismDestinations lang={lang} />
+      <TourismDestinations lang={lang} maxItems={3} />
 
       <PromoBanners lang={lang} index={1} />
 
