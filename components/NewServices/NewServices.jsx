@@ -12,7 +12,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
     ? servicesData
     : [];
 
-  console.log('🎨 NewServices component received:', {
+  console.log(' NewServices component received:', {
     lang,
     servicesDataLength: servicesData?.length || 0,
     sectionTitle,

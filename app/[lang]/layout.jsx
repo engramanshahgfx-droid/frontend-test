@@ -12,6 +12,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackToTopButton from "@/components/BackToTopButton";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import ChatAssistant from "@/components/ChatAssistant";
 import AuthModal from "@/components/AuthModal";
 import BookingModal from "@/components/BookingModal";
 import ReservationModal from "@/components/ReservationModal";
@@ -121,6 +122,7 @@ export default async function RootLayout({ children, params }) {
               </main>
               <BackToTopButton />
               <WhatsAppButton lang={lang} />
+              <ChatAssistant lang={lang} />
               <Footer lang={lang} />
             </ContextProvider>
             <AuthModal />
