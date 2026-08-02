@@ -36,7 +36,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     package_id: "",
     package_code: "",
     notes: "",
-    guests: 2,
+    guests: 1,
     special_requests: "",
     booking_type: bookingType,
   });
@@ -250,11 +250,11 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     }
   };
 
-const initiatePayment = async (bookingId, amount) => {
-  setLoading(false);
-  setIsRedirecting(true);
-  window.location.href = `/${lang}/booking-success?booking_id=${bookingId}`;
-};
+  const initiatePayment = async (bookingId, amount) => {
+    setLoading(false);
+    setIsRedirecting(true);
+    window.location.href = `/${lang}/booking-success?booking_id=${bookingId}`;
+  };
   const resetForm = () => {
     setStep(1);
     setBookingId(null);
@@ -575,7 +575,7 @@ const initiatePayment = async (bookingId, amount) => {
                     </h4>
                     {packageData?.basic_info && (
                       <div style={{ fontSize: "14px", color: "#666" }}>
-                     
+
                       </div>
                     )}
                   </div>
@@ -1056,7 +1056,7 @@ const initiatePayment = async (bookingId, amount) => {
                       </div>
                     </div>
 
-              
+
                   </div>
 
                   {errors.submit && (
