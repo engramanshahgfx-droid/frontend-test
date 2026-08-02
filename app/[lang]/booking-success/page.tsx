@@ -504,7 +504,8 @@ export default function BookingSuccessPage() {
     const initPayment = () => {
       const publishableKey =
         process.env.NEXT_PUBLIC_MOYASAR_PUBLIC_KEY ||
-        process.env.NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY;
+        process.env.NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY ||
+        'pk_test_RkhX8tYa6szipY7w5ZQF33pz5YZAbxa42qqGbmJh';
       if (!publishableKey) {
         setError('Payment gateway is not configured.');
         return;

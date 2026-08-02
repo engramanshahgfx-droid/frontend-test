@@ -9,7 +9,21 @@ import { useAuth } from "../providers/AuthProvider";
 import { useUI } from "../providers/UIProvider";
 import en from "@/public/locales/en/common.json";
 import ar from "@/public/locales/ar/common.json";
-import { ChevronDown, ChevronRight, Globe, Menu, X, Phone } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  ChevronLeft,
+  Globe,
+  Menu,
+  X,
+  Phone,
+  Plane,
+  Wifi,
+  FileCheck,
+  Landmark,
+  Compass,
+  ShieldCheck,
+} from "lucide-react";
 import { API_URL } from "@/lib/api";
 
 import {
@@ -237,7 +251,7 @@ export default function Navbar({ lang }) {
     },
     { href: "/about-us", label: t("nav.about") },
     {
-      href: "/basic",
+      href: "#",
       label: lang === "ar" ? "متطلبات السفر" : "Travel Requirements",
       dropdown: true,
       type: "basic",
@@ -246,23 +260,24 @@ export default function Navbar({ lang }) {
 
   const visaData = [
     {
-      title: { en: "Schengen visa", ar: "تأشيرة الشنغن" },
-      description: { en: "Requirements", ar: "المتطلبات" },
-      icon: "🏛️",
+      title: { en: "Schengen Visa", ar: "تأشيرة الشنغن" },
+      description: { en: "Application & requirements", ar: "التقديم والمتطلبات" },
+      icon: <ShieldCheck size={18} />,
       href: "/visa",
     },
   ];
+
   const basicData = [
     {
       title: { en: "About Saudi Arabia", ar: "عن المملكة العربية السعودية" },
       description: { en: "Culture and heritage", ar: "الثقافة والتراث" },
-      icon: "🏛️",
+      icon: <Landmark size={18} />,
       href: "/about-saudi",
     },
     {
       title: { en: "Travel Guide", ar: "دليل المسافر" },
-      description: { en: "Transportation", ar: "المواصلات" },
-      icon: "📋",
+      description: { en: "Transportation & tips", ar: "المواصلات والنصائح" },
+      icon: <Compass size={18} />,
       href: "/transportation",
     },
   ];
@@ -274,7 +289,7 @@ export default function Navbar({ lang }) {
         en: "Request private jet services",
         ar: "طلب خدمات الطيران الخاص",
       },
-      icon: "✈️",
+      icon: <Plane size={18} />,
       href: "/international/private-jet",
     },
     {
@@ -283,7 +298,7 @@ export default function Navbar({ lang }) {
         en: "Global internet solutions",
         ar: "حلول الإنترنت العالمية",
       },
-      icon: "🌐",
+      icon: <Wifi size={18} />,
       href: "/international/internet-packages",
     },
     {
@@ -292,7 +307,7 @@ export default function Navbar({ lang }) {
         en: "Apply for tourist and Schengen visas",
         ar: "التقديم على التأشيرات السياحية والشنغن",
       },
-      icon: "📋",
+      icon: <FileCheck size={18} />,
       href: "/visa",
     },
   ];
@@ -454,7 +469,7 @@ export default function Navbar({ lang }) {
                 {item.dropdown ? (
                   <Link
                     href={item.type === "packages" ? `/${lang}/destinations` : `/${lang}${item.href}`}
-                    className={`nav-link ${isActive(item.href) ? "active" : ""}`}
+                    className={`nav-link ${isActive(item.href) ? "active" : ""} ${openDesktopDropdown === item.type ? "dropdown-open" : ""}`}
                     onClick={(e) => {
                       if (window.innerWidth <= 1210) {
                         e.preventDefault();
@@ -462,7 +477,11 @@ export default function Navbar({ lang }) {
                       }
                     }}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    <ChevronDown
+                      size={14}
+                      className={`nav-dropdown-arrow ${openDesktopDropdown === item.type ? "rotate-arrow" : ""}`}
+                    />
                   </Link>
                 ) : (
                   <Link
@@ -477,10 +496,10 @@ export default function Navbar({ lang }) {
                   <AnimatePresence>
                     {openDesktopDropdown === item.type && (
                       <motion.div
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 5 }}
-                        transition={{ duration: 0.15 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
                         className={`dropdown-menu-wrapper ${isRTL ? "dropdown-rtl" : "dropdown-ltr"}`}
                         onMouseEnter={handleDropdownMouseEnterContainer}
                         onMouseLeave={handleDropdownMouseLeaveContainer}
@@ -494,12 +513,12 @@ export default function Navbar({ lang }) {
                                   key={regionKey}
                                   href={`/${lang}/destinations?region=${regionKey}`}
                                   className="region-group text-decoration-none d-block"
-                                  style={{ color: "inherit" }}
                                 >
                                   <div className="region-trigger">
-                                    <span>
-                                      {data.icon} {getRegionLabel(regionKey)}
+                                    <span className="region-icon-wrapper">
+                                      {data.icon || "🌍"}
                                     </span>
+                                    <span>{getRegionLabel(regionKey)}</span>
                                   </div>
                                 </Link>
                               ),
@@ -513,12 +532,14 @@ export default function Navbar({ lang }) {
                                 href={`/${lang}${d.href}`}
                                 className="dropdown-item"
                               >
-                                <span className="me-2">{d.icon}</span>
-                                <div>
-                                  <div className="fw-bold">
+                                <div className="dropdown-item-icon">
+                                  {d.icon || "✨"}
+                                </div>
+                                <div className="dropdown-item-content">
+                                  <div className="dropdown-item-title">
                                     {localize(d.title)}
                                   </div>
-                                  <div className="small text-muted">
+                                  <div className="dropdown-item-desc">
                                     {localize(d.description)}
                                   </div>
                                 </div>

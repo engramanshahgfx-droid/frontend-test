@@ -856,7 +856,7 @@ export default function JamoulaOfferDetails() {
 
       <style jsx>{`
         .offer-details {
-          padding: 150px 0 60px; /* Clear floating navbar */
+          padding: 150px 0 100px; /* Clear floating navbar & provide space before footer */
           background: #FAF6F0; /* Soft Desert Sand theme variant */
           min-height: 100vh;
         }
@@ -1245,7 +1245,9 @@ export default function JamoulaOfferDetails() {
 
         .book-now-section {
           text-align: center;
-          margin-top: 20px;
+          margin-top: 40px;
+          margin-bottom: 40px;
+          padding-bottom: 20px;
         }
 
         .btn-book-now {
