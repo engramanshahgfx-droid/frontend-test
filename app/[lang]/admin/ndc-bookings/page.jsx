@@ -193,7 +193,7 @@ export default function AdminNDCBookingsPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      background: '#e2e8f0',
       padding: '24px',
       fontFamily: "'DM Sans', sans-serif"
     }}>
@@ -283,7 +283,7 @@ export default function AdminNDCBookingsPage() {
           color: #3b82f6;
         }
         .filter-btn.active {
-          background: linear-gradient(135deg, #3b82f6, #6366f1);
+          background:  #3b82f6;
           color: white;
           border-color: transparent;
         }
@@ -556,7 +556,7 @@ export default function AdminNDCBookingsPage() {
       {/* NDC Flow Documentation */}
       <div style={{ 
         marginTop: '32px',
-        background: 'linear-gradient(135deg, #1e293b, #334155)',
+        background: ' #334155)',
         borderRadius: '16px',
         padding: '28px',
         color: 'white'

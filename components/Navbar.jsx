@@ -344,28 +344,14 @@ export default function Navbar({ lang }) {
   const handleDropdownMouseLeave = (e) => {
     if (window.innerWidth > 1210) {
       const relatedTarget = e.relatedTarget;
-      const isChildElement =
+      const isInsideDropdown =
         relatedTarget &&
         (relatedTarget.closest(".dropdown-menu-wrapper") ||
-          relatedTarget.closest(".sub-menu") ||
-          relatedTarget.closest(".region-group"));
+          relatedTarget.closest(".dropdown-packages"));
 
-      const isNavItem =
-        relatedTarget &&
-        (relatedTarget.closest(".nav-item-wrapper") ||
-          relatedTarget.classList.contains("nav-link"));
-
-      const isDropdownMenu =
-        relatedTarget && relatedTarget.closest(".dropdown-menu-wrapper");
-
-      // Only close if leaving to outside the dropdown/menu area
-      if (!isChildElement && !isDropdownMenu && !isNavItem) {
-        dropdownTimeoutRef.current = setTimeout(() => {
-          if (!isHoveringDropdown.current) {
-            setOpenDesktopDropdown(null);
-            setOpenSubDropdown(null);
-          }
-        }, 100);
+      if (!isInsideDropdown) {
+        setOpenDesktopDropdown(null);
+        setOpenSubDropdown(null);
       }
     }
   };
@@ -378,14 +364,16 @@ export default function Navbar({ lang }) {
     }
   };
 
-  const handleDropdownMouseLeaveContainer = () => {
+  const handleDropdownMouseLeaveContainer = (e) => {
     isHoveringDropdown.current = false;
-    dropdownTimeoutRef.current = setTimeout(() => {
-      if (!isHoveringDropdown.current) {
-        setOpenDesktopDropdown(null);
-        setOpenSubDropdown(null);
-      }
-    }, 100);
+    const relatedTarget = e?.relatedTarget;
+    const isInsideNavWrapper =
+      relatedTarget && relatedTarget.closest(".nav-item-wrapper");
+
+    if (!isInsideNavWrapper) {
+      setOpenDesktopDropdown(null);
+      setOpenSubDropdown(null);
+    }
   };
 
   const toggleMobileDropdown = (type, e) => {
@@ -433,22 +421,22 @@ export default function Navbar({ lang }) {
                 href="https://www.tiktok.com/@tilalr2030"
                 className="social-icon"
               >
-                <FaTiktok size={14} />
+                <FaTiktok size={16} />
               </a>
               <a
                 href="https://www.snapchat.com/@tilalr2030"
                 className="social-icon"
               >
-                <FaSnapchat size={14} />
+                <FaSnapchat size={16} />
               </a>
               <a
                 href="https://www.instagram.com/tilall2030?igsh=c2wyaThvcmZpb3pz/"
                 className="social-icon"
               >
-                <FaInstagram size={14} />
+                <FaInstagram size={16} />
               </a>
               <a href="https://twitter.com/tilalr2030" className="social-icon">
-                <SiX size={14} />
+                <SiX size={16} />
               </a>
             </div>
           </div>
@@ -482,12 +470,19 @@ export default function Navbar({ lang }) {
                 <div
                   key={idx}
                   className="nav-item-wrapper"
-                  onMouseEnter={() =>
-                    item.dropdown && handleDropdownMouseEnter(item.type)
-                  }
-                  onMouseLeave={(e) =>
-                    item.dropdown && handleDropdownMouseLeave(e)
-                  }
+                  onMouseEnter={() => {
+                    if (item.dropdown) {
+                      handleDropdownMouseEnter(item.type);
+                    } else {
+                      setOpenDesktopDropdown(null);
+                      setOpenSubDropdown(null);
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (item.dropdown) {
+                      handleDropdownMouseLeave(e);
+                    }
+                  }}
                 >
                   {item.dropdown ? (
                     <Link
@@ -653,7 +648,19 @@ export default function Navbar({ lang }) {
               dir={isRTL ? "rtl" : "ltr"}
             >
               <div className="mobile-sidebar-header">
-                <img src="/logo.png" alt="logo" className="mobile-logo" />
+                <Link href={`/${lang}`} className="logo-wrapper" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: "none" }}>
+                  <img src="/logo.png" alt="Logo" className="mobile-logo" />
+                  <div className="logo-text">
+                    <span className="logo-title">
+                      {lang === "ar" ? "التلال والرمال" : "Tilal Rimal"}
+                    </span>
+                    <span className="logo-subtitle">
+                      {lang === "ar"
+                        ? "لتنظيم الرحلات السياحية"
+                        : "Tourism Organization"}
+                    </span>
+                  </div>
+                </Link>
                 <button onClick={() => setMobileMenuOpen(false)}>
                   <X size={24} />
                 </button>
@@ -668,7 +675,7 @@ export default function Navbar({ lang }) {
                           className="mobile-link-toggle"
                           onClick={(e) => toggleMobileDropdown(item.type, e)}
                         >
-                          {item.label}
+                          <span>{item.label}</span>
                           {openMobileDropdown === item.type ? (
                             <FaChevronUp size={12} className="mobile-arrow" />
                           ) : (
@@ -716,7 +723,7 @@ export default function Navbar({ lang }) {
                         className="mobile-link-toggle"
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        {item.label}
+                        <span>{item.label}</span>
                       </Link>
                     )}
                   </div>

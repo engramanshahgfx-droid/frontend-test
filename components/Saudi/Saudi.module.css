@@ -48,12 +48,11 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  margin-top: 40.5px;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 110px 24px 40px;
 }
 
 /* --- ARABIC SPECIFIC STYLES --- */
@@ -396,6 +395,25 @@
 
 .regionFillOverlay:hover {
   opacity: 0.5;
+}
+
+/* =========================================
+   DESKTOP ZOOM & SCREEN HEIGHT ADAPTATIONS
+   ========================================= */
+@media (max-width: 1280px) {
+  .mainWrapper {
+    padding-top: 125px;
+  }
+}
+
+@media (max-height: 850px) {
+  .container {
+    min-height: auto !important;
+    padding-bottom: 40px;
+  }
+  .mainWrapper {
+    padding-top: 120px;
+  }
 }
 
 /* =========================================

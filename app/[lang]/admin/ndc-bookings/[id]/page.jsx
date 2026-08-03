@@ -326,7 +326,7 @@ export default function BookingDetailsPage() {
     return (
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+        background: ' #e2e8f0',
         padding: '24px',
         display: 'flex',
         alignItems: 'center',
@@ -699,7 +699,7 @@ export default function BookingDetailsPage() {
                   className="action-btn"
                   onClick={handleIssueTicket}
                   disabled={actionLoading}
-                  style={{ background: 'linear-gradient(135deg, #22c55e, #16a34a)', color: 'white', width: '100%', justifyContent: 'center' }}
+                  style={{ background: ' #16a34a', color: 'white', width: '100%', justifyContent: 'center' }}
                 >
                   {actionLoading ? <span className="spinner-sm" /> : '🎫'} Issue Ticket
                 </button>

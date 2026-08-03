@@ -9,12 +9,12 @@
   --accent-color: #E85D1F; /* Desert Sunset Orange */
   --accent-hover-color: #D34C12;
   --accent-yellow: #FFC60B; /* Golden Dune Yellow */
-  --whatsapp-green: #25D366;
+  --whatsapp-green: #000100;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --background: #ffffff;
+    --background: #FAF6F0;
     --foreground: #000000;
   }
 }
@@ -36,7 +36,7 @@ body {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: #FAF6F0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -279,7 +279,7 @@ select.form-control option {
   transform: translateY(-100%);
 }
 .top-bar-container {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -289,14 +289,15 @@ select.form-control option {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 .top-bar-icon {
   width: 14px;
   height: 14px;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 .top-bar-phone {
-  font-weight: 500;
+  font-weight: 600;
   transition: color 0.2s;
 }
 .top-bar-phone:hover {
@@ -304,14 +305,17 @@ select.form-control option {
 }
 .social-icons {
   display: flex;
+  align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 .social-icon {
-  color: white;
-  opacity: 0.8;
+  color: #ffffff !important;
+  opacity: 1 !important;
   transition: opacity 0.2s, transform 0.2s;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 .social-icon:hover {
   opacity: 1;
@@ -948,7 +952,28 @@ select.form-control option {
   overflow: visible;
 }
 
+@media (max-width: 768px) {
+  .header-container,
+  .top-bar-container {
+    padding: 0 20px !important;
+  }
+}
+
 @media (max-width: 576px) {
+  .top-bar-phone {
+    font-size: 12px;
+  }
+  .top-bar-icon {
+    width: 13px;
+    height: 13px;
+  }
+  .social-icons {
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .social-icon {
+    opacity: 1 !important;
+  }
   .logo-title {
     font-size: 14px;
   }
@@ -962,7 +987,99 @@ select.form-control option {
   .main-header.scrolled .logo-image {
     height: 34px;
   }
-  .header-container {
-    padding: 0 12px;
+  .header-container,
+  .top-bar-container {
+    padding: 0 20px !important;
+  }
+}
+
+/* Universal Modal Backdrop & Centering System */
+.booking-modal-overlay,
+.tourism-booking-modal-overlay,
+.reservation-modal-overlay,
+.auth-modal-overlay,
+.modal-backdrop,
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.65) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.booking-modal,
+.tourism-booking-modal,
+.reservation-modal,
+.auth-modal,
+.modal-dialog,
+.modal-content {
+  margin: auto !important;
+  width: 100% !important;
+  max-width: 620px !important;
+  max-height: calc(100dvh - 32px) !important;
+  max-height: calc(100vh - 32px) !important;
+  overflow-y: auto !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 25px 60px -10px rgba(28, 0, 82, 0.25) !important;
+  position: relative !important;
+}
+
+@media (max-width: 576px) {
+  .booking-modal-overlay,
+  .tourism-booking-modal-overlay,
+  .reservation-modal-overlay,
+  .auth-modal-overlay,
+  .modal-overlay {
+    padding: 12px !important;
+  }
+
+  .booking-modal,
+  .tourism-booking-modal,
+  .reservation-modal,
+  .auth-modal,
+  .modal-dialog,
+  .modal-content {
+    max-height: calc(100dvh - 24px) !important;
+    max-height: calc(100vh - 24px) !important;
+    border-radius: 16px !important;
+    margin: auto !important;
+  }
+
+  .booking-modal-header {
+    padding: 14px 16px !important;
+  }
+
+  .booking-modal-steps {
+    padding: 12px 10px 0 !important;
+  }
+
+  .booking-modal-body {
+    padding: 14px 14px 20px !important;
+  }
+
+  .modal-form-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .modal-form-grid > div {
+    grid-column: span 1 !important;
+    width: 100% !important;
   }
 }

@@ -186,7 +186,7 @@ export default function WhyChooseUs({ lang }) {
                       className="display-6 fw-bold mb-2"
                       style={{
                         fontFamily: lang === "zh" ? "'Noto Sans SC', sans-serif" : "'Tajawal', sans-serif",
-                        background: "linear-gradient(135deg, #dfa528, #EFC8AE)",
+                        background: "#dfa528",
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
                         backgroundClip: "text",

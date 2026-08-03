@@ -418,20 +418,12 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
         >
           <motion.div
             className="booking-modal"
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 30 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: "#fff",
-              borderRadius: "12px",
-              maxWidth: "650px",
-              width: "100%",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
-              position: "relative",
               direction: isRTL ? "rtl" : "ltr",
             }}
           >
@@ -453,18 +445,11 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
               <X size={24} />
             </button>
 
-            <div
-              style={{
-                padding: "20px 30px",
-                borderBottom: "1px solid #e8e8e8",
-                background: "#f8f9fa",
-                borderRadius: "12px 12px 0 0",
-              }}
-            >
+            <div className="booking-modal-header">
               <div
                 style={{ display: "flex", alignItems: "center", gap: "10px" }}
               >
-                <User size={20} color="#dfa528" />
+                <User size={20} color="#E85D1F" />
                 <span
                   style={{
                     fontSize: "18px",
@@ -477,7 +462,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
               </div>
             </div>
 
-            <div style={{ padding: "20px 30px 0" }}>
+            <div className="booking-modal-steps">
               <ul
                 style={{
                   display: "flex",
@@ -526,14 +511,14 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                         width: "36px",
                         height: "36px",
                         borderRadius: "50%",
-                        background: step >= s.id ? "#dfa528" : "#e0e0e0",
+                        background: step >= s.id ? "#E85D1F" : "#e0e0e0",
                         color: step >= s.id ? "#fff" : "#999",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         fontSize: "14px",
                         transition: "all 0.3s",
-                        border: step === s.id ? "3px solid #c98c1e" : "none",
+                        border: step === s.id ? "3px solid #E85D1F" : "none",
                       }}
                     >
                       {step > s.id ? <Check size={16} color="#fff" /> : s.icon}
@@ -541,7 +526,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     <span
                       style={{
                         fontSize: "11px",
-                        color: step >= s.id ? "#dfa528" : "#999",
+                        color: step >= s.id ? "#E85D1F" : "#999",
                         marginTop: "6px",
                         fontWeight: step >= s.id ? "600" : "400",
                         textAlign: "center",
@@ -554,7 +539,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
               </ul>
             </div>
 
-            <div style={{ padding: "20px 30px 30px" }}>
+            <div className="booking-modal-body">
               {step === 1 && (
                 <div>
                   <div
@@ -579,7 +564,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     style={{
                       width: "100%",
                       padding: "12px",
-                      background: "#dfa528",
+                      background: "#E85D1F",
                       color: "#fff",
                       border: "none",
                       borderRadius: "8px",
@@ -593,10 +578,10 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                       gap: "8px",
                     }}
                     onMouseEnter={(e) =>
-                      (e.target.style.background = "#c98c1e")
+                      (e.target.style.background = "#1C0052")
                     }
                     onMouseLeave={(e) =>
-                      (e.target.style.background = "#dfa528")
+                      (e.target.style.background = "#E85D1F")
                     }
                   >
                     {t.continue}
@@ -607,13 +592,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
 
               {step === 2 && (
                 <form onSubmit={handleSubmitBooking}>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: isRTL ? "1fr 1fr" : "1fr 1fr",
-                      gap: "15px",
-                    }}
-                  >
+                  <div className="modal-form-grid">
                     {/* First Name */}
                     <div style={{ gridColumn: "1 / -1" }}>
                       <label
@@ -626,7 +605,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                         }}
                       >
                         {t.firstName}{" "}
-                        <span style={{ color: "#dc3545" }}>*</span>
+                        <span style={{ color: "#E85D1F" }}>*</span>
                       </label>
                       <div style={{ position: "relative" }}>
                         <User
@@ -1034,7 +1013,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                             style={{
                               fontSize: "20px",
                               fontWeight: "700",
-                              color: "#dfa528",
+                              color: "#1C0052",
                             }}
                           >
                             {totalAmount} SAR
@@ -1131,7 +1110,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                       style={{
                         flex: 2,
                         padding: "12px",
-                        background: loading ? "#c98c1e" : "#dfa528",
+                        background: loading ? "#E85D1F" : "#E85D1F",
                         color: "#fff",
                         border: "none",
                         borderRadius: "8px",
@@ -1146,10 +1125,10 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                         gap: "8px",
                       }}
                       onMouseEnter={(e) =>
-                        !loading && (e.target.style.background = "#c98c1e")
+                        !loading && (e.target.style.background = "#E85D1F")
                       }
                       onMouseLeave={(e) =>
-                        !loading && (e.target.style.background = "#dfa528")
+                        !loading && (e.target.style.background = "#E85D1F")
                       }
                     >
                       {loading ? (
@@ -1228,7 +1207,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     <div style={{ textAlign: "center", padding: "40px 20px" }}>
                       <Loader2
                         size={34}
-                        color="#dfa528"
+                        color="#1C0052"
                         style={{ animation: "spin 1s linear infinite", marginBottom: "12px" }}
                       />
                       <p style={{ color: "#666", margin: 0 }}>
@@ -1254,7 +1233,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                           setStep(2);
                         }}
                         style={{
-                          background: "#dfa528",
+                          background: "#1C0052",
                           color: "#fff",
                           border: "none",
                           padding: "8px 20px",

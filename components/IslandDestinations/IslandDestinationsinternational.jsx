@@ -484,7 +484,7 @@ export default function IslandDestinationsinternational({ lang }) {
               style={{
                 fontFamily: "'Tajawal', sans-serif",
                 background:
-                  "linear-gradient(135deg, #ffffff, #EFC8AE, #dfa528)",
+                  " #dfa528",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",

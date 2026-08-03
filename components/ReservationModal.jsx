@@ -418,7 +418,7 @@ export default function ReservationModal() {
         {/* Header Bar */}
         <div
           style={{
-            background: "linear-gradient(135deg, #1C0052 0%, #2F057F 100%)",
+            background: " #1C0052",
             color: "#ffffff",
             padding: "18px 24px",
             display: "flex",
@@ -498,7 +498,7 @@ export default function ReservationModal() {
                 style={{
                   width: `${(currentStep / 3) * 100}%`,
                   height: "100%",
-                  background: "linear-gradient(90deg, #E85D1F, #FFC60B)",
+                  background: " #E85D1F",
                   transition: "width 0.3s ease",
                 }}
               />
@@ -979,7 +979,7 @@ export default function ReservationModal() {
                     borderRadius: "12px",
                     border: "none",
                     background: isStepValid()
-                      ? "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)"
+                      ? "#E85D1F "
                       : "#e5e7eb",
                     color: "#ffffff",
                     fontWeight: 700,

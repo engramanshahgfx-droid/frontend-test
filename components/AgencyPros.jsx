@@ -6,53 +6,67 @@ export default function AgencyPros({ lang }) {
   const content = {
     en: {
       title: "Why Travel With Tilal Rimal",
-      subtitle: "Discover the premium advantages that make your journeys with us truly exceptional.",
+      subtitle:
+        "Discover the premium advantages that make your journeys with us truly exceptional.",
       pros: [
         {
           icon: <Compass size={28} className="pro-icon" />,
           title: "Expert Travel Designers",
-          description: "Fully tailor-made tours planned by local experts to match your personal interests and travel style.",
+          description:
+            "Fully tailor-made tours planned by local experts to match your personal interests and travel style.",
         },
         {
           icon: <ShieldCheck size={28} className="pro-icon" />,
           title: "Authentic Local Access",
-          description: "Exclusive entry to Saudi Arabia's hidden gems, heritage sites, and authentic cultural experiences.",
+          description:
+            "Exclusive entry to Saudi Arabia's hidden gems, heritage sites, and authentic cultural experiences.",
         },
         {
           icon: <HeartHandshake size={28} className="pro-icon" />,
           title: "Seamless VIP Care",
-          description: "Dedicated 24/7 assistance, logistics management, and premium support throughout your entire journey.",
+          description:
+            "Dedicated 24/7 assistance, logistics management, and premium support throughout your entire journey.",
         },
-      ]
+      ],
     },
     ar: {
       title: "لماذا تسافر مع تلال ورمال؟",
-      subtitle: "اكتشف المزايا الاستثنائية التي تجعل رحلتك معنا تجربة لا تُنسى.",
+      subtitle:
+        "اكتشف المزايا الاستثنائية التي تجعل رحلتك معنا تجربة لا تُنسى.",
       pros: [
         {
           icon: <Compass size={28} className="pro-icon" />,
-          title: "تصميم رحلات خبير",
-          description: "رحلات سياحية مخصصة بالكامل تم التخطيط لها بواسطة خبراء محليين لتناسب اهتماماتك الخاصة.",
+          title: "تصميم رحلات ",
+          description:
+            "رحلات سياحية مخصصة بالكامل تم التخطيط لها بواسطة خبراء محليين لتناسب اهتماماتك الخاصة.",
         },
         {
           icon: <ShieldCheck size={28} className="pro-icon" />,
-          title: "وصول محلي أصيل",
-          description: "دخول حصري لأبرز معالم وجواهر المملكة المخفية، وتجارب ثقافية وتراثية حقيقية.",
+          title: "أكتشف المملكة",
+          description:
+            "دخول حصري لأبرز معالم وجواهر المملكة المخفية، وتجارب ثقافية وتراثية حقيقية.",
         },
         {
           icon: <HeartHandshake size={28} className="pro-icon" />,
-          title: "رعاية راقية متكاملة",
-          description: "متابعة مستمرة على مدار الساعة، وإدارة لوجستية متكاملة لضمان راحتك وأمانك طوال الرحلة.",
+          title: "رعاية و اهتمام",
+          description:
+            "متابعة مستمرة على مدار الساعة، وإدارة لوجستية متكاملة لضمان راحتك وأمانك طوال الرحلة.",
         },
-      ]
-    }
+      ],
+    },
   };
 
   const t = content[lang] || content.en;
 
   return (
-    <section className="agency-pros-section" dir={lang === "ar" ? "rtl" : "ltr"}>
-      <div className="container" style={{ maxWidth: "1200px", margin: "0 auto" }}>
+    <section
+      className="agency-pros-section"
+      dir={lang === "ar" ? "rtl" : "ltr"}
+    >
+      <div
+        className="container"
+        style={{ maxWidth: "1200px", margin: "0 auto" }}
+      >
         {/* <div className="section-header">
           <span className="accent-tag">{lang === "ar" ? "مميزاتنا" : "OUR VALUES"}</span>
           <h2>{t.title}</h2>
@@ -66,14 +80,16 @@ export default function AgencyPros({ lang }) {
               className="pro-card"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, cubicBezier: [0.16, 1, 0.3, 1], delay: index * 0.15 }}
+              transition={{
+                duration: 0.8,
+                cubicBezier: [0.16, 1, 0.3, 1],
+                delay: index * 0.15,
+              }}
               viewport={{ once: true, margin: "-100px" }}
             >
               <div className="card-bg-glow"></div>
               <div className="card-top-row">
-                <div className="pro-icon-wrapper">
-                  {pro.icon}
-                </div>
+                <div className="pro-icon-wrapper">{pro.icon}</div>
                 <span className="pro-number">{pro.index}</span>
               </div>
               <h3 className="pro-title">{pro.title}</h3>
@@ -86,7 +102,7 @@ export default function AgencyPros({ lang }) {
       <style jsx>{`
         .agency-pros-section {
           padding: 40px 20px;
-          background: #FAF6F0; /* Soft Desert Sand background */
+          background: #faf6f0; /* Soft Desert Sand background */
           position: relative;
           overflow: hidden;
         }
@@ -100,18 +116,18 @@ export default function AgencyPros({ lang }) {
           font-size: 0.85rem;
           font-weight: 700;
           letter-spacing: 2px;
-          color: #E85D1F; /* Desert Sunset Orange tag */
+          color: #e85d1f; /* Desert Sunset Orange tag */
           display: inline-block;
           margin-bottom: 12px;
-          font-family: 'Tajawal', sans-serif;
+          font-family: "Tajawal", sans-serif;
         }
 
         .section-header h2 {
           font-size: 2.5rem;
           font-weight: 800;
-          color: #1C0052; /* Deep Heritage Purple */
+          color: #1c0052; /* Deep Heritage Purple */
           margin-bottom: 20px;
-          font-family: 'Tajawal', sans-serif;
+          font-family: "Tajawal", sans-serif;
           letter-spacing: -0.5px;
         }
 
@@ -121,7 +137,7 @@ export default function AgencyPros({ lang }) {
           max-width: 600px;
           margin: 0 auto;
           line-height: 1.6;
-          font-family: 'Tajawal', sans-serif;
+          font-family: "Tajawal", sans-serif;
         }
 
         .pros-grid {
@@ -153,7 +169,11 @@ export default function AgencyPros({ lang }) {
           left: 0;
           width: 100%;
           height: 100%;
-          background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(232, 93, 31, 0.06), transparent 40%);
+          background: radial-gradient(
+            800px circle at var(--x, 0px) var(--y, 0px),
+            rgba(232, 93, 31, 0.06),
+            transparent 40%
+          );
           opacity: 0;
           transition: opacity 0.5s ease;
           pointer-events: none;
@@ -188,12 +208,12 @@ export default function AgencyPros({ lang }) {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #E85D1F;
+          color: #e85d1f;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .pro-card:hover .pro-icon-wrapper {
-          background: #1C0052;
+          background: #1c0052;
           color: #ffffff;
           transform: rotate(5deg) scale(1.05);
         }
@@ -214,9 +234,9 @@ export default function AgencyPros({ lang }) {
         .pro-title {
           font-size: 1.35rem;
           font-weight: 700;
-          color: #1C0052;
+          color: #1c0052;
           margin-bottom: 12px;
-          font-family: 'Tajawal', sans-serif;
+          font-family: "Tajawal", sans-serif;
           z-index: 1;
           letter-spacing: -0.3px;
         }
@@ -226,7 +246,7 @@ export default function AgencyPros({ lang }) {
           color: #555;
           line-height: 1.7;
           margin: 0;
-          font-family: 'Tajawal', sans-serif;
+          font-family: "Tajawal", sans-serif;
           z-index: 1;
         }
 

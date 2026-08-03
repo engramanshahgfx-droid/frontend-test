@@ -296,9 +296,15 @@ export default function JamoulaOffersPage() {
 
       <style jsx>{`
         .offers-page {
-          padding: 150px 0 150px; /* Clear floating navbar */
+          padding: 115px 0 80px; /* Clear floating navbar */
           background: #FAF6F0; /* Soft Desert Sand theme variant */
           min-height: 100vh;
+        }
+
+        @media (max-width: 768px) {
+          .offers-page {
+            padding: 105px 0 60px !important;
+          }
         }
 
         .page-header{

@@ -24,31 +24,8 @@ const WhatsAppButton = ({ lang = "en" }) => {
       footerRef.current = footer;
     }
 
-    // Handle scroll and resize events
     const handleScrollAndResize = () => {
-      if (!buttonRef.current || !footerRef.current) return;
-
-      const buttonRect = buttonRef.current.getBoundingClientRect();
-      const footerRect = footerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      // Calculate if button is overlapping footer
-      const buttonBottom = buttonRect.bottom;
-      const footerTop = footerRect.top;
-
-      // If button overlaps with footer, move it up
-      if (buttonBottom >= footerTop) {
-        // Calculate new bottom position to be above footer
-        const gap = 20; // gap between button and footer
-        const newBottom = viewportHeight - footerTop + gap + 10;
-        setBottom(newBottom);
-      } else {
-        // Reset to default position
-        setBottom(80);
-      }
-
-      // Determine visibility based on scroll position
-      // Hide on very small screens or when near the top of page
+      // Determine visibility based on window height
       if (window.innerHeight < 400) {
         setIsVisible(false);
       } else {
@@ -89,7 +66,7 @@ const WhatsAppButton = ({ lang = "en" }) => {
       aria-label={lang === "ar" ? "زر واتساب" : lang === "zh" ? "WhatsApp 按钮" : "WhatsApp Button"}
       style={{
         position: "fixed",
-        bottom: `${bottom}px`,
+        bottom: "25px",
         left: "20px",
         zIndex: 999,
         cursor: "pointer",

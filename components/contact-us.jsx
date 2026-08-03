@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useUI } from "../providers/UIProvider";
 import { contactAPI } from "../lib/api";
 import {
@@ -10,6 +11,7 @@ import {
   FaWhatsapp,
   FaClock,
   FaCheckCircle,
+  FaChevronDown,
 } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 
@@ -21,6 +23,18 @@ export default function Contact({ lang, hideHero = false }) {
     tripType: "",
     message: "",
   });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const content = {
     ar: {
@@ -188,22 +202,44 @@ export default function Contact({ lang, hideHero = false }) {
                   />
                 </div>
 
-                <div className="form-group">
-                  <select
-                    name="tripType"
-                    value={formData.tripType}
-                    onChange={handleInputChange}
-                    required
-                    aria-label={t.form.tripType}
-                    className="form-control"
+                <div className="form-group" ref={dropdownRef} style={{ position: "relative" }}>
+                  <div
+                    className={`custom-select-trigger ${formData.tripType ? "selected" : ""}`}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <option value="" disabled>{t.form.tripType}</option>
-                    {t.form.tripTypes.map((type, index) => (
-                      <option key={index} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </select>
+                    <span>{formData.tripType || t.form.tripType}</span>
+                    <FaChevronDown
+                      className={`select-arrow ${isDropdownOpen ? "open" : ""}`}
+                    />
+                  </div>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.ul
+                        className="custom-options-menu"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        {t.form.tripTypes.map((type, index) => (
+                          <li
+                            key={index}
+                            className={`custom-option ${formData.tripType === type ? "active" : ""}`}
+                            onClick={() => {
+                              setFormData({ ...formData, tripType: type });
+                              setIsDropdownOpen(false);
+                            }}
+                          >
+                            <span>{type}</span>
+                            {formData.tripType === type && (
+                              <span style={{ color: "#E85D1F", fontWeight: "bold", fontSize: "0.9rem" }}>✓</span>
+                            )}
+                          </li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
                 </div>
 
                 <div className="form-group">
@@ -333,7 +369,7 @@ export default function Contact({ lang, hideHero = false }) {
         }
 
         .contact-section {
-          padding: ${hideHero ? "0 0 40px 0" : "30px 0"};
+          padding: ${hideHero ? "0 0 120px 0" : "30px 0 120px 0"};
         }
 
         .contact-wrapper {
@@ -398,28 +434,86 @@ export default function Contact({ lang, hideHero = false }) {
           color: #999;
         }
 
-        .contact-form select.form-control {
-          background-color: #ffffff !important;
-          color: #2c3e50 !important;
-          border-color: #e9ecef !important;
-          -webkit-appearance: menulist;
-          -moz-appearance: menulist;
-          appearance: menulist;
-          padding-right: 2.25rem;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'><path fill='none' stroke='%232c3e50' stroke-width='2' d='M1 1l6 6 6-6'/></svg>");
-          background-repeat: no-repeat;
-          background-position: right 12px center;
-          background-size: 12px 8px;
+        .custom-select-trigger {
+          width: 100%;
+          border: 2px solid #e9ecef;
+          border-radius: 10px;
+          padding: 13px 16px;
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: #999;
+          background: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          user-select: none;
         }
 
-        .contact-form select.form-control:invalid {
-          color: #999 !important;
+        .custom-select-trigger.selected {
+          color: #1C0052;
         }
 
-        .contact-form select.form-control option {
-          background-color: #ffffff !important;
-          color: #2c3e50 !important;
+        .custom-select-trigger:hover,
+        .custom-select-trigger.open {
+          border-color: #E85D1F;
+          box-shadow: 0 4px 15px rgba(232, 93, 31, 0.15);
+        }
+
+        .select-arrow {
+          color: #E85D1F;
+          font-size: 0.85rem;
+          transition: transform 0.3s ease;
+        }
+
+        .select-arrow.open {
+          transform: rotate(180deg);
+        }
+
+        .custom-options-menu {
+          position: absolute;
+          top: calc(100% + 6px);
+          left: 0;
+          width: 100%;
+          background: #ffffff !important;
+          border: 1px solid rgba(232, 93, 31, 0.2) !important;
+          border-radius: 12px !important;
+          box-shadow: 0 15px 35px -5px rgba(28, 0, 82, 0.18), 0 5px 15px rgba(0, 0, 0, 0.04) !important;
+          z-index: 1000 !important;
+          list-style: none !important;
+          list-style-type: none !important;
+          padding: 6px !important;
+          margin: 0 !important;
+          max-height: 230px;
+          overflow-y: auto;
+        }
+
+        .custom-option {
+          list-style: none !important;
+          list-style-type: none !important;
+          padding: 10px 14px !important;
+          font-size: 0.95rem !important;
+          font-weight: 600 !important;
+          color: #1C0052 !important;
+          border-radius: 8px !important;
+          cursor: pointer !important;
+          transition: all 0.2s ease !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: space-between !important;
+          text-align: ${isRTL ? "right" : "left"};
+        }
+
+        .custom-option:hover {
+          background: rgba(232, 93, 31, 0.08) !important;
+          color: #E85D1F !important;
+        }
+
+        .custom-option.active {
+          background: #FAF6F0 !important;
+          color: #E85D1F !important;
+          font-weight: 700 !important;
         }
 
         .btn-submit {

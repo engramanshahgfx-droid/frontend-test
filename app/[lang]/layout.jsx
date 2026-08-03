@@ -122,7 +122,7 @@ export default async function RootLayout({ children, params }) {
               </main>
               <BackToTopButton />
               <WhatsAppButton lang={lang} />
-              <ChatAssistant lang={lang} />
+              {/* <ChatAssistant lang={lang} /> */}
               <Footer lang={lang} />
             </ContextProvider>
             <AuthModal />

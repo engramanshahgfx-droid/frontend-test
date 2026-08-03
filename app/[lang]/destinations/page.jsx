@@ -150,11 +150,19 @@ export default function DestinationsPage() {
     <div className="destinations-page-wrapper" style={{ 
       minHeight: "100vh", 
       background: "#FAF6F0",
-      padding:"150px 0px"}}>
+      padding: "115px 0px 80px 0px"
+    }}>
+      <style jsx>{`
+        @media (max-width: 768px) {
+          .destinations-page-wrapper {
+            padding: 105px 0px 60px 0px !important;
+          }
+        }
+      `}</style>
       <div className="container" style={{ maxWidth: "1200px" }}>
         <HeaderBanners lang={lang} page="destinations" index={2} />
         {/* Page Header */}
-        <div className="text-center mb-5" style={{ marginTop: "20px" }}>
+        <div className="text-center mb-4" style={{ marginTop: "10px" }}>
           <h1 className="fw-bold mb-3" style={{ fontSize: "2.5rem", color: "#1C0052" }}>
             {t.title}
           </h1>
@@ -234,7 +242,7 @@ export default function DestinationsPage() {
                       <div
                         className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-end p-4"
                         style={{
-                          background: "linear-gradient(to top, rgba(28, 0, 82, 0.95) 0%, rgba(28, 0, 82, 0.3) 65%, transparent 100%)"
+                          background: "rgba(28, 0, 82, 0.95)"
                         }}
                       >
                         <span className="badge align-self-start mb-2 px-3 py-2 fw-bold text-uppercase" style={{ fontSize: "0.75rem", background: "#E85D1F", color: "#FFFFFF", borderRadius: "10px" }}>

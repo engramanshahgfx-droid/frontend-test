@@ -10,6 +10,7 @@ import {
   Eye,
   Heart,
   ChevronRight,
+  Users,
 } from "lucide-react";
 import { API_URL } from "../lib/api";
 import { formatCurrency, amountWithVAT } from "../lib/localization";
@@ -268,6 +269,50 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
     );
   }
 
+  const getPersonRange = (destination) => {
+    if (!destination) return null;
+
+    let prices = destination.person_prices;
+    if (typeof prices === "string") {
+      try {
+        prices = JSON.parse(prices);
+      } catch (e) {
+        prices = null;
+      }
+    }
+
+    if (Array.isArray(prices) && prices.length > 0) {
+      const personNums = prices
+        .map((item) => Number(item.persons || item.person_count || item.count || item.num))
+        .filter((n) => !isNaN(n) && n > 0);
+
+      if (personNums.length > 0) {
+        const min = Math.min(...personNums);
+        const max = Math.max(...personNums);
+        if (min === max) return `${min}`;
+        return `${min} - ${max}`;
+      }
+    }
+
+    const minP = Number(destination.min_persons);
+    const maxP = Number(destination.max_persons);
+    if (!isNaN(minP) && minP > 0 && !isNaN(maxP) && maxP > 0) {
+      if (minP === maxP) return `${minP}`;
+      return `${minP} - ${maxP}`;
+    }
+
+    if (destination.group_size) {
+      const str = String(destination.group_size).replace(/persons|person|أفراد|فرد/gi, '').trim();
+      if (str) return str;
+    }
+
+    if (destination.person_count || destination.persons) {
+      return String(destination.person_count || destination.persons);
+    }
+
+    return null;
+  };
+
   const displayDestinations = Array.isArray(destinations) && destinations.length > 0
     ? destinations.slice(0, maxItems)
     : [];
@@ -343,6 +388,9 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                       )}
                       {getText(destination, "duration") && (
                         <span><Clock size={14} /> {getText(destination, "duration")}</span>
+                      )}
+                      {getPersonRange(destination) && (
+                        <span><Users size={14} /> {getPersonRange(destination)}</span>
                       )}
                     </div>
 
