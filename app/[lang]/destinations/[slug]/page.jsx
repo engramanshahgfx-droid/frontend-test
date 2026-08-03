@@ -344,7 +344,7 @@ export default function DestinationDetails() {
   };
   if (loading) {
     return (
-      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 0px 50px 0px" }}>
+      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 40px 150px 150px" }}>
         <div className="container">
           <div className="row text-center" style={{ padding: "60px 0" }}>
             <div className="col-12">
@@ -363,7 +363,7 @@ export default function DestinationDetails() {
   if (countryTours) {
     const countryName = getText(countryTours[0], "location");
     return (
-      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 0px 50px 0px" }}>
+      <div className="details-section" style={{ minHeight: "100vh", background: "#FAF6F0", padding: "150px 0px 150px 0px" }}>
         <div className="container" style={{ maxWidth: "1200px" }}>
           {/* Breadcrumb */}
           <nav className="breadcrumb" style={{ padding: "0 0 20px" }}>
