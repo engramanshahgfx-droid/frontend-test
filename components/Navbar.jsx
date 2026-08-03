@@ -257,7 +257,7 @@ export default function Navbar({ lang }) {
           </>
         ) : (
           <>
-            <span style={{ color: "#FF0000", fontWeight: "700" }}>Jamoula</span> Offers
+            <span style={{ color: "#FF0000", fontWeight: "700" }}>Jamoula Offers</span>
           </>
         ),
     },
@@ -474,10 +474,10 @@ export default function Navbar({ lang }) {
           {/* Desktop Nav */}
           <nav className="desktop-nav">
             {menuItems.map((item, idx) => {
-              const isItemActive = item.dropdown 
+              const isItemActive = item.dropdown
                 ? false // Dropdown items don't have active state on the parent link
                 : isActive(item.href);
-              
+
               return (
                 <div
                   key={idx}

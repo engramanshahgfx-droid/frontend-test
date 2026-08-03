@@ -135,7 +135,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
               style={{
                 width: "80px",
                 height: "4px",
-                background: "linear-gradient(90deg, #E85D1F 0%, #FFC60B 100%)",
+                background: "#E85D1F",
                 borderRadius: '2px'
               }}
             ></div>

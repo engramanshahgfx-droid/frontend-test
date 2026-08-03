@@ -354,7 +354,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
         </div>
 
         {!region && displayDestinations.length > maxItems && (
-          <div className="row text-center">
+          <div className="row text-center mt-2">
             <div className="col-12 d-flex justify-content-center">
               <motion.button
                 className="btn-view-all"
@@ -373,7 +373,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
                   fontWeight: '700',
                   fontSize: '1rem',
                   border: 'none',
-                  marginTop: '0px',
+                  marginTop: '10px',
                   textDecoration: 'none',
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   boxShadow: '0 4px 15px rgba(255, 123, 0, 0.41)',
@@ -399,7 +399,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
 
       <style jsx>{`
         .tourism-section {
-          padding: 40px 0;
+          padding: 30px 0 35px 0;
           background: #FAF6F0; /* Soft Desert Sand theme variant */
         }
 

@@ -85,22 +85,22 @@ export default function TripsArchive({ lang, hideHero = false }) {
   // Developer helper
   const isDev = process.env.NODE_ENV === 'development';
 
-  const fetchRef = React.useRef(() => {});
+  const fetchRef = React.useRef(() => { });
 
   // Static trips data with complete information and videos
-const staticTrips = [
+  const staticTrips = [
     {
       id: 1,
       type: 'event',
       title: 'Winter Hills and Sands',
-      title_trans: { 
-        en: 'Winter Hills and Sands', 
+      title_trans: {
+        en: 'Winter Hills and Sands',
         ar: 'شتوية التلال والرمال',
         zh: '冬季山丘与沙地'
       },
       description: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.',
-      description_trans: { 
-        en: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.', 
+      description_trans: {
+        en: 'Enjoy the pleasure with us at Winter Hills and Sands. Experience party sessions, warm gatherings, beverages, BBQ meals, and archery challenges in a unique desert atmosphere.',
         ar: 'عيش المتعة معنا في شتوية التلال والرمال. جلسات طربية، جلسات دافئة، متعة المشروبات، الاستمتاع بوجبة الشواء، تحدي الرماية في أجواء صحراوية فريدة.',
         zh: '与我们一起享受冬季山丘与沙地的乐趣。体验派对环节、温馨聚会、饮品、烧烤餐以及在独特的沙漠氛围中的射箭挑战。'
       },
@@ -124,14 +124,14 @@ const staticTrips = [
       id: 2,
       type: 'event',
       title: 'Egyptian Night at Winter Hills and Sands',
-      title_trans: { 
-        en: 'Egyptian Night at Winter Hills and Sands', 
+      title_trans: {
+        en: 'Egyptian Night at Winter Hills and Sands',
         ar: 'ليلة مصرية في شتوية التلال والرمال',
         zh: '冬季山丘与沙地的埃及之夜'
       },
       description: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.',
-      description_trans: { 
-        en: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.', 
+      description_trans: {
+        en: 'Experience different atmospheres and enjoy evening performances in nature. Oud music session with "Al-Omda", authentic Egyptian dinner, and classic melodies with "Amathal" band.',
         ar: 'عيش اجواء مختلفة والاستمتاع بفقرات الأمسية في اجواء الطبيعة. جلسة طربية على انغام العود بصوت العمده، وجبة عشاء مشاري واكلات مصرية، جلسة مع الانغام القديمة بصوت امثال.',
         zh: '体验不同的氛围，在大自然中享受晚间表演。与"Al-Omda"一同聆听乌德琴演奏，享用正宗埃及晚餐，并伴随"Amathal"乐队的经典旋律。'
       },
@@ -142,7 +142,7 @@ const staticTrips = [
       city_name: 'Jeddah-AlUla',
       group_size: '25-60 Persons',
       duration: 1,
-      badge: 'Popular',
+      badge: '',
       highlights: [
         { en: 'Oud Music', ar: 'موسيقى العود', zh: '乌德琴音乐' },
         { en: 'Egyptian Food', ar: 'الطعام المصري', zh: '埃及美食' },
@@ -156,14 +156,14 @@ const staticTrips = [
       id: 3,
       type: 'event',
       title: 'Foundation Day at Winter Hills and Sands',
-      title_trans: { 
-        en: 'Foundation Day at Winter Hills and Sands', 
+      title_trans: {
+        en: 'Foundation Day at Winter Hills and Sands',
         ar: 'يوم التأسيس في شتوية التلال والرمال',
         zh: '冬季山丘与沙地的建国日庆典'
       },
       description: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.',
-      description_trans: { 
-        en: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.', 
+      description_trans: {
+        en: 'Celebrate our founding day with us! Experience Foundation Day procession, oud music by artist "Al-Omda", folk and folklore bands, women\'s folk performances, traditional hospitality, horse and camel rides.',
         ar: 'يوم بدينا معنا، اعيش اجواء مختلفة. مسيرة يوم التأسيس، جلسة مع انغام العود بصوت الفنان العمده، فرقة شعبية وفلكلور، فرقة شعبية نسائية، الضيافة الشعبية، ركوب الخيول والجمال.',
         zh: '与我们一起庆祝建国日！体验建国日游行，艺术家"Al-Omda"的乌德琴演奏，民俗与民间乐团，女性民俗表演，传统待客之道，骑马和骑骆驼。'
       },
@@ -196,11 +196,11 @@ const staticTrips = [
 
       try {
         setFetchStatus('fetching');
-        
+
         // Use static data with language selection
         if (!cancelled) {
           console.debug('[TripsArchive] Using static trips data');
-          
+
           // Select trips matching the UI language if available, otherwise use first language
           const display = staticTrips.map(trip => {
             // Already have complete trip data with translations
@@ -274,10 +274,10 @@ const staticTrips = [
       {!hideHero && (
         <section className="trips-hero">
           <div className="video-background">
-            <video 
-              autoPlay 
-              muted 
-              loop 
+            <video
+              autoPlay
+              muted
+              loop
               playsInline
               className="background-video"
             >
@@ -286,7 +286,7 @@ const staticTrips = [
             </video>
             <div className="video-overlay"></div>
           </div>
-          
+
           <div className="container">
             <div className="row align-items-center min-vh-80">
               <div className="col-lg-8 mx-auto text-center text-white">
@@ -321,9 +321,9 @@ const staticTrips = [
                   <div key={trip.id} className="col-lg-4 col-md-6 mb-4">
                     <div className={`trip-card ${isDev ? 'debug-outline' : ''}`}>
                       {/* Trip Badge */}
-                      {trip.badge && <div className="trip-badge">{trip.badge}</div>}
+                      {/* {trip.badge && <div className="trip-badge">{trip.badge}</div>} */}
 
-                      <div className="trip-image" style={{position: 'relative', overflow: 'hidden'}}>
+                      <div className="trip-image" style={{ position: 'relative', overflow: 'hidden' }}>
                         <video
                           src={(trip.video && (trip.video.startsWith('http') || trip.video.startsWith('/')) ? trip.video : (trip.video ? '/' + trip.video : '/desert2.mp4'))}
                           poster={image}
@@ -396,8 +396,8 @@ const staticTrips = [
                         {/* Trip Highlights */}
                         <div className="trip-highlights">
                           {highlights.map((highlight, index) => {
-                            const highlightText = typeof highlight === 'string' 
-                              ? highlight 
+                            const highlightText = typeof highlight === 'string'
+                              ? highlight
                               : (highlight[safeLang] || highlight.en || '');
                             return (
                               <span key={index} className="highlight-tag">
@@ -429,13 +429,13 @@ const staticTrips = [
             ) : fetchStatus === 'fetching' ? (
               <div className="col-12 text-center my-5">
                 <div>Loading...</div>
-                <small style={{color: '#999', fontSize: '0.8rem', marginTop: '10px', display: 'block'}}>
+                <small style={{ color: '#999', fontSize: '0.8rem', marginTop: '10px', display: 'block' }}>
                   API: {process.env.NEXT_PUBLIC_API_URL || 'https://admin.tilalr.com/api'}/trips?lang={safeLang}
                 </small>
-                <small style={{color: '#666', fontSize: '0.8rem', marginTop: '6px', display: 'block'}}>
+                <small style={{ color: '#666', fontSize: '0.8rem', marginTop: '6px', display: 'block' }}>
                   Status: {fetchStatus}{lastResponseSize !== null ? ` — ${lastResponseSize} items` : ''}
                 </small>
-                <div style={{marginTop: 12}}>
+                <div style={{ marginTop: 12 }}>
                   <button className="btn btn-load-more" onClick={() => { console.debug('[TripsArchive] Manual fetch triggered'); fetchRef.current(); }}>Fetch now</button>
                 </div>
               </div>
@@ -447,7 +447,7 @@ const staticTrips = [
             ) : (
               <div className="col-12 text-center my-5">
                 <p>No trips found.</p>
-                <div style={{marginTop: 12}}>
+                <div style={{ marginTop: 12 }}>
                   <button className="btn btn-load-more" onClick={() => { console.debug('[TripsArchive] Manual fetch triggered (no trips)'); fetchRef.current(); }}>Fetch now</button>
                 </div>
               </div>
@@ -456,7 +456,7 @@ const staticTrips = [
 
           {/* Load More Section */}
           <div className="text-center mt-5">
-        
+
           </div>
         </div>
       </section>

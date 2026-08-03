@@ -489,7 +489,7 @@ export default function PrivateJetRequestForm({ lang }) {
                       disabled={isSubmitting}
                       className="btn btn-lg w-100 fw-semibold text-white transition-all"
                       style={{
-                        background: "linear-gradient(135deg, #E85D1F 0%, #FFC60B 100%)",
+                        background: "#E85D1F ",
                         border: "none",
                         padding: "14px",
                         borderRadius: "10px",

@@ -993,7 +993,7 @@ export default function DestinationDetails() {
 
       <style jsx>{`
         .details-section {
-          padding: 150px 0 60px; /* Clears floating navbar */
+          padding: 150px 0 120px; /* Clears floating navbar and footer wave */
           background: #FAF6F0; /* Soft Desert Sand theme variant */
           min-height: 100vh;
         }
@@ -1194,7 +1194,8 @@ export default function DestinationDetails() {
           cursor: pointer;
           transition: all 0.3s ease;
           box-shadow: 0 4px 20px rgba(232, 93, 31, 0.25);
-          margin-top: 10px;
+          margin-top: 15px;
+          margin-bottom: 35px;
         }
 
         .btn-book-now:hover {
