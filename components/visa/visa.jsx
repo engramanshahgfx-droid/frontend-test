@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { API_URL } from "@/lib/api";
 import {
   FaPassport,
   FaBuilding,
@@ -27,7 +28,7 @@ export default function Visa({ lang }) {
   const [activeGccTab, setActiveGccTab] = useState(1);
   const [activeSchengenTab, setActiveSchengenTab] = useState(1);
   const [activeOtherTab, setActiveOtherTab] = useState(1);
-  
+
   // Form state
   const [formData, setFormData] = useState({
     fullName: "",
@@ -44,7 +45,7 @@ export default function Visa({ lang }) {
       other: null,
     },
   });
-  
+
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(null);
@@ -68,18 +69,18 @@ export default function Visa({ lang }) {
 
       // GCC Tabs
       gccTabs: [
-        { 
-          id: 1, 
-          title: "GCC Nationality", 
+        {
+          id: 1,
+          title: "GCC Nationality",
           icon: <FaDesktop />,
           content: {
             title: "Welcome!",
             description: "Our dear neighbors, citizens of GCC countries, do not need a visa. You can travel to Saudi Arabia at any time using your ID or passport."
           }
         },
-        { 
-          id: 2, 
-          title: "GCC Resident", 
+        {
+          id: 2,
+          title: "GCC Resident",
           icon: <FaPlane />,
           content: {
             title: "Information",
@@ -93,9 +94,9 @@ export default function Visa({ lang }) {
 
       // Schengen/USA/UK Tabs
       schengenTabs: [
-        { 
-          id: 1, 
-          title: "Electronic Visa", 
+        {
+          id: 1,
+          title: "Electronic Visa",
           icon: <FaDesktop />,
           content: {
             title: "Information",
@@ -105,9 +106,9 @@ export default function Visa({ lang }) {
             applyLink: "https://visa.visitsaudi.com/"
           }
         },
-        { 
-          id: 2, 
-          title: "Visa on Arrival", 
+        {
+          id: 2,
+          title: "Visa on Arrival",
           icon: <FaPlane />,
           content: {
             title: "Information",
@@ -115,9 +116,9 @@ export default function Visa({ lang }) {
             requirements: "Upon arrival at your destination airport or other entry points in Saudi Arabia, you can use self-service machines or go directly to passport office to apply for visa on arrival.\n\nYou can apply for electronic visa to visit Saudi Arabia at any age. If you are a minor traveling unaccompanied, you must check your country's regulations regarding travel without guardian, as these regulations vary by nationality. Please ensure all requirements are met before submitting application, and for more information you can check the electronic visa guide or contact us for assistance.\nYour passport must be valid for at least six months after entry date to Saudi Arabia except for US citizens where US citizens can enter as long as their passport is valid, regardless of remaining time before expiry.\nTravelers wishing to perform Umrah can book Umrah appointment through the official Nusuk platform."
           }
         },
-        { 
-          id: 3, 
-          title: "Transit Visa", 
+        {
+          id: 3,
+          title: "Transit Visa",
           icon: <FaBuilding />,
           content: {
             title: "Information",
@@ -128,9 +129,9 @@ export default function Visa({ lang }) {
 
       // Other Countries Tabs
       otherTabs: [
-        { 
-          id: 1, 
-          title: "Embassy/Consulate", 
+        {
+          id: 1,
+          title: "Embassy/Consulate",
           icon: <FaPassport />,
           content: {
             title: "Information",
@@ -138,9 +139,9 @@ export default function Visa({ lang }) {
             requirements: "You must be at least 18 years old to enter alone. Travelers under 18 years cannot enter unless accompanied by parent, grandparent, or adult sibling (over 18 years).\nYour passport must be valid for at least six months after entry date to Saudi Arabia.\nThe following documents are also required for embassy/consulate visa: Proof of residence (in country of residence), return ticket, employment proof, financial proof/bank statement, travel itinerary, ID, accommodation address (address during Saudi Arabia visit)."
           }
         },
-        { 
-          id: 2, 
-          title: "Accredited Visa Offices", 
+        {
+          id: 2,
+          title: "Accredited Visa Offices",
           icon: <FaBuilding />,
           content: {
             title: "Information",
@@ -151,9 +152,9 @@ export default function Visa({ lang }) {
             nusukLink: "https://www.nusuk.sa/"
           }
         },
-        { 
-          id: 3, 
-          title: "Transit Visa", 
+        {
+          id: 3,
+          title: "Transit Visa",
           icon: <FaBuilding />,
           content: {
             title: "Information",
@@ -212,18 +213,18 @@ export default function Visa({ lang }) {
 
       // GCC Tabs
       gccTabs: [
-        { 
-          id: 1, 
-          title: "جنسية من دول الخليج", 
+        {
+          id: 1,
+          title: "جنسية من دول الخليج",
           icon: <FaDesktop />,
           content: {
             title: "مرحبا!",
             description: "جيراننا الأعزاء مواطني دول مجلس التعاون الخليجي لا يحتاجون إلى تأشيرة. يمكنكم السفر إلى المملكة العربية السعودية في أي وقت باستخدام هويتكم أو جواز سفركم."
           }
         },
-        { 
-          id: 2, 
-          title: "مقيم في دول الخليج", 
+        {
+          id: 2,
+          title: "مقيم في دول الخليج",
           icon: <FaPlane />,
           content: {
             title: "المعلومات",
@@ -237,9 +238,9 @@ export default function Visa({ lang }) {
 
       // Schengen/USA/UK Tabs
       schengenTabs: [
-        { 
-          id: 1, 
-          title: "التأشيرات الإلكترونية", 
+        {
+          id: 1,
+          title: "التأشيرات الإلكترونية",
           icon: <FaDesktop />,
           content: {
             title: "المعلومات",
@@ -249,9 +250,9 @@ export default function Visa({ lang }) {
             applyLink: "https://visa.visitsaudi.com/"
           }
         },
-        { 
-          id: 2, 
-          title: "التأشيرات عند الوصول", 
+        {
+          id: 2,
+          title: "التأشيرات عند الوصول",
           icon: <FaPlane />,
           content: {
             title: "المعلومات",
@@ -259,9 +260,9 @@ export default function Visa({ lang }) {
             requirements: "بمجرد وصولك إلى مطار وجهتك أو إحدى نقاط الدخول الأخرى في السعودية، يمكنك استخدام أجهزة الخدمة الذاتية أو توجّه مباشرة إلى مكتب الجوازات للتقدم بطلب للحصول على تأشيرتك عند الوصول.\n\nيمكنك التقدّم للحصول على التأشيرات الإلكترونية لزيارة السعودية في أي عمر. وإذا كنت قاصراً وتسافر دون مرافق، فيجب عليك مراجعة أنظمة بلدك المتعلقة بالسفر دون ولي أمر، حيث تختلف هذه الأنظمة حسب الجنسية. يُرجى التأكّد من استيفاء جميع المتطلبات قبل تقديم الطلب، وللمزيد من المعلومات يمكنك الاطّلاع على دليل التأشيرات الإلكترونية أو التواصل معنا للحصول على المساعدة.\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية باستثناء مواطني الولايات المتحدة الأمريكية حيث يمكن لمواطني الولايات المتحدة الدخول طالما أن جواز سفرهم ساري المفعول، بغض النظر عن الوقت المتبقي قبل انتهاء الصلاحية.\nيمكن للمسافرين الراغبين في أداء مناسك العمرة بحجز موعد العمرة عبر منصة نُسك الرسمية"
           }
         },
-        { 
-          id: 3, 
-          title: "تأشيرة المرور \"ترانزيت\"", 
+        {
+          id: 3,
+          title: "تأشيرة المرور \"ترانزيت\"",
           icon: <FaBuilding />,
           content: {
             title: "المعلومات",
@@ -272,9 +273,9 @@ export default function Visa({ lang }) {
 
       // Other Countries Tabs
       otherTabs: [
-        { 
-          id: 1, 
-          title: "السفارة/القنصلية", 
+        {
+          id: 1,
+          title: "السفارة/القنصلية",
           icon: <FaPassport />,
           content: {
             title: "المعلومات",
@@ -282,9 +283,9 @@ export default function Visa({ lang }) {
             requirements: "يجب ألا يقل عمرك عن 18 عاماً للدخول بمفردك. لا يجوز للمسافرين الذين تقل أعمارهم عن 18 عاماً الدخول إلا إذا كانوا برفقة أحد الوالدين أو الأجداد أو الأشقاء البالغين (فوق 18 عاماً).\nيجب أن يكون جواز سفرك ساري المفعول لمدة لا تقل عن ستة أشهر بعد تاريخ الدخول إلى المملكة العربية السعودية.\nالوثائق التالية مطلوبة أيضاً للحصول على تأشيرة سفارة/قنصلية/تأشير: إثبات الإقامة (في البلد الذي تقيم فيه)، تذكرة العودة، إثبات العمل، إثبات مالي/كشف الحساب المصرفي، خط سير الرحلة، الهوية، عنوان الإقامة (عنوان الاقامة أثناء زيارة السعودية)."
           }
         },
-        { 
-          id: 2, 
-          title: "مكاتب التأشيرات المعتمدة", 
+        {
+          id: 2,
+          title: "مكاتب التأشيرات المعتمدة",
           icon: <FaBuilding />,
           content: {
             title: "المعلومات",
@@ -295,9 +296,9 @@ export default function Visa({ lang }) {
             nusukLink: "https://www.nusuk.sa/"
           }
         },
-        { 
-          id: 3, 
-          title: "تأشيرة المرور \"ترانزيت\"", 
+        {
+          id: 3,
+          title: "تأشيرة المرور \"ترانزيت\"",
           icon: <FaBuilding />,
           content: {
             title: "المعلومات",
@@ -339,150 +340,7 @@ export default function Visa({ lang }) {
       needHelp: "تحتاج مساعدة في طلب التأشيرات؟",
       getHelp: "طلب مساعدة"
     },
-    zh: {
-      heroTitle: "大自然的神奇，前所未见",
-      heroSubtitle: "发现您访问沙特阿拉伯所需的签证类型",
-      heroDescription: "让我们来规划... 您只管享受旅程",
 
-      welcomeTitle: "欢迎！",
-      welcomeDescription: "我们亲爱的邻国，海湾合作委员会国家的公民，不需要签证。您可以随时使用身份证或护照前往沙特阿拉伯。",
-
-      // Main Tabs
-      mainTabs: [
-        { id: 1, title: "海湾合作委员会国家", icon: <FaGlobeAmericas /> },
-        { id: 2, title: "申根区 - 美国 - 英国", icon: <FaShieldAlt /> },
-        { id: 3, title: "以上都不是", icon: <FaPassport /> },
-      ],
-
-      // GCC Tabs
-      gccTabs: [
-        { 
-          id: 1, 
-          title: "海湾国家国籍", 
-          icon: <FaDesktop />,
-          content: {
-            title: "欢迎！",
-            description: "我们亲爱的邻国，海湾合作委员会国家的公民，不需要签证。您可以随时使用身份证或护照前往沙特阿拉伯。"
-          }
-        },
-        { 
-          id: 2, 
-          title: "海湾国家居民", 
-          icon: <FaPlane />,
-          content: {
-            title: "信息",
-            description: "电子签证费用：300 沙特里亚尔（约80美元）\n申请费：39.44 沙特里亚尔（约10.50美元）\n医疗保险费：不包含（价格由服务提供商确定）\n入境次数：多次入境或单次入境，根据沙特外交部决定\n有效期：多次入境签证自签发之日起一年有效，允许连续停留不超过90天",
-            requirements: "您必须提交由海湾合作委员会国家之一签发的有效居留许可，有效期至少为入境沙特阿拉伯日期后三个月。\n您的护照必须在入境沙特阿拉伯日期后至少六个月内有效。\n对于18岁以下的旅客，旅客的父母必须先申请电子签证。\n希望进行副朝的旅客可以通过官方Nusuk平台预订副朝预约。",
-            applyButton: "立即申请",
-            applyLink: "https://visa.visitsaudi.com/"
-          }
-        }
-      ],
-
-      // Schengen/USA/UK Tabs
-      schengenTabs: [
-        { 
-          id: 1, 
-          title: "电子签证", 
-          icon: <FaDesktop />,
-          content: {
-            title: "信息",
-            description: "电子签证费用：395 沙特里亚尔\n申请费：包含在电子签证价格中\n医疗保险费：包含在电子签证价格中\n入境次数：多次入境\n有效期：多次入境签证自签发之日起一年有效，允许连续停留不超过90天",
-            requirements: "您可以在任何年龄申请电子签证访问沙特阿拉伯。如果您是未成年人独自旅行，必须查看您所在国家关于无监护人旅行的规定，因为这些规定因国籍而异。请在提交申请前确保满足所有要求，有关更多信息，您可以查看电子签证指南或联系我们获取帮助。\n您的护照必须在入境沙特阿拉伯日期后至少六个月内有效，但美国公民除外 - 美国公民只要护照有效即可入境，无论剩余有效期多长。",
-            applyButton: "立即申请",
-            applyLink: "https://visa.visitsaudi.com/"
-          }
-        },
-        { 
-          id: 2, 
-          title: "落地签证", 
-          icon: <FaPlane />,
-          content: {
-            title: "信息",
-            description: "落地签证费用：300 沙特里亚尔（约80美元）\n医疗保险费：95 沙特里亚尔（约25.33美元）\n多次入境：多次入境或单次入境，根据沙特外交部决定\n有效期：多次入境签证自签发之日起一年有效。签证允许最长停留90天",
-            requirements: "抵达目的地机场或沙特阿拉伯的其他入境点时，您可以使用自助服务机或直接前往护照办公室申请落地签证。\n\n您可以在任何年龄申请电子签证访问沙特阿拉伯。如果您是未成年人独自旅行，必须查看您所在国家关于无监护人旅行的规定，因为这些规定因国籍而异。请在提交申请前确保满足所有要求，有关更多信息，您可以查看电子签证指南或联系我们获取帮助。\n您的护照必须在入境沙特阿拉伯日期后至少六个月内有效，但美国公民除外，美国公民只要护照有效即可入境，无论剩余有效期多长。\n希望进行副朝的旅客可以通过官方Nusuk平台预订副朝预约。"
-          }
-        },
-        { 
-          id: 3, 
-          title: "过境签证", 
-          icon: <FaBuilding />,
-          content: {
-            title: "信息",
-            description: "过境签证允许途经沙特阿拉伯的旅客入境多种目的，包括进行副朝、参观先知清真寺，或在旅行期间度过短暂假期，享受利雅得季等活动并参观整个王国的旅游景点。\n\n注意：出于副朝或访问目的的旅客必须在前往麦加或麦地那之前在电子Nusuk平台Nusuk.sa上预约。"
-          }
-        }
-      ],
-
-      // Other Countries Tabs
-      otherTabs: [
-        { 
-          id: 1, 
-          title: "大使馆/领事馆", 
-          icon: <FaPassport />,
-          content: {
-            title: "信息",
-            description: "医疗保险费：不包含（价格由服务提供商确定）\n入境次数：多次入境或单次入境，根据沙特外交部决定\n有效期：多次入境签证自签发之日起一年有效。签证允许停留长达90天",
-            requirements: "您必须年满18岁才能单独入境。18岁以下的旅客不得入境，除非有父母、祖父母或成年兄弟姐妹（18岁以上）陪同。\n您的护照必须在入境沙特阿拉伯日期后至少六个月内有效。\n以下文件也是大使馆/领事馆签证所需的：居住证明（在居住国）、回程机票、工作证明、财务证明/银行对账单、旅行行程、身份证、住宿地址（在沙特阿拉伯访问期间的地址）。"
-          }
-        },
-        { 
-          id: 2, 
-          title: "认证签证办公室", 
-          icon: <FaBuilding />,
-          content: {
-            title: "信息",
-            description: "如果您居住在以下国家之一，您可以使用'Tasheer'签证便利服务。\n\n非洲：喀麦隆 | 乍得 | 埃及 | 加纳 | 几内亚 | 科特迪瓦 | 马里 | 毛里塔尼亚 | 尼日利亚 | 南非。\n亚洲：印度尼西亚 | 日本 | 约旦 | 科威特 | 马尔代夫 | 巴基斯坦 | 菲律宾 | 卡塔尔 | 新加坡 | 斯里兰卡 | 韩国 | 塔吉克斯坦 | 阿拉伯联合酋长国。\n欧洲：德国 | 意大利 | 荷兰 | 瑞典 | 瑞士。\n澳大利亚\n\n希望进行副朝的旅客可以通过官方Nusuk平台预订副朝预约。",
-            searchButton: "搜索",
-            searchLink: "https://vc.tasheer.com/",
-            nusukButton: "官方Nusuk平台",
-            nusukLink: "https://www.nusuk.sa/"
-          }
-        },
-        { 
-          id: 3, 
-          title: "过境签证", 
-          icon: <FaBuilding />,
-          content: {
-            title: "信息",
-            description: "过境签证允许途经沙特阿拉伯的旅客入境多种目的，包括进行副朝、参观先知清真寺，或在旅行期间度过短暂假期，享受利雅得季等活动并参观整个王国的旅游景点。\n\n注意：出于副朝或访问目的的旅客必须在前往麦加或麦地那之前在电子Nusuk平台Nusuk.sa上预约。"
-          }
-        }
-      ],
-
-      // Form Labels
-      requestService: "请求签证协助",
-      requestDesc: "填写下表，我们的团队将与您联系，帮助您申请沙特签证。",
-      fullName: "全名",
-      phone: "电话号码",
-      email: "电子邮件",
-      nationality: "国籍",
-      passportNumber: "护照号码",
-      visaTypeLabel: "签证类型",
-      visaTypes: {
-        electronic: "电子签证",
-        arrival: "落地签证",
-        transit: "过境签证",
-        embassy: "大使馆/领事馆签证"
-      },
-      travelDate: "预计出行日期",
-      notes: "附加说明/问题",
-      attachments: "附件",
-      passportCopy: "护照复印件",
-      photo: "近期照片",
-      otherDoc: "其他文件（可选）",
-      submit: "提交申请",
-      submitting: "提交中...",
-      success: "您的申请已成功提交！我们的团队将在24小时内与您联系。",
-      error: "发生错误，请重试。",
-      connectionError: "连接错误，请检查您的网络连接。",
-      applyNow: "立即申请",
-      search: "搜索",
-      requirements: "要求",
-      howToApply: "如何申请",
-      needHelp: "签证申请需要帮助？",
-      getHelp: "请求协助"
-    }
   };
 
   const safeLang = lang && content[lang] ? lang : "ar";
@@ -535,7 +393,7 @@ export default function Visa({ lang }) {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/visa-applications`, {
+      const response = await fetch(`${API_URL}/visa-applications`, {
         method: 'POST',
         body: submitFormData,
       });
@@ -631,7 +489,7 @@ export default function Visa({ lang }) {
           </video>
           <div className="video-overlay"></div>
         </div>
-        
+
         <div className="container">
           <div className="row align-items-center min-vh-80">
             <div className="col-lg-8 mx-auto text-center text-white">
@@ -639,7 +497,7 @@ export default function Visa({ lang }) {
                 <h1 className="display-4 fw-bold mb-4">{t.heroTitle}</h1>
                 <p className="lead mb-3">{t.heroSubtitle}</p>
                 <p className="hero-description">{t.heroDescription}</p>
-                <button 
+                <button
                   className="help-btn"
                   onClick={() => setShowForm(!showForm)}
                 >

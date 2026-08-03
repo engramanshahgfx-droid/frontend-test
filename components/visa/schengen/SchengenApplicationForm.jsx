@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { API_URL } from "@/lib/api";
 import styles from "./SchengenVisaPage.module.css";
 
 const content = {
@@ -121,7 +122,7 @@ export default function SchengenApplicationForm({ lang = "ar" }) {
     };
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/schengen-applications`, {
+      const response = await fetch(`${API_URL}/schengen-applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

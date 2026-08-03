@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from 'react';
+import { API_URL } from '@/lib/api';
 import Link from "next/link";
 import styles from "./evisa.module.css";
 
@@ -117,7 +118,7 @@ export default function EvisaCountryDetails({
     };
     
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/evisa-applications`, {
+      const response = await fetch(`${API_URL}/evisa-applications`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
