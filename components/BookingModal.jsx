@@ -431,18 +431,31 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
               onClick={handleClose}
               style={{
                 position: "absolute",
-                top: "15px",
-                [isRTL ? "left" : "right"]: "20px",
-                background: "none",
+                top: "16px",
+                [isRTL ? "left" : "right"]: "18px",
+                width: "34px",
+                height: "34px",
+                borderRadius: "50%",
+                background: "#f4f4f6",
                 border: "none",
                 cursor: "pointer",
-                fontSize: "24px",
-                color: "#999",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#666",
                 zIndex: 10,
-                padding: "5px",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#e5e5ea";
+                e.currentTarget.style.color = "#111";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#f4f4f6";
+                e.currentTarget.style.color = "#666";
               }}
             >
-              <X size={24} />
+              <X size={18} />
             </button>
 
             <div className="booking-modal-header">
@@ -545,12 +558,13 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                   <div
                     style={{
                       background: "#f8f9fa",
-                      padding: "20px",
-                      borderRadius: "8px",
+                      padding: "24px 20px",
+                      borderRadius: "14px",
+                      border: "1px solid #eaeaea",
                       marginBottom: "20px",
                     }}
                   >
-                    <h4 style={{ margin: "0 0 8px 0", color: "#2c2c2c" }}>
+                    <h4 style={{ margin: "0 0 8px 0", color: "#1C0052", fontSize: "18px", fontWeight: "700" }}>
                       {packageTitle || packageData?.title || packageData?.title_en}
                     </h4>
                     {packageData?.basic_info && (
@@ -563,15 +577,15 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     onClick={() => setStep(2)}
                     style={{
                       width: "100%",
-                      padding: "12px",
+                      padding: "14px 20px",
                       background: "#E85D1F",
                       color: "#fff",
                       border: "none",
-                      borderRadius: "8px",
+                      borderRadius: "12px",
                       fontSize: "16px",
-                      fontWeight: "600",
+                      fontWeight: "700",
                       cursor: "pointer",
-                      transition: "all 0.3s",
+                      transition: "all 0.3s ease",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -594,7 +608,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                 <form onSubmit={handleSubmitBooking}>
                   <div className="modal-form-grid">
                     {/* First Name */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -655,7 +669,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     </div>
 
                     {/* Last Name */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -714,7 +728,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     </div>
 
                     {/* Email */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -773,7 +787,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     </div>
 
                     {/* Mobile */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -832,7 +846,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     </div>
 
                     {/* Travel Date */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -892,7 +906,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                     </div>
 
                     {/* Guests Input */}
-                    <div style={{ gridColumn: "1 / -1" }}>
+                    <div>
                       <label
                         style={{
                           display: "block",
@@ -1256,15 +1270,3 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     </AnimatePresence>
   );
 }
-
-// Global styles for spinner animation
-<style
-  dangerouslySetInnerHTML={{
-    __html: `
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  `,
-  }}
-/>;
