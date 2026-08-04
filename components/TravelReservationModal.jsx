@@ -495,7 +495,7 @@ export default function TravelReservationModal({
                   style={{
                     backgroundColor: "#FAF6F0",
                     borderRadius: "14px",
-                    border: "1px solid #EFE4D2",
+                    border: "1px solid #E85D1F",
                     overflow: "hidden",
                     marginBottom: "24px",
                   }}
@@ -532,7 +532,7 @@ export default function TravelReservationModal({
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <MapPin size={18} color="#DFA528" />
+                        <MapPin size={18} color="#E85D1F" />
                         <div>
                           <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
                             {t.destination}
@@ -542,7 +542,7 @@ export default function TravelReservationModal({
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <Clock size={18} color="#DFA528" />
+                        <Clock size={18} color="#E85D1F" />
                         <div>
                           <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
                             {t.duration}
@@ -552,7 +552,7 @@ export default function TravelReservationModal({
                       </div>
 
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileText size={18} color="#DFA528" />
+                        <FileText size={18} color="#E85D1F" />
                         <div>
                           <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
                             {t.tripCode}
@@ -581,7 +581,7 @@ export default function TravelReservationModal({
                   style={{
                     width: "100%",
                     padding: "14px 24px",
-                    backgroundColor: "#DFA528",
+                    backgroundColor: "#E85D1F",
                     color: "#ffffff",
                     border: "none",
                     borderRadius: "10px",
@@ -595,8 +595,8 @@ export default function TravelReservationModal({
                     gap: "8px",
                     transition: "all 0.2s ease",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c98c1e")}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#DFA528")}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#E85D1F")}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#E85D1F")}
                 >
                   <span>{t.continue}</span>
                   {isRTL ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
@@ -632,7 +632,7 @@ export default function TravelReservationModal({
                         flex: 1,
                         padding: "12px 16px",
                         borderRadius: "10px",
-                        border: reservationType === "individual" ? "2px solid #DFA528" : "1.5px solid #e5e7eb",
+                        border: reservationType === "individual" ? "2px solid #E85D1F" : "1.5px solid #e5e7eb",
                         backgroundColor: reservationType === "individual" ? "#FAF6F0" : "#ffffff",
                         color: reservationType === "individual" ? "#1C0052" : "#4b5563",
                         fontWeight: reservationType === "individual" ? 700 : 500,
@@ -645,7 +645,7 @@ export default function TravelReservationModal({
                         transition: "all 0.2s ease",
                       }}
                     >
-                      <User size={18} color={reservationType === "individual" ? "#DFA528" : "#6b7280"} />
+                      <User size={18} color={reservationType === "individual" ? "#E85D1F" : "#6b7280"} />
                       <span>{t.individualType}</span>
                     </button>
 
@@ -656,7 +656,7 @@ export default function TravelReservationModal({
                         flex: 1,
                         padding: "12px 16px",
                         borderRadius: "10px",
-                        border: reservationType === "company" ? "2px solid #DFA528" : "1.5px solid #e5e7eb",
+                        border: reservationType === "company" ? "2px solid #E85D1F" : "1.5px solid #e5e7eb",
                         backgroundColor: reservationType === "company" ? "#FAF6F0" : "#ffffff",
                         color: reservationType === "company" ? "#1C0052" : "#4b5563",
                         fontWeight: reservationType === "company" ? 700 : 500,
@@ -669,7 +669,7 @@ export default function TravelReservationModal({
                         transition: "all 0.2s ease",
                       }}
                     >
-                      <Building size={18} color={reservationType === "company" ? "#DFA528" : "#6b7280"} />
+                      <Building size={18} color={reservationType === "company" ? "#E85D1F" : "#6b7280"} />
                       <span>{t.companyType}</span>
                     </button>
                   </div>
@@ -680,7 +680,7 @@ export default function TravelReservationModal({
                     style={{
                       padding: "12px 16px",
                       backgroundColor: "#fef2f2",
-                      border: "1px solid #fca5a5",
+                      border: "1px solid #E85D1F",
                       borderRadius: "8px",
                       color: "#991b1b",
                       fontSize: "0.85rem",

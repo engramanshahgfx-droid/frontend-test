@@ -116,7 +116,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "guests" && value === "custom") {
-      handleClose();
+      onClose();
       if (typeof onOpenCustomModal === "function") {
         onOpenCustomModal();
       }

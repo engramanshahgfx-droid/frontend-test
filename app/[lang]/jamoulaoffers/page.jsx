@@ -6,6 +6,7 @@ import { Star, MapPin, Clock, Eye, Heart } from "lucide-react";
 import { API_URL } from "@/lib/api";
 import Image from "next/image";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 import HeaderBanners from "@/components/HeaderBanners";
 
 export default function JamoulaOffersPage() {
@@ -16,6 +17,7 @@ export default function JamoulaOffersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   const labels = {
@@ -152,9 +154,9 @@ export default function JamoulaOffersPage() {
         <div className="page-header" style={{ marginTop: "20px" }}>
           <h1 style={{ padding: "0" }}>
             {lang === "ar" ? (
-              <><span className="highlight-orange">اكتشف</span> <span className="highlight-green">جمولة</span></>
+              <><span className="highlight-orange" >     اكتشف عروض  </span> <span className="highlight-green">جمولة</span></>
             ) : (
-              <><span className="highlight-orange">Discover</span> <span className="highlight-green">Jamoula</span></>
+              <><span className="highlight-orange">Discover </span> <span className="highlight-green">Jamoula Offers</span></>
             )}
           </h1>
           <p>{t.subtitle}</p>
@@ -292,6 +294,14 @@ export default function JamoulaOffersPage() {
         packageData={selectedOffer}
         lang={lang}
         bookingType="jamoula_offer"
+        onOpenCustomModal={() => setShowTravelReservationModal(true)}
+      />
+
+      <TravelReservationModal
+        isOpen={showTravelReservationModal}
+        onClose={() => setShowTravelReservationModal(false)}
+        packageData={selectedOffer}
+        lang={lang}
       />
 
       <style jsx>{`

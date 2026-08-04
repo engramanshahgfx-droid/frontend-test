@@ -6,6 +6,7 @@ import { Star, MapPin, Clock, Eye, Heart } from "lucide-react";
 import { API_URL } from "@/lib/api";
 import Image from "next/image";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 import HeaderBanners from "@/components/HeaderBanners";
 
 export default function TourismOffersPage() {
@@ -16,6 +17,7 @@ export default function TourismOffersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   const labels = {
@@ -290,6 +292,14 @@ export default function TourismOffersPage() {
           packageData={selectedOffer}
           lang={lang}
           bookingType="tourism_offer"
+          onOpenCustomModal={() => setShowTravelReservationModal(true)}
+        />
+
+        <TravelReservationModal
+          isOpen={showTravelReservationModal}
+          onClose={() => setShowTravelReservationModal(false)}
+          packageData={selectedOffer}
+          lang={lang}
         />
 
         <style jsx>{`

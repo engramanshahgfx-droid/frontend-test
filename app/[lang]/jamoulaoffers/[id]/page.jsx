@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 import Image from "next/image";
 import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage, Clock } from "lucide-react";
 
@@ -13,6 +14,8 @@ export default function JamoulaOfferDetails() {
   const lang = params?.lang || "en";
   const id = params?.id;
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
+  const [selectedPersons, setSelectedPersons] = useState(1);
 
   const [offer, setOffer] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -163,6 +166,36 @@ export default function JamoulaOfferDetails() {
       setLoading(false);
     }
   };
+
+  const getPersonPricesList = (offerObj) => {
+    if (!offerObj || !offerObj.person_prices) return [];
+    let prices = offerObj.person_prices;
+    if (typeof prices === "string") {
+      try {
+        prices = JSON.parse(prices);
+      } catch (e) {
+        prices = [];
+      }
+    }
+    if (Array.isArray(prices)) {
+      return prices
+        .map((p) => ({
+          persons: Number(p.persons || p.person_count || p.count || p.num),
+          price: Number(p.price),
+        }))
+        .filter((p) => !isNaN(p.persons) && p.persons > 0 && !isNaN(p.price));
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    if (offer) {
+      const list = getPersonPricesList(offer);
+      if (list.length > 0) {
+        setSelectedPersons(list[0].persons);
+      }
+    }
+  }, [offer]);
 
   // Improved getLocalizedText function that handles more cases
   const getLocalizedText = (value, fallback = "") => {
@@ -557,20 +590,12 @@ export default function JamoulaOfferDetails() {
             <div className="info-item">
               <span className="label">{t.price}</span>
               <span className="value">
-                {offer.original_price && (
-                  <span className="original-price">
-                    {offer.original_price}{" "}
-                    <Image
-                      src="/saudi_riyal.png"
-                      alt="SAR"
-                      width={14}
-                      height={14}
-                      className="currency-icon"
-                    />
-                  </span>
-                )}
                 <span className="current-price">
-                  {offer.price}{" "}
+                  {(() => {
+                    const list = getPersonPricesList(offer);
+                    const matched = list.find((p) => p.persons === selectedPersons);
+                    return matched ? matched.price : offer.price;
+                  })()}{" "}
                   <Image
                     src="/saudi_riyal.png"
                     alt="SAR"
@@ -582,6 +607,48 @@ export default function JamoulaOfferDetails() {
                 <span className="per">{t.perPerson}</span>
               </span>
             </div>
+
+            {getPersonPricesList(offer).length > 0 && (
+              <div className="info-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: "6px", width: "100%" }}>
+                <span className="label" style={{ fontWeight: "700", color: "#1C0052", fontSize: "0.95rem" }}>
+                  {lang === "ar" ? "العروض المتاحة :" : "Available Offers :"}
+                </span>
+                <select
+                  value={selectedPersons}
+                  onChange={(e) => {
+                    if (e.target.value === "custom") {
+                      setShowTravelReservationModal(true);
+                    } else {
+                      setSelectedPersons(Number(e.target.value));
+                    }
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    border: "2px solid #E85D1F",
+                    backgroundColor: "#fff",
+                    color: "#1C0052",
+                    fontWeight: "600",
+                    fontSize: "0.95rem",
+                    cursor: "pointer",
+                    outline: "none",
+                    boxShadow: "0 2px 8px rgba(232, 93, 31, 0.15)",
+                  }}
+                >
+                  {getPersonPricesList(offer).map((pOffer, idx) => (
+                    <option key={idx} value={pOffer.persons}>
+                      {lang === "ar"
+                        ? `عرض ${pOffer.persons} ${Number(pOffer.persons) === 1 ? "فرد" : "أفراد"} - (${pOffer.price} ر.س)`
+                        : `${pOffer.persons} ${Number(pOffer.persons) > 1 ? "Persons" : "Person"} Offer - (${pOffer.price} SAR)`}
+                    </option>
+                  ))}
+                  <option value="custom" style={{ fontWeight: "700", color: "#E85D1F" }}>
+                    {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
+                  </option>
+                </select>
+              </div>
+            )}
             {getText(offer, "duration") && (
               <div className="info-item">
                 <span className="label">{t.duration}</span>
@@ -882,6 +949,16 @@ export default function JamoulaOfferDetails() {
           console.log("Closing modal");
           setShowBookingModal(false);
         }}
+        packageData={offer}
+        lang={lang}
+        bookingType="jamoula_offer"
+        initialGuests={selectedPersons}
+        onOpenCustomModal={() => setShowTravelReservationModal(true)}
+      />
+
+      <TravelReservationModal
+        isOpen={showTravelReservationModal}
+        onClose={() => setShowTravelReservationModal(false)}
         packageData={offer}
         lang={lang}
         bookingType="jamoula_offer"

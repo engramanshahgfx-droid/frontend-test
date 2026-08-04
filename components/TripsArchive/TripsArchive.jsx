@@ -9,6 +9,7 @@ import {
   FaArrowLeft,
   FaArrowRight,
 } from "react-icons/fa";
+import { tripsAPI } from "../../lib/api";
 
 export default function TripsArchive({ lang, hideHero = false }) {
   const content = {
@@ -197,28 +198,40 @@ export default function TripsArchive({ lang, hideHero = false }) {
       try {
         setFetchStatus('fetching');
 
-        // Use static data with language selection
+        // Fetch from API first
+        console.debug('[TripsArchive] Fetching trips from API');
+        const apiResponse = await tripsAPI.getAll({ lang: safeLang });
+        
+        let fetchedTrips = [];
+        if (apiResponse) {
+          if (Array.isArray(apiResponse.data)) {
+            fetchedTrips = apiResponse.data;
+          } else if (Array.isArray(apiResponse)) {
+            fetchedTrips = apiResponse;
+          }
+        }
+
         if (!cancelled) {
-          console.debug('[TripsArchive] Using static trips data');
-
-          // Select trips matching the UI language if available, otherwise use first language
-          const display = staticTrips.map(trip => {
-            // Already have complete trip data with translations
-            return trip;
-          });
-
-          console.debug('[TripsArchive] display items selected:', display.length);
-
-          setTrips(display);
-          setLastResponseSize(display.length);
+          if (fetchedTrips && fetchedTrips.length > 0) {
+            console.debug('[TripsArchive] API returned trips:', fetchedTrips.length);
+            setTrips(fetchedTrips);
+            setLastResponseSize(fetchedTrips.length);
+          } else {
+            console.debug('[TripsArchive] API returned no trips, falling back to static data');
+            setTrips(staticTrips);
+            setLastResponseSize(staticTrips.length);
+          }
           setFetchStatus('success');
         }
       } catch (e) {
         if (!cancelled) {
           let errorMsg = e.message || 'Unknown error';
-          console.error('[TripsArchive] Error:', errorMsg, e);
-          setError(t.errorFetchingTrips + ' (' + errorMsg + ')');
-          setFetchStatus('error: ' + errorMsg);
+          console.error('[TripsArchive] API Error, falling back to static data:', errorMsg, e);
+          
+          // Fallback to static data on error so page still works
+          setTrips(staticTrips);
+          setLastResponseSize(staticTrips.length);
+          setFetchStatus('success'); // mark as success since we loaded fallback
         }
       } finally {
         clearTimeout(timeoutId);
