@@ -155,7 +155,7 @@ export default function TravelReservationModal({
       step2Title: "نموذج طلب الحجز",
       reservationTypeLabel: "نوع الطلب",
       individualType: "طلب فردي",
-      companyType: "طلب شركة / مؤسسة",
+      companyType: "طلب المدارس / الشركات والمؤسسات",
 
       // Individual Fields
       firstName: "الاسم الأول",
@@ -166,13 +166,13 @@ export default function TravelReservationModal({
       numberOfAdults: "عدد البالغين",
       numberOfChildren: "عدد الأطفال",
 
-      // Company Fields
-      companyName: "اسم الشركة / المؤسسة",
+      // Company / School Fields
+      companyName: "اسم المدرسة / الشركة",
       contactPersonName: "اسم الشخص المسؤول للتواصل",
       companyCrNumber: "رقم السجل التجاري / الرقم الضريبي",
-      companyCountry: "دولة الشركة",
-      companyLocation: "مدينة / موقع الشركة",
-      companyAddress: "عنوان الشركة المفصل",
+      companyCountry: "دولة المدرسة / الشركة",
+      companyLocation: "مدينة / موقع المدرسة / الشركة",
+      companyAddress: "عنوان المدرسة / الشركة المفصل",
       companyPassportsInfo: "معلومات جوازات الموظفين / المجموعة",
       numberOfEmployees: "عدد المسافرين / الموظفين",
       accommodationPreference: "تفضيل الإقامة والسكن",

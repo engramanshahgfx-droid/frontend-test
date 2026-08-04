@@ -22,17 +22,16 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
 
   const translations = {
     en: {
-      viewDetails: "Reservation for Local",
-      bookNow: "Reservation for International",
+      viewDetails: "Book Service Now",
+      bookNow: "Book Now",
     },
     ar: {
-      viewDetails: "حجز رحلات محلية",
-      bookNow: "حجز رحلات دولية",
+      viewDetails: "طلب حجز الخدمة",
+      bookNow: "حجز الآن",
     },
-
     zh: {
-      viewDetails: "本地预订",
-      bookNow: "国际预订",
+      viewDetails: "立即预订",
+      bookNow: "立即预订",
     },
   };
 
@@ -70,19 +69,62 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
   // Map service title to trip type (uses localized title)
   const getTripType = (title) => {
     const lowerTitle = (title || "").toLowerCase();
-    if (lowerTitle.includes('school') || lowerTitle.includes('مدرس') || lowerTitle.includes('مدارس')) return 'school';
-    if (lowerTitle.includes('corporate') || lowerTitle.includes('شركات') || lowerTitle.includes('شركة')) return 'corporate';
-    if (lowerTitle.includes('family') || lowerTitle.includes('عوائل') || lowerTitle.includes('عائل') || lowerTitle.includes('عائلة')) return 'family';
-    return 'private';
+    if (
+      lowerTitle.includes('school') ||
+      lowerTitle.includes('student') ||
+      lowerTitle.includes('مدارس') ||
+      lowerTitle.includes('مدرسة') ||
+      lowerTitle.includes('طلاب') ||
+      lowerTitle.includes('تعليم')
+    ) return 'school';
+
+    if (
+      lowerTitle.includes('corporate') ||
+      lowerTitle.includes('company') ||
+      lowerTitle.includes('شركة') ||
+      lowerTitle.includes('شركات') ||
+      lowerTitle.includes('أعمال')
+    ) return 'company';
+
+    if (
+      lowerTitle.includes('family') ||
+      lowerTitle.includes('private') ||
+      lowerTitle.includes('group') ||
+      lowerTitle.includes('عوائل') ||
+      lowerTitle.includes('عائل') ||
+      lowerTitle.includes('مجموعات') ||
+      lowerTitle.includes('خاصة')
+    ) return 'family';
+
+    return 'individual';
+  };
+
+  const getButtonText = (service) => {
+    const titleText = localize(service.title);
+    const type = getTripType(titleText);
+
+    if (type === 'school') {
+      return lang === 'ar' ? 'طلب حجز رحلة مدرسية' : 'Book School Trip';
+    }
+    if (type === 'company') {
+      return lang === 'ar' ? 'طلب حجز رحلة شركات' : 'Book Corporate Trip';
+    }
+    if (type === 'family') {
+      return lang === 'ar' ? 'طلب حجز رحلة عائلية' : 'Book Family Trip';
+    }
+
+    return lang === 'ar' ? `طلب حجز ${titleText}` : `Book ${titleText}`;
   };
 
   const handleReservation = (service) => {
     const titleText = localize(service.title);
+    const tripType = getTripType(titleText || '');
+
     openReservationModal({
       title: titleText,
       slug: service.slug || '',
-      type: getTripType(titleText || ''),
-      // Open modal on local Activities tab
+      type: tripType,
+      category: tripType,
       bookingLocation: 'local',
       preferredBookingType: 'activity',
       isLocalService: true,
@@ -140,16 +182,16 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
               }}
             ></div>
             <p
-  className="lead text-light mx-auto"
-  style={{
-    maxWidth: "600px",
-    // color: "#f5f5f5 !important", // Changed from #d71111
-    lineHeight: "1.7",
-    fontSize: "1.1rem"
-  }}
->
-  {sectionDescription}
-</p>
+              className="lead text-light mx-auto"
+              style={{
+                maxWidth: "600px",
+                // color: "#f5f5f5 !important", // Changed from #d71111
+                lineHeight: "1.7",
+                fontSize: "1.1rem"
+              }}
+            >
+              {sectionDescription}
+            </p>
           </motion.div>
 
           {/* Services Grid */}
@@ -169,12 +211,12 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
                 >
                   <motion.div
                     className="card h-100 border-0 overflow-hidden shadow-lg"
-style={{
-  background: "#f9e5d2", // Solid, no transparency
-  border: "1px solid rgba(249, 229, 210, 0.15)",
-  borderRadius: "10px",
-  transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-}}
+                    style={{
+                      background: "#f9e5d2", // Solid, no transparency
+                      border: "1px solid rgba(249, 229, 210, 0.15)",
+                      borderRadius: "10px",
+                      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+                    }}
                     whileHover={{
                       scale: 1.03,
                       borderColor: "rgba(232, 93, 31, 0.5)", /* Accent orange */
@@ -246,7 +288,7 @@ style={{
                             e.target.style.boxShadow = "0 4px 15px rgba(232, 93, 31, 0.25)";
                           }}
                         >
-                          {t.viewDetails}
+                          {getButtonText(service)}
                         </button>
                       </div>
                     </div>

@@ -1,58 +1,31 @@
 .container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+  background: #FAF6F0;
+  /* Creamy/soft desert background */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding-top: 115px;
 }
 
-.header {
-  position: relative;
-  padding: 20px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.backButton {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.backButton:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.cityName {
-  font-size: clamp(28px, 5vw, 48px);
-  font-weight: 700;
-  margin: 0;
-  flex: 1;
-}
-
+/* Hero Section */
 .heroSection {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 500px;
+  min-height: 350px;
+  max-height: 60vh;
   overflow: hidden;
+  background: #000;
 }
 
 .heroImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 10s ease;
 }
 
-.heroImage:hover {
-  transform: scale(1.05);
+.heroSection:hover .heroImage {
+  transform: scale(1.08);
 }
 
 .heroOverlay {
@@ -61,241 +34,396 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0.75) 100%);
   pointer-events: none;
 }
 
+.floatingHeader {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  right: 30px;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-start;
+}
+
+:global([dir="rtl"]) .floatingHeader {
+  justify-content: flex-end;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.backButton:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(232, 93, 31, 0.4);
+}
+
+.heroContent {
+  position: absolute;
+  bottom: 40px;
+  left: 5%;
+  right: 5%;
+  z-index: 5;
+  color: white;
+}
+
+.cityName {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.5px;
+}
+
+.titleUnderline {
+  width: 80px;
+  height: 4px;
+  background: var(--accent-yellow);
+  margin-top: 15px;
+  border-radius: 2px;
+}
+
+/* Layout Content Wrapper */
 .contentWrapper {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 50px 24px 100px 24px;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 2.2fr 1.2fr;
+  gap: 40px;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 /* Description Section */
 .descriptionSection {
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 40px;
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(28, 0, 82, 0.04);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(28, 0, 82, 0.05);
+}
+
+.quoteBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--primary-color);
+}
+
+:global([dir="rtl"]) .quoteBar {
+  left: auto;
+  right: 0;
 }
 
 .description {
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.8;
-  color: #333;
+  color: #4a5568;
   margin: 0;
-  font-weight: 400;
-}
-
-/* Best Time Section */
-.bestTimeSection {
-  background: linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(223, 165, 40, 0.2);
-  margin-bottom: 40px;
-  text-align: center;
-  color: #1a1a1a;
-}
-
-.bestTimeSection h2 {
-  margin: 0 0 15px 0;
-  font-size: 28px;
-  font-weight: 700;
-}
-
-.bestTimeText {
-  font-size: 18px;
-  margin: 0;
-  font-weight: 500;
+  font-weight: 450;
 }
 
 /* Landmarks Section */
 .landmarksSection {
-  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.landmarksSection h2 {
-  font-size: 32px;
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
   font-weight: 700;
-  color: #1a1a2e;
-  margin-bottom: 30px;
-  text-align: center;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.sectionIcon {
+  color: var(--accent-color);
 }
 
 .landmarksGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }
 
 .landmarkCard {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(28, 0, 82, 0.04);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
 }
 
 .landmarkCard:hover {
   transform: translateY(-8px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px rgba(28, 0, 82, 0.08);
 }
 
 .landmarkImageWrapper {
   width: 100%;
-  height: 220px;
+  height: 240px;
   overflow: hidden;
-  background: #f0f0f0;
+  position: relative;
 }
 
 .landmarkImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .landmarkCard:hover .landmarkImage {
-  transform: scale(1.1);
+  transform: scale(1.08);
+}
+
+.landmarkOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.15) 100%);
+  pointer-events: none;
 }
 
 .landmarkContent {
-  padding: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .landmarkName {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 700;
-  color: #1a1a2e;
-  margin: 0 0 12px 0;
+  color: var(--primary-color);
+  margin: 0 0 10px 0;
 }
 
 .landmarkDescription {
-  font-size: 14px;
+  font-size: 14.5px;
   line-height: 1.6;
-  color: #666;
+  color: #718096;
   margin: 0;
 }
 
-/* Activities Section */
-.activitiesSection {
+/* Sidebar Sections */
+.bestTimeSection,
+.activitiesSection,
+.ctaCard {
   background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 40px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(28, 0, 82, 0.04);
+  border: 1px solid rgba(28, 0, 82, 0.05);
 }
 
-.activitiesSection h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a1a2e;
-  margin-bottom: 25px;
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
+.cardHeader h3 {
+  font-size: 18px;
+  font-weight: 750;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.cardIcon {
+  color: var(--accent-color);
+}
+
+/* Best Time custom coloring */
+.bestTimeSection {
+  background: var(--accent-yellow);
+  border: 1.5px solid var(--primary-color);
+}
+
+.bestTimeSection h3 {
+  color: var(--primary-color);
+}
+
+.bestTimeSection .cardIcon {
+  color: var(--primary-color);
+}
+
+.bestTimeText {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--primary-color);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Activities tags */
 .activitiesList {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
 }
 
 .activityTag {
-  background: linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%);
-  color: #1a1a1a;
-  padding: 12px 24px;
+  background: var(--accent-yellow);
+  color: var(--primary-color);
+  border: 1.5px solid var(--primary-color);
+  padding: 10px 18px;
   border-radius: 50px;
-  font-weight: 600;
-  font-size: 14px;
-  box-shadow: 0 2px 8px rgba(223, 165, 40, 0.2);
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 13.5px;
+  box-shadow: 0 2px 6px rgba(28, 0, 82, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: default;
 }
 
 .activityTag:hover {
+  background: #2F057F;
+  color: var(--light-color);
+  border-color: #2F057F;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(223, 165, 40, 0.3);
+  box-shadow: 0 4px 12px rgba(47, 5, 127, 0.3);
 }
 
-/* CTA Section */
-.ctaSection {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+/* CTA Card */
+.ctaCard {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-color) 100%);
   color: white;
-  padding: 60px 40px;
-  border-radius: 12px;
   text-align: center;
-  margin-bottom: 40px;
+  border: none;
 }
 
-.ctaSection h2 {
-  font-size: 32px;
-  font-weight: 700;
-  margin: 0 0 15px 0;
+.ctaCard h3 {
+  font-size: 22px;
+  font-weight: 750;
+  margin: 0 0 12px 0;
 }
 
-.ctaSection p {
-  font-size: 18px;
+.ctaCard p {
+  font-size: 15px;
   line-height: 1.6;
-  margin: 0 0 30px 0;
-  opacity: 0.9;
+  margin: 0 0 24px 0;
+  opacity: 0.85;
 }
 
 .bookButton {
-  background: linear-gradient(135deg, #dfa528 0%, #EFC8AE 100%);
-  color: #1a1a1a;
+  width: 100%;
+  background: var(--accent-color);
+  color: var(--light-color);
   border: none;
-  padding: 15px 50px;
-  font-size: 16px;
+  padding: 14px 24px;
+  font-size: 15px;
   font-weight: 700;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(223, 165, 40, 0.3);
+  box-shadow: 0 4px 15px rgba(232, 93, 31, 0.35);
 }
 
 .bookButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(223, 165, 40, 0.5);
+  background: var(--accent-hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(211, 76, 18, 0.5);
 }
 
-/* Footer */
-.footer {
-  background: #1a1a2e;
-  color: white;
+/* Not Found View */
+.notFoundContainer {
+  padding: 80px 20px;
   text-align: center;
-  padding: 20px;
-  font-size: 14px;
+  background: #FAF6F0;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-/* Responsive Design */
+.notFoundTitle {
+  color: var(--primary-color);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.notFoundButton {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.notFoundButton:hover {
+  background: var(--primary-hover-color);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 992px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .heroSection {
-    height: 250px;
+    height: 350px;
   }
 
   .contentWrapper {
-    padding: 20px 15px;
-  }
-
-  .descriptionSection,
-  .activitiesSection {
-    padding: 20px;
-  }
-
-  .bestTimeSection {
-    padding: 25px 20px;
-  }
-
-  .bestTimeSection h2 {
-    font-size: 24px;
-  }
-
-  .landmarksSection h2 {
-    font-size: 24px;
+    padding: 30px 16px;
   }
 
   .landmarksGrid {
@@ -303,48 +431,385 @@
     gap: 20px;
   }
 
-  .ctaSection {
-    padding: 40px 20px;
+  .descriptionSection {
+    padding: 24px;
   }
 
-  .ctaSection h2 {
-    font-size: 24px;
-  }
-
-  .header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .cityName {
-    font-size: 32px;
+  .bestTimeSection,
+  .activitiesSection,
+  .ctaCard {
+    padding: 24px;
   }
 }
 
 @media (max-width: 480px) {
   .heroSection {
+    height: 280px;
+  }
+
+  .backButton {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .cityName {
+    font-size: 32px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+  }
+
+  .landmarkImageWrapper {
     height: 200px;
   }
+}
 
-  .description {
-    font-size: 16px;
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 20px;
+  color: var(--primary-color);
+  font-family: inherit;
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--secondary-color);
+  border-bottom-color: var(--primary-color);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
   }
 
-  .landmarkCard {
-    margin-bottom: 15px;
+  100% {
+    transform: rotate(360deg);
   }
+}
 
-  .activitiesList {
-    gap: 10px;
+/* Tourism Offers Section inside City Detail Page */
+.offersSection {
+  margin-top: 60px;
+  padding-top: 50px;
+  border-top: 1px solid rgba(28, 0, 82, 0.08);
+}
+
+.offersHeader {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.offersTitle {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+}
+
+.offersTitleHighlight {
+  color: var(--accent-color);
+}
+
+.offersSubtitle {
+  font-size: clamp(14px, 2vw, 16px);
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.offersGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.offerCard {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(28, 0, 82, 0.05);
+  box-shadow: 0 10px 30px rgba(28, 0, 82, 0.03);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.offerCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(28, 0, 82, 0.1);
+  border-color: rgba(232, 93, 31, 0.2);
+}
+
+.offerImageWrapper {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.offerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.offerCard:hover .offerImage {
+  transform: scale(1.08);
+}
+
+.badgesContainer {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+}
+
+:global([dir="rtl"]) .badgesContainer {
+  left: auto;
+  right: 15px;
+}
+
+.discountBadge {
+  background: #ee5a24;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+.popularBadge {
+  background: var(--accent-color);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.limitedBadge {
+  background: var(--primary-color);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  width: fit-content;
+}
+
+.offerContent {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.offerTitleRating {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.offerTitleRating h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent-color);
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.ratingStars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.ratingValue {
+  font-size: 13px;
+  color: #666;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+:global([dir="rtl"]) .ratingValue {
+  margin-left: 0;
+  margin-right: 4px;
+}
+
+.offerDesc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin: 10px 0 20px;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.offerMeta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.offerMeta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--primary-color);
+  font-weight: 550;
+}
+
+.offerFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(28, 0, 82, 0.06);
+  margin-top: auto;
+  gap: 10px;
+}
+
+.offerPrice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.priceOriginal {
+  font-size: 12px;
+  color: #999;
+  text-decoration: line-through;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.priceAmountWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.priceAmount {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.currencyIcon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.currencyIconSmall {
+  display: inline-block;
+  vertical-align: middle;
+  opacity: 0.7;
+}
+
+.btnBook {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btnBook:hover {
+  background: var(--primary-hover-color);
+  transform: translateY(-2px);
+}
+
+.btnViewAllContainer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.btnViewAll {
+  background: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 12px 36px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(232, 93, 31, 0.25);
+  text-decoration: none;
+}
+
+.btnViewAll:hover {
+  background: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(28, 0, 82, 0.25);
+}
+
+.btnViewAll svg {
+  transition: transform 0.3s ease;
+}
+
+.btnViewAll:hover svg {
+  transform: translateX(4px);
+}
+
+:global([dir="rtl"]) .btnViewAll:hover svg {
+  transform: translateX(-4px);
+}
+
+@media (max-width: 992px) {
+  .offersGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .activityTag {
-    padding: 10px 16px;
-    font-size: 12px;
+@media (max-width: 768px) {
+  .offersSection {
+    margin-top: 40px;
+    padding-top: 30px;
   }
-
-  .bookButton {
-    padding: 12px 30px;
-    font-size: 14px;
+  .offersGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .btnViewAll {
+    width: 100%;
+    justify-content: center;
   }
 }

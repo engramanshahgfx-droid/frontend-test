@@ -339,5 +339,317 @@ export const citiesData = {
     bestTimeAr: "من أبريل إلى سبتمبر",
     activitiesEn: ["Hiking", "Mountain Biking", "Sightseeing", "Local Market Tours", "Photography"],
     activitiesAr: ["المشي لمسافات طويلة", "ركوب الدراجات الجبلية", "مشاهدة المعالم", "جولات الأسواق المحلية", "التصوير الفوتوغرافي"]
+  },
+
+  arar: {
+    nameEn: "Arar",
+    nameAr: "عرعر",
+    image: "/cities/Arar.jpeg",
+    descriptionEn: "Arar is the capital of the Northern Borders Province in Saudi Arabia. Situated on the northern rocky limestone plateau, it is a significant trading hub, rich in cultural heritage and close to the ancient trans-Arabian pipeline routes.",
+    descriptionAr: "عرعر هي عاصمة منطقة الحدود الشمالية في المملكة العربية السعودية. تقع على الهضبة الصخرية الشمالية، وتعتبر مركزاً تجارياً مهماً غنياً بالتراث الثقافي وقريباً من مسارات خطوط الأنابيب التاريخية.",
+    landmarksEn: [
+      {
+        name: "Arar Valley",
+        description: "A stunning valley that greens up beautifully after winter rains, perfect for family picnics.",
+        image: "/cities/Arar.jpeg"
+      },
+      {
+        name: "Northern Borders Museum",
+        description: "Showcases the archaeological history and traditional Bedouin culture of the northern region.",
+        image: "/cities/Arar.jpeg"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "وادي عرعر",
+        description: "وادي طبيعي خلاب يكتسي بالخضرة بعد الأمطار الشتوية، مثالي للنزهات العائلية.",
+        image: "/cities/Arar.jpeg"
+      },
+      {
+        name: "متحف الحدود الشمالية",
+        description: "يعرض التاريخ الأثري والثقافة البدوية التقليدية لمنطقة الحدود الشمالية.",
+        image: "/cities/Arar.jpeg"
+      }
+    ],
+    bestTimeEn: "November to March",
+    bestTimeAr: "من نوفمبر إلى مارس",
+    activitiesEn: ["Desert Camping", "Valley Picnics", "Cultural Exploration", "Traditional Dining"],
+    activitiesAr: ["التخييم الصحراوي", "النزهات في الوادي", "الاستكشاف الثقافي", "تناول الأطعمة التقليدية"]
+  },
+
+  sakaka: {
+    nameEn: "Sakaka",
+    nameAr: "سكاكا",
+    image: "/cities/Sakaka.jpeg",
+    descriptionEn: "Sakaka is the capital city of Al Jouf Province in northwestern Saudi Arabia. Known for its rich history dating back thousands of years, it is home to ancient fortresses, mysterious stone pillars, and lush olive groves.",
+    descriptionAr: "سكاكا هي عاصمة منطقة الجوف في شمال غرب المملكة العربية السعودية. تشتهر بتاريخها العريق الذي يعود لآلاف السنين، وتضم قلاعاً أثرية وأعمدة حجرية غامضة وبساتين زيتون وفيرة.",
+    landmarksEn: [
+      {
+        name: "Za'abal Castle",
+        description: "An imposing stone fortress perched on a mountain peak, dating back to Nabataean times.",
+        image: "/cities/Sakaka.jpeg"
+      },
+      {
+        name: "Rajajil Columns",
+        description: "Mystery-shrouded prehistoric standing stone pillars, often called the Stonehenge of Arabia.",
+        image: "/cities/Sakaka.jpeg"
+      },
+      {
+        name: "Al Jouf Olive Farms",
+        description: "Vast agricultural landscapes producing some of the finest organic olive oil in the Middle East.",
+        image: "/cities/Sakaka.jpeg"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "قلعة زعبل",
+        description: "حصن حجري مهيب يقع على قمة جبلية، يعود تاريخه إلى العصر النبطي.",
+        image: "/cities/Sakaka.jpeg"
+      },
+      {
+        name: "أعمدة الرجاجيل",
+        description: "أعمدة حجرية قائمة غامضة تعود لعصر ما قبل التاريخ، وتُعرف باسم ستونهنج الجزيرة العربية.",
+        image: "/cities/Sakaka.jpeg"
+      },
+      {
+        name: "مزارع زيتون الجوف",
+        description: "مساحات زراعية شاسعة تنتج أفضل أنواع زيت الزيتون العضوي في الشرق الأوسط.",
+        image: "/cities/Sakaka.jpeg"
+      }
+    ],
+    bestTimeEn: "October to April",
+    bestTimeAr: "من أكتوبر إلى أبريل",
+    activitiesEn: ["Historical Tours", "Olive Oil Tastings", "Scenic Photography", "Archaeological Walks"],
+    activitiesAr: ["الجولات التاريخية", "تذوق زيت الزيتون", "التصوير الفوتوغرافي", "المشي الأثري"]
+  },
+
+  hail: {
+    nameEn: "Ha'il",
+    nameAr: "حائل",
+    image: "/cities/hail.jpeg",
+    descriptionEn: "Ha'il is an oasis city in the Nejd region of northwestern Saudi Arabia, surrounded by the majestic Shammar Mountains. Famously associated with the legendary Arabian poet and host Hatim al-Tai, it is renowned for its generous hospitality and UNESCO-listed rock art.",
+    descriptionAr: "حائل هي مدينة واحة في منطقة نجد شمال غرب المملكة العربية السعودية، تحيط بها جبال شمر المهيبة. ترتبط تاريخياً بالشاعر والرمز العربي الأسطوري حاتم الطائي، وتشتهر بكرم الضيافة والفنون الصخرية المسجلة في اليونسكو.",
+    landmarksEn: [
+      {
+        name: "A'arif Fort",
+        description: "A historic mud-clay fortress sitting on a hilltop, offering panoramic views of Hail city.",
+        image: "/cities/hail.jpeg"
+      },
+      {
+        name: "Jubbah Rock Art",
+        description: "A UNESCO World Heritage Site showing extraordinary carvings and inscriptions dating back 10,000 years.",
+        image: "/cities/hail.jpeg"
+      },
+      {
+        name: "Aja and Salma Mountains",
+        description: "Stunning granite mountain ranges rich in local myths and popular for desert treks.",
+        image: "/cities/hail.jpeg"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "قلعة أعيرف",
+        description: "قلعة طينية تاريخية تقع على قمة تل، وتوفر إطلالات بانورامية على مدينة حائل.",
+        image: "/cities/hail.jpeg"
+      },
+      {
+        name: "رسوم جبة الصخرية",
+        description: "موقع تراث عالمي لليونسكو يعرض نقوشاً صخرية استثنائية تعود إلى 10,000 عام.",
+        image: "/cities/hail.jpeg"
+      },
+      {
+        name: "جبال أجا وسلمى",
+        description: "سلاسل جبال غرانيتية رائعة غنية بالأساطير المحلية ومحبوبة لرحلات السفاري.",
+        image: "/cities/hail.jpeg"
+      }
+    ],
+    bestTimeEn: "October to April",
+    bestTimeAr: "من أكتوبر إلى أبريل",
+    activitiesEn: ["Mountain Hiking", "UNESCO Rock Art Tours", "Desert Safaris", "Cultural Majlis Visits"],
+    activitiesAr: ["المشي الجبلي", "جولات الفنون الصخرية", "سفاري الصحراء", "زيارة المجالس الثقافية"]
+  },
+
+  dammam: {
+    nameEn: "Dammam",
+    nameAr: "الدمام",
+    image: "/cities/dammam.png",
+    descriptionEn: "Dammam is the capital of the Eastern Province of Saudi Arabia, forming a major part of the Dammam metropolitan area along the Arabian Gulf. It is a vital industrial powerhouse, modern seaport, and a tourist destination famous for its sprawling corniche and sandy beaches.",
+    descriptionAr: "الدمام هي عاصمة المنطقة الشرقية في المملكة العربية السعودية، وتشكل جزءاً رئيسياً من منطقة الدمام الحضرية على ساحل الخليج العربي. وهي مركز صناعي حيوي وميناء حديث بالإضافة لوجهة سياحية تشتهر بكورنيشها الممتد وشواطئها الرملية.",
+    landmarksEn: [
+      {
+        name: "Dammam Corniche",
+        description: "A beautifully designed waterfront promenade featuring green parks, cafes, and family recreation areas.",
+        image: "/cities/dammam.png"
+      },
+      {
+        name: "Marjan Island",
+        description: "An artificial island park linked by a bridge, featuring a viewing tower and boat trips.",
+        image: "/cities/dammam.png"
+      },
+      {
+        name: "Love Market (Souq Al-Hob)",
+        description: "A vibrant traditional market famous for jewelry, bridal shopping, street food, and heritage atmosphere.",
+        image: "/cities/dammam.png"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "كورنيش الدمام",
+        description: "ممشى مائي مصمم بشكل جميل يضم منتزهات خضراء ومقاهي ومناطق ترفيه عائلية.",
+        image: "/cities/dammam.png"
+      },
+      {
+        name: "جزيرة المرجان",
+        description: "جزيرة اصطناعية متصلة بجسر، تتميز ببرج مراقبة ورحلات بحرية.",
+        image: "/cities/dammam.png"
+      },
+      {
+        name: "سوق الحب",
+        description: "سوق تقليدي نابض بالحياة يشتهر بالمجوهرات ومستلزمات الأعراس والمأكولات الشعبية.",
+        image: "/cities/dammam.png"
+      }
+    ],
+    bestTimeEn: "November to March",
+    bestTimeAr: "من نوفمبر إلى مارس",
+    activitiesEn: ["Coastal Cruises", "Seafood Dining", "Waterfront Jogging", "Traditional Souk Shopping"],
+    activitiesAr: ["الرحلات البحرية", "تناول المأكولات البحرية", "الجري على الواجهة المائية", "التسوق في الأسواق التقليدية"]
+  },
+
+  najran: {
+    nameEn: "Najran",
+    nameAr: "نجران",
+    image: "/cities/Najran.jpeg",
+    descriptionEn: "Najran is an ancient city located in southwestern Saudi Arabia near the Yemeni border. Famous for its distinct mud-brick architecture, lush date palm oases, and rich archaeological ruins of Al-Ukhdood, it offers an incredible window into pre-Islamic history.",
+    descriptionAr: "نجران مدينة أثرية قديمة تقع في جنوب غرب المملكة العربية السعودية بالقرب من الحدود اليمنية. تشتهر بعمارتها الطينية الفريدة وواحات النخيل الخصبة وآثار الأخدود القديمة، وتقدم نافذة مذهلة على تاريخ ما قبل الإسلام.",
+    landmarksEn: [
+      {
+        name: "Al-Ukhdood Archaeological Site",
+        description: "The ancient ruins of a pre-Islamic city featuring historic stone carvings, inscriptions, and ruins.",
+        image: "/cities/Najran.jpeg"
+      },
+      {
+        name: "Aan Palace",
+        description: "A gorgeous traditional multi-story mud-brick palace showcasing classical Najran heritage architecture.",
+        image: "/cities/Najran.jpeg"
+      },
+      {
+        name: "Najran Valley Dam",
+        description: "One of the largest dams in the kingdom, set amidst striking granite mountain backdrops.",
+        image: "/cities/Najran.jpeg"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "موقع الأخدود الأثري",
+        description: "بقايا مدينة قديمة تعود لعصر ما قبل الإسلام وتتميز بنقوش ورسومات حجرية تاريخية.",
+        image: "/cities/Najran.jpeg"
+      },
+      {
+        name: "قصر العان",
+        description: "قصر طيني تقليدي متعدد الطوابق رائع يعكس العمارة النجرانية الكلاسيكية الفريدة.",
+        image: "/cities/Najran.jpeg"
+      },
+      {
+        name: "سد وادي نجران",
+        description: "واحد من أكبر السدود في المملكة، يقع وسط خلفيات جبلية غرانيتية مهيبة.",
+        image: "/cities/Najran.jpeg"
+      }
+    ],
+    bestTimeEn: "September to April",
+    bestTimeAr: "من سبتمبر إلى أبريل",
+    activitiesEn: ["Historical Exploration", "Heritage Palace Tours", "Oasis Hiking", "Traditional Craft Shopping"],
+    activitiesAr: ["الاستكشاف التاريخي", "جولات القصور التراثية", "المشي في الواحات", "تسوق الحرف التقليدية"]
+  },
+
+  jizan: {
+    nameEn: "Jizan",
+    nameAr: "جيزان",
+    image: "/cities/jizan.webp",
+    descriptionEn: "Jizan is a vibrant port city on the southern Red Sea coast of Saudi Arabia. Known for its tropical climate, rich agricultural output (including mangoes and coffee), and diverse geography, it serves as the primary gateway to the pristine Farasan Islands.",
+    descriptionAr: "جيزان هي مدينة ساحلية نابضة بالحياة تقع على الساحل الجنوبي للبحر الأحمر في المملكة العربية السعودية. تشتهر بمناخها الاستوائي وإنتاجها الزراعي الوفير (مثل المانجو والبن) وتضاريسها المتنوعة، وتعتبر البوابة الرئيسية لجزر فرسان البكر.",
+    landmarksEn: [
+      {
+        name: "Farasan Islands",
+        description: "A protected marine sanctuary with white-sand beaches, coral reefs, and historical pearl-trading villages.",
+        image: "/cities/jizan.webp"
+      },
+      {
+        name: "Fayfa Mountains",
+        description: "Known as the 'Neighbors of the Moon', these terraced green mountains offer spectacular views and lush vegetation.",
+        image: "/cities/jizan.webp"
+      },
+      {
+        name: "Al-Dousariyah Castle",
+        description: "A high hilltop fortress providing sweeping views over Jizan city and the Red Sea coastline.",
+        image: "/cities/jizan.webp"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "جزر فرسان",
+        description: "محمية بحرية خلابة تتميز بشواطئها الرملية البيضاء والشعاب المرجانية وقرى صيد اللؤلؤ التاريخية.",
+        image: "/cities/jizan.webp"
+      },
+      {
+        name: "جبال فيفاء",
+        description: "تُعرف بـ 'جارة القمر'، وهي جبال خضراء مدرجة توفر إطلالات مذهلة وغطاءً نباتياً كثيفاً.",
+        image: "/cities/jizan.webp"
+      },
+      {
+        name: "قلعة الدوسرية",
+        description: "حصن جبلي مرتفع يوفر إطلالات شاملة على مدينة جيزان وساحل البحر الأحمر.",
+        image: "/cities/jizan.webp"
+      }
+    ],
+    bestTimeEn: "November to February",
+    bestTimeAr: "من نوفمبر إلى فبراير",
+    activitiesEn: ["Island Snorkeling", "Mountain Terrace Hiking", "Mango & Coffee Tasting", "Seaside Dining"],
+    activitiesAr: ["الغطس في الجزر", "المشي في المدرجات الجبلية", "تذوق المانجو والبن الجيزاني", "تناول الطعام على البحر"]
+  },
+
+  qassim: {
+    nameEn: "Al-Qassim",
+    nameAr: "القصيم",
+    image: "/cities/qassim.jpeg",
+    descriptionEn: "Al-Qassim Province is situated in the heart of Saudi Arabia, renowned as the agricultural basket of the country. It is famous for its vast palm groves, delicious dates, traditional heritage towns, and lively cultural festivals.",
+    descriptionAr: "منطقة القصيم تقع في قلب المملكة العربية السعودية، وتشتهر بأنها سلة الغذاء الزراعية للبلاد. وهي معروفة ببلدات النخيل الشاسعة والتمور اللذيذة والقرى التراثية والمهرجانات الثقافية الحيوية.",
+    landmarksEn: [
+      {
+        name: "Buraidah Date Market",
+        description: "The largest date market in the world, hosting the famous seasonal date festival every year.",
+        image: "/cities/qassim.jpeg"
+      },
+      {
+        name: "Ushaiqer Heritage Village",
+        description: "A beautifully preserved traditional mud-brick village offering a glimpse into historic Najdi culture.",
+        image: "/cities/qassim.jpeg"
+      },
+      {
+        name: "Al-Shinanah Tower",
+        description: "A historic clay tower in Ar Rass dating back centuries, showing the defensive architecture of the region.",
+        image: "/cities/qassim.jpeg"
+      }
+    ],
+    landmarksAr: [
+      {
+        name: "سوق تمور بريدة",
+        description: "أكبر سوق للتمور في العالم، ويستضيف مهرجان التمور الموسمي الشهير كل عام.",
+        image: "/cities/qassim.jpeg"
+      },
+      {
+        name: "قرية أشيقر التراثية",
+        description: "قرية طينية تقليدية محفوظة بشكل جميل تقدم لمحة عن ثقافة نجد التاريخية.",
+        image: "/cities/qassim.jpeg"
+      },
+      {
+        name: "برج الشنانة",
+        description: "برج طيني تاريخي في الرس يعود لقرون مضت، ويعكس العمارة الدفاعية للمنطقة.",
+        image: "/cities/qassim.jpeg"
+      }
+    ],
+    bestTimeEn: "October to March",
+    bestTimeAr: "من أكتوبر إلى مارس",
+    activitiesEn: ["Date Tasting", "Heritage Village Tours", "Agricultural Walks", "Traditional Souk Visits"],
+    activitiesAr: ["تذوق التمور", "جولات القرى التراثية", "المشي في المزارع", "زيارة الأسواق التقليدية"]
   }
 };

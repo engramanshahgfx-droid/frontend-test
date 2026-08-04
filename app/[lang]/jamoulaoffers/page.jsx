@@ -530,6 +530,7 @@ export default function JamoulaOffersPage() {
           margin: 10px 0 20px;
           display: -webkit-box;
           -webkit-line-clamp: 3;
+          line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
           font-family: 'Tajawal', sans-serif;

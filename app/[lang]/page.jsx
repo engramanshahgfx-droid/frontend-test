@@ -127,56 +127,7 @@ export default async function Home({ params }) {
       ],
     },
 
-    zh: {
-      // Chinese content
-      heroTitle: "欢迎来到Tilal Rimal！我们以极具竞争力的价格提供高品质的旅游体验，将乐趣与宝贵见解融为一体，为您创造难忘的回忆。我们充满热情的年轻团队精心策划和执行每一次旅行，确保为您留下终生的美好记忆。",
-      heroSubtitle: "从新视角探索沙特阿拉伯",
-      heroDescription: "让我们来规划... 您只管享受旅程。与我们一起探索沙特阿拉伯的美景 - 发现为您量身定制的旅行、文化体验和令人叹为观止的风景。",
-      shopNow: "探索优惠",
-
-      // Features/Why Choose section
-      whyChooseTitle: "为何选择Tilalr",
-      whyChooseDescription: "我们以专业的旅行规划、当地知识和承诺在沙特阿拉伯最美丽的景点创造难忘体验而自豪。",
-      features: [
-        {
-          title: "专业当地导游",
-          description: "知识渊博的导游了解沙特阿拉伯的隐藏宝藏和文化见解。",
-        },
-        {
-          title: "定制行程",
-          description: "根据您的兴趣、偏好和旅行风格量身打造的旅行。",
-        },
-        {
-          title: "安全与舒适",
-          description: "整个旅程中全面的安全措施和舒适的住宿条件。",
-        },
-        {
-          title: "文化沉浸",
-          description: "真实体验让您与当地传统和社区建立联系。",
-        },
-      ],
-
-      // Services section
-      discoverTitle: "发现独特目的地",
-      discoverDescription: "专为满足不同兴趣和偏好而设计的全面旅行体验。",
-      services: [
-        {
-          title: "学校旅行",
-          image: "/services/school-trip.webp",
-          description: "我们提供结合学习和娱乐的有趣教育旅行。包括工作坊和参观文化遗址，为学生提供独特的教育体验。",
-        },
-        {
-          title: "企业旅行",
-          image: "/services/corporate-trips.jpeg",
-          description: "让您的公司活动与众不同！我们提供激励旅行，以增强员工之间的合作和创造力，通过互动活动和团队建设来加强团队精神。",
-        },
-        {
-          title: "家庭和私人团体旅行",
-          image: "/services/family-trips.jpeg",
-          description: "与家人或朋友共度美好时光！我们提供适合各种口味的定制旅行，独特的体验保证给您留下难忘的回忆。",
-        },
-      ],
-    },
+   
   };
 
   const {
