@@ -94,7 +94,9 @@ export default function Navbar({ lang }) {
   const isActive = (href) => {
     if (href === "#") return false;
     if (href === "/" && pathname === `/${lang}`) return true;
-    return pathname === `/${lang}${href}` || pathname?.startsWith(`/${lang}${href}/`);
+    return (
+      pathname === `/${lang}${href}` || pathname?.startsWith(`/${lang}${href}/`)
+    );
   };
 
   useEffect(() => {
@@ -240,11 +242,11 @@ export default function Navbar({ lang }) {
       label:
         lang === "ar" ? (
           <>
-            اكتشف <span style={{ color: "#006C35", fontWeight: "400" }}>السعودية</span>
+            اكتشف <span style={{ color: "#006C35" }}>السعودية</span>
           </>
         ) : (
           <>
-            Discover <span style={{ color: "#006C35", fontWeight: "400" }}>Saudi</span>
+            Discover <span style={{ color: "#006C35" }}>Saudi</span>
           </>
         ),
     },
@@ -253,11 +255,11 @@ export default function Navbar({ lang }) {
       label:
         lang === "ar" ? (
           <>
-            <span style={{ color: "#FF0000", fontWeight: "400" }}>عروض جمولة </span>
+            <span style={{ color: "#FF0000" }}>عروض جمولة </span>
           </>
         ) : (
           <>
-            <span style={{ color: "#FF0000", fontWeight: "400" }}>Jamoula Offers</span>
+            <span style={{ color: "#FF0000" }}>Jamoula Offers</span>
           </>
         ),
     },
@@ -279,7 +281,10 @@ export default function Navbar({ lang }) {
   const visaData = [
     {
       title: { en: "Schengen Visa", ar: "تأشيرة الشنغن" },
-      description: { en: "Application & requirements", ar: "التقديم والمتطلبات" },
+      description: {
+        en: "Application & requirements",
+        ar: "التقديم والمتطلبات",
+      },
       icon: <ShieldCheck size={18} />,
       href: "/visa",
     },
@@ -403,7 +408,10 @@ export default function Navbar({ lang }) {
   return (
     <>
       {/* Top Bar */}
-      <div className={`top-bar ${isScrolled ? "scrolled" : ""}`} dir={isRTL ? "rtl" : "ltr"}>
+      <div
+        className={`top-bar ${isScrolled ? "scrolled" : ""}`}
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         <div className="top-bar-container">
           <div className="top-bar-left">
             <Phone className="top-bar-icon" />
@@ -443,7 +451,10 @@ export default function Navbar({ lang }) {
         </div>
       </div>
 
-      <header className={`main-header ${isScrolled ? "scrolled" : ""}`} dir={isRTL ? "rtl" : "ltr"}>
+      <header
+        className={`main-header ${isScrolled ? "scrolled" : ""}`}
+        dir={isRTL ? "rtl" : "ltr"}
+      >
         <div className="header-container" ref={navRef}>
           <Link href={`/${lang}`} className="logo-wrapper">
             <img src="/logo.png" alt="Logo" className="logo-image" />
@@ -486,7 +497,11 @@ export default function Navbar({ lang }) {
                 >
                   {item.dropdown ? (
                     <Link
-                      href={item.type === "packages" ? `/${lang}/destinations` : `/${lang}${item.href}`}
+                      href={
+                        item.type === "packages"
+                          ? `/${lang}/destinations`
+                          : `/${lang}${item.href}`
+                      }
                       className={`nav-link ${openDesktopDropdown === item.type ? "dropdown-open" : ""}`}
                       style={{
                         position: "relative",
@@ -554,13 +569,25 @@ export default function Navbar({ lang }) {
                                     key={regionKey}
                                     href={`/${lang}/destinations?region=${regionKey}`}
                                     className="region-group text-decoration-none d-block"
-                                    style={{ color: "#210459ff", textDecoration: "none" }}
+                                    style={{
+                                      color: "#210459ff",
+                                      textDecoration: "none",
+                                    }}
                                   >
-                                    <div className="region-trigger" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                                    <div
+                                      className="region-trigger"
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "10px",
+                                      }}
+                                    >
                                       <span className="region-icon-wrapper">
                                         {data.icon || "🌍"}
                                       </span>
-                                      <span style={{ fontWeight: "500" }}>{getRegionLabel(regionKey)}</span>
+                                      <span style={{ fontWeight: "500" }}>
+                                        {getRegionLabel(regionKey)}
+                                      </span>
                                     </div>
                                   </Link>
                                 ),
@@ -649,7 +676,12 @@ export default function Navbar({ lang }) {
               dir={isRTL ? "rtl" : "ltr"}
             >
               <div className="mobile-sidebar-header">
-                <Link href={`/${lang}`} className="logo-wrapper" onClick={() => setMobileMenuOpen(false)} style={{ textDecoration: "none" }}>
+                <Link
+                  href={`/${lang}`}
+                  className="logo-wrapper"
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ textDecoration: "none" }}
+                >
                   <img src="/logo.png" alt="Logo" className="mobile-logo" />
                   <div className="logo-text">
                     <span className="logo-title">
@@ -687,35 +719,43 @@ export default function Navbar({ lang }) {
                           <div className="mobile-nested-menu">
                             {item.type === "packages"
                               ? Object.entries(displayDestinations).map(
-                                ([regionKey, data]) => (
-                                  <div
-                                    key={regionKey}
-                                    className="mobile-region-section"
-                                  >
-                                    <Link
-                                      href={`/${lang}/destinations?region=${regionKey}`}
-                                      className="mobile-region-btn text-decoration-none"
-                                      onClick={() => setMobileMenuOpen(false)}
-                                      style={{ color: "#E85D1F", display: "flex", alignItems: "center", gap: "10px", padding: "10px 16px", fontWeight: "600", fontSize: "15px" }}
+                                  ([regionKey, data]) => (
+                                    <div
+                                      key={regionKey}
+                                      className="mobile-region-section"
                                     >
-                                      {data.icon} {getRegionLabel(regionKey)}
-                                    </Link>
-                                  </div>
-                                ),
-                              )
+                                      <Link
+                                        href={`/${lang}/destinations?region=${regionKey}`}
+                                        className="mobile-region-btn text-decoration-none"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        style={{
+                                          color: "#E85D1F",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: "10px",
+                                          padding: "10px 16px",
+                                          fontWeight: "600",
+                                          fontSize: "15px",
+                                        }}
+                                      >
+                                        {data.icon} {getRegionLabel(regionKey)}
+                                      </Link>
+                                    </div>
+                                  ),
+                                )
                               : getDropdownData(item.type).map((d, idx) => (
-                                <Link
-                                  key={idx}
-                                  href={`/${lang}${d.href}`}
-                                  className="mobile-dropdown-link"
-                                  onClick={() => setMobileMenuOpen(false)}
-                                >
-                                  <span className="mobile-link-icon">
-                                    {d.icon}
-                                  </span>
-                                  {localize(d.title)}
-                                </Link>
-                              ))}
+                                  <Link
+                                    key={idx}
+                                    href={`/${lang}${d.href}`}
+                                    className="mobile-dropdown-link"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    <span className="mobile-link-icon">
+                                      {d.icon}
+                                    </span>
+                                    {localize(d.title)}
+                                  </Link>
+                                ))}
                           </div>
                         )}
                       </>
@@ -749,7 +789,7 @@ export default function Navbar({ lang }) {
 
         /* Active underline for non-dropdown items */
         .nav-link.active::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0px;
           left: 0;
@@ -761,7 +801,7 @@ export default function Navbar({ lang }) {
 
         /* Hover underline for all nav links */
         .nav-link::before {
-          content: '';
+          content: "";
           position: absolute;
           bottom: 0px;
           left: 0;
