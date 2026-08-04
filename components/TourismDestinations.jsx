@@ -53,7 +53,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
 
   const getText = (obj, field) => {
     if (!obj) return "";
-    
+
     if (field === "title" && obj.title_en) {
       return lang === "ar" ? obj.title_ar || obj.title_en : obj.title_en;
     }
@@ -75,18 +75,18 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
     if (destination?.image_url) {
       return destination.image_url;
     }
-    
+
     const img = destination?.image;
     if (!img) return "/placeholder.png";
-    
+
     if (/^https?:\/\//.test(img)) return img;
-    
+
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-    
+
     if (img.startsWith("/")) {
       return `${backendBase}${img}`;
     }
-    
+
     return `${backendBase}/storage/tourism/${img}`;
   };
 
@@ -100,8 +100,8 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
         if (region) {
           apiEndpoint += `/region/${region}`;
         }
-        
-        const res = await fetch(apiEndpoint, { 
+
+        const res = await fetch(apiEndpoint, {
           signal: controller.signal,
           method: 'GET',
           headers: {
@@ -109,19 +109,19 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
             'Content-Type': 'application/json',
           }
         });
-        
+
         const json = await res.json();
-        
+
         if (!res.ok) {
           throw new Error(`API error: ${res.status} - ${json?.message || 'Unknown error'}`);
         }
-        
+
         if (!json?.success) {
           throw new Error(json?.message || 'Failed to fetch destinations');
         }
-        
+
         const data = Array.isArray(json.data) ? json.data : [];
-        
+
         if (data.length > 0) {
           setDestinations(data);
         }
@@ -269,7 +269,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
   };
 
   const displayDestinations = destinations.length > 0 ? destinations : [];
-  
+
   // SHOW maxItems DESTINATIONS ON HOME PAGE (when no region is selected)
   // When region is selected (on region page), show all
   const visibleDestinations = region ? displayDestinations : displayDestinations.slice(0, maxItems);
@@ -295,14 +295,14 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
               className={cardColClass}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: index * 0.1,
                 ease: "easeOut"
               }}
               viewport={{ once: true }}
             >
-              <div 
+              <div
                 className="destination-card"
                 onClick={() => handleDestinationClick(destination)}
               >
@@ -456,14 +456,15 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
           font-weight: 700;
           color: #E85D1F; /* Desert Sunset Orange */
           position: relative;
-          margin-bottom: 25px;
+          padding-bottom: 10px;
+          margin-bottom: 55px;
           text-align: center;
         }
 
         .section-title:after {
           content: "";
           position: absolute;
-          bottom: -10px;
+          bottom: 0px;
           left: 50%;
           transform: translateX(-50%);
           width: 60px;
@@ -848,6 +849,6 @@ function getRegionTitle(region, lang) {
       america: 'الوجهات الأمريكية',
     }
   };
-  
+
   return titles[lang]?.[region] || titles.en[region] || region || '';
 }

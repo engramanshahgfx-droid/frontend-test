@@ -331,7 +331,9 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
                   <><span className="highlight-orange">Discover</span> <span className="highlight-green">Saudi Arabia</span></>
                 )}
               </h2>
-              <p className="section-subtitle">{t.subtitle}</p>
+              <p className="section-subtitle"></p>
+              <br></br>
+              
             </div>
           </div>
 
@@ -490,7 +492,8 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
             font-weight: 700;
             color: #E85D1F; /* Desert Sunset Orange */
             position: relative;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
           }
           .highlight-green {
             color: #006C35; /* Premium Saudi Flag Green */
@@ -503,7 +506,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           .section-title:after {
             content: "";
             position: absolute;
-            bottom: -10px;
+            bottom: 0px;
             left: 50%;
             transform: translateX(-50%);
             width: 60px;

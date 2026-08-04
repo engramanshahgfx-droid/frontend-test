@@ -521,7 +521,7 @@ export default function JamoulaOffersPage() {
         .offer-header h3 {
           font-size: 1.15rem;
           font-weight: 600;
-          color: #1C0052;
+          color: #E85D1F;
           margin: 0;
           line-height: 1.4;
           font-family: 'Tajawal', sans-serif;

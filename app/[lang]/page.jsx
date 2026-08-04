@@ -127,7 +127,7 @@ export default async function Home({ params }) {
       ],
     },
 
-   
+
   };
 
   const {
@@ -254,7 +254,7 @@ export default async function Home({ params }) {
           letterSpacing: "2px",
           color: "#E85D1F",
           display: "inline-block",
-          marginBottom: "12px",
+          marginBottom: "2px",
           fontFamily: "'Tajawal', sans-serif"
         }}>
           {lang === "ar" ? "اتصل بنا" : "CONTACT US"}
@@ -264,10 +264,23 @@ export default async function Home({ params }) {
           fontWeight: "800",
           color: "#1C0052",
           margin: "0",
-          paddingBottom: "0",
+          marginBottom: "32px",
+
+          position: "relative",
+          paddingBottom: "10px",
           fontFamily: "'Tajawal', sans-serif"
         }}>
           {lang === "ar" ? "تواصل معنا اليوم" : "Get In Touch With Us"}
+          <span style={{
+            position: "absolute",
+            bottom: "0px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "60px",
+            height: "3px",
+            background: "#E85D1F",
+            display: "block"
+          }}></span>
         </h2>
       </div>
 

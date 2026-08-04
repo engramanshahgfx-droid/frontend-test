@@ -205,7 +205,7 @@ export default function DestinationsPage() {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = selectedRegion === region.key ? "#E85D1F" : "#FFFFFF";
-                e.currentTarget.style.color = selectedRegion === region.key ? "#FFFFFF" : "#1C0052";
+                e.currentTarget.style.color = selectedRegion === region.key ? "#FFFFFF" : "#E85D1F";
                 e.currentTarget.style.boxShadow = selectedRegion === region.key ? "0 4px 15px rgba(232, 93, 31, 0.25)" : "none";
               }}
             >

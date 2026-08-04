@@ -1218,7 +1218,7 @@ export default function DestinationDetails() {
           align-items: center;
           gap: 10px;
           padding: 15px 20px;
-          background: #1C0052; /* Deep Heritage Purple header */
+          background: #E85D1F; /* Deep Heritage Purple header */
         }
 
         .panel-header h4 {

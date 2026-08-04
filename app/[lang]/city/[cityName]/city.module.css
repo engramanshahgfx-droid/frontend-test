@@ -513,7 +513,20 @@
   font-size: clamp(28px, 4vw, 36px);
   font-weight: 800;
   color: var(--primary-color);
-  margin-bottom: 12px;
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.offersTitle::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: var(--accent-color); /* Usually orange */
 }
 
 .offersTitleHighlight {

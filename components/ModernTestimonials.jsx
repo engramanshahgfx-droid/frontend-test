@@ -215,7 +215,20 @@ export default function ModernTestimonials({ lang }) {
           font-weight: 800;
           color: #1C0052; /* Deep Heritage Purple */
           margin: 0;
+          position: relative;
+          padding-bottom: 10px;
           font-family: 'Tajawal', sans-serif;
+        }
+
+        .section-header h2:after {
+          content: "";
+          position: absolute;
+          bottom: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 3px;
+          background: #E85D1F;
         }
 
         .testimonials-marquee {

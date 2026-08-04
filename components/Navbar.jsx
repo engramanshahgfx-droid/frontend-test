@@ -240,11 +240,11 @@ export default function Navbar({ lang }) {
       label:
         lang === "ar" ? (
           <>
-            اكتشف <span style={{ color: "#006C35", fontWeight: "700" }}>السعودية</span>
+            اكتشف <span style={{ color: "#006C35", fontWeight: "400" }}>السعودية</span>
           </>
         ) : (
           <>
-            Discover <span style={{ color: "#006C35", fontWeight: "700" }}>Saudi</span>
+            Discover <span style={{ color: "#006C35", fontWeight: "400" }}>Saudi</span>
           </>
         ),
     },
@@ -253,11 +253,11 @@ export default function Navbar({ lang }) {
       label:
         lang === "ar" ? (
           <>
-            <span style={{ color: "#FF0000", fontWeight: "700" }}>عروض جمولة </span>
+            <span style={{ color: "#FF0000", fontWeight: "400" }}>عروض جمولة </span>
           </>
         ) : (
           <>
-            <span style={{ color: "#FF0000", fontWeight: "700" }}>Jamoula Offers</span>
+            <span style={{ color: "#FF0000", fontWeight: "400" }}>Jamoula Offers</span>
           </>
         ),
     },
@@ -554,12 +554,13 @@ export default function Navbar({ lang }) {
                                     key={regionKey}
                                     href={`/${lang}/destinations?region=${regionKey}`}
                                     className="region-group text-decoration-none d-block"
+                                    style={{ color: "#210459ff", textDecoration: "none" }}
                                   >
-                                    <div className="region-trigger">
+                                    <div className="region-trigger" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                                       <span className="region-icon-wrapper">
                                         {data.icon || "🌍"}
                                       </span>
-                                      <span>{getRegionLabel(regionKey)}</span>
+                                      <span style={{ fontWeight: "500" }}>{getRegionLabel(regionKey)}</span>
                                     </div>
                                   </Link>
                                 ),
@@ -695,6 +696,7 @@ export default function Navbar({ lang }) {
                                       href={`/${lang}/destinations?region=${regionKey}`}
                                       className="mobile-region-btn text-decoration-none"
                                       onClick={() => setMobileMenuOpen(false)}
+                                      style={{ color: "#E85D1F", display: "flex", alignItems: "center", gap: "10px", padding: "10px 16px", fontWeight: "600", fontSize: "15px" }}
                                     >
                                       {data.icon} {getRegionLabel(regionKey)}
                                     </Link>

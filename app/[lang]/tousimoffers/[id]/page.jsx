@@ -1101,7 +1101,7 @@ export default function TourismOfferDetails() {
         .offer-header h1 {
           font-size: 2.5rem;
           font-weight: 700;
-          color: #1C0052; /* Deep Heritage Purple */
+          color: #E85D1F; /* Deep Heritage Purple */
           margin: 0;
         }
 
@@ -1302,7 +1302,7 @@ export default function TourismOfferDetails() {
           align-items: center;
           gap: 10px;
           padding: 15px 20px;
-          background: #1C0052; /* Deep Heritage Purple header */
+          background: #E85D1F; /* Deep Heritage Purple header */
         }
 
         .panel-header h4 {

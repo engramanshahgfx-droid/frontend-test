@@ -109,12 +109,12 @@ export default function CityDetail({ params }) {
   }
 
   const isRTL = lang === "ar";
-  
+
   // Resolve properties dynamically between API schema and fallback static config
   const displayName = city.name || (isRTL ? city.nameAr : city.nameEn);
   const description = city.description || (isRTL ? city.descriptionAr : city.descriptionEn);
   const bestTime = city.best_time || (isRTL ? city.bestTimeAr : city.bestTimeEn);
-  
+
   let activities = [];
   if (Array.isArray(city.activities)) {
     activities = city.activities;
@@ -135,7 +135,7 @@ export default function CityDetail({ params }) {
       <div className={styles.heroSection}>
         <img src={getImageUrl(city.image)} alt={displayName} className={styles.heroImage} />
         <div className={styles.heroOverlay}></div>
-        
+
         {/* Floating Back Button */}
         <div className={styles.floatingHeader}>
           <Link href={`/${lang}`}>
@@ -156,7 +156,7 @@ export default function CityDetail({ params }) {
       {/* Main Content Layout */}
       <div className={styles.contentWrapper}>
         <div className={styles.mainGrid}>
-          
+
           {/* Main Content Column */}
           <div className={styles.leftColumn}>
             {/* Description Section */}
@@ -224,7 +224,7 @@ export default function CityDetail({ params }) {
             <section className={styles.ctaCard}>
               <h3>{isRTL ? "ابدأ رحلتك اليوم" : "Start Your Journey Today"}</h3>
               <p>
-                {isRTL 
+                {isRTL
                   ? "احجز باقة سفرك المخصصة واستمتع بتجربة سياحية لا تُنسى."
                   : "Book your customized travel package and live an unforgettable tourism experience."}
               </p>
@@ -246,11 +246,11 @@ export default function CityDetail({ params }) {
                 {isRTL ? "استكشف عروض " : "Discover "}
                 <span className={styles.offersTitleHighlight}>{displayName}</span>
               </h2>
-              <p className={styles.offersSubtitle}>
+              {/* <p className={styles.offersSubtitle}>
                 {isRTL 
                   ? "اكتشف الصفقات المذهلة والتجارب التي لا تنسى في هذه المدينة."
                   : "Discover amazing deals and unforgettable experiences in this city."}
-              </p>
+              </p> */}
             </div>
 
             <div className={styles.offersGrid}>

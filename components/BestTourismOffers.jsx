@@ -286,7 +286,9 @@ export default function BestTourismOffers({ lang }) {
           <div className="row">
             <div className="col-12 text-center">
               <h2 className="section-title">{t.title}</h2>
-              <p className="section-subtitle">{t.subtitle}</p>
+
+              <br></br>
+              <br></br>
             </div>
           </div>
 
@@ -358,8 +360,8 @@ export default function BestTourismOffers({ lang }) {
                         </span>
                         <span className="price-per">{t.perPerson}</span>
                       </div>
-                      <button 
-                        className="btn-book" 
+                      <button
+                        className="btn-book"
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent card click
                           handleBookNow(destination);
