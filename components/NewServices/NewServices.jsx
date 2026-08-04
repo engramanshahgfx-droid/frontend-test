@@ -66,14 +66,15 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
     return field[lang] || field.en || Object.values(field)[0] || "";
   };
 
-  // Map service title to trip type (uses localized title)
   const getTripType = (title) => {
     const lowerTitle = (title || "").toLowerCase();
     if (
       lowerTitle.includes('school') ||
       lowerTitle.includes('student') ||
       lowerTitle.includes('مدارس') ||
-      lowerTitle.includes('مدرسة') ||
+      lowerTitle.includes('مدراس') ||
+      lowerTitle.includes('مدرس') ||
+      lowerTitle.includes('جامع') ||
       lowerTitle.includes('طلاب') ||
       lowerTitle.includes('تعليم')
     ) return 'school';
@@ -81,9 +82,9 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
     if (
       lowerTitle.includes('corporate') ||
       lowerTitle.includes('company') ||
-      lowerTitle.includes('شركة') ||
-      lowerTitle.includes('شركات') ||
-      lowerTitle.includes('أعمال')
+      lowerTitle.includes('شرك') ||
+      lowerTitle.includes('أعمال') ||
+      lowerTitle.includes('مؤسس')
     ) return 'company';
 
     if (
@@ -93,7 +94,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
       lowerTitle.includes('عوائل') ||
       lowerTitle.includes('عائل') ||
       lowerTitle.includes('مجموعات') ||
-      lowerTitle.includes('خاصة')
+      lowerTitle.includes('خاص')
     ) return 'family';
 
     return 'individual';

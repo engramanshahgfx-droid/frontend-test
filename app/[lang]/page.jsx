@@ -110,7 +110,7 @@ export default async function Home({ params }) {
       discoverDescription: "عيش المغامرة في أي وقت مع عروضنا المتجددة",
       services: [
         {
-          title: "رحلات المدراس",
+          title: "رحلات المدارس",
           image: "/services/school-trip.webp",
           description: "نقدم رحلات تعليمية ممتعة تجمع بين التعلم والترفيه. تشمل ورش عمل وزيارات لمواقع ثقافية، مما يوفر تجربة تعليمية فريدة للطلاب.",
         },

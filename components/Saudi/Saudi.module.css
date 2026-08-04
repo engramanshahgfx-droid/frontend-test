@@ -7,7 +7,7 @@
   width: 100%;
   min-height: 100vh; /* or 85vh, 90vh - adjust as needed */
   overflow: hidden;
-  background: #E85D1F;
+  background: #000;
   font-family: "Tajawal", sans-serif;
   display: flex;
   flex-direction: column;

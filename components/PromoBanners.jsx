@@ -152,13 +152,12 @@ export default function PromoBanners({ lang, index = 0, page, height, minHeight 
           left: 0;
           right: 0;
           bottom: 0;
-          background: linear-gradient(0deg, rgba(28, 0, 82, 0.65) 0%, rgba(28, 0, 82, 0.55) 100%);
           transition: opacity 0.3s ease;
           border-radius: 12px;
         }
 
         :global(.banner-card:hover .banner-overlay) {
-          background: linear-gradient(0deg, rgba(28, 0, 82, 0.75) 0%, rgba(28, 0, 82, 0.65) 100%);
+          // background: linear-gradient(0deg, rgba(28, 0, 82, 0.75) 0%, rgba(28, 0, 82, 0.65) 100%);
         }
 
         :global(.banner-content) {

@@ -15,6 +15,7 @@ import {
 import { API_URL } from "../lib/api";
 import { formatCurrency, amountWithVAT } from "../lib/localization";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 
 // Fallback data if API fails
 const fallbackDestinations = [
@@ -80,6 +81,7 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   const labels = {
@@ -862,9 +864,22 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
           setShowBookingModal(false);
           setSelectedOffer(null);
         }}
+        onOpenCustomModal={() => {
+          setShowBookingModal(false);
+          setShowTravelReservationModal(true);
+        }}
         packageData={selectedOffer}
         lang={lang}
         bookingType="tourism_offer"
+      />
+      <TravelReservationModal
+        isOpen={showTravelReservationModal}
+        onClose={() => {
+          setShowTravelReservationModal(false);
+          setSelectedOffer(null);
+        }}
+        packageData={selectedOffer}
+        lang={lang}
       />
     </>
   );

@@ -202,7 +202,7 @@ const Saudi = ({ lang = "ar" }) => {
         >
           <source src="/AllSections.mp4" type="video/mp4" />
         </video>
-        <div className={styles.overlay}></div>
+        {/* <div className={styles.overlay}></div> */}
       </div>
 
       {/* Main Content Wrapper */}

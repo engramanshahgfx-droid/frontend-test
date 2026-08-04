@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { API_URL } from "../lib/api";
 import BookingModal from "@/components/BookingModal";
+import TravelReservationModal from "@/components/TravelReservationModal";
 
 export default function TourismDestinations({ lang, region, maxItems = 3 }) {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showTravelReservationModal, setShowTravelReservationModal] = useState(false);
   const [selectedDestination, setSelectedDestination] = useState(null);
 
   const labels = {
@@ -824,9 +826,22 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
           setShowBookingModal(false);
           setSelectedDestination(null);
         }}
+        onOpenCustomModal={() => {
+          setShowBookingModal(false);
+          setShowTravelReservationModal(true);
+        }}
         packageData={selectedDestination}
         lang={lang}
         bookingType="destination"
+      />
+      <TravelReservationModal
+        isOpen={showTravelReservationModal}
+        onClose={() => {
+          setShowTravelReservationModal(false);
+          setSelectedDestination(null);
+        }}
+        packageData={selectedDestination}
+        lang={lang}
       />
     </section>
   );

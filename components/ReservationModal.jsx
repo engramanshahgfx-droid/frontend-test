@@ -98,9 +98,12 @@ export default function ReservationModal() {
         destination?.category === "school" ||
         titleLower.includes("school") ||
         titleLower.includes("student") ||
-        titleLower.includes("جامعة") ||
-        titleLower.includes("مدرسة") ||
-        titleLower.includes("مدارس")
+        titleLower.includes("جامع") ||
+        titleLower.includes("مدرس") ||
+        titleLower.includes("مدارس") ||
+        titleLower.includes("مدراس") ||
+        titleLower.includes("طلاب") ||
+        titleLower.includes("تعليم")
       ) {
         defaultType = "school";
       } else if (
@@ -110,9 +113,9 @@ export default function ReservationModal() {
         destination?.category === "corporate" ||
         titleLower.includes("company") ||
         titleLower.includes("corporate") ||
-        titleLower.includes("شركة") ||
-        titleLower.includes("شركات") ||
-        titleLower.includes("أعمال")
+        titleLower.includes("شرك") ||
+        titleLower.includes("أعمال") ||
+        titleLower.includes("مؤسس")
       ) {
         defaultType = "company";
       } else if (
@@ -125,7 +128,7 @@ export default function ReservationModal() {
         titleLower.includes("عوائل") ||
         titleLower.includes("عائل") ||
         titleLower.includes("مجموعات") ||
-        titleLower.includes("خاصة")
+        titleLower.includes("خاص")
       ) {
         defaultType = "family";
       }
@@ -361,13 +364,13 @@ export default function ReservationModal() {
           {/* Header Bar */}
           <div
             style={{
-              background: "#1C0052",
-              color: "#ffffff",
+                background: "#E85D1F",
+              color: "#F9E5D2",
               padding: "20px 24px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              borderBottom: "3.5px solid #E85D1F",
+              borderBottom: "3.5px solid #F9E5D2",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
@@ -377,20 +380,20 @@ export default function ReservationModal() {
                   height: "44px",
                   borderRadius: "12px",
                   backgroundColor: "rgba(232, 93, 31, 0.18)",
-                  border: "1.5px solid #E85D1F",
+                  border: "1.5px solid #F9E5D2",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "#E85D1F",
+                  color: "#F9E5D2",
                 }}
               >
                 {headerInfo.icon}
               </div>
               <div>
-                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#ffffff" }}>
+                <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#F9E5D2" }}>
                   {headerInfo.title}
                 </h3>
-                <p style={{ margin: "2px 0 0", fontSize: "0.8rem", color: "#E85D1F" }}>
+                <p style={{ margin: "2px 0 0", fontSize: "0.8rem", color: "#F9E5D2" }}>
                   {headerInfo.subtitle}
                 </p>
               </div>
@@ -401,7 +404,7 @@ export default function ReservationModal() {
               style={{
                 background: "rgba(255, 255, 255, 0.12)",
                 border: "none",
-                color: "#ffffff",
+                color: "#F9E5D2",
                 borderRadius: "50%",
                 width: "36px",
                 height: "36px",
