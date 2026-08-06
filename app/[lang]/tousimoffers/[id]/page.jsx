@@ -611,18 +611,6 @@ export default function TourismOfferDetails() {
     return data || {};
   };
 
-  const getBasicInfo = () => {
-    if (!offer) return {};
-    const data = offer.basic_info;
-    if (typeof data === "string") {
-      try {
-        return JSON.parse(data);
-      } catch {
-        return {};
-      }
-    }
-    return data || {};
-  };
 
   const getImageUrl = (img) => {
     if (!img) return "/placeholder.png";
@@ -714,7 +702,6 @@ export default function TourismOfferDetails() {
       iban: "SA2222222222222",
     },
   ];
-  const basicInfo = getBasicInfo();
 
   return (
     <>
@@ -963,54 +950,6 @@ export default function TourismOfferDetails() {
                       )}
                     </motion.div>
                   ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Basic Info */}
-          {Object.keys(basicInfo).length > 0 && (
-            <div className="sidebar-panel" style={{ marginBottom: "30px" }}>
-              <div className="panel-header">
-                <Luggage size={18} color="#fff" />
-                <h4>{t.details}</h4>
-              </div>
-              <div className="panel-body">
-                <div className="contact-grid">
-                  {basicInfo.trip_code && (
-                    <div>🆔 {t.tripCode}: {basicInfo.trip_code}</div>
-                  )}
-                  {basicInfo.days_num && <div>📅 {t.days}: {basicInfo.days_num}</div>}
-                  {basicInfo.destination_name && (
-                    <div>📍 {t.destination}: {getLocalizedText(basicInfo, "destination_name") || basicInfo.destination_name}</div>
-                  )}
-                  {basicInfo.available_to && (
-                    <div>📆 {t.availableTo}: {basicInfo.available_to}</div>
-                  )}
-                  {basicInfo.double_room && (
-                    <div>
-                      🛏️ {t.doubleRoom}: {basicInfo.double_room}{" "}
-                      <Image
-                        src="/saudi_riyal.png"
-                        alt="SAR"
-                        width={12}
-                        height={12}
-                        className="currency-icon"
-                      />
-                    </div>
-                  )}
-                  {basicInfo.single_room && (
-                    <div>
-                      🛏️ {t.singleRoom}: {basicInfo.single_room}{" "}
-                      <Image
-                        src="/saudi_riyal.png"
-                        alt="SAR"
-                        width={12}
-                        height={12}
-                        className="currency-icon"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
