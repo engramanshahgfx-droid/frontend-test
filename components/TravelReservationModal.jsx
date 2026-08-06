@@ -27,6 +27,19 @@ import {
 import Image from "next/image";
 import { API_URL } from "@/lib/api";
 
+// Helper function to safely strip HTML tags & entities from API strings
+const stripHtml = (html) => {
+  if (!html) return "";
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/\s+/g, " ")
+    .trim();
+};
+
 export default function TravelReservationModal({
   isOpen,
   onClose,
@@ -213,16 +226,16 @@ export default function TravelReservationModal({
   };
 
   const pkgTitle =
-    getFieldValue("title") ||
+    stripHtml(getFieldValue("title")) ||
     packageData?.name ||
     packageData?.title ||
     t.na;
 
   const pkgDestination =
-    getFieldValue("location") || packageData?.region || t.na;
+    stripHtml(getFieldValue("location")) || packageData?.region || t.na;
 
   const pkgDuration =
-    getFieldValue("duration") || packageData?.duration || t.na;
+    stripHtml(getFieldValue("duration")) || packageData?.duration || t.na;
 
   const pkgTripCode =
     packageData?.trip_code ||
@@ -230,11 +243,16 @@ export default function TravelReservationModal({
     packageData?.code ||
     (packageData?.id ? `PKG-${packageData.id}` : t.na);
 
-  const pkgDescription =
+  const rawDescription =
     getFieldValue("description") ||
     getFieldValue("short_description") ||
+    getFieldValue("long_description") ||
     packageData?.description ||
+    packageData?.short_description ||
+    packageData?.long_description ||
     "";
+
+  const pkgDescription = stripHtml(rawDescription);
 
   const getImageUrl = (imageData) => {
     if (!imageData) return "/placeholder.png";
@@ -377,43 +395,45 @@ export default function TravelReservationModal({
           right: 0,
           bottom: 0,
           backgroundColor: "rgba(10, 10, 20, 0.75)",
-          backdropFilter: "blur(6px)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
           zIndex: 99999,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: "16px",
+          padding: "12px",
           overflowY: "auto",
         }}
         onClick={onClose}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.94, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
           style={{
             backgroundColor: "#ffffff",
             borderRadius: "20px",
-            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(223, 165, 40, 0.2)",
-            maxWidth: "720px",
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(232, 93, 31, 0.15)",
+            maxWidth: "740px",
             width: "100%",
-            maxHeight: "90vh",
+            maxHeight: "92vh",
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
             direction: isRTL ? "rtl" : "ltr",
             position: "relative",
+            margin: "auto",
           }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top Decorative Sunset Accent Bar */}
-          <div style={{ height: "5px", background: "#E85D1F" }} />
+          <div style={{ height: "4px", background: "linear-gradient(90deg, #E85D1F 0%, #FF8C38 100%)" }} />
 
           {/* Modal Header */}
           <div
             style={{
-              padding: "20px 28px",
+              padding: "16px 24px",
               borderBottom: "1px solid #f0e8db",
               display: "flex",
               alignItems: "center",
@@ -422,21 +442,35 @@ export default function TravelReservationModal({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <Plane size={22} color="#E85D1F" />
-              <h3 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 700, color: "#1C0052" }}>
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "10px",
+                  backgroundColor: "rgba(232, 93, 31, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Plane size={20} color="#E85D1F" />
+              </div>
+              <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1C0052" }}>
                 {step === 1 && t.step1Title}
                 {step === 2 && t.step2Title}
                 {step === 3 && t.step3Title}
               </h3>
             </div>
+
             <button
               onClick={onClose}
+              aria-label="Close modal"
               style={{
                 border: "none",
-                background: "rgba(28, 0, 82, 0.05)",
+                background: "rgba(28, 0, 82, 0.06)",
                 borderRadius: "50%",
-                width: "36px",
-                height: "36px",
+                width: "34px",
+                height: "34px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -445,38 +479,43 @@ export default function TravelReservationModal({
                 transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(232, 93, 31, 0.2)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28, 0, 82, 0.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28, 0, 82, 0.06)")}
             >
-              <X size={20} />
+              <X size={18} />
             </button>
           </div>
 
           {/* Step Indicator */}
-          <div style={{ padding: "14px 28px", backgroundColor: "#ffffff", borderBottom: "1px solid #f0f0f0" }}>
-            <div style={{ display: "flex", alignItems: "center", justifySpace: "space-between", gap: "12px" }}>
+          <div style={{ padding: "12px 20px", backgroundColor: "#ffffff", borderBottom: "1px solid #f0f0f0" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
               {[1, 2, 3].map((s) => (
                 <div key={s} style={{ flex: 1, display: "flex", alignItems: "center", gap: "8px" }}>
                   <div
                     style={{
-                      width: "28px",
-                      height: "28px",
+                      width: "26px",
+                      height: "26px",
+                      minWidth: "26px",
                       borderRadius: "50%",
-                      backgroundColor: step >= s ? "#E85D1F" : "#e5e7eb",
-                      color: step >= s ? "#ffffff" : "#6b7280",
+                      backgroundColor: step >= s ? "#E85D1F" : "#f3f4f6",
+                      color: step >= s ? "#ffffff" : "#9ca3af",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontWeight: 700,
-                      fontSize: "0.85rem",
+                      fontSize: "0.8rem",
+                      transition: "all 0.3s ease",
                     }}
                   >
-                    {step > s ? <Check size={16} /> : s}
+                    {step > s ? <Check size={14} /> : s}
                   </div>
                   <span
                     style={{
-                      fontSize: "0.82rem",
+                      fontSize: "0.78rem",
                       fontWeight: step === s ? 700 : 500,
                       color: step === s ? "#1C0052" : "#9ca3af",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {s === 1 ? t.step1Title : s === 2 ? t.step2Title : t.step3Title}
@@ -486,21 +525,21 @@ export default function TravelReservationModal({
             </div>
           </div>
 
-          {/* Modal Body */}
-          <div style={{ padding: "24px 28px", overflowY: "auto", flex: 1 }}>
-            {/* STEP 1: Selected Package Info Only */}
+          {/* Modal Content Body */}
+          <div style={{ padding: "20px 24px", overflowY: "auto", flex: 1 }}>
+            {/* STEP 1: Selected Package Info */}
             {step === 1 && (
-              <motion.div initial={{ opacity: 0, x: isRTL ? -20 : 20 }} animate={{ opacity: 1, x: 0 }}>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                 <div
                   style={{
                     backgroundColor: "#FAF6F0",
-                    borderRadius: "14px",
-                    border: "1px solid #E85D1F",
+                    borderRadius: "16px",
+                    border: "1px solid rgba(232, 93, 31, 0.3)",
                     overflow: "hidden",
-                    marginBottom: "24px",
+                    marginBottom: "20px",
                   }}
                 >
-                  <div style={{ position: "relative", height: "200px", width: "100%" }}>
+                  <div style={{ position: "relative", height: "180px", width: "100%", backgroundColor: "#1C0052" }}>
                     <img
                       src={pkgImage}
                       alt={pkgTitle}
@@ -513,62 +552,68 @@ export default function TravelReservationModal({
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        padding: "16px",
-                        background: "linear-gradient(to top, rgba(28, 0, 82, 0.85), transparent)",
+                        padding: "16px 20px",
+                        background: "linear-gradient(to top, rgba(28, 0, 82, 0.9) 0%, rgba(28, 0, 82, 0.3) 70%, transparent 100%)",
                         color: "#fff",
                       }}
                     >
-                      <h4 style={{ margin: 0, fontSize: "1.3rem", fontWeight: 700 }}>{pkgTitle}</h4>
+                      <h4 style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, lineHeight: 1.3 }}>{pkgTitle}</h4>
                     </div>
                   </div>
 
-                  <div style={{ padding: "20px" }}>
+                  <div style={{ padding: "18px 20px" }}>
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                        gap: "14px",
-                        marginBottom: "16px",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                        gap: "12px",
+                        marginBottom: "14px",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <MapPin size={18} color="#E85D1F" />
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <MapPin size={16} color="#E85D1F" />
+                        </div>
                         <div>
-                          <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
+                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
                             {t.destination}
                           </span>
-                          <strong style={{ fontSize: "0.9rem", color: "#1C0052" }}>{pkgDestination}</strong>
+                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDestination}</strong>
                         </div>
                       </div>
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <Clock size={18} color="#E85D1F" />
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <Clock size={16} color="#E85D1F" />
+                        </div>
                         <div>
-                          <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
+                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
                             {t.duration}
                           </span>
-                          <strong style={{ fontSize: "0.9rem", color: "#1C0052" }}>{pkgDuration}</strong>
+                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDuration}</strong>
                         </div>
                       </div>
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileText size={18} color="#E85D1F" />
+                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <FileText size={16} color="#E85D1F" />
+                        </div>
                         <div>
-                          <span style={{ fontSize: "0.75rem", color: "#6b7280", display: "block" }}>
+                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
                             {t.tripCode}
                           </span>
-                          <strong style={{ fontSize: "0.9rem", color: "#1C0052" }}>{pkgTripCode}</strong>
+                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgTripCode}</strong>
                         </div>
                       </div>
                     </div>
 
                     {pkgDescription && (
-                      <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "14px" }}>
-                        <span style={{ fontSize: "0.8rem", color: "#6b7280", fontWeight: 600, display: "block" }}>
+                      <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "12px" }}>
+                        <span style={{ fontSize: "0.75rem", color: "#6b7280", fontWeight: 700, display: "block" }}>
                           {t.description}
                         </span>
-                        <p style={{ margin: "6px 0 0", fontSize: "0.9rem", color: "#374151", lineHeight: "1.5" }}>
-                          {pkgDescription.substring(0, 220)}...
+                        <p style={{ margin: "4px 0 0", fontSize: "0.88rem", color: "#374151", lineHeight: "1.5" }}>
+                          {pkgDescription.length > 220 ? `${pkgDescription.substring(0, 220)}...` : pkgDescription}
                         </p>
                       </div>
                     )}
@@ -584,18 +629,18 @@ export default function TravelReservationModal({
                     backgroundColor: "#E85D1F",
                     color: "#ffffff",
                     border: "none",
-                    borderRadius: "10px",
-                    fontSize: "1rem",
+                    borderRadius: "12px",
+                    fontSize: "0.98rem",
                     fontWeight: 700,
                     cursor: "pointer",
-                    boxShadow: "0 4px 14px rgba(223, 165, 40, 0.3)",
+                    boxShadow: "0 4px 14px rgba(232, 93, 31, 0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "8px",
                     transition: "all 0.2s ease",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#E85D1F")}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1C0052")}
                   onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#E85D1F")}
                 >
                   <span>{t.continue}</span>
@@ -607,16 +652,16 @@ export default function TravelReservationModal({
             {/* STEP 2: Reservation Request Form */}
             {step === 2 && (
               <motion.form
-                initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 onSubmit={handleSubmitReservation}
               >
-                {/* Reservation Type Toggle (Individual vs Company) */}
-                <div style={{ marginBottom: "20px" }}>
+                {/* Reservation Type Toggle */}
+                <div style={{ marginBottom: "18px" }}>
                   <label
                     style={{
                       display: "block",
-                      fontSize: "0.88rem",
+                      fontSize: "0.85rem",
                       fontWeight: 700,
                       color: "#1C0052",
                       marginBottom: "8px",
@@ -624,13 +669,13 @@ export default function TravelReservationModal({
                   >
                     {t.reservationTypeLabel}
                   </label>
-                  <div style={{ display: "flex", gap: "12px" }}>
+                  <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                     <button
                       type="button"
                       onClick={() => setReservationType("individual")}
                       style={{
-                        flex: 1,
-                        padding: "12px 16px",
+                        flex: "1 1 200px",
+                        padding: "11px 16px",
                         borderRadius: "10px",
                         border: reservationType === "individual" ? "2px solid #E85D1F" : "1.5px solid #e5e7eb",
                         backgroundColor: reservationType === "individual" ? "#FAF6F0" : "#ffffff",
@@ -641,7 +686,6 @@ export default function TravelReservationModal({
                         alignItems: "center",
                         justifyContent: "center",
                         gap: "8px",
-                        boxShadow: reservationType === "individual" ? "0 2px 8px rgba(223, 165, 40, 0.2)" : "none",
                         transition: "all 0.2s ease",
                       }}
                     >
@@ -653,8 +697,8 @@ export default function TravelReservationModal({
                       type="button"
                       onClick={() => setReservationType("company")}
                       style={{
-                        flex: 1,
-                        padding: "12px 16px",
+                        flex: "1 1 200px",
+                        padding: "11px 16px",
                         borderRadius: "10px",
                         border: reservationType === "company" ? "2px solid #E85D1F" : "1.5px solid #e5e7eb",
                         backgroundColor: reservationType === "company" ? "#FAF6F0" : "#ffffff",
@@ -665,7 +709,6 @@ export default function TravelReservationModal({
                         alignItems: "center",
                         justifyContent: "center",
                         gap: "8px",
-                        boxShadow: reservationType === "company" ? "0 2px 8px rgba(223, 165, 40, 0.2)" : "none",
                         transition: "all 0.2s ease",
                       }}
                     >
@@ -678,13 +721,13 @@ export default function TravelReservationModal({
                 {submitError && (
                   <div
                     style={{
-                      padding: "12px 16px",
+                      padding: "10px 14px",
                       backgroundColor: "#fef2f2",
-                      border: "1px solid #E85D1F",
+                      border: "1px solid #f87171",
                       borderRadius: "8px",
                       color: "#991b1b",
                       fontSize: "0.85rem",
-                      marginBottom: "18px",
+                      marginBottom: "16px",
                     }}
                   >
                     {submitError}
@@ -694,14 +737,13 @@ export default function TravelReservationModal({
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                    gap: "16px",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+                    gap: "14px",
                   }}
                 >
                   {/* INDIVIDUAL FIELDS */}
                   {reservationType === "individual" && (
                     <>
-                      {/* First Name */}
                       <div>
                         <label style={labelStyle}>
                           {t.firstName} <span style={{ color: "#dc2626" }}>*</span>
@@ -717,7 +759,6 @@ export default function TravelReservationModal({
                         {errors.first_name && <span style={errorStyle}>{errors.first_name}</span>}
                       </div>
 
-                      {/* Last Name */}
                       <div>
                         <label style={labelStyle}>
                           {t.lastName} <span style={{ color: "#dc2626" }}>*</span>
@@ -733,7 +774,6 @@ export default function TravelReservationModal({
                         {errors.last_name && <span style={errorStyle}>{errors.last_name}</span>}
                       </div>
 
-                      {/* Nationality */}
                       <div>
                         <label style={labelStyle}>{t.nationality}</label>
                         <input
@@ -746,7 +786,6 @@ export default function TravelReservationModal({
                         />
                       </div>
 
-                      {/* Passport Number */}
                       <div>
                         <label style={labelStyle}>{t.passportNumber}</label>
                         <input
@@ -759,7 +798,6 @@ export default function TravelReservationModal({
                         />
                       </div>
 
-                      {/* Departure City */}
                       <div>
                         <label style={labelStyle}>{t.departureCity}</label>
                         <input
@@ -777,7 +815,6 @@ export default function TravelReservationModal({
                   {/* COMPANY FIELDS */}
                   {reservationType === "company" && (
                     <>
-                      {/* Company Name */}
                       <div>
                         <label style={labelStyle}>
                           {t.companyName} <span style={{ color: "#dc2626" }}>*</span>
@@ -793,7 +830,6 @@ export default function TravelReservationModal({
                         {errors.company_name && <span style={errorStyle}>{errors.company_name}</span>}
                       </div>
 
-                      {/* Contact Person Name */}
                       <div>
                         <label style={labelStyle}>
                           {t.contactPersonName} <span style={{ color: "#dc2626" }}>*</span>
@@ -809,7 +845,6 @@ export default function TravelReservationModal({
                         {errors.contact_person_name && <span style={errorStyle}>{errors.contact_person_name}</span>}
                       </div>
 
-                      {/* CR / Tax Number */}
                       <div>
                         <label style={labelStyle}>{t.companyCrNumber}</label>
                         <input
@@ -822,7 +857,6 @@ export default function TravelReservationModal({
                         />
                       </div>
 
-                      {/* Company Country */}
                       <div>
                         <label style={labelStyle}>
                           {t.companyCountry} <span style={{ color: "#dc2626" }}>*</span>
@@ -838,7 +872,6 @@ export default function TravelReservationModal({
                         {errors.company_country && <span style={errorStyle}>{errors.company_country}</span>}
                       </div>
 
-                      {/* Company City / Location */}
                       <div>
                         <label style={labelStyle}>
                           {t.companyLocation} <span style={{ color: "#dc2626" }}>*</span>
@@ -854,7 +887,6 @@ export default function TravelReservationModal({
                         {errors.company_location && <span style={errorStyle}>{errors.company_location}</span>}
                       </div>
 
-                      {/* Company Address */}
                       <div>
                         <label style={labelStyle}>{t.companyAddress}</label>
                         <input
@@ -869,8 +901,7 @@ export default function TravelReservationModal({
                     </>
                   )}
 
-                  {/* SHARED CONTACT & TRIP FIELDS */}
-                  {/* Email */}
+                  {/* SHARED FIELDS */}
                   <div>
                     <label style={labelStyle}>
                       {t.email} <span style={{ color: "#dc2626" }}>*</span>
@@ -886,7 +917,6 @@ export default function TravelReservationModal({
                     {errors.email && <span style={errorStyle}>{errors.email}</span>}
                   </div>
 
-                  {/* Mobile */}
                   <div>
                     <label style={labelStyle}>
                       {t.mobile} <span style={{ color: "#dc2626" }}>*</span>
@@ -902,7 +932,6 @@ export default function TravelReservationModal({
                     {errors.mobile && <span style={errorStyle}>{errors.mobile}</span>}
                   </div>
 
-                  {/* Preferred Travel Date */}
                   <div>
                     <label style={labelStyle}>
                       {t.preferredTravelDate} <span style={{ color: "#dc2626" }}>*</span>
@@ -920,7 +949,6 @@ export default function TravelReservationModal({
                     )}
                   </div>
 
-                  {/* Number of Adults / Passengers */}
                   <div>
                     <label style={labelStyle}>
                       {reservationType === "company" ? t.numberOfEmployees : t.numberOfAdults}
@@ -936,7 +964,6 @@ export default function TravelReservationModal({
                     />
                   </div>
 
-                  {/* Number of Children (Individual mode only) */}
                   {reservationType === "individual" && (
                     <div>
                       <label style={labelStyle}>{t.numberOfChildren}</label>
@@ -952,7 +979,6 @@ export default function TravelReservationModal({
                     </div>
                   )}
 
-                  {/* Room Type / Accommodation Preference */}
                   <div>
                     <label style={labelStyle}>{t.roomType}</label>
                     <select
@@ -967,7 +993,6 @@ export default function TravelReservationModal({
                     </select>
                   </div>
 
-                  {/* Hotel Preference */}
                   <div>
                     <label style={labelStyle}>{t.hotelPreference}</label>
                     <input
@@ -980,7 +1005,6 @@ export default function TravelReservationModal({
                     />
                   </div>
 
-                  {/* Company Employee Passports & Group Info (Company Mode Only) */}
                   {reservationType === "company" && (
                     <div style={{ gridColumn: "1 / -1" }}>
                       <label style={labelStyle}>{t.companyPassportsInfo}</label>
@@ -999,7 +1023,6 @@ export default function TravelReservationModal({
                     </div>
                   )}
 
-                  {/* Special Requests */}
                   <div style={{ gridColumn: "1 / -1" }}>
                     <label style={labelStyle}>{t.specialRequests}</label>
                     <textarea
@@ -1012,7 +1035,6 @@ export default function TravelReservationModal({
                     />
                   </div>
 
-                  {/* Notes */}
                   <div style={{ gridColumn: "1 / -1" }}>
                     <label style={labelStyle}>{t.notes}</label>
                     <textarea
@@ -1027,14 +1049,14 @@ export default function TravelReservationModal({
                 </div>
 
                 {/* Confirmation Checkbox */}
-                <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+                <div style={{ marginTop: "16px", marginBottom: "16px" }}>
                   <label
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: "10px",
                       cursor: "pointer",
-                      fontSize: "0.88rem",
+                      fontSize: "0.85rem",
                       color: "#374151",
                       fontWeight: 600,
                     }}
@@ -1056,8 +1078,8 @@ export default function TravelReservationModal({
                   {errors.confirmed && <span style={errorStyle}>{errors.confirmed}</span>}
                 </div>
 
-                {/* Form Navigation Buttons */}
-                <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
+                {/* Navigation Buttons */}
+                <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
                   <button
                     type="button"
                     onClick={() => setStep(1)}
@@ -1085,7 +1107,7 @@ export default function TravelReservationModal({
                       color: "#ffffff",
                       border: "none",
                       borderRadius: "10px",
-                      fontSize: "1rem",
+                      fontSize: "0.98rem",
                       fontWeight: 700,
                       cursor: loading ? "not-allowed" : "pointer",
                       boxShadow: "0 4px 14px rgba(232, 93, 31, 0.3)",
@@ -1094,7 +1116,7 @@ export default function TravelReservationModal({
                       justifyContent: "center",
                       gap: "8px",
                       opacity: loading ? 0.7 : 1,
-                      transition: "all 0.3s ease",
+                      transition: "all 0.2s ease",
                     }}
                     onMouseEnter={(e) => {
                       if (!loading) e.currentTarget.style.backgroundColor = "#1C0052";
@@ -1121,40 +1143,40 @@ export default function TravelReservationModal({
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                style={{ textAlign: "center", padding: "20px 10px" }}
+                style={{ textAlign: "center", padding: "16px 8px" }}
               >
                 <div
                   style={{
-                    width: "80px",
-                    height: "80px",
+                    width: "72px",
+                    height: "72px",
                     borderRadius: "50%",
                     backgroundColor: "#ecfdf5",
                     color: "#10b981",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 20px",
+                    margin: "0 auto 16px",
                     boxShadow: "0 10px 25px rgba(16, 185, 129, 0.2)",
                   }}
                 >
-                  <CheckCircle2 size={48} />
+                  <CheckCircle2 size={42} />
                 </div>
 
-                <h3 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1C0052", margin: "0 0 10px" }}>
+                <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#1C0052", margin: "0 0 8px" }}>
                   {t.step3Title}
                 </h3>
 
-                <p style={{ fontSize: "1rem", fontWeight: 600, color: "#E85D1F", margin: "0 0 14px" }}>
+                <p style={{ fontSize: "0.95rem", fontWeight: 600, color: "#E85D1F", margin: "0 0 12px" }}>
                   {t.thankYou}
                 </p>
 
                 <p
                   style={{
-                    fontSize: "0.92rem",
+                    fontSize: "0.88rem",
                     color: "#4b5563",
                     lineHeight: "1.6",
-                    maxWidth: "520px",
-                    margin: "0 auto 24px",
+                    maxWidth: "500px",
+                    margin: "0 auto 20px",
                   }}
                 >
                   {t.successMsg}
@@ -1166,15 +1188,15 @@ export default function TravelReservationModal({
                       backgroundColor: "#FAF6F0",
                       border: "2px dashed #E85D1F",
                       borderRadius: "12px",
-                      padding: "16px 24px",
+                      padding: "14px 20px",
                       display: "inline-block",
-                      marginBottom: "28px",
+                      marginBottom: "24px",
                     }}
                   >
-                    <span style={{ fontSize: "0.8rem", color: "#6b7280", display: "block", marginBottom: "4px" }}>
+                    <span style={{ fontSize: "0.78rem", color: "#6b7280", display: "block", marginBottom: "4px" }}>
                       {t.bookingReference}
                     </span>
-                    <strong style={{ fontSize: "1.3rem", color: "#1C0052", letterSpacing: "1px" }}>
+                    <strong style={{ fontSize: "1.25rem", color: "#1C0052", letterSpacing: "1px" }}>
                       {referenceNo}
                     </strong>
                   </div>
@@ -1185,13 +1207,13 @@ export default function TravelReservationModal({
                     type="button"
                     onClick={onClose}
                     style={{
-                      padding: "12px 36px",
+                      padding: "12px 32px",
                       backgroundColor: "#1C0052",
                       color: "#ffffff",
                       border: "none",
                       borderRadius: "10px",
                       fontWeight: 700,
-                      fontSize: "1rem",
+                      fontSize: "0.95rem",
                       cursor: "pointer",
                       boxShadow: "0 4px 14px rgba(28, 0, 82, 0.2)",
                     }}
@@ -1210,27 +1232,27 @@ export default function TravelReservationModal({
 
 const labelStyle = {
   display: "block",
-  fontSize: "0.85rem",
+  fontSize: "0.82rem",
   fontWeight: 600,
   color: "#374151",
-  marginBottom: "6px",
+  marginBottom: "5px",
 };
 
 const inputStyle = (error) => ({
   width: "100%",
-  padding: "10px 14px",
+  padding: "9px 12px",
   borderRadius: "8px",
   border: error ? "1.5px solid #dc2626" : "1.5px solid #d1d5db",
   backgroundColor: "#ffffff",
-  fontSize: "0.9rem",
+  fontSize: "0.88rem",
   color: "#111827",
   outline: "none",
   transition: "all 0.2s ease",
 });
 
 const errorStyle = {
-  fontSize: "0.75rem",
+  fontSize: "0.74rem",
   color: "#dc2626",
-  marginTop: "4px",
+  marginTop: "3px",
   display: "block",
 };

@@ -289,8 +289,7 @@ export default function BestTourismOffers({ lang }) {
             <div className="col-12 text-center">
               <h2 className="section-title">{t.title}</h2>
 
-              <br></br>
-              <br></br>
+
             </div>
           </div>
 

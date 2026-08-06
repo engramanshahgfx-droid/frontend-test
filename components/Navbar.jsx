@@ -184,7 +184,6 @@ export default function Navbar({ lang }) {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
-      // Close desktop dropdown when clicking outside
       if (navRef.current && !navRef.current.contains(event.target)) {
         setOpenDesktopDropdown(null);
         setOpenSubDropdown(null);
@@ -194,7 +193,6 @@ export default function Navbar({ lang }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close menus on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setOpenMobileDropdown(null);
@@ -776,7 +774,6 @@ export default function Navbar({ lang }) {
         )}
       </AnimatePresence>
 
-      {/* Add global styles for the underline effect */}
       <style jsx>{`
         /* Desktop nav link styles - ensures consistent underline positioning */
         .nav-link {

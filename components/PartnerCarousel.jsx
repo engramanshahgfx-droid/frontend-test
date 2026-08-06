@@ -71,7 +71,7 @@ export default function PartnerCarousel({ lang }) {
 
         .section-title {
           text-align: center;
-          margin-bottom: 25px;
+          margin-bottom: 35px;
         }
 
         .section-title h3 {

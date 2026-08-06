@@ -18,8 +18,153 @@ import {
   Building2,
   AlertCircle,
   Loader2,
+  ChevronDown,
 } from "lucide-react";
 import { API_URL } from "@/lib/api";
+
+function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang, error }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const selectedOffer = (personPrices || []).find((o) => Number(o.persons) === Number(value));
+
+  const getLabel = (persons, price, isCustom) => {
+    if (isCustom) {
+      return lang === "ar" ? "طلب عرض خاص (عدد أفراد مخصص)" : "Request Custom Offer (Custom Persons)";
+    }
+    return lang === "ar"
+      ? `عرض ${persons} ${Number(persons) === 1 ? "فرد" : "أفراد"} - (${price} ر.س)`
+      : `${persons} ${Number(persons) > 1 ? "Persons" : "Person"} Offer - (${price} SAR)`;
+  };
+
+  let currentText = "";
+  if (value === "custom") {
+    currentText = lang === "ar" ? "طلب عرض خاص (عدد أفراد مخصص)" : "Request Custom Offer (Custom Persons)";
+  } else if (selectedOffer) {
+    currentText = getLabel(selectedOffer.persons, selectedOffer.price, false);
+  } else {
+    currentText = lang === "ar" ? "اختر العرض" : "Select Offer";
+  }
+
+  return (
+    <div style={{ position: "relative", width: "100%" }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: "100%",
+          padding: isRTL ? "10px 40px 10px 12px" : "10px 12px 10px 40px",
+          border: error ? "2px solid #dc3545" : "2px solid #e0e0e0",
+          borderRadius: "8px",
+          fontSize: "14px",
+          outline: "none",
+          backgroundColor: "#ffffff",
+          fontWeight: "600",
+          color: value === "custom" ? "#E85D1F" : "#1C0052",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxSizing: "border-box",
+          textAlign: isRTL ? "right" : "left",
+        }}
+      >
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: isRTL ? "right" : "left" }}>
+          {currentText}
+        </span>
+        <ChevronDown
+          size={16}
+          color="#666"
+          style={{
+            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+            marginLeft: isRTL ? 0 : "8px",
+            marginRight: isRTL ? "8px" : 0,
+            flexShrink: 0,
+          }}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.15 }}
+            style={{
+              position: "absolute",
+              top: "calc(100% + 4px)",
+              left: 0,
+              right: 0,
+              backgroundColor: "#ffffff",
+              border: "2px solid #E85D1F",
+              borderRadius: "10px",
+              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.18)",
+              zIndex: 9999,
+              maxHeight: "220px",
+              overflowY: "auto",
+              boxSizing: "border-box",
+            }}
+          >
+            {(personPrices || []).map((offer, idx) => {
+              const isSelected = Number(offer.persons) === Number(value);
+              return (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    onChange({ target: { name: "guests", value: offer.persons } });
+                    setIsOpen(false);
+                  }}
+                  style={{
+                    padding: "10px 14px",
+                    fontSize: "13px",
+                    fontWeight: isSelected ? "700" : "500",
+                    color: isSelected ? "#ffffff" : "#1C0052",
+                    backgroundColor: isSelected ? "#E85D1F" : "#ffffff",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #f0f0f0",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    lineHeight: "1.4",
+                    whiteSpace: "normal",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  <span>{getLabel(offer.persons, offer.price, false)}</span>
+                  {isSelected && <Check size={14} color="#ffffff" />}
+                </div>
+              );
+            })}
+            <div
+              onClick={() => {
+                onChange({ target: { name: "guests", value: "custom" } });
+                setIsOpen(false);
+              }}
+              style={{
+                padding: "10px 14px",
+                fontSize: "13px",
+                fontWeight: "700",
+                color: value === "custom" ? "#ffffff" : "#E85D1F",
+                backgroundColor: value === "custom" ? "#E85D1F" : "#FAF6F0",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                lineHeight: "1.4",
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+              }}
+            >
+              <span>{getLabel(null, null, true)}</span>
+              {value === "custom" && <Check size={14} color="#ffffff" />}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default function BookingModal({ isOpen, onClose, packageData, lang, bookingType = "destination", initialGuests = 1, onOpenCustomModal }) {
   const [loading, setLoading] = useState(false);
@@ -931,39 +1076,14 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                           }}
                         />
                         {packageData?.person_prices && Array.isArray(packageData.person_prices) && packageData.person_prices.length > 0 ? (
-                          <select
-                            name="guests"
+                          <OfferCustomSelect
+                            personPrices={packageData.person_prices}
                             value={formData.guests}
                             onChange={handleChange}
-                            style={{
-                              width: "100%",
-                              padding: isRTL
-                                ? "10px 40px 10px 12px"
-                                : "10px 12px 10px 40px",
-                              border: errors.guests
-                                ? "2px solid #dc3545"
-                                : "2px solid #e0e0e0",
-                              borderRadius: "8px",
-                              fontSize: "14px",
-                              outline: "none",
-                              backgroundColor: "#ffffff",
-                              fontWeight: "600",
-                              color: "#1C0052",
-                              cursor: "pointer",
-                              textAlign: isRTL ? "right" : "left",
-                            }}
-                          >
-                            {packageData.person_prices.map((offer, idx) => (
-                              <option key={idx} value={offer.persons}>
-                                {lang === "ar"
-                                  ? `عرض ${offer.persons} ${Number(offer.persons) === 1 ? "فرد" : "أفراد"} - (${offer.price} ر.س)`
-                                  : `${offer.persons} ${Number(offer.persons) > 1 ? "Persons" : "Person"} Offer - (${offer.price} SAR)`}
-                              </option>
-                            ))}
-                            <option value="custom" style={{ fontWeight: "700", color: "#E85D1F" }}>
-                              {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
-                            </option>
-                          </select>
+                            isRTL={isRTL}
+                            lang={lang}
+                            error={errors.guests}
+                          />
                         ) : (
                           <input
                             type="number"

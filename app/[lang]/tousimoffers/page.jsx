@@ -157,7 +157,6 @@ export default function TourismOffersPage() {
               <><span className="highlight-orange">Discover</span> <span className="highlight-green">Saudi Arabia</span></>
             )}
           </h1>
-          <br></br>
           {/* <p>{t.subtitle}</p> */}
         </div>
         {offers.length === 0 ? (
@@ -318,7 +317,7 @@ export default function TourismOffersPage() {
 
         .page-header{
           text-align: center;
-          margin-bottom: 40px;
+          margin-bottom: 10px;
         }
         .page-header h1 {
           font-size: 2.5rem;

@@ -265,7 +265,7 @@ export default function HeaderBanners({ lang, index = 0, page, height, minHeight
         /* Mobile Small (max-width: 480px) */
         @media (max-width: 480px) {
           .header-banners-section {
-            padding: 15px 10px;
+            padding: 15px 0px;
           }
 
           :global(.headerbanner-card) {

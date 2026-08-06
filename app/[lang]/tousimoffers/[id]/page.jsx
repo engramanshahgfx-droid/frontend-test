@@ -6,7 +6,146 @@ import { API_URL } from "@/lib/api";
 import BookingModal from "@/components/BookingModal";
 import TravelReservationModal from "@/components/TravelReservationModal";
 import Image from "next/image";
-import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage, Users } from "lucide-react";
+import { Headphones, CreditCard, Copy, Phone, MessageSquare, Mail, MapPin, FileText, Star, CheckCircle, XCircle, Calendar, Luggage, Users, ChevronDown, Check } from "lucide-react";
+
+function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const selectedOffer = (personPrices || []).find((o) => Number(o.persons) === Number(value));
+
+  const getLabel = (persons, price, isCustom) => {
+    if (isCustom) {
+      return lang === "ar" ? "طلب عرض خاص (عدد أفراد مخصص)" : "Request Custom Offer (Custom Persons)";
+    }
+    return lang === "ar"
+      ? `عرض ${persons} ${Number(persons) === 1 ? "فرد" : "أفراد"} - (${price} ر.س)`
+      : `${persons} ${Number(persons) > 1 ? "Persons" : "Person"} Offer - (${price} SAR)`;
+  };
+
+  let currentText = "";
+  if (value === "custom") {
+    currentText = lang === "ar" ? "طلب عرض خاص (عدد أفراد مخصص)" : "Request Custom Offer (Custom Persons)";
+  } else if (selectedOffer) {
+    currentText = getLabel(selectedOffer.persons, selectedOffer.price, false);
+  } else {
+    currentText = lang === "ar" ? "اختر العرض" : "Select Offer";
+  }
+
+  return (
+    <div style={{ position: "relative", width: "100%", maxWidth: "100%" }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: "100%",
+          padding: "10px 14px",
+          borderRadius: "8px",
+          border: "2px solid #E85D1F",
+          backgroundColor: "#fff",
+          color: value === "custom" ? "#E85D1F" : "#1C0052",
+          fontWeight: "600",
+          fontSize: "0.95rem",
+          cursor: "pointer",
+          outline: "none",
+          boxShadow: "0 2px 8px rgba(232, 93, 31, 0.15)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          boxSizing: "border-box",
+          textAlign: isRTL ? "right" : "left",
+        }}
+      >
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, textAlign: isRTL ? "right" : "left" }}>
+          {currentText}
+        </span>
+        <ChevronDown
+          size={16}
+          color="#E85D1F"
+          style={{
+            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+            marginLeft: isRTL ? 0 : "8px",
+            marginRight: isRTL ? "8px" : 0,
+            flexShrink: 0,
+          }}
+        />
+      </button>
+
+      {isOpen && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 4px)",
+            left: 0,
+            right: 0,
+            backgroundColor: "#ffffff",
+            border: "2px solid #E85D1F",
+            borderRadius: "10px",
+            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.18)",
+            zIndex: 9999,
+            maxHeight: "220px",
+            overflowY: "auto",
+            boxSizing: "border-box",
+          }}
+        >
+          {(personPrices || []).map((offer, idx) => {
+            const isSelected = Number(offer.persons) === Number(value);
+            return (
+              <div
+                key={idx}
+                onClick={() => {
+                  onChange(offer.persons);
+                  setIsOpen(false);
+                }}
+                style={{
+                  padding: "10px 14px",
+                  fontSize: "13px",
+                  fontWeight: isSelected ? "700" : "500",
+                  color: isSelected ? "#ffffff" : "#1C0052",
+                  backgroundColor: isSelected ? "#E85D1F" : "#ffffff",
+                  cursor: "pointer",
+                  borderBottom: "1px solid #f0f0f0",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  lineHeight: "1.4",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                }}
+              >
+                <span>{getLabel(offer.persons, offer.price, false)}</span>
+                {isSelected && <Check size={14} color="#ffffff" />}
+              </div>
+            );
+          })}
+          <div
+            onClick={() => {
+              onChange("custom");
+              setIsOpen(false);
+            }}
+            style={{
+              padding: "10px 14px",
+              fontSize: "13px",
+              fontWeight: "700",
+              color: value === "custom" ? "#ffffff" : "#E85D1F",
+              backgroundColor: value === "custom" ? "#E85D1F" : "#FAF6F0",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              lineHeight: "1.4",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+            }}
+          >
+            <span>{getLabel(null, null, true)}</span>
+            {value === "custom" && <Check size={14} color="#ffffff" />}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function TourismOfferDetails() {
   const params = useParams();
@@ -694,44 +833,23 @@ export default function TourismOfferDetails() {
             </div>
 
             {getPersonPricesList(offer).length > 0 && (
-              <div className="info-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: "6px", width: "100%", marginTop: "10px", marginBottom: "10px" }}>
+              <div className="info-item" style={{ flexDirection: "column", alignItems: "flex-start", gap: "6px", width: "100%", maxWidth: "100%", minWidth: 0, marginTop: "10px", marginBottom: "10px", boxSizing: "border-box" }}>
                 <span className="label" style={{ fontWeight: "700", color: "#1C0052", fontSize: "0.95rem" }}>
                   {lang === "ar" ? "العروض المتاحة :" : "Available Offers :"}
                 </span>
-                <select
+                <OfferCustomSelect
+                  personPrices={getPersonPricesList(offer)}
                   value={selectedPersons}
-                  onChange={(e) => {
-                    if (e.target.value === "custom") {
+                  onChange={(val) => {
+                    if (val === "custom") {
                       setShowTravelReservationModal(true);
                     } else {
-                      setSelectedPersons(Number(e.target.value));
+                      setSelectedPersons(Number(val));
                     }
                   }}
-                  style={{
-                    width: "100%",
-                    padding: "10px 14px",
-                    borderRadius: "8px",
-                    border: "2px solid #E85D1F",
-                    backgroundColor: "#fff",
-                    color: "#1C0052",
-                    fontWeight: "600",
-                    fontSize: "0.95rem",
-                    cursor: "pointer",
-                    outline: "none",
-                    boxShadow: "0 2px 8px rgba(232, 93, 31, 0.15)",
-                  }}
-                >
-                  {getPersonPricesList(offer).map((pOffer, idx) => (
-                    <option key={idx} value={pOffer.persons}>
-                      {lang === "ar"
-                        ? `عرض ${pOffer.persons} ${Number(pOffer.persons) === 1 ? "فرد" : "أفراد"} - (${pOffer.price} ر.س)`
-                        : `${pOffer.persons} ${Number(pOffer.persons) > 1 ? "Persons" : "Person"} Offer - (${pOffer.price} SAR)`}
-                    </option>
-                  ))}
-                  <option value="custom" style={{ fontWeight: "700", color: "#E85D1F" }}>
-                    {lang === "ar" ? " طلب عرض خاص (عدد أفراد مخصص)" : " Request Custom Offer (Custom Persons)"}
-                  </option>
-                </select>
+                  isRTL={lang === "ar"}
+                  lang={lang}
+                />
               </div>
             )}
             {getText(offer, "duration") && (

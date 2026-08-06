@@ -196,7 +196,7 @@ export default function ModernTestimonials({ lang }) {
 
         .section-header {
           text-align: center;
-          margin-bottom: 30px;
+          margin-bottom: 35px;
           padding: 0 20px;
         }
 
@@ -214,16 +214,15 @@ export default function ModernTestimonials({ lang }) {
           font-size: 2.5rem;
           font-weight: 800;
           color: #1C0052; /* Deep Heritage Purple */
-          margin: 0;
+          margin-bottom: -10px;
           position: relative;
-          padding-bottom: 10px;
           font-family: 'Tajawal', sans-serif;
         }
 
         .section-header h2:after {
           content: "";
           position: absolute;
-          bottom: 0px;
+          bottom: -10px;
           left: 50%;
           transform: translateX(-50%);
           width: 60px;

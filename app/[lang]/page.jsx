@@ -247,14 +247,14 @@ export default async function Home({ params }) {
 
       <ModernTestimonials lang={lang} />
 
-      <div className="section-header-contact" style={{ textAlign: "center", padding: "0 20px 15px 20px", backgroundColor: "#faf6f0" }}>
+      <div className="section-header-contact" style={{ textAlign: "center", padding: "0 20px 35px 20px", marginBottom: "0", backgroundColor: "#FAF6F0" }}>
         <span className="accent-tag" style={{
           fontSize: "0.85rem",
           fontWeight: "700",
           letterSpacing: "2px",
           color: "#E85D1F",
           display: "inline-block",
-          marginBottom: "2px",
+          marginBottom: "12px",
           fontFamily: "'Tajawal', sans-serif"
         }}>
           {lang === "ar" ? "اتصل بنا" : "CONTACT US"}
@@ -264,8 +264,6 @@ export default async function Home({ params }) {
           fontWeight: "800",
           color: "#1C0052",
           margin: "0",
-          marginBottom: "32px",
-
           position: "relative",
           paddingBottom: "10px",
           fontFamily: "'Tajawal', sans-serif"

@@ -459,7 +459,7 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
           color: #E85D1F; /* Desert Sunset Orange */
           position: relative;
           padding-bottom: 10px;
-          margin-bottom: 55px;
+          margin-bottom: 35px;
           text-align: center;
         }
 

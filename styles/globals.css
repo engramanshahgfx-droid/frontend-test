@@ -1104,3 +1104,45 @@ select.form-control option {
     width: 100% !important;
   }
 }
+
+/* Responsive Select & Dropdown Styling for Mobile */
+select {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  text-overflow: ellipsis !important;
+}
+
+select option {
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.info-item select,
+.quick-info select,
+.sidebar-panel select {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+.info-item {
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Uniform Section Title & Header Spacing Across All Sections */
+.section-title,
+.section-header {
+  margin-bottom: 35px !important;
+}
+
+.section-header-contact {
+  margin-bottom: 0 !important;
+  padding-bottom: 35px !important;
+  background-color: #FAF6F0 !important;
+}
