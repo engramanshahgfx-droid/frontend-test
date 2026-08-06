@@ -80,15 +80,24 @@ export default function DestinationsPage() {
     }
   };
 
-  const getImageUrl = (img) => {
-    if (!img) return "/placeholder.png";
+  const getImageUrl = (item) => {
+    if (!item) return "/placeholder.png";
+    let img = item;
+    if (typeof item === "object") {
+      if (item.image_url && typeof item.image_url === "string" && /^https?:\/\//.test(item.image_url)) {
+        return item.image_url;
+      }
+      img = item.image_url || item.image || item.image_path || "";
+    }
+    if (!img || typeof img !== "string") return "/placeholder.png";
     if (/^https?:\/\//.test(img)) return img;
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-    if (img.startsWith("/")) return `${backendBase}${img}`;
-    if (img.startsWith("tourism/")) {
-      return `${backendBase}/storage/${img}`;
+    const cleanImg = img.replace(/^\//, "");
+    if (cleanImg.startsWith("storage/")) return `${backendBase}/${cleanImg}`;
+    if (cleanImg.startsWith("tourism/") || cleanImg.includes("/")) {
+      return `${backendBase}/storage/${cleanImg}`;
     }
-    return `${backendBase}/storage/tourism/${img}`;
+    return `${backendBase}/storage/tourism/${cleanImg}`;
   };
 
   const slugify = (text) => {

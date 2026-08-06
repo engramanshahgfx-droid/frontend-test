@@ -129,15 +129,24 @@ export default function TourismOffers({ lang, maxItems = 3 }) {
     return obj[fieldKey] || obj[`${field}_en`] || obj[field] || "";
   };
 
-  const getImageUrl = (img) => {
-    const placeholder = "/placeholder.png";
-    if (!img) return placeholder;
+  const getImageUrl = (item) => {
+    if (!item) return "/placeholder.png";
+    let img = item;
+    if (typeof item === "object") {
+      if (item.image_url && typeof item.image_url === "string" && /^https?:\/\//.test(item.image_url)) {
+        return item.image_url;
+      }
+      img = item.image_url || item.image || item.image_path || "";
+    }
+    if (!img || typeof img !== "string") return "/placeholder.png";
     if (/^https?:\/\//.test(img)) return img;
     const backendBase = API_URL.replace(/\/api\/?$/, "");
-    if (img.startsWith("/")) return `${backendBase}${img}`;
-    if (img.startsWith("storage/")) return `${backendBase}/${img}`;
-    if (img.startsWith("offers/")) return `${backendBase}/storage/${img}`;
-    return `${backendBase}/storage/offers/${img}`;
+    const cleanImg = img.replace(/^\//, "");
+    if (cleanImg.startsWith("storage/")) return `${backendBase}/${cleanImg}`;
+    if (cleanImg.startsWith("offers/") || cleanImg.startsWith("tourism/") || cleanImg.includes("/")) {
+      return `${backendBase}/storage/${cleanImg}`;
+    }
+    return `${backendBase}/storage/offers/${cleanImg}`;
   };
 
   useEffect(() => {

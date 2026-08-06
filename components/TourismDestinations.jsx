@@ -74,22 +74,27 @@ export default function TourismDestinations({ lang, region, maxItems = 3 }) {
   };
 
   const getImageUrl = (destination) => {
-    if (destination?.image_url) {
+    if (destination?.image_url && typeof destination.image_url === "string" && /^https?:\/\//.test(destination.image_url)) {
       return destination.image_url;
     }
 
-    const img = destination?.image;
-    if (!img) return "/placeholder.png";
+    const img = destination?.image_url || destination?.image;
+    if (!img || typeof img !== "string") return "/placeholder.png";
 
     if (/^https?:\/\//.test(img)) return img;
 
     const backendBase = API_URL.replace(/\/api\/?$/, "");
+    const cleanImg = img.replace(/^\//, "");
 
-    if (img.startsWith("/")) {
-      return `${backendBase}${img}`;
+    if (cleanImg.startsWith("storage/")) {
+      return `${backendBase}/${cleanImg}`;
     }
 
-    return `${backendBase}/storage/tourism/${img}`;
+    if (cleanImg.startsWith("tourism/") || cleanImg.includes("/")) {
+      return `${backendBase}/storage/${cleanImg}`;
+    }
+
+    return `${backendBase}/storage/tourism/${cleanImg}`;
   };
 
   useEffect(() => {
