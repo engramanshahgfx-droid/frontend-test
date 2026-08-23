@@ -46,6 +46,51 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
 
   const isRTL = lang === 'ar';
 
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState('');
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setApplyingCoupon(true);
+    setCouponError('');
+    try {
+      const res = await fetch(`${API_URL}/coupons/apply`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          code: couponCode.trim(),
+          booking_amount: calculateOfferTotal(),
+          package_type: 'tourism_offer',
+          package_id: offerData?.id,
+          email: formData.email || '',
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAppliedCoupon(data);
+        setCouponError('');
+      } else {
+        setAppliedCoupon(null);
+        setCouponError(data.message || (isRTL ? 'كوبون الخصم غير صالح أو منتهي الصلاحية' : 'Invalid or expired promo code'));
+      }
+    } catch (err) {
+      setCouponError(isRTL ? 'فشل تطبيق الكوبون' : 'Failed to apply coupon');
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode('');
+    setCouponError('');
+  };
+
   const labels = {
     en: {
       title: "Book Tourism Offer",
@@ -140,6 +185,43 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
     try {
       const offerPrice = Number(offerData?.price ?? offerData?.original_price ?? 0);
       const totalAmount = calculateOfferTotal();
+      let activeCoupon = appliedCoupon;
+
+      // Auto-validate coupon if user typed code but didn't click Apply button first
+      if (!activeCoupon && couponCode.trim()) {
+        try {
+          const res = await fetch(`${API_URL}/coupons/apply`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              code: couponCode.trim(),
+              booking_amount: totalAmount,
+              package_type: 'tourism_offer',
+              package_id: offerData?.id,
+              email: formData.email || "",
+            }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            activeCoupon = data;
+            setAppliedCoupon(data);
+            setCouponError("");
+          } else {
+            setCouponError(data.message || (isRTL ? "كوبون الخصم غير صالح أو منتهي الصلاحية" : "Invalid or expired promo code"));
+            setLoading(false);
+            return;
+          }
+        } catch (err) {
+          setCouponError(isRTL ? "فشل تطبيق الكوبون" : "Failed to apply coupon");
+          setLoading(false);
+          return;
+        }
+      }
+
+      const payableTotal = activeCoupon ? activeCoupon.final_total : totalAmount;
 
       if (!offerPrice || totalAmount <= 0) {
         setErrors({ submit: 'Offer price not available or invalid' });
@@ -151,9 +233,11 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
         ...formData,
         booking_type: 'tourism_offer',
         payment_method: 'credit_card',
-        total_amount: totalAmount,
-        price: offerPrice,
+        total_amount: payableTotal,
+        price: payableTotal,
         package_title: getOfferTitle(),
+        coupon_code: activeCoupon ? activeCoupon.code : null,
+        discount_amount: activeCoupon ? activeCoupon.discount_amount : 0,
       };
 
       console.log("Submitting tourism offer booking:", bookingData);
@@ -549,6 +633,87 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                         />
                       </div>
                     </div>
+
+                    {/* Promo Code Box */}
+                    <div style={{ gridColumn: "1 / -1", marginTop: "6px", marginBottom: "4px" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {isRTL ? "كود الخصم (كوبون)" : "Promo / Discount Code"}
+                      </label>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <input
+                          type="text"
+                          placeholder={isRTL ? "أدخل كود الخصم مثل SUMMER5" : "Enter code e.g. SUMMER5"}
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          disabled={!!appliedCoupon}
+                          style={{
+                            flex: 1,
+                            padding: "10px 12px",
+                            border: couponError ? "2px solid #dc3545" : appliedCoupon ? "2px solid #28a745" : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                            textTransform: "uppercase",
+                            textAlign: isRTL ? "right" : "left",
+                          }}
+                        />
+                        {appliedCoupon ? (
+                          <button
+                            type="button"
+                            onClick={handleRemoveCoupon}
+                            style={{
+                              padding: "10px 16px",
+                              background: "#dc3545",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              fontWeight: "600",
+                              fontSize: "13px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {isRTL ? "إزالة" : "Remove"}
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleApplyCoupon}
+                            disabled={applyingCoupon || !couponCode.trim()}
+                            style={{
+                              padding: "10px 20px",
+                              background: "#dfa528",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              fontWeight: "600",
+                              fontSize: "13px",
+                              cursor: "pointer",
+                              opacity: applyingCoupon || !couponCode.trim() ? 0.6 : 1,
+                            }}
+                          >
+                            {applyingCoupon ? (isRTL ? "جاري..." : "Applying...") : (isRTL ? "تطبيق" : "Apply")}
+                          </button>
+                        )}
+                      </div>
+                      {couponError && (
+                        <span style={{ color: "#dc3545", fontSize: "13px", marginTop: "6px", display: "block" }}>
+                          ✕ {couponError}
+                        </span>
+                      )}
+                      {appliedCoupon && (
+                        <span style={{ color: "#28a745", fontSize: "13px", marginTop: "6px", display: "block", fontWeight: "600" }}>
+                          ✓ {isRTL ? `تم تطبيق الكود "${appliedCoupon.code}"! وفرت ${appliedCoupon.discount_amount} ر.س` : `Code "${appliedCoupon.code}" applied! You save SAR ${appliedCoupon.discount_amount}`}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {errors.submit && (
@@ -602,7 +767,7 @@ export default function TourismOfferBookingModal({ isOpen, onClose, offerData, l
                       onMouseEnter={(e) => !loading && (e.target.style.background = '#c98c1e')}
                       onMouseLeave={(e) => !loading && (e.target.style.background = '#dfa528')}
                     >
-                      {loading ? 'Processing...' : t.confirm}
+                      {loading ? 'Processing...' : `${t.confirm} (${(appliedCoupon && appliedCoupon.final_total !== undefined ? appliedCoupon.final_total : calculateOfferTotal())} SAR)`}
                     </button>
                   </div>
                 </form>

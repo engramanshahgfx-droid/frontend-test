@@ -1228,6 +1228,7 @@ export default function TourismOfferDetails() {
           font-size: 1rem;
           line-height: 1.8;
           color: #555;
+          white-space: pre-line;
         }
 
         .quick-info {
@@ -1337,6 +1338,7 @@ export default function TourismOfferDetails() {
           line-height: 1.8;
           color: #555;
           margin-bottom: 10px;
+          white-space: pre-line;
         }
 
         .day-card img {

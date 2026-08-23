@@ -231,7 +231,7 @@ export default function About({ lang }) {
       <section className="profile-download-section py-5 text-center">
         <div className="container">
           <a
-            href="/pdfs/company profile.pdf"
+            href="/pdfs/company-profile.pdf"
             download="Company Profile.pdf"
             className="btn btn-primary btn-lg px-5 shadow-sm"
           >

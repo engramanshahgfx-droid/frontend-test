@@ -190,8 +190,52 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
   const [totalAmount, setTotalAmount] = useState(0);
   const [paymentUrl, setPaymentUrl] = useState(null);
   const [showPaymentIframe, setShowPaymentIframe] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState("");
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
 
   const isRTL = lang === "ar";
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setApplyingCoupon(true);
+    setCouponError("");
+    try {
+      const res = await fetch(`${API_URL}/coupons/apply`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          code: couponCode.trim(),
+          booking_amount: calculateTotalPrice(),
+          package_type: bookingType || "international",
+          package_id: packageData?.id,
+          email: formData.email || "",
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setAppliedCoupon(data);
+        setCouponError("");
+      } else {
+        setAppliedCoupon(null);
+        setCouponError(data.message || (isRTL ? "كوبون الخصم غير صالح أو منتهي الصلاحية" : "Invalid or expired promo code"));
+      }
+    } catch (err) {
+      setCouponError(isRTL ? "فشل تطبيق الكوبون" : "Failed to apply coupon");
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
 
   const parseJsonField = (field, fallback = {}) => {
     if (!field) return fallback;
@@ -326,6 +370,43 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       `PKG-${packageData?.id || "1"}`;
 
     const calculatedTotal = calculateTotalPrice();
+    let activeCoupon = appliedCoupon;
+
+    // Auto-validate coupon if user typed code but didn't click Apply button first
+    if (!activeCoupon && couponCode.trim()) {
+      try {
+        const res = await fetch(`${API_URL}/coupons/apply`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            code: couponCode.trim(),
+            booking_amount: calculatedTotal,
+            package_type: bookingType || "destination",
+            package_id: packageData?.id,
+            email: formData.email || "",
+          }),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          activeCoupon = data;
+          setAppliedCoupon(data);
+          setCouponError("");
+        } else {
+          setCouponError(data.message || (isRTL ? "كوبون الخصم غير صالح أو منتهي الصلاحية" : "Invalid or expired promo code"));
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        setCouponError(isRTL ? "فشل تطبيق الكوبون" : "Failed to apply coupon");
+        setLoading(false);
+        return;
+      }
+    }
+
+    const payableTotal = activeCoupon ? activeCoupon.final_total : calculatedTotal;
 
     const bookingData = {
       first_name: formData.first_name,
@@ -341,8 +422,10 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
       booking_type: "destination",
       guests: formData.guests || 1,
       special_requests: formData.special_requests || "",
-      total_amount: calculatedTotal,
-      price: calculatedTotal,
+      total_amount: payableTotal,
+      price: payableTotal,
+      coupon_code: activeCoupon ? activeCoupon.code : null,
+      discount_amount: activeCoupon ? activeCoupon.discount_amount : 0,
     };
 
     console.log("Submitting booking:", bookingData);
@@ -365,7 +448,29 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
         const newBookingId = bookingResult.data.id;
         setBookingId(newBookingId);
 
-        // Step 2: Move to the Moyasar payment form flow.
+        // Step 2: Initiate Moyasar hosted invoice payment
+        try {
+          const payResponse = await fetch(`${API_URL}/payments/moyasar/initiate`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              booking_id: newBookingId,
+              amount: payableTotal,
+              lang: lang,
+            }),
+          });
+          const payResult = await payResponse.json();
+          if (payResponse.ok && payResult.success && payResult.payment_url) {
+            window.location.href = payResult.payment_url;
+            return;
+          }
+        } catch (payErr) {
+          console.error("Moyasar payment initiation error:", payErr);
+        }
+
         setLoading(false);
         setIsRedirecting(true);
         window.location.href = `/${lang}/booking-success?booking_id=${newBookingId}`;
@@ -1123,6 +1228,87 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                       )}
                     </div>
 
+                    {/* Promo Code Box */}
+                    <div style={{ gridColumn: "1 / -1", marginTop: "6px", marginBottom: "4px" }}>
+                      <label
+                        style={{
+                          display: "block",
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "6px",
+                          color: "#333",
+                        }}
+                      >
+                        {isRTL ? "كود الخصم (كوبون)" : "Promo / Discount Code"}
+                      </label>
+                      <div style={{ display: "flex", gap: "8px" }}>
+                        <input
+                          type="text"
+                          placeholder={isRTL ? "أدخل كود الخصم مثل SUMMER5" : "Enter code e.g. SUMMER5"}
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          disabled={!!appliedCoupon}
+                          style={{
+                            flex: 1,
+                            padding: "10px 12px",
+                            border: couponError ? "2px solid #dc3545" : appliedCoupon ? "2px solid #28a745" : "2px solid #e0e0e0",
+                            borderRadius: "8px",
+                            fontSize: "14px",
+                            outline: "none",
+                            textTransform: "uppercase",
+                            textAlign: isRTL ? "right" : "left",
+                          }}
+                        />
+                        {appliedCoupon ? (
+                          <button
+                            type="button"
+                            onClick={handleRemoveCoupon}
+                            style={{
+                              padding: "10px 16px",
+                              background: "#dc3545",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              fontWeight: "600",
+                              fontSize: "13px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {isRTL ? "إزالة" : "Remove"}
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleApplyCoupon}
+                            disabled={applyingCoupon || !couponCode.trim()}
+                            style={{
+                              padding: "10px 20px",
+                              background: "#E85D1F",
+                              color: "#fff",
+                              border: "none",
+                              borderRadius: "8px",
+                              fontWeight: "600",
+                              fontSize: "13px",
+                              cursor: "pointer",
+                              opacity: applyingCoupon || !couponCode.trim() ? 0.6 : 1,
+                            }}
+                          >
+                            {applyingCoupon ? (isRTL ? "جاري..." : "Applying...") : (isRTL ? "تطبيق" : "Apply")}
+                          </button>
+                        )}
+                      </div>
+                      {couponError && (
+                        <span style={{ color: "#dc3545", fontSize: "13px", marginTop: "6px", display: "block" }}>
+                          ✕ {couponError}
+                        </span>
+                      )}
+                      {appliedCoupon && (
+                        <span style={{ color: "#28a745", fontSize: "13px", marginTop: "6px", display: "block", fontWeight: "600" }}>
+                          ✓ {isRTL ? `تم تطبيق الكود "${appliedCoupon.code}"! وفرت ${appliedCoupon.discount_amount} ر.س` : `Code "${appliedCoupon.code}" applied! You save SAR ${appliedCoupon.discount_amount}`}
+                        </span>
+                      )}
+                    </div>
+
                     {/* Price Breakdown Display */}
                     <div style={{ gridColumn: "1 / -1" }}>
                       <div
@@ -1138,6 +1324,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center",
+                            marginBottom: appliedCoupon ? "6px" : "0",
                           }}
                         >
                           <span style={{ fontWeight: "600", color: "#2c2c2c" }}>
@@ -1145,20 +1332,65 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                           </span>
                           <span
                             style={{
-                              fontSize: "20px",
+                              fontSize: "18px",
                               fontWeight: "700",
                               color: "#1C0052",
+                              textDecoration: appliedCoupon ? "line-through" : "none",
+                              opacity: appliedCoupon ? 0.6 : 1,
                             }}
                           >
                             {totalAmount} SAR
                           </span>
                         </div>
+
+                        {appliedCoupon && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              color: "#28a745",
+                              fontWeight: "600",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            <span>{isRTL ? "الخصم المطبق" : "Discount Applied"}</span>
+                            <span>-{appliedCoupon.discount_amount} SAR</span>
+                          </div>
+                        )}
+
+                        {appliedCoupon && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              borderTop: "1px solid #cce5ff",
+                              paddingTop: "6px",
+                              marginTop: "4px",
+                            }}
+                          >
+                            <span style={{ fontWeight: "700", color: "#1C0052" }}>
+                              {isRTL ? "المبلغ النهائي للدفع" : "Final Payable Amount"}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: "22px",
+                                fontWeight: "800",
+                                color: "#E85D1F",
+                              }}
+                            >
+                              {appliedCoupon.final_total} SAR
+                            </span>
+                          </div>
+                        )}
+
                         <div
                           style={{
                             fontSize: "12px",
                             color: "#666",
                             marginTop: "4px",
-                            textAlign: "right",
+                            textAlign: isRTL ? "right" : "left",
                           }}
                         >
                           {getPriceBreakdown().description}
@@ -1273,7 +1505,7 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
                       ) : (
                         <>
                           <CreditCard size={16} />
-                          {t.confirm} ({totalAmount} SAR)
+                          {t.confirm} ({(appliedCoupon && appliedCoupon.final_total !== undefined ? appliedCoupon.final_total : (totalAmount || calculateTotalPrice()))} SAR)
                         </>
                       )}
                     </button>

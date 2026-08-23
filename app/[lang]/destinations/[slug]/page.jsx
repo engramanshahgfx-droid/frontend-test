@@ -694,12 +694,12 @@ export default function DestinationDetails() {
       account_no: "68205990876000",
       iban: "SA3705000068205990876000",
     },
-    {
-      name_en: "Al Rajhi Bank",
-      name_ar: "مصرف الراجحي",
-      account_no: "SA6780000189608010004821",
-      iban: "SA6780000189608010004821",
-    },
+    // {
+    //   name_en: "Al Rajhi Bank",
+    //   name_ar: "مصرف الراجحي",
+    //   account_no: "SA6780000189608010004821",
+    //   iban: "SA6780000189608010004821",
+    // },
   ];
 
   const displayPaymentMethods = staticPaymentMethods.map((method) => ({
@@ -866,14 +866,6 @@ export default function DestinationDetails() {
               <div className="panel-body">
                 <ul className="info-list">
                   <li>
-                    <Laptop size={16} color="#E85D1F" />
-                    <span className="label">{t.tripCode} :</span>
-                    <span className="value">
-                      {tripCode}
-                    </span>
-                  </li>
-                  <li className="divider"></li>
-                  <li>
                     <Clock size={16} color="#E85D1F" />
                     <span className="label">{t.daysNum} :</span>
                     <span className="value">{daysNum}</span>
@@ -883,12 +875,6 @@ export default function DestinationDetails() {
                     <Globe size={16} color="#E85D1F" />
                     <span className="label">{t.destinationName} :</span>
                     <span className="value">{destinationName}</span>
-                  </li>
-                  <li className="divider"></li>
-                  <li>
-                    <Calendar size={16} color="#E85D1F" />
-                    <span className="label">{t.availableTo} :</span>
-                    <span className="value">{availableTo}</span>
                   </li>
                   <li className="divider"></li>
                   {destination?.person_prices && Array.isArray(destination.person_prices) && destination.person_prices.length > 0 ? (
@@ -1184,6 +1170,7 @@ export default function DestinationDetails() {
           line-height: 1.8;
           color: #555;
           margin-bottom: 15px;
+          white-space: pre-line;
         }
 
         .main-image {
@@ -1251,6 +1238,7 @@ export default function DestinationDetails() {
           font-size: 1rem;
           line-height: 1.8;
           color: #555;
+          white-space: pre-line;
         }
 
         .itinerary-section {
@@ -1289,6 +1277,7 @@ export default function DestinationDetails() {
           line-height: 1.8;
           color: #555;
           margin-bottom: 10px;
+          white-space: pre-line;
         }
 
         .day-image {

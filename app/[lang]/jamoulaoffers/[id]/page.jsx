@@ -638,11 +638,11 @@ export default function JamoulaOfferDetails() {
   };
 
   const paymentMethods = [
-    {
-      name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
-      account_no: "11111111",
-      iban: "SA1111111111111",
-    },
+    // {
+    //   name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
+    //   account_no: "11111111",
+    //   iban: "SA1111111111111",
+    // },
     {
       name: lang === "ar" ? "إس تي سي باي" : "STC Pay",
       account_no: "22222222",
@@ -996,11 +996,11 @@ export default function JamoulaOfferDetails() {
                   account_no: "68205990876000",
                   iban: "SA3705000068205990876000",
                 },
-                {
-                  name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
-                  account_no: "SA6780000189608010004821",
-                  iban: "SA6780000189608010004821",
-                },
+                // {
+                //   name: lang === "ar" ? "مصرف الراجحي" : "Al Rajhi Bank",
+                //   account_no: "SA6780000189608010004821",
+                //   iban: "SA6780000189608010004821",
+                // },
               ].map((method, index, arr) => (
                 <div key={index} className="bank-item">
                   <div className="bank-details">
@@ -1204,6 +1204,7 @@ export default function JamoulaOfferDetails() {
           font-size: 1rem;
           line-height: 1.8;
           color: #555;
+          white-space: pre-line;
         }
 
         .quick-info {
@@ -1313,6 +1314,7 @@ export default function JamoulaOfferDetails() {
           line-height: 1.8;
           color: #555;
           margin-bottom: 10px;
+          white-space: pre-line;
         }
 
         .day-card img {

@@ -229,19 +229,19 @@ export default function TravelReservationModal({
     stripHtml(getFieldValue("title")) ||
     packageData?.name ||
     packageData?.title ||
-    t.na;
+    "";
 
   const pkgDestination =
-    stripHtml(getFieldValue("location")) || packageData?.region || t.na;
+    stripHtml(getFieldValue("location")) || packageData?.region || packageData?.destination || "";
 
   const pkgDuration =
-    stripHtml(getFieldValue("duration")) || packageData?.duration || t.na;
+    stripHtml(getFieldValue("duration")) || packageData?.duration || "";
 
   const pkgTripCode =
     packageData?.trip_code ||
     packageData?.basic_info?.trip_code ||
     packageData?.code ||
-    (packageData?.id ? `PKG-${packageData.id}` : t.na);
+    "";
 
   const rawDescription =
     getFieldValue("description") ||
@@ -562,50 +562,58 @@ export default function TravelReservationModal({
                   </div>
 
                   <div style={{ padding: "18px 20px" }}>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-                        gap: "12px",
-                        marginBottom: "14px",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <MapPin size={16} color="#E85D1F" />
-                        </div>
-                        <div>
-                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
-                            {t.destination}
-                          </span>
-                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDestination}</strong>
-                        </div>
-                      </div>
+                    {(pkgDestination || pkgDuration || pkgTripCode) && (
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                          gap: "12px",
+                          marginBottom: "14px",
+                        }}
+                      >
+                        {pkgDestination && (
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <MapPin size={16} color="#E85D1F" />
+                            </div>
+                            <div>
+                              <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
+                                {t.destination}
+                              </span>
+                              <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDestination}</strong>
+                            </div>
+                          </div>
+                        )}
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <Clock size={16} color="#E85D1F" />
-                        </div>
-                        <div>
-                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
-                            {t.duration}
-                          </span>
-                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDuration}</strong>
-                        </div>
-                      </div>
+                        {pkgDuration && (
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <Clock size={16} color="#E85D1F" />
+                            </div>
+                            <div>
+                              <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
+                                {t.duration}
+                              </span>
+                              <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgDuration}</strong>
+                            </div>
+                          </div>
+                        )}
 
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                        <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <FileText size={16} color="#E85D1F" />
-                        </div>
-                        <div>
-                          <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
-                            {t.tripCode}
-                          </span>
-                          <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgTripCode}</strong>
-                        </div>
+                        {pkgTripCode && (
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <div style={{ width: "32px", height: "32px", borderRadius: "8px", backgroundColor: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <FileText size={16} color="#E85D1F" />
+                            </div>
+                            <div>
+                              <span style={{ fontSize: "0.72rem", color: "#6b7280", display: "block" }}>
+                                {t.tripCode}
+                              </span>
+                              <strong style={{ fontSize: "0.85rem", color: "#1C0052" }}>{pkgTripCode}</strong>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
 
                     {pkgDescription && (
                       <div style={{ borderTop: "1px solid #e5e7eb", paddingTop: "12px" }}>

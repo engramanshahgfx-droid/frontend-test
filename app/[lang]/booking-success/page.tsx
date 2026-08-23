@@ -151,7 +151,6 @@ export default function BookingSuccessPage() {
           border-radius: 24px;
           border: 1px solid #f0e8d8;
           padding: 32px 40px;
-          ar
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
 
@@ -430,6 +429,25 @@ export default function BookingSuccessPage() {
 
     const fetchPaymentDetails = async () => {
       try {
+        // First try to initiate Moyasar hosted invoice payment
+        try {
+          const initRes = await fetch(`${API_URL}/payments/moyasar/initiate`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify({ booking_id: id, lang }),
+          });
+          const initData = await initRes.json();
+          if (initRes.ok && initData.success && initData.payment_url) {
+            window.location.href = initData.payment_url;
+            return;
+          }
+        } catch (initErr) {
+          console.warn('Moyasar hosted invoice initiate warning:', initErr);
+        }
+
         const response = await fetch(`${API_URL}/bookings/${id}/payment-details`);
         const data = await response.json();
 
@@ -505,7 +523,7 @@ export default function BookingSuccessPage() {
       const publishableKey =
         process.env.NEXT_PUBLIC_MOYASAR_PUBLIC_KEY ||
         process.env.NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY ||
-        'pk_test_RkhX8tYa6szipY7w5ZQF33pz5YZAbxa42qqGbmJh';
+        'pk_live_JjGYt4f9iWDGpc9uCE9FCMBvZ9u5FBa5SsQvEFAY';
       if (!publishableKey) {
         setError('Payment gateway is not configured.');
         return;
