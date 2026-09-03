@@ -90,7 +90,7 @@ export default function Market({ lang }) {
       <div
         className="position-absolute top-0 start-0 w-100 h-100"
         style={{
-          backgroundcolor: "rgba(0, 0, 0, 0.7)",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
           zIndex: 0
         }}
       ></div>
@@ -140,7 +140,7 @@ export default function Market({ lang }) {
                 <div className="d-flex flex-column align-items-center">
                   <div className="mb-3 p-3 rounded-circle d-flex align-items-center justify-content-center"
                     style={{
-                      backgroundcolor: 'rgba(206, 172, 36, 0.2)',
+                      backgroundColor: 'rgba(206, 172, 36, 0.2)',
                       border: '2px solid rgba(206, 172, 36, 0.3)',
                       width: '80px',
                       height: '80px'
@@ -216,7 +216,7 @@ export default function Market({ lang }) {
                       <div className="d-flex align-items-start mb-4">
                         <div className="me-4 p-3 rounded-circle d-flex align-items-center justify-content-center"
                           style={{
-                            backgroundcolor: 'rgba(206, 172, 36, 0.2)',
+                            backgroundColor: 'rgba(206, 172, 36, 0.2)',
                             border: '2px solid rgba(206, 172, 36, 0.5)',
                             width: '70px',
                             height: '70px',
@@ -300,3 +300,4 @@ export default function Market({ lang }) {
     </section>
   );
 }
+

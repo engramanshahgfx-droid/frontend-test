@@ -21,7 +21,7 @@ export default function LocalBookingSuccess({ params }) {
 
   // For guest users (not authenticated), show confirmation message
   return (
-    <div style={{ padding: 40, textAlign: isRTL ? 'right' : 'left', minHeight: '100vh', backgroundcolor: '#f9f9f9' }}>
+    <div style={{ padding: 40, textAlign: isRTL ? 'right' : 'left', minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
       <div style={{ maxWidth: '600px', margin: '0 auto' }}>
         <h1 style={{ color: '#dfa528', marginBottom: '20px' }}>
           {isRTL ? 'تم استلام طلب الحجز (أنشطة محلية)' : 'Local Activities Reservation Received'}
@@ -29,7 +29,7 @@ export default function LocalBookingSuccess({ params }) {
         <p style={{ fontSize: '1rem', color: '#666', marginTop: '20px' }}>
           {isRTL ? 'شكراً! سنقوم بمراجعة طلبك والتواصل معك خلال 24 ساعة لتأكيد تفاصيل الأنشطة.' : 'Thank you! Your reservation request has been submitted. We will review it and contact you within 24 hours to confirm the details of your local activities.'}
         </p>
-        <div style={{ marginTop: '30px', padding: '20px', backgroundcolor: '#f0f0f0', borderRadius: '8px', color: '#333' }}>
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px', color: '#333' }}>
           <h3>{isRTL ? 'الخطوات التالية:' : 'What happens next:'}</h3>
           <ul style={{ marginTop: '15px', marginLeft: isRTL ? 0 : '20px', marginRight: isRTL ? '20px' : 0 }}>
             <li>{isRTL ? 'مراجعة طلبك من قبل فريقنا' : 'Our team will review your reservation request'}</li>
@@ -38,7 +38,7 @@ export default function LocalBookingSuccess({ params }) {
           </ul>
         </div>
 
-        <div style={{ marginTop: '30px', padding: '20px', backgroundcolor: '#e8f4f8', borderRadius: '8px', borderLeft: '4px solid #0099cc' }}>
+        <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#e8f4f8', borderRadius: '8px', borderLeft: '4px solid #0099cc' }}>
           <h4 style={{ color: '#0099cc', marginTop: 0 }}>
             {isRTL ? '📝 ملاحظة مهمة' : '📝 Important Note'}
           </h4>

@@ -48,7 +48,7 @@ export default function ChangeEmail({ params }) {
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
-        backgroundcolor: "white",
+        backgroundColor: "white",
       }}
     >
       <form onSubmit={handleChangeEmail} className="w-md-75">

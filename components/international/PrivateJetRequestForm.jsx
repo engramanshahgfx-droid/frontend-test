@@ -278,13 +278,13 @@ export default function PrivateJetRequestForm({ lang }) {
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundcolor: "#ffffff"
+              backgroundColor: "#ffffff"
             }}
           >
             <div
               className="card-header text-white py-4 px-4 border-0"
               style={{
-                backgroundcolor: "#1C0052",
+                backgroundColor: "#1C0052",
                 borderRadius: "10px 10px 0 0"
               }}
             >
@@ -535,13 +535,13 @@ export default function PrivateJetRequestForm({ lang }) {
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundcolor: "#ffffff"
+              backgroundColor: "#ffffff"
             }}
           >
             <div
               className="card-header text-white py-3 px-4 border-0"
               style={{
-                backgroundcolor: "#1C0052"
+                backgroundColor: "#1C0052"
               }}
             >
               <h4 className="h5 mb-0 fw-semibold">{t.featuresTitle}</h4>
@@ -551,7 +551,7 @@ export default function PrivateJetRequestForm({ lang }) {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(232, 93, 31, 0.08)",
+                    backgroundColor: "rgba(232, 93, 31, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -569,7 +569,7 @@ export default function PrivateJetRequestForm({ lang }) {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(28, 0, 82, 0.08)",
+                    backgroundColor: "rgba(28, 0, 82, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -587,7 +587,7 @@ export default function PrivateJetRequestForm({ lang }) {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(232, 93, 31, 0.08)",
+                    backgroundColor: "rgba(232, 93, 31, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -605,7 +605,7 @@ export default function PrivateJetRequestForm({ lang }) {
                 <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(28, 0, 82, 0.08)",
+                    backgroundColor: "rgba(28, 0, 82, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -627,7 +627,7 @@ export default function PrivateJetRequestForm({ lang }) {
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundcolor: "#ffffff"
+              backgroundColor: "#ffffff"
             }}
           >
             <div className="card-body p-4">
@@ -671,3 +671,4 @@ export default function PrivateJetRequestForm({ lang }) {
     </div>
   );
 }
+

@@ -492,7 +492,7 @@ export default function IslandDetailPage() {
                   lineHeight: "1.95",
                   whiteSpace: "pre-wrap",
                   wordWrap: "break-word",
-                  backgroundcolor: "rgba(255,255,255,0.08)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
                   padding: "35px",
                   borderRadius: "15px",
                   border: "2px solid rgba(255,255,255,0.15)",

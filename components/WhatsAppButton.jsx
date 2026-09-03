@@ -70,7 +70,7 @@ const WhatsAppButton = ({ lang = "en" }) => {
         left: "20px",
         zIndex: 999,
         cursor: "pointer",
-        backgroundcolor: "#25D366",
+        backgroundColor: "#25D366",
         width: "60px",
         height: "60px",
         borderRadius: "50%",
@@ -143,3 +143,4 @@ const WhatsAppButton = ({ lang = "en" }) => {
 };
 
 export default WhatsAppButton;
+

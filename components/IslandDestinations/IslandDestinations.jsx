@@ -564,7 +564,7 @@ export default function IslandDestinationslocal({ lang }) {
             <motion.button
               onClick={prevSlide}
               className="btn position-absolute border-0"
-              whileHover={{ scale: 1.1, backgroundcolor: "rgba(255,255,255,0.25)" }}
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.25)" }}
               whileTap={{ scale: 0.95 }}
               style={{
                 top: "50%",
@@ -590,7 +590,7 @@ export default function IslandDestinationslocal({ lang }) {
             <motion.button
               onClick={nextSlide}
               className="btn position-absolute border-0"
-              whileHover={{ scale: 1.1, backgroundcolor: "rgba(255,255,255,0.25)" }}
+              whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.25)" }}
               whileTap={{ scale: 0.95 }}
               style={{
                 top: "50%",
@@ -801,7 +801,7 @@ export default function IslandDestinationslocal({ lang }) {
                     width: currentSlide === index ? "24px" : "8px",
                     height: "8px",
                     borderRadius: "4px",
-                    backgroundcolor: currentSlide === index ? "#dfa528" : "rgba(255,255,255,0.4)",
+                    backgroundColor: currentSlide === index ? "#dfa528" : "rgba(255,255,255,0.4)",
                     transition: "all 0.3s ease",
                   }}
                 />
@@ -814,3 +814,4 @@ export default function IslandDestinationslocal({ lang }) {
     </>
   );
 }
+

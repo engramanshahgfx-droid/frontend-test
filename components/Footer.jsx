@@ -136,7 +136,7 @@ export default function Footer({ lang }) {
     <footer
       className="footer lh-lg"
       style={{
-        backgroundcolor: "#E85D1F",
+        backgroundColor: "#E85D1F",
         background: "linear-gradient(135deg, #E85D1F 0%, #E85D1F 100%)",
         position: "relative",
         zIndex: 1,
@@ -577,3 +577,4 @@ export default function Footer({ lang }) {
     </footer>
   );
 }
+

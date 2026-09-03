@@ -464,7 +464,7 @@ export default function akbarTestSuitePage() {
       dir={isRTL ? "rtl" : "ltr"}
       style={{
         minHeight: '100vh',
-        backgroundcolor: '#090d16',
+        backgroundColor: '#090d16',
         color: '#f8fafc',
         fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif',
         paddingTop: '130px',

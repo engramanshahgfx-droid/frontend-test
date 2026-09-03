@@ -88,7 +88,7 @@ export default function Badge({ lang = "en" }) {
               <motion.div
                 key={idx}
                 className="floating-circle"
-                style={{ backgroundcolor: color }}
+                style={{ backgroundColor: color }}
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{
                   duration: 2 + idx * 0.2,
@@ -106,3 +106,4 @@ export default function Badge({ lang = "en" }) {
     </section>
   );
 }
+

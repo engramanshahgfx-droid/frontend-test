@@ -134,7 +134,7 @@ export default async function FAQs({ params }) {
 
   return (
     <>
-      <div className="py-5" style={{ backgroundcolor: "#52a9ff" }}>
+      <div className="py-5" style={{ backgroundColor: "#52a9ff" }}>
         <div className="container d-flex flex-column align-items-center text-white">
           <h1 className="text-center mb-3" style={{ fontWeight: "700" }}>
             {headerText.title}

@@ -97,7 +97,7 @@ export default async function ProductDetailsPage({ params }) {
               position: "relative",
               width: "100%",
               paddingTop: "83.83%",
-              backgroundcolor: "#f0f0f0",
+              backgroundColor: "#f0f0f0",
               overflow: "hidden",
             }}
             className="rounded"

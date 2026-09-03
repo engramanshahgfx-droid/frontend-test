@@ -153,7 +153,7 @@ export default function ContactsPage({ params }) {
   return (
     <div
       style={{
-        backgroundcolor: "white",
+        backgroundColor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",

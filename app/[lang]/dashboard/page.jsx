@@ -204,7 +204,7 @@ export default function DashboardPage() {
         fontSize: '0.875rem',
         fontWeight: '600',
         color: 'white',
-        backgroundcolor: colors[status] || '#6c757d',
+        backgroundColor: colors[status] || '#6c757d',
       }}>
         {translateStatus(status)}
       </span>

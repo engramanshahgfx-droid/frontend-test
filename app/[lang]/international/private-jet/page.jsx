@@ -47,7 +47,7 @@ export default async function PrivateJetPage({ params }) {
     <main
       className="min-h-screen"
       style={{
-        backgroundcolor: "#FAF6F0",
+        backgroundColor: "#FAF6F0",
         paddingTop: "150px",
         direction: validLang === 'ar' ? 'rtl' : 'ltr'
       }}

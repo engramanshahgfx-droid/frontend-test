@@ -75,7 +75,7 @@ export default function Products({ params }) {
   return (
     <div
       style={{
-        backgroundcolor: "white",
+        backgroundColor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
@@ -146,7 +146,7 @@ export default function Products({ params }) {
                         </div>
                         <div
                           className="btn btn-danger"
-                          style={{ backgroundcolor: "red" }}
+                          style={{ backgroundColor: "red" }}
                           onClick={() => handleDelete(product)}
                           title={t.delete}
                         >

@@ -474,7 +474,7 @@ export default function ChatAssistant({ lang = "en" }) {
           right: isRTL ? "95px" : "auto",
           zIndex: 999999,
           cursor: "pointer",
-          backgroundcolor: "#1C0052",
+          backgroundColor: "#1C0052",
           border: "1.5px solid #E85D1F",
           borderRadius: "50px",
           padding: "10px 18px",
@@ -502,7 +502,7 @@ export default function ChatAssistant({ lang = "en" }) {
             width: "30px",
             height: "30px",
             borderRadius: "50%",
-            backgroundcolor: "rgba(232, 93, 31, 0.2)",
+            backgroundColor: "rgba(232, 93, 31, 0.2)",
             border: "1px solid #E85D1F",
             display: "flex",
             alignItems: "center",
@@ -534,7 +534,7 @@ export default function ChatAssistant({ lang = "en" }) {
             maxWidth: "760px",
             height: isExpanded ? "calc(100vh - 32px)" : "650px",
             maxHeight: "90vh",
-            backgroundcolor: "#ffffff",
+            backgroundColor: "#ffffff",
             borderRadius: "20px",
             boxShadow: "0 25px 70px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08)",
             zIndex: 999999,
@@ -548,7 +548,7 @@ export default function ChatAssistant({ lang = "en" }) {
           {/* Hostinger Header Bar */}
           <div
             style={{
-              backgroundcolor: "#ffffff",
+              backgroundColor: "#ffffff",
               padding: "16px 20px",
               display: "flex",
               alignItems: "center",
@@ -562,7 +562,7 @@ export default function ChatAssistant({ lang = "en" }) {
                   width: "36px",
                   height: "36px",
                   borderRadius: "50%",
-                  backgroundcolor: "#1C0052",
+                  backgroundColor: "#1C0052",
                   color: "#FFC60B",
                   display: "flex",
                   alignItems: "center",
@@ -589,7 +589,7 @@ export default function ChatAssistant({ lang = "en" }) {
                 title="WhatsApp Support"
                 style={{
                   color: "#25D366",
-                  backgroundcolor: "#f9fafb",
+                  backgroundColor: "#f9fafb",
                   borderRadius: "50%",
                   width: "34px",
                   height: "34px",
@@ -645,7 +645,7 @@ export default function ChatAssistant({ lang = "en" }) {
               flex: 1,
               padding: "20px",
               overflowY: "auto",
-              backgroundcolor: "#ffffff",
+              backgroundColor: "#ffffff",
               display: "flex",
               flexDirection: "column",
               gap: "24px",
@@ -664,7 +664,7 @@ export default function ChatAssistant({ lang = "en" }) {
                 {msg.sender === "user" ? (
                   <div
                     style={{
-                      backgroundcolor: "#f0ebff",
+                      backgroundColor: "#f0ebff",
                       color: "#111827",
                       padding: "10px 18px",
                       borderRadius: "20px",
@@ -800,7 +800,7 @@ export default function ChatAssistant({ lang = "en" }) {
                           <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#4b5563" }}>
                             {isRTL ? "خيارات سريعة" : "Quick actions"}
                           </span>
-                          <div style={{ flex: 1, height: "1px", backgroundcolor: "#f0f0f0" }} />
+                          <div style={{ flex: 1, height: "1px", backgroundColor: "#f0f0f0" }} />
                         </div>
 
                         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -809,7 +809,7 @@ export default function ChatAssistant({ lang = "en" }) {
                               key={actIdx}
                               onClick={() => handleActionButtonClick(act)}
                               style={{
-                                backgroundcolor: "#f6f3ff",
+                                backgroundColor: "#f6f3ff",
                                 color: "#1f2937",
                                 border: "none",
                                 borderRadius: "24px",
@@ -824,10 +824,10 @@ export default function ChatAssistant({ lang = "en" }) {
                                 transition: "all 0.15s ease",
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundcolor = "#ede5ff";
+                                e.currentTarget.style.backgroundColor = "#ede5ff";
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundcolor = "#f6f3ff";
+                                e.currentTarget.style.backgroundColor = "#f6f3ff";
                               }}
                             >
                               <span>{act.label}</span>
@@ -861,7 +861,7 @@ export default function ChatAssistant({ lang = "en" }) {
                   }}
                 >
                   {streamingText}
-                  <span style={{ display: "inline-block", width: "6px", height: "14px", backgroundcolor: "#1C0052", marginLeft: "2px", verticalAlign: "middle" }} />
+                  <span style={{ display: "inline-block", width: "6px", height: "14px", backgroundColor: "#1C0052", marginLeft: "2px", verticalAlign: "middle" }} />
                 </div>
               </div>
             )}
@@ -873,7 +873,7 @@ export default function ChatAssistant({ lang = "en" }) {
           {showQuickPrompts && (
             <div
               style={{
-                backgroundcolor: "#FAF6F0",
+                backgroundColor: "#FAF6F0",
                 padding: "12px 16px",
                 borderTop: "1px solid #e5e7eb",
                 display: "flex",
@@ -895,7 +895,7 @@ export default function ChatAssistant({ lang = "en" }) {
                       handleQuickTopicClick(topic);
                     }}
                     style={{
-                      backgroundcolor: "#ffffff",
+                      backgroundColor: "#ffffff",
                       border: "1px solid #e5e7eb",
                       borderRadius: "16px",
                       padding: "6px 12px",
@@ -913,7 +913,7 @@ export default function ChatAssistant({ lang = "en" }) {
           )}
 
           {/* Hostinger Style Input Container */}
-          <div style={{ padding: "12px 16px 16px", backgroundcolor: "#ffffff" }}>
+          <div style={{ padding: "12px 16px 16px", backgroundColor: "#ffffff" }}>
             {attachedFileName && (
               <div
                 style={{
@@ -922,7 +922,7 @@ export default function ChatAssistant({ lang = "en" }) {
                   gap: "6px",
                   fontSize: "0.78rem",
                   color: "#1C0052",
-                  backgroundcolor: "#f0ebff",
+                  backgroundColor: "#f0ebff",
                   padding: "4px 10px",
                   borderRadius: "12px",
                   marginBottom: "6px",
@@ -945,7 +945,7 @@ export default function ChatAssistant({ lang = "en" }) {
               style={{
                 borderRadius: "22px",
                 border: "1.5px solid #e2e8f0",
-                backgroundcolor: "#ffffff",
+                backgroundColor: "#ffffff",
                 padding: "12px 16px 10px",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.03)",
               }}
@@ -965,7 +965,7 @@ export default function ChatAssistant({ lang = "en" }) {
                   width: "100%",
                   border: "none",
                   outline: "none",
-                  backgroundcolor: "transparent",
+                  backgroundColor: "transparent",
                   fontSize: "0.92rem",
                   color: "#111827",
                   resize: "none",
@@ -1020,7 +1020,7 @@ export default function ChatAssistant({ lang = "en" }) {
                       cursor: "pointer",
                       padding: "4px 8px",
                       borderRadius: "6px",
-                      backgroundcolor: "#f9fafb",
+                      backgroundColor: "#f9fafb",
                     }}
                   >
                     <span style={{ fontSize: "0.85rem", color: "#1C0052" }}>❖</span>
@@ -1035,7 +1035,7 @@ export default function ChatAssistant({ lang = "en" }) {
                         position: "absolute",
                         bottom: "35px",
                         right: "40px",
-                        backgroundcolor: "#ffffff",
+                        backgroundColor: "#ffffff",
                         border: "1px solid #e5e7eb",
                         borderRadius: "12px",
                         boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
@@ -1052,7 +1052,7 @@ export default function ChatAssistant({ lang = "en" }) {
                           fontWeight: 600,
                           cursor: "pointer",
                           borderRadius: "8px",
-                          backgroundcolor: selectedAgentModel === "Agent" ? "#f0ebff" : "transparent",
+                          backgroundColor: selectedAgentModel === "Agent" ? "#f0ebff" : "transparent",
                           color: "#1C0052",
                           display: "flex",
                           alignItems: "center",
@@ -1071,7 +1071,7 @@ export default function ChatAssistant({ lang = "en" }) {
                           fontWeight: 600,
                           cursor: "pointer",
                           borderRadius: "8px",
-                          backgroundcolor: selectedAgentModel === "Fast Agent" ? "#f0ebff" : "transparent",
+                          backgroundColor: selectedAgentModel === "Fast Agent" ? "#f0ebff" : "transparent",
                           color: "#1C0052",
                           display: "flex",
                           alignItems: "center",
@@ -1092,7 +1092,7 @@ export default function ChatAssistant({ lang = "en" }) {
                       width: "34px",
                       height: "34px",
                       borderRadius: "50%",
-                      backgroundcolor: (inputMessage.trim() || attachedFileName) ? "#1C0052" : "#f3f4f6",
+                      backgroundColor: (inputMessage.trim() || attachedFileName) ? "#1C0052" : "#f3f4f6",
                       color: (inputMessage.trim() || attachedFileName) ? "#ffffff" : "#9ca3af",
                       border: "none",
                       display: "flex",
@@ -1121,3 +1121,4 @@ export default function ChatAssistant({ lang = "en" }) {
     </>
   );
 }
+

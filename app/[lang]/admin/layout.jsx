@@ -95,7 +95,7 @@ export default function AdminAccount({ params, children }) {
           right: 0,
           zIndex: 1000,
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          backgroundcolor: "#fff",
+          backgroundColor: "#fff",
         }}
       >
         <Link href={`/${lang}`} className="d-none d-lg-flex">

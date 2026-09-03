@@ -618,7 +618,7 @@ export default function IslandDestinationslocal({ lang }) {
               tabIndex={0}
               whileHover={{
                 scale: 1.1,
-                backgroundcolor: "rgba(255,255,255,0.25)",
+                backgroundColor: "rgba(255,255,255,0.25)",
               }}
               whileTap={{ scale: 0.95 }}
               style={{
@@ -656,7 +656,7 @@ export default function IslandDestinationslocal({ lang }) {
               tabIndex={0}
               whileHover={{
                 scale: 1.1,
-                backgroundcolor: "rgba(255,255,255,0.25)",
+                backgroundColor: "rgba(255,255,255,0.25)",
               }}
               whileTap={{ scale: 0.95 }}
               style={{
@@ -868,7 +868,7 @@ export default function IslandDestinationslocal({ lang }) {
                     width: currentSlide === index ? "24px" : "8px",
                     height: "8px",
                     borderRadius: "4px",
-                    backgroundcolor:
+                    backgroundColor:
                       currentSlide === index
                         ? "#dfa528"
                         : "rgba(255,255,255,0.4)",
@@ -885,3 +885,4 @@ export default function IslandDestinationslocal({ lang }) {
     </>
   );
 }
+

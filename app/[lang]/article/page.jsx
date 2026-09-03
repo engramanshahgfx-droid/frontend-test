@@ -64,7 +64,7 @@ export default function ArticlePageClient({ article, lang }) {
   return (
     <div
       className="position-relative py-5"
-      style={{ backgroundcolor: "#0a1f44", minHeight: "100vh", overflow: "hidden" }}
+      style={{ backgroundColor: "#0a1f44", minHeight: "100vh", overflow: "hidden" }}
     >
       {/* Star Canvas */}
       <canvas

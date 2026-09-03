@@ -117,7 +117,7 @@ export default function StartProject({ lang }) {
       <div
         className="position-absolute top-0 start-0 w-100 h-100"
         style={{
-          backgroundcolor: "rgba(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
           zIndex: 1,
         }}
       ></div>
@@ -232,7 +232,7 @@ export default function StartProject({ lang }) {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(74, 144, 226, 0.2)",
+                    backgroundColor: "rgba(74, 144, 226, 0.2)",
                     border: "1px solid rgba(74, 144, 226, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -253,7 +253,7 @@ export default function StartProject({ lang }) {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(34, 197, 94, 0.2)",
+                    backgroundColor: "rgba(34, 197, 94, 0.2)",
                     border: "1px solid rgba(34, 197, 94, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -274,7 +274,7 @@ export default function StartProject({ lang }) {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(245, 158, 11, 0.2)",
+                    backgroundColor: "rgba(245, 158, 11, 0.2)",
                     border: "1px solid rgba(245, 158, 11, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -295,7 +295,7 @@ export default function StartProject({ lang }) {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundcolor: "rgba(168, 85, 247, 0.2)",
+                    backgroundColor: "rgba(168, 85, 247, 0.2)",
                     border: "1px solid rgba(168, 85, 247, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -340,3 +340,4 @@ export default function StartProject({ lang }) {
     </section>
   );
 }
+

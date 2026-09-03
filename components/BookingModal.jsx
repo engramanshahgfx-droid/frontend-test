@@ -57,7 +57,7 @@ function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang, error }
           borderRadius: "8px",
           fontSize: "14px",
           outline: "none",
-          backgroundcolor: "#ffffff",
+          backgroundColor: "#ffffff",
           fontWeight: "600",
           color: value === "custom" ? "#E85D1F" : "#1C0052",
           cursor: "pointer",
@@ -96,7 +96,7 @@ function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang, error }
               top: "calc(100% + 4px)",
               left: 0,
               right: 0,
-              backgroundcolor: "#ffffff",
+              backgroundColor: "#ffffff",
               border: "2px solid #E85D1F",
               borderRadius: "10px",
               boxShadow: "0 10px 25px rgba(0, 0, 0, 0.18)",
@@ -120,7 +120,7 @@ function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang, error }
                     fontSize: "13px",
                     fontWeight: isSelected ? "700" : "500",
                     color: isSelected ? "#ffffff" : "#1C0052",
-                    backgroundcolor: isSelected ? "#E85D1F" : "#ffffff",
+                    backgroundColor: isSelected ? "#E85D1F" : "#ffffff",
                     cursor: "pointer",
                     borderBottom: "1px solid #f0f0f0",
                     display: "flex",
@@ -146,7 +146,7 @@ function OfferCustomSelect({ personPrices, value, onChange, isRTL, lang, error }
                 fontSize: "13px",
                 fontWeight: "700",
                 color: value === "custom" ? "#ffffff" : "#E85D1F",
-                backgroundcolor: value === "custom" ? "#E85D1F" : "#FAF6F0",
+                backgroundColor: value === "custom" ? "#E85D1F" : "#FAF6F0",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -1622,3 +1622,4 @@ export default function BookingModal({ isOpen, onClose, packageData, lang, booki
     </AnimatePresence>
   );
 }
+

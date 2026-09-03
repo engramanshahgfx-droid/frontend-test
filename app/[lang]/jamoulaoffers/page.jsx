@@ -197,7 +197,7 @@ export default function JamoulaOffersPage() {
               <motion.div
                 key={offer.id || index}
                 className="offer-card"
-                style={{ backgroundcolor: "#ffffff", borderRadius: "10px" }}
+                style={{ backgroundColor: "#ffffff", borderRadius: "10px" }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}

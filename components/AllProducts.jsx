@@ -271,7 +271,7 @@ export default function AllProjects({ lang, projects }) {
                             position: "relative",
                             width: "100%",
                             paddingTop: "75%",
-                            backgroundcolor: "#f0f0f0",
+                            backgroundColor: "#f0f0f0",
                             overflow: "hidden",
                           }}
                           className="card-img-top"
@@ -369,3 +369,4 @@ export default function AllProjects({ lang, projects }) {
     </div>
   );
 }
+

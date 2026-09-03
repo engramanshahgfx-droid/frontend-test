@@ -140,7 +140,7 @@ export default function Team({ lang }) {
       <div
         className="position-absolute top-0 start-0 w-100 h-100"
         style={{
-          backgroundcolor: "rgba(0, 0, 0, 0.7)",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
           zIndex: 0
         }}
       ></div>
@@ -215,7 +215,7 @@ export default function Team({ lang }) {
                   style={{
                     width: "70px",
                     height: "70px",
-                    backgroundcolor: "rgba(206, 172, 36, 0.2)",
+                    backgroundColor: "rgba(206, 172, 36, 0.2)",
                     border: "1px solid rgba(206, 172, 36, 0.5)"
                   }}
                 >
@@ -269,3 +269,4 @@ export default function Team({ lang }) {
     </section>
   );
 }
+

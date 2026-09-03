@@ -75,7 +75,7 @@ export default function Articles({ params }) {
   return (
     <div
       style={{
-        backgroundcolor: "white",
+        backgroundColor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
@@ -143,7 +143,7 @@ export default function Articles({ params }) {
                         </div>
                         <div
                           className="btn btn-danger"
-                          style={{ backgroundcolor: "red" }}
+                          style={{ backgroundColor: "red" }}
                           onClick={() => handleDelete(article)}
                           title={t.delete}
                         >

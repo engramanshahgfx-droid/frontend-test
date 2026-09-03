@@ -144,13 +144,13 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)", backgroundcolor: "#000" }}>
+    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}>
       <div className="container py-5">
         <div className="d-flex flex-column align-items-center">
           <div className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`} style={{ borderRadius: "25px", border: "1px solid rgba(202, 218, 231, 1)", background: "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)" }}>
 
             {/* Icon */}
-            <div className="d-flex justify-content-center align-items-center mb-4" style={{ width: "61px", height: "61px", backgroundcolor: "white", borderRadius: "12px", boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)" }}>
+            <div className="d-flex justify-content-center align-items-center mb-4" style={{ width: "61px", height: "61px", backgroundColor: "white", borderRadius: "12px", boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)" }}>
               {step === 1 && <LuAtSign style={{ width: "30px", height: "30px" }} />}
               {step === 2 && <FiShield style={{ width: "30px", height: "30px" }} />}
               {step === 3 && <GoLock style={{ width: "30px", height: "30px" }} />}

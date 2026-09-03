@@ -5,7 +5,7 @@ const overlayStyle = {
   left: 0,
   width: "100%",
   height: "calc(100% - 150px)",
-  backgroundcolor: "rgba(255, 255, 255, 0.5)",
+  backgroundColor: "rgba(255, 255, 255, 0.5)",
   zIndex: 999,
 };
 export default function Loading() {
@@ -20,3 +20,4 @@ export default function Loading() {
     </div>
   );
 }
+
