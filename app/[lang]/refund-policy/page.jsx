@@ -1,6 +1,6 @@
-import Refuakbarontent from '@/components/Policies/Refuakbarontent';
+import RefundContent from '@/components/Policies/RefundContent';
 
 export default async function RefundPage({ params }) {
   const { lang } = await params;
-  return <Refuakbarontent lang={lang} />;
+  return <RefundContent lang={lang} />;
 }

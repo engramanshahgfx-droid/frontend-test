@@ -37,7 +37,7 @@ export default function RegisterPage({ params }) {
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [devOtp, setDevOtp] = useState(null);
-  const [reseakbarooldown, setReseakbarooldown] = useState(0);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const translations = {
     en: {
@@ -60,7 +60,7 @@ export default function RegisterPage({ params }) {
       otpSubtitle: "Enter the verification code sent to your phone",
       otpPlaceholder: "Enter 6-digit code",
       verify: "Verify",
-      reseakbarode: "Resend Code",
+      resendCode: "Resend Code",
       backToRegister: "Back to Registration",
       codeSentTo: "Code sent to",
       emailAvailable: "Email available",
@@ -87,7 +87,7 @@ export default function RegisterPage({ params }) {
       otpSubtitle: "أدخل رمز التحقق المرسل إلى هاتفك",
       otpPlaceholder: "أدخل الرمز المكون من 6 أرقام",
       verify: "تحقق",
-      reseakbarode: "إعادة إرسال الرمز",
+      resendCode: "إعادة إرسال الرمز",
       backToRegister: "العودة للتسجيل",
       codeSentTo: "تم إرسال الرمز إلى",
       emailAvailable: "البريد الإلكتروني متاح",
@@ -115,7 +115,7 @@ export default function RegisterPage({ params }) {
       otpSubtitle: "请输入发送到您手机的验证码",
       otpPlaceholder: "输入6位数字验证码",
       verify: "验证",
-      reseakbarode: "重新发送验证码",
+      resendCode: "重新发送验证码",
       backToRegister: "返回注册",
       codeSentTo: "验证码已发送至",
       emailAvailable: "电子邮箱可用",
@@ -128,11 +128,11 @@ export default function RegisterPage({ params }) {
 
   // Resend cooldown timer
   useEffect(() => {
-    if (reseakbarooldown > 0) {
-      const timer = setTimeout(() => setReseakbarooldown(reseakbarooldown - 1), 1000);
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
       return () => clearTimeout(timer);
     }
-  }, [reseakbarooldown]);
+  }, [resendCooldown]);
 
   // Debounced email existence check
   useEffect(() => {
@@ -208,7 +208,7 @@ export default function RegisterPage({ params }) {
         if (result.requiresOtp) {
           setShowOtp(true);
           setDevOtp(result.devOtp);
-          setReseakbarooldown(60);
+          setResendCooldown(60);
         } else {
           toast.success(lang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account created successfully!');
           const returnUrl = getReturnUrl();
@@ -247,13 +247,13 @@ export default function RegisterPage({ params }) {
   };
 
   const handleResendOtp = async () => {
-    if (reseakbarooldown > 0) return;
+    if (resendCooldown > 0) return;
 
     setLoading(true);
     try {
       const result = await sendOtp(formData.phone, 'register');
       if (result.success) {
-        setReseakbarooldown(60);
+        setResendCooldown(60);
         setDevOtp(result.devOtp);
         toast.info(lang === 'ar' ? 'تم إرسال رمز جديد' : 'New code sent');
       }
@@ -373,10 +373,10 @@ export default function RegisterPage({ params }) {
                   type="button"
                   className="btn btn-link w-100"
                   onClick={handleResendOtp}
-                  disabled={reseakbarooldown > 0 || loading}
-                  style={{ color: reseakbarooldown > 0 ? "#999" : "#0d6efd" }}
+                  disabled={resendCooldown > 0 || loading}
+                  style={{ color: resendCooldown > 0 ? "#999" : "#0d6efd" }}
                 >
-                  {reseakbarooldown > 0 ? `${t.reseakbarode} (${reseakbarooldown}s)` : t.reseakbarode}
+                  {resendCooldown > 0 ? `${t.resendCode} (${resendCooldown}s)` : t.resendCode}
                 </button>
 
                 <button

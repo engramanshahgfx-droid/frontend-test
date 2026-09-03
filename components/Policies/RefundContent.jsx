@@ -17,7 +17,7 @@ import {
   FaFileSignature,
 } from "react-icons/fa";
 
-export default function Refuakbarontent({ lang }) {
+export default function RefundContent({ lang }) {
   const content = {
     ar: {
       heroTitle: "سياسة الاسترداد المالي",
