@@ -152,7 +152,7 @@ export default function NewServices({ lang, servicesData, sectionTitle, sectionD
         <div
           className="position-absolute top-0 start-0 w-100 h-100"
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            backgroundcolor: "rgba(0, 0, 0, 0.7)",
             zIndex: 0
           }}
         ></div>

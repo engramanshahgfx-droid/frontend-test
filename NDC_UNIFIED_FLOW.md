@@ -1,11 +1,11 @@
-# NDC Flight Booking - Unified Flow Documentation
+# akbar Flight Booking - Unified Flow Documentation
 
 ## Overview
 
-This document explains the **ONE** unified flow for the NDC Flight Booking System.
+This document explains the **ONE** unified flow for the akbar Flight Booking System.
 
 ```
-Frontend (Next.js) → Backend (Laravel) → Database (MySQL) → NDC Provider
+Frontend (Next.js) → Backend (Laravel) → Database (MySQL) → akbar Provider
 ```
 
 ---
@@ -20,7 +20,7 @@ Frontend (Next.js) → Backend (Laravel) → Database (MySQL) → NDC Provider
 └────────────────────────────────────────────────────────────────────────────┘
 
 [1. SEARCH]          [2. SELECT]          [3. PASSENGERS]      [4. EXTRAS]
-ndcflights.jsx       ndcflights.jsx       passengers/page.jsx  extras/page.jsx
+akbarflights.jsx       akbarflights.jsx       passengers/page.jsx  extras/page.jsx
     │                     │                     │                    │
     ▼                     ▼                     ▼                    ▼
 ┌─────────┐          ┌─────────┐          ┌─────────┐          ┌─────────┐
@@ -63,7 +63,7 @@ unified-checkout/page.jsx        unified-pay/page.jsx        unified-confirmatio
                                   ▼                          │ (polls every 2s)
                     ┌──────────────────────────┐             │
                     │ 1. Verify payment        │             │
-                    │ 2. /confirm (NDC)        │             │
+                    │ 2. /confirm (akbar)        │             │
                     │ 3. /issue-ticket        │◄─────────────┘
                     │ Status → TICKETED ✅     │
                     └──────────────────────────┘
@@ -85,12 +85,12 @@ The booking is saved to the database at these key points:
 
 | Step | API Endpoint | What's Saved | Database Table | Status |
 |------|-------------|--------------|----------------|--------|
-| 1 | `/api/v2/ndc/bookings/start` | Flight offer, idempotency key | `ndc_orders` | INITIATED |
-| 2 | `/api/v2/ndc/bookings/passengers` | Passenger details (encrypted) | `ndc_passengers` | PASSENGERS_ADDED |
-| 3 | `/api/v2/ndc/bookings/hold` | Hold reservation with expiry | `ndc_orders` | **ON_HOLD** ✅ |
-| 4 | `POST /api/v2/webhook/moyasar` | Webhook confirms payment | `ndc_payments` | PAYMENT_PENDING → PAID |
-| 5 | (Webhook) `/confirm` | NDC confirmation + PNR | `ndc_orders` | CONFIRMED |
-| 6 | (Webhook) `/issue-ticket` | Ticket numbers | `ndc_orders` | **TICKETED** ✅ |
+| 1 | `/api/v2/akbar/bookings/start` | Flight offer, idempotency key | `akbar_orders` | INITIATED |
+| 2 | `/api/v2/akbar/bookings/passengers` | Passenger details (encrypted) | `akbar_passengers` | PASSENGERS_ADDED |
+| 3 | `/api/v2/akbar/bookings/hold` | Hold reservation with expiry | `akbar_orders` | **ON_HOLD** ✅ |
+| 4 | `POST /api/v2/webhook/moyasar` | Webhook confirms payment | `akbar_payments` | PAYMENT_PENDING → PAID |
+| 5 | (Webhook) `/confirm` | akbar confirmation + PNR | `akbar_orders` | CONFIRMED |
+| 6 | (Webhook) `/issue-ticket` | Ticket numbers | `akbar_orders` | **TICKETED** ✅ |
 
 ---
 
@@ -111,7 +111,7 @@ Frontend              Moyasar              Backend
   │                    └────▶ WEBHOOK ────▶│ (Automatic callback)
   │                         POST /webhook   │
   │                                        │
-  │                                        ├─ Confirm with NDC
+  │                                        ├─ Confirm with akbar
   │                                        ├─ Issue Ticket
   │                                        ├─ Update DB
   │                                        │
@@ -125,9 +125,9 @@ Frontend              Moyasar              Backend
 
 ```php
 // routes/api.php
-Route::post('/v2/webhook/moyasar', [NdcWebhookController::class, 'handleMoyasarWebhook']);
+Route::post('/v2/webhook/moyasar', [akbarWebhookController::class, 'handleMoyasarWebhook']);
 
-// app/Http/Controllers/Api/Ndc/WebhookController.php
+// app/Http/Controllers/Api/akbar/WebhookController.php
 public function handleMoyasarWebhook(Request $request)
 {
     // 1. Verify webhook signature (security!)
@@ -140,13 +140,13 @@ public function handleMoyasarWebhook(Request $request)
     $status = $request->input('status');
 
     // 3. Find order by payment
-    $order = NdcOrder::whereHas('payment', function ($q) use ($paymentId) {
+    $order = akbarOrder::whereHas('payment', function ($q) use ($paymentId) {
         $q->where('moyasar_payment_id', $paymentId);
     })->first();
 
     // 4. Process based on status
     if ($status === 'paid') {
-        // Confirm with NDC
+        // Confirm with akbar
         $bookingService->confirm($order->order_reference);
         
         // Issue ticket
@@ -170,7 +170,7 @@ public function handleMoyasarWebhook(Request $request)
 // unified-pay/page.jsx - Wait for webhook
 const pollStatus = async () => {
   try {
-    const result = await ndcBookingApi.getBookingDetails(orderRef);
+    const result = await akbarBookingApi.getBookingDetails(orderRef);
     const status = result.data.booking_status;
     
     // If webhook processed, status will be TICKETED
@@ -206,10 +206,10 @@ When user clicks "Proceed to Payment", the flight needs to be **reserved**. Othe
 2. Add Passengers → Status: PASSENGERS_ADDED
 3. HOLD FLIGHT ← NEW! ┐
    ↓                  │ Reserves seat for 30 mins
-   Status: ON_HOLD ◀─┘ (or however long NDC allows)
+   Status: ON_HOLD ◀─┘ (or however long akbar allows)
 4. User enters payment
 5. Webhook confirms payment
-6. Confirm with NDC (uses the hold)
+6. Confirm with akbar (uses the hold)
 7. Issue ticket
 8. Status: TICKETED
 ```
@@ -245,47 +245,47 @@ If hold expires (user doesn't pay in time):
 
 | Page | Path | Purpose |
 |------|------|---------|
-| Checkout | `/[lang]/ndc-flights/unified-checkout` | Start booking + add passengers |
-| Payment | `/[lang]/ndc-flights/unified-pay` | Moyasar payment processing |
-| Confirmation | `/[lang]/ndc-flights/unified-confirmation` | Show booking + ticket |
+| Checkout | `/[lang]/akbar-flights/unified-checkout` | Start booking + add passengers |
+| Payment | `/[lang]/akbar-flights/unified-pay` | Moyasar payment processing |
+| Confirmation | `/[lang]/akbar-flights/unified-confirmation` | Show booking + ticket |
 
 ### API Client
 
 ```javascript
-// lib/ndcBookingApi.js - Single source for all API calls
+// lib/akbarBookingApi.js - Single source for all API calls
 
-import ndcBookingApi from '@/lib/ndcBookingApi';
+import akbarBookingApi from '@/lib/akbarBookingApi';
 
 // Set auth token (from login)
-ndcBookingApi.setAuthToken(token);
+akbarBookingApi.setAuthToken(token);
 
 // Search flights
-await ndcBookingApi.searchFlights({ origin, destination, date, passengers });
+await akbarBookingApi.searchFlights({ origin, destination, date, passengers });
 
 // Start booking (SAVES TO DATABASE)
-await ndcBookingApi.startBooking(offerId, flightData);
+await akbarBookingApi.startBooking(offerId, flightData);
 
 // Add passengers (SAVES TO DATABASE)
-await ndcBookingApi.addPassengers(orderRef, passengers);
+await akbarBookingApi.addPassengers(orderRef, passengers);
 
 // Process payment (SAVES TO DATABASE)
-await ndcBookingApi.processPayment(orderRef, paymentData);
+await akbarBookingApi.processPayment(orderRef, paymentData);
 
-// Confirm with NDC (SAVES TO DATABASE)
-await ndcBookingApi.confirmBooking(orderRef);
+// Confirm with akbar (SAVES TO DATABASE)
+await akbarBookingApi.confirmBooking(orderRef);
 
 // Issue ticket (SAVES TO DATABASE)
-await ndcBookingApi.issueTicket(orderRef);
+await akbarBookingApi.issueTicket(orderRef);
 
 // Get booking details
-await ndcBookingApi.getBookingDetails(orderRef);
+await akbarBookingApi.getBookingDetails(orderRef);
 ```
 
 ---
 
 ## Backend API Endpoints
 
-All endpoints under `/api/v2/ndc/bookings/`:
+All endpoints under `/api/v2/akbar/bookings/`:
 
 | Endpoint | Method | Purpose | Status After |
 |----------|--------|---------|--------------|
@@ -293,7 +293,7 @@ All endpoints under `/api/v2/ndc/bookings/`:
 | `/{ref}/passengers` | POST | Add passengers | PASSENGERS_ADDED |
 | `/{ref}/hold` | POST | Hold flight (optional) | ON_HOLD |
 | `/{ref}/payment` | POST | Record payment | PAYMENT_PENDING |
-| `/{ref}/confirm` | POST | Confirm with NDC | CONFIRMED |
+| `/{ref}/confirm` | POST | Confirm with akbar | CONFIRMED |
 | `/{ref}/ticket` | POST | Issue e-ticket | TICKETED |
 | `/{ref}` | GET | Get booking details | - |
 | `/{ref}/cancel` | POST | Cancel booking | CANCELLED |
@@ -307,11 +307,11 @@ All endpoints under `/api/v2/ndc/bookings/`:
 User: Enters RUH → JED, 2024-01-15
 
 Frontend:
-  POST /api/v2/ndc/bookings/search
+  POST /api/v2/akbar/bookings/search
   { origin: 'RUH', destination: 'JED', date: '2024-01-15' }
 
 Backend:
-  → Calls NDC provider search
+  → Calls akbar provider search
   → Returns list of offers
 
 Frontend:
@@ -335,28 +335,28 @@ User: Clicks "Proceed to Payment"
 
 Frontend (unified-checkout/page.jsx):
 
-  1️⃣ POST /api/v2/ndc/bookings/start
+  1️⃣ POST /api/v2/akbar/bookings/start
      { offer_id, flight_data }
      
 Backend:
-  → Creates ndc_orders record
+  → Creates akbar_orders record
   → Status: INITIATED
   → Returns: { order_reference: 'ORD-XXXX' }
 
 Frontend (continued):
-  2️⃣ POST /api/v2/ndc/bookings/passengers
+  2️⃣ POST /api/v2/akbar/bookings/passengers
      { order_reference: 'ORD-XXXX', passengers: [...] }
      
 Backend:
-  → Creates ndc_passengers records
+  → Creates akbar_passengers records
   → Status: PASSENGERS_ADDED
 
 Frontend (continued):
-  3️⃣ POST /api/v2/ndc/bookings/hold
+  3️⃣ POST /api/v2/akbar/bookings/hold
      { order_reference: 'ORD-XXXX' }  ← NEW!
      
 Backend:
-  → Calls NDC to hold flight
+  → Calls akbar to hold flight
   → Saves hold info
   → Status: ON_HOLD ✅
   → Returns: { hold_expiry: '2024-01-15 15:30' }
@@ -389,25 +389,25 @@ Backend (WebhookController) - AUTOMATIC 🔔
   4. Payment status: PAID
   
   Then:
-  5️⃣ Calls: POST /api/v2/ndc/bookings/confirm
+  5️⃣ Calls: POST /api/v2/akbar/bookings/confirm
      { order_reference: 'ORD-XXXX' }
      
-     → Calls NDC OrderCreate
-     → Gets PNR from NDC
-     → Saves PNR to ndc_orders
+     → Calls akbar OrderCreate
+     → Gets PNR from akbar
+     → Saves PNR to akbar_orders
      → Status: CONFIRMED
   
-  6️⃣ Calls: POST /api/v2/ndc/bookings/issue-ticket
+  6️⃣ Calls: POST /api/v2/akbar/bookings/issue-ticket
      { order_reference: 'ORD-XXXX' }
      
-     → Calls NDC TicketIssue
+     → Calls akbar TicketIssue
      → Gets ticket numbers
-     → Saves to ndc_orders
+     → Saves to akbar_orders
      → Status: TICKETED ✅
 
 Frontend (Meanwhile):
   Polling every 2 seconds:
-  GET /api/v2/ndc/bookings/ORD-XXXX
+  GET /api/v2/akbar/bookings/ORD-XXXX
   
   Waits for status to change from PAYMENT_PENDING → TICKETED
   Once TICKETED:
@@ -419,7 +419,7 @@ Frontend (Meanwhile):
 ```
 Frontend (unified-confirmation/page.jsx):
 
-  GET /api/v2/ndc/bookings/ORD-XXXX
+  GET /api/v2/akbar/bookings/ORD-XXXX
   
 Backend:
   → Returns full booking with:
@@ -447,14 +447,14 @@ Frontend:
 ### Local Testing (.env.local)
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000/api
-NEXT_PUBLIC_NDC_TEST_MODE=true
+NEXT_PUBLIC_akbar_TEST_MODE=true
 NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY=pk_test_xxx
 ```
 
 ### Production (.env.production)
 ```env
 NEXT_PUBLIC_API_URL=https://your-api.com/api
-NEXT_PUBLIC_NDC_TEST_MODE=false
+NEXT_PUBLIC_akbar_TEST_MODE=false
 NEXT_PUBLIC_MOYASAR_PUBLISHABLE_KEY=pk_live_xxx
 ```
 
@@ -517,24 +517,24 @@ npm run dev
 ```
 
 ### 4. Test the Flow
-1. Go to `http://localhost:3000/en/ndc-flights`
+1. Go to `http://localhost:3000/en/akbar-flights`
 2. Search for flights (RUH → JED)
 3. Select a flight
 4. Enter passenger details
-5. Go to checkout → `/en/ndc-flights/unified-checkout`
+5. Go to checkout → `/en/akbar-flights/unified-checkout`
 6. Click "Proceed to Payment"
-7. Complete payment on `/en/ndc-flights/unified-pay`
-8. View confirmation on `/en/ndc-flights/unified-confirmation`
+7. Complete payment on `/en/akbar-flights/unified-pay`
+8. View confirmation on `/en/akbar-flights/unified-confirmation`
 
 ### 5. Check Database
 ```sql
-SELECT * FROM ndc_orders ORDER BY created_at DESC;
-SELECT * FROM ndc_passengers WHERE order_id = ?;
-SELECT * FROM ndc_payments WHERE order_id = ?;
+SELECT * FROM akbar_orders ORDER BY created_at DESC;
+SELECT * FROM akbar_passengers WHERE order_id = ?;
+SELECT * FROM akbar_payments WHERE order_id = ?;
 ```
 
 ### 6. Check Filament Admin
-Go to `http://localhost:8000/admin/ndc-flight-bookings` to see all bookings.
+Go to `http://localhost:8000/admin/akbar-flight-bookings` to see all bookings.
 
 ---
 
@@ -543,7 +543,7 @@ Go to `http://localhost:8000/admin/ndc-flight-bookings` to see all bookings.
 ### Frontend
 | File | Description |
 |------|-------------|
-| `lib/ndcBookingApi.js` | API client for all booking calls |
+| `lib/akbarBookingApi.js` | API client for all booking calls |
 | `lib/BookingContext.js` | React context for state (optional) |
 | `unified-checkout/page.jsx` | Checkout page |
 | `unified-pay/page.jsx` | Payment page |
@@ -553,8 +553,8 @@ Go to `http://localhost:8000/admin/ndc-flight-bookings` to see all bookings.
 | File | Description |
 |------|-------------|
 | `app/Services/UnifiedBookingService.php` | Core booking logic |
-| `app/Http/Controllers/Api/Ndc/BookingController.php` | API endpoints |
-| `app/Http/Controllers/Api/MockNdcController.php` | Mock NDC for testing |
+| `app/Http/Controllers/Api/akbar/BookingController.php` | API endpoints |
+| `app/Http/Controllers/Api/MockakbarController.php` | Mock akbar for testing |
 | `app/Enums/BookingStatus.php` | Status state machine |
 | `database/seeders/LocalTestingSeeder.php` | Test data |
 
@@ -607,12 +607,12 @@ Go to `http://localhost:8000/admin/ndc-flight-bookings` to see all bookings.
 ### Database & Data
 
 **Q: "Where is payment info saved?"**
-- `ndc_payments` table - records Moyasar payment ID
-- `ndc_orders.booking_status` - changes from PAYMENT_PENDING → PAID
+- `akbar_payments` table - records Moyasar payment ID
+- `akbar_orders.booking_status` - changes from PAYMENT_PENDING → PAID
 
 **Q: "Are tickets saved immediately?"**
 - Yes! Webhook auto-issues tickets
-- Saves to `ndc_orders.ticket_numbers`
+- Saves to `akbar_orders.ticket_numbers`
 - Confirmation page displays them immediately
 
 **Q: "What if webhook never arrives?"**
@@ -627,7 +627,7 @@ Go to `http://localhost:8000/admin/ndc-flight-bookings` to see all bookings.
 
 ### API returns 401
 1. Log in first: `POST /api/auth/login`
-2. Set token: `ndcBookingApi.setAuthToken(token)`
+2. Set token: `akbarBookingApi.setAuthToken(token)`
 
 ### Payment fails
 1. Check Moyasar key is correct

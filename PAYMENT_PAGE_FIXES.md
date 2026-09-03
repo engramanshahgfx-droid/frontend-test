@@ -3,7 +3,7 @@
 ## Changes Made to Address Moyasar Issues
 
 ### 1. **Moyasar Initialization Improvements** ✅
-- **File:** `app/[lang]/ndc-flights/pay/page.jsx`
+- **File:** `app/[lang]/akbar-flights/pay/page.jsx`
 - **Changes:**
   - Simplified script loading with proper ref checking
   - Added null checks for `moyasarFormRef.current` before initialization
@@ -52,7 +52,7 @@
 
 ---
 
-## Complete NDC Booking Flow Testing
+## Complete akbar Booking Flow Testing
 
 ### Prerequisites
 1. **Backend Running:** `php artisan serve --port=8000` (Laravel)
@@ -64,7 +64,7 @@
 
 #### Step 1: Search for Flights ✈️
 ```
-URL: http://localhost:3000/en/ndc-flights/search
+URL: http://localhost:3000/en/akbar-flights/search
 1. Select origin airport: JED (Jeddah) - type "jed" and it will auto-uppercase
 2. Select destination: CAI (Cairo) - type "cai"
 3. Select departure date: Any future date
@@ -99,7 +99,7 @@ URL: http://localhost:3000/en/ndc-flights/search
 
 #### Step 3: Payment Page 💳
 ```
-1. Redirected to: http://localhost:3000/en/ndc-flights/pay?pnr=[ref]&amount=[amt]...
+1. Redirected to: http://localhost:3000/en/akbar-flights/pay?pnr=[ref]&amount=[amt]...
 2. Payment form should load
 ```
 
@@ -160,18 +160,18 @@ URL: http://localhost:3000/en/ndc-flights/search
 ## Files Modified
 
 ### Frontend Changes
-1. **app/[lang]/ndc-flights/pay/page.jsx** - Main payment page
+1. **app/[lang]/akbar-flights/pay/page.jsx** - Main payment page
    - Lines 1-260: Enhanced CSS with Moyasar hiding rules
    - Lines 500-570: Complete Moyasar initialization refactor
    - Lines 745-747: Removed "Powered by Moyasar" from sidebar
 
 ### Database
-- All NDC tables created and indexed
+- All akbar tables created and indexed
 - Permissions seeded
 - Super admin account created
 
 ### Backend (No changes needed - already complete)
-- 5 NDC endpoints working
+- 5 akbar endpoints working
 - Filament admin resource ready
 - Payment handling functional
 
@@ -198,7 +198,7 @@ URL: http://localhost:3000/en/ndc-flights/search
 ### Data Integrity ✅
 - [ ] Order reference matches across all pages
 - [ ] Passenger data saved correctly in database
-- [ ] Payment status marked as PAID in ndc_payments table
+- [ ] Payment status marked as PAID in akbar_payments table
 - [ ] Ticket numbers generated and visible
 
 ---

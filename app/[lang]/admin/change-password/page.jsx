@@ -48,7 +48,7 @@ export default function ChangePassword({ params }) {
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
-        backgroundColor: "white",
+        backgroundcolor: "white",
       }}
     >
       <form onSubmit={handleChangePassword} className="w-md-75">

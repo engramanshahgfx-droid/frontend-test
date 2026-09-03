@@ -185,7 +185,7 @@ export default function EditArticle({ params }) {
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundcolor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
@@ -260,7 +260,7 @@ export default function EditArticle({ params }) {
             value={article.description?.[activeLang] || ""}
             tabIndex={1}
             onBlur={(newContent) => handleChange("description", newContent)}
-            onChange={() => {}}
+            onChange={() => { }}
           />
         </div>
 
@@ -273,9 +273,8 @@ export default function EditArticle({ params }) {
           {loading ? (
             <>
               <span
-                className={`spinner-border spinner-border-sm ${
-                  lang === "en" ? "me-2" : "ms-2"
-                }`}
+                className={`spinner-border spinner-border-sm ${lang === "en" ? "me-2" : "ms-2"
+                  }`}
                 role="status"
                 aria-hidden="true"
               ></span>

@@ -117,7 +117,7 @@ export default function Categories({ params }) {
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundcolor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
@@ -226,9 +226,8 @@ export default function Categories({ params }) {
           {saving ? (
             <>
               <span
-                className={`spinner-border spinner-border-sm ${
-                  lang === "en" ? "me-2" : "ms-2"
-                }`}
+                className={`spinner-border spinner-border-sm ${lang === "en" ? "me-2" : "ms-2"
+                  }`}
                 role="status"
                 aria-hidden="true"
               ></span>

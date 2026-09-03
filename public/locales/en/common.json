@@ -59,7 +59,10 @@
     "send": "Send",
     "sendMessage": "Send Message",
     "print": "Print",
-    "share": "Share"
+    "share": "Share",
+    "continue": "Continue",
+    "returnHome": "Return Home",
+    "processing": "Processing..."
   },
   "forms": {
     "firstName": "First Name",
@@ -288,5 +291,106 @@
   "faq": {
     "title": "Frequently Asked Questions",
     "description": "Here you can find answers to the most common questions about our services. If you have any other questions, feel free to contact us."
+  },
+  "flightBooking": {
+    "preparingJourney": "Preparing your flight journey...",
+    "noFlightSelected": "No Flight Selected",
+    "searchFlightsFirst": "Please search and select a flight before booking.",
+    "searchFlights": "Search Flights",
+    "yourJourney": "Your Journey",
+    "priceBreakdown": "Price Breakdown",
+    "secureBooking": "100% Secure Flight Booking",
+    "steps": {
+      "passengers": "Passengers",
+      "extras": "Extras & Upgrades",
+      "review": "Review",
+      "payment": "Payment",
+      "confirmed": "Confirmed"
+    },
+    "passengersStep": {
+      "title": "Passenger {number}",
+      "titleLabel": "Title",
+      "adult": "(Adult)",
+      "child": "(Child)",
+      "infant": "(Infant)",
+      "personalInformation": "Personal Details",
+      "selectTitle": "Select Title",
+      "mr": "Mr",
+      "mrs": "Mrs",
+      "ms": "Ms",
+      "dr": "Dr",
+      "asInPassport": "As shown in passport",
+      "nameExample": "e.g. Ahmed",
+      "travelDocument": "Travel Document (Passport)",
+      "passportNumber": "Passport Number",
+      "expiryDate": "Passport Expiry Date",
+      "mustBeValid6Months": "Must be valid for 6+ months",
+      "issuingCountry": "Issuing Country",
+      "contactDetails": "Contact Information",
+      "phoneFormat": "e.g. 501234567"
+    },
+    "extrasStep": {
+      "title": "Upgrade Your Experience",
+      "subtitle": "Select add-ons & insurance for your trip",
+      "travelInsurance": "Trip Insurance (SAR 20,000 Cover)",
+      "travelInsuranceDesc": "Coverage for flight cancellations, delays, and emergencies",
+      "autoCheckIn": "Auto Check-in & Online Boarding Pass",
+      "autoCheckInDesc": "Check in automatically 24h prior to flight departure",
+      "delayProtection": "Baggage Recovery (96hr Guarantee)",
+      "delayProtectionDesc": "Guaranteed baggage tracking & recovery within 96 hours",
+      "cancellationFreedom": "Flexible Cancellation Freedom",
+      "cancellationFreedomDesc": "Cancel anytime up to 24h before flight with 90% refund"
+    },
+    "confirmationStep": {
+      "tripTo": "Flight Itinerary to",
+      "eTicketConfirmation": "E-Ticket & Booking Confirmation",
+      "preparedFor": "Prepared For",
+      "travelConsultant": "Travel Agency / Consultant",
+      "reservationCode": "Booking Reference (Order PNR)",
+      "airlineReservationCode": "Airline PNR",
+      "departure": "Departure Outbound ({date})",
+      "verifyFlightTimes": "Please verify terminal & flight times prior to departure",
+      "bookingDate": "Booking Issue Date",
+      "printETicket": "Print E-Ticket",
+      "downloadETicket": "Download PDF E-Ticket"
+    },
+    "sidebar": {
+      "flightSummary": "Flight summary",
+      "details": "Details",
+      "departure": "Departure",
+      "direct": "Direct",
+      "cancelAndDateChange": "Cancel & date change",
+      "nonRefundable": "Non-refundable",
+      "changeableWithFees": "Changeable with fees",
+      "flightInclVat": "Flight (incl. VAT)",
+      "serviceFee": "Service fee",
+      "totalInclVat": "Total (incl. VAT)",
+      "adultCount": "{count} adult",
+      "childCount": "{count} child",
+      "infantCount": "{count} infant"
+    },
+    "paymentStep": {
+      "title": "Payment",
+      "howToPay": "How would you like to pay?",
+      "safeTransactions": "Your transactions are 100% safe with us",
+      "selectOrAddCard": "Select or add credit/Debit card",
+      "addNewCard": "Add a new credit/Debit card",
+      "cardExpiry": "Expiry",
+      "cvv": "CVV",
+      "defaultCard": "Default",
+      "addVoucher": "Add a voucher code (optional)",
+      "voucherCode": "Voucher Code",
+      "apply": "Apply",
+      "selectReward": "Select your reward",
+      "rewardEligibility": "This booking is eligible for one of the following rewards",
+      "pointConversion": "1 point = ﷼ 1",
+      "almosaferPoints": "Almosafer points",
+      "qitafPoints": "Qitaf points",
+      "mokafaaPoints": "Mokafaa points",
+      "termsAgreement": "By completing this booking, I acknowledge and agree to the privacy policy and the terms & conditions that are applicable to this itinerary.",
+      "privacyPolicy": "privacy policy",
+      "termsConditions": "terms & conditions",
+      "payNow": "Pay now"
+    }
   }
 }

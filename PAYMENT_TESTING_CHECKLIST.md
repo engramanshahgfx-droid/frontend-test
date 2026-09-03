@@ -1,4 +1,4 @@
-# 🎯 NDC Payment Flow - Quick Testing Checklist
+# 🎯 akbar Payment Flow - Quick Testing Checklist
 
 ## Before You Start
 - [ ] Backend running: `php artisan serve` (port 8000)
@@ -11,7 +11,7 @@
 ## Test Scenario: Complete Booking to Payment
 
 ### 1. Booking Flow (Frontend)
-**🔗 URL:** `http://localhost:3000/en/ndc-flights`
+**🔗 URL:** `http://localhost:3000/en/akbar-flights`
 
 - [ ] Page loads with gold theme
 - [ ] Search flights form visible
@@ -20,10 +20,10 @@
 - [ ] Select a flight option
 - [ ] Click "Continue" to bundle selection
 - [ ] Select a cabin class
-- [ ] Click "Confirm Selection" → redirects to `/en/ndc-flights/booking`
+- [ ] Click "Confirm Selection" → redirects to `/en/akbar-flights/booking`
 
 ### 2. Passenger Information (Frontend)
-**🔗 URL:** `http://localhost:3000/en/ndc-flights/booking`
+**🔗 URL:** `http://localhost:3000/en/akbar-flights/booking`
 
 - [ ] Booking summary shows selected flight
 - [ ] Form fields: First Name, Last Name, Email, Phone, DOB, Passport
@@ -36,11 +36,11 @@
   DOB: 1990-01-01
   Passport: A123456789
   ```
-- [ ] Click "Continue to Payment" → redirects to `/en/ndc-flights/pay`
+- [ ] Click "Continue to Payment" → redirects to `/en/akbar-flights/pay`
 - [ ] Check console: `localStorage` has `passengers` key
 
 ### 3. Payment Page (Frontend)
-**🔗 URL:** `http://localhost:3000/en/ndc-flights/pay`
+**🔗 URL:** `http://localhost:3000/en/akbar-flights/pay`
 
 **Visual Checks:**
 - [ ] Gold theme styling applied
@@ -91,7 +91,7 @@
 - [ ] ✅ `✅ Confirmation response: {success: true, ...}`
 
 ### 5. Confirmation Page (Frontend)
-**🔗 URL:** `http://localhost:3000/en/ndc-flights/confirmation?order_ref=...&payment_id=...`
+**🔗 URL:** `http://localhost:3000/en/akbar-flights/confirmation?order_ref=...&payment_id=...`
 
 **Should See:**
 - [ ] Success icon / green checkmark
@@ -123,7 +123,7 @@
 
 ### View Booking
 - [ ] Click **"Flight Bookings"** or similar in menu
-- [ ] Click **"NDC Bookings"** or **"NDC Orders"**
+- [ ] Click **"akbar Bookings"** or **"akbar Orders"**
 - [ ] List page loads showing all bookings
 - [ ] Your test booking appears in the list with:
   - [ ] ✅ **Order Reference** (matches confirmation page)
@@ -160,7 +160,7 @@ USE your_database_name;
 **Check Orders Table:**
 ```sql
 SELECT order_reference, airline_pnr, booking_status, total_amount 
-FROM ndc_orders 
+FROM akbar_orders 
 ORDER BY created_at DESC 
 LIMIT 1;
 ```
@@ -172,8 +172,8 @@ LIMIT 1;
 **Check Passengers Table:**
 ```sql
 SELECT first_name, last_name, ticket_number 
-FROM ndc_passengers 
-WHERE ndc_order_id = (SELECT id FROM ndc_orders ORDER BY created_at DESC LIMIT 1);
+FROM akbar_passengers 
+WHERE akbar_order_id = (SELECT id FROM akbar_orders ORDER BY created_at DESC LIMIT 1);
 ```
 **Expected Output:**
 | first_name | last_name | ticket_number |
@@ -183,8 +183,8 @@ WHERE ndc_order_id = (SELECT id FROM ndc_orders ORDER BY created_at DESC LIMIT 1
 **Check Payments Table:**
 ```sql
 SELECT moyasar_payment_id, amount, status 
-FROM ndc_payments 
-WHERE ndc_order_id = (SELECT id FROM ndc_orders ORDER BY created_at DESC LIMIT 1);
+FROM akbar_payments 
+WHERE akbar_order_id = (SELECT id FROM akbar_orders ORDER BY created_at DESC LIMIT 1);
 ```
 **Expected Output:**
 | moyasar_payment_id | amount | status |
@@ -210,14 +210,14 @@ WHERE ndc_order_id = (SELECT id FROM ndc_orders ORDER BY created_at DESC LIMIT 1
 - **Fix:** Ensure `API_BASE` in pay/page.jsx matches your backend URL
 
 ### Booking not in admin dashboard
-- **Check:** Admin panel → NDC Bookings → Refresh page
+- **Check:** Admin panel → akbar Bookings → Refresh page
 - **Try:** Log out and back in
 - **Check:** Database directly with SQL query above
 - **Debug:** Look at Laravel logs for database errors
 
 ### Ticket numbers not showing
 - **Check:** Did confirmation endpoint return `success: true`?
-- **Verify:** `ndc_passengers` table has `ticket_number` populated
+- **Verify:** `akbar_passengers` table has `ticket_number` populated
 - **Try:** Clear localStorage and redo payment flow
 
 ---

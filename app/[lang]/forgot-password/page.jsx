@@ -20,7 +20,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const [devOtp, setDevOtp] = useState(null);
 
-const translations = {
+  const translations = {
     en: {
       title: "Forgot Password",
       step1Title: "Enter Phone Number",
@@ -144,13 +144,13 @@ const translations = {
   };
 
   return (
-    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}>
+    <div className="d-flex align-items-center" style={{ minHeight: "calc(100vh - 88px)", backgroundcolor: "#000" }}>
       <div className="container py-5">
         <div className="d-flex flex-column align-items-center">
           <div className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`} style={{ borderRadius: "25px", border: "1px solid rgba(202, 218, 231, 1)", background: "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)" }}>
-            
+
             {/* Icon */}
-            <div className="d-flex justify-content-center align-items-center mb-4" style={{ width: "61px", height: "61px", backgroundColor: "white", borderRadius: "12px", boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)" }}>
+            <div className="d-flex justify-content-center align-items-center mb-4" style={{ width: "61px", height: "61px", backgroundcolor: "white", borderRadius: "12px", boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)" }}>
               {step === 1 && <LuAtSign style={{ width: "30px", height: "30px" }} />}
               {step === 2 && <FiShield style={{ width: "30px", height: "30px" }} />}
               {step === 3 && <GoLock style={{ width: "30px", height: "30px" }} />}
@@ -172,14 +172,14 @@ const translations = {
             {step === 1 && (
               <form className="w-100" onSubmit={handleSendOtp}>
                 <div className="mb-3 position-relative">
-                  <input 
-                    type="tel" 
-                    className="form-control" 
-                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
-                    placeholder={t.phonePlaceholder} 
-                    value={phone} 
-                    onChange={(e) => setPhone(e.target.value)} 
-                    required 
+                  <input
+                    type="tel"
+                    className="form-control"
+                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }}
+                    placeholder={t.phonePlaceholder}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
                   />
                 </div>
                 <button type="submit" className="primaryButton w-100" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading}>
@@ -192,18 +192,18 @@ const translations = {
             {step === 2 && (
               <form className="w-100" onSubmit={handleVerifyOtp}>
                 <div className="mb-3 position-relative">
-                  <input 
-                    type="text" 
-                    className="form-control text-center" 
-                    style={{ borderRadius: "15px", height: "50px", fontSize: "24px", letterSpacing: "8px", fontWeight: "bold" }} 
-                    placeholder={t.otpPlaceholder} 
-                    value={otpCode} 
-                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))} 
+                  <input
+                    type="text"
+                    className="form-control text-center"
+                    style={{ borderRadius: "15px", height: "50px", fontSize: "24px", letterSpacing: "8px", fontWeight: "bold" }}
+                    placeholder={t.otpPlaceholder}
+                    value={otpCode}
+                    onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     maxLength={6}
-                    required 
+                    required
                   />
                 </div>
-                
+
                 {devOtp && (
                   <div style={{ marginBottom: '10px', padding: '8px', background: '#e7f5e7', color: '#2d7d2d', borderRadius: '6px', textAlign: 'center' }}>
                     Dev OTP: <strong>{devOtp}</strong>
@@ -213,7 +213,7 @@ const translations = {
                 <button type="submit" className="primaryButton w-100 mb-2" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading || otpCode.length !== 6}>
                   {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.verifyOtp}
                 </button>
-                
+
                 <button type="button" className="btn btn-outline-secondary w-100" onClick={goBack} style={{ borderRadius: "15px", height: "44px" }}>
                   {t.back}
                 </button>
@@ -224,35 +224,35 @@ const translations = {
             {step === 3 && (
               <form className="w-100" onSubmit={handleResetPassword}>
                 <div className="mb-3 position-relative">
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
-                    placeholder={t.passwordPlaceholder} 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    required 
-                    minLength={6} 
+                  <input
+                    type="password"
+                    className="form-control"
+                    style={{ borderRadius: "15px", paddingLeft: lang === "ar" ? "" : "40px", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }}
+                    placeholder={t.passwordPlaceholder}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
                   />
                 </div>
-                
+
                 <div className="mb-3 position-relative">
-                  <input 
-                    type="password" 
-                    className="form-control" 
-                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }} 
-                    placeholder={t.confirmPasswordPlaceholder} 
-                    value={passwordConfirmation} 
-                    onChange={(e) => setPasswordConfirmation(e.target.value)} 
-                    required 
-                    minLength={6} 
+                  <input
+                    type="password"
+                    className="form-control"
+                    style={{ borderRadius: "15px", paddingLeft: lang === "en" ? "40px" : "", paddingRight: lang === "ar" ? "40px" : "", height: "50px" }}
+                    placeholder={t.confirmPasswordPlaceholder}
+                    value={passwordConfirmation}
+                    onChange={(e) => setPasswordConfirmation(e.target.value)}
+                    required
+                    minLength={6}
                   />
                 </div>
 
                 <button type="submit" className="primaryButton w-100 mb-2" style={{ borderWidth: 0, borderRadius: "15px", height: "44px" }} disabled={loading || !password || !passwordConfirmation}>
                   {loading ? <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> : t.resetPassword}
                 </button>
-                
+
                 <button type="button" className="btn btn-outline-secondary w-100" onClick={goBack} style={{ borderRadius: "15px", height: "44px" }}>
                   {t.back}
                 </button>

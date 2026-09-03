@@ -95,7 +95,7 @@ export default function CityDetail({ params }) {
 
   if (!city) {
     return (
-      <div className={styles.notFoundContainer}>
+      <div className={styles.notFouakbarontainer}>
         <h1 className={styles.notFoundTitle}>
           {lang === "ar" ? "المدينة غير موجودة" : "City Not Found"}
         </h1>

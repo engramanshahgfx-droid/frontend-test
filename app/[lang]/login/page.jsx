@@ -23,12 +23,12 @@ export default function LoginPage({ params }) {
     phone: "",
     password: "",
   });
-  
+
   // OTP flow state
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [devOtp, setDevOtp] = useState(null);
-  const [resendCooldown, setResendCooldown] = useState(0);
+  const [reseakbarooldown, setReseakbarooldown] = useState(0);
 
   const translations = {
     en: {
@@ -44,7 +44,7 @@ export default function LoginPage({ params }) {
       otpSubtitle: "Enter the verification code sent to your phone",
       otpPlaceholder: "Enter 6-digit code",
       verify: "Verify",
-      resendCode: "Resend Code",
+      reseakbarode: "Resend Code",
       backToLogin: "Back to Login",
       codeSentTo: "Code sent to",
     },
@@ -61,39 +61,39 @@ export default function LoginPage({ params }) {
       otpSubtitle: "أدخل رمز التحقق المرسل إلى هاتفك",
       otpPlaceholder: "أدخل الرمز المكون من 6 أرقام",
       verify: "تحقق",
-      resendCode: "إعادة إرسال الرمز",
+      reseakbarode: "إعادة إرسال الرمز",
       backToLogin: "العودة لتسجيل الدخول",
       codeSentTo: "تم إرسال الرمز إلى",
     },
 
-     zh: {
-    title: "登录您的账户",
-    subtitle: "欢迎回来！请输入您的详细信息",
-    phone: "电话号码（例如：+966501234567）",
-    password: "密码",
-    forgotPassword: "忘记密码？",
-    login: "登录",
-    newHere: "新用户？",
-    createAccount: "创建账户",
-    otpTitle: "验证您的手机",
-    otpSubtitle: "请输入发送到您手机的验证码",
-    otpPlaceholder: "输入6位数字验证码",
-    verify: "验证",
-    resendCode: "重新发送验证码",
-    backToLogin: "返回登录",
-    codeSentTo: "验证码已发送至",
-  },
+    zh: {
+      title: "登录您的账户",
+      subtitle: "欢迎回来！请输入您的详细信息",
+      phone: "电话号码（例如：+966501234567）",
+      password: "密码",
+      forgotPassword: "忘记密码？",
+      login: "登录",
+      newHere: "新用户？",
+      createAccount: "创建账户",
+      otpTitle: "验证您的手机",
+      otpSubtitle: "请输入发送到您手机的验证码",
+      otpPlaceholder: "输入6位数字验证码",
+      verify: "验证",
+      reseakbarode: "重新发送验证码",
+      backToLogin: "返回登录",
+      codeSentTo: "验证码已发送至",
+    },
   };
 
   const t = translations[lang] || translations.en;
 
   // Resend cooldown timer
   useEffect(() => {
-    if (resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+    if (reseakbarooldown > 0) {
+      const timer = setTimeout(() => setReseakbarooldown(reseakbarooldown - 1), 1000);
       return () => clearTimeout(timer);
     }
-  }, [resendCooldown]);
+  }, [reseakbarooldown]);
 
   const handleDataChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +119,7 @@ export default function LoginPage({ params }) {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const result = await login({
         phone: userData.phone,
@@ -131,7 +131,7 @@ export default function LoginPage({ params }) {
           // Show OTP input
           setShowOtp(true);
           setDevOtp(result.devOtp);
-          setResendCooldown(60);
+          setReseakbarooldown(60);
         } else {
           // Direct login (admin)
           toast.success(lang === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Login successful!');
@@ -151,10 +151,10 @@ export default function LoginPage({ params }) {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const result = await verifyOtp(userData.phone, otpCode, 'login');
-      
+
       if (result.success) {
         toast.success(lang === 'ar' ? 'تم تسجيل الدخول بنجاح!' : 'Login successful!');
         const returnUrl = getReturnUrl();
@@ -171,13 +171,13 @@ export default function LoginPage({ params }) {
   };
 
   const handleResendOtp = async () => {
-    if (resendCooldown > 0) return;
-    
+    if (reseakbarooldown > 0) return;
+
     setLoading(true);
     try {
       const result = await sendOtp(userData.phone, 'login');
       if (result.success) {
-        setResendCooldown(60);
+        setReseakbarooldown(60);
         setDevOtp(result.devOtp);
         toast.info(lang === 'ar' ? 'تم إرسال رمز جديد' : 'New code sent');
       }
@@ -220,10 +220,10 @@ export default function LoginPage({ params }) {
   if (showOtp) {
     return (
       <div
-        className="d-flex align-items-center"
-        style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#acaaaa" }}
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "100vh", paddingTop: "140px", paddingBottom: "80px", backgroundColor: "#f8fafc" }}
       >
-        <div className="container py-5">
+        <div className="container py-3">
           <div className="d-flex flex-column align-items-center">
             <div
               className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`}
@@ -231,7 +231,8 @@ export default function LoginPage({ params }) {
                 borderRadius: "25px",
                 border: "1px solid rgba(202, 218, 231, 1)",
                 background:
-                  "linear-gradient(180deg, #E2F2FF 0%,",
+                  "linear-gradient(180deg, #E2F2FF 0%, #ffffff 78.01%)",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
               }}
             >
               <div
@@ -239,7 +240,7 @@ export default function LoginPage({ params }) {
                 style={{
                   width: "61px",
                   height: "61px",
-                  backgroundColor: "white",
+                  backgroundColor: "#ffffff",
                   borderRadius: "12px",
                   boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
                 }}
@@ -255,13 +256,13 @@ export default function LoginPage({ params }) {
               <div className="text-center mb-4" style={{ fontSize: "14px", color: "#0d6efd" }}>
                 {t.codeSentTo}: <strong>{userData.phone}</strong>
               </div>
-              
+
               {devOtp && (
                 <div className="alert alert-success w-100 text-center mb-3" style={{ fontSize: "14px" }}>
                   Dev OTP: <strong>{devOtp}</strong>
                 </div>
               )}
-              
+
               <form className="w-100" onSubmit={handleVerifyOtp}>
                 <div className="mb-4">
                   <input
@@ -299,10 +300,10 @@ export default function LoginPage({ params }) {
                   type="button"
                   className="btn btn-link w-100"
                   onClick={handleResendOtp}
-                  disabled={resendCooldown > 0 || loading}
-                  style={{ color: resendCooldown > 0 ? "#999" : "#0d6efd" }}
+                  disabled={reseakbarooldown > 0 || loading}
+                  style={{ color: reseakbarooldown > 0 ? "#999" : "#0d6efd" }}
                 >
-                  {resendCooldown > 0 ? `${t.resendCode} (${resendCooldown}s)` : t.resendCode}
+                  {reseakbarooldown > 0 ? `${t.reseakbarode} (${reseakbarooldown}s)` : t.reseakbarode}
                 </button>
 
                 <button
@@ -324,10 +325,10 @@ export default function LoginPage({ params }) {
   // Otherwise show login form
   return (
     <div
-      className="d-flex align-items-center"
-      style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#7b7b7b" }}
+      className="d-flex align-items-center justify-content-center"
+      style={{ minHeight: "100vh", paddingTop: "140px", paddingBottom: "80px", backgroundColor: "#f8fafc" }}
     >
-      <div className="container py-5">
+      <div className="container py-3">
         <div className="d-flex flex-column align-items-center">
           <div
             className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`}
@@ -335,7 +336,8 @@ export default function LoginPage({ params }) {
               borderRadius: "25px",
               border: "1px solid rgba(202, 218, 231, 1)",
               background:
-                "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)",
+                "linear-gradient(180deg, #E2F2FF 0%, #ffffff 78.01%)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
             }}
           >
             <div
@@ -343,9 +345,9 @@ export default function LoginPage({ params }) {
               style={{
                 width: "61px",
                 height: "61px",
-                backgroundColor: "white",
+                backgroundColor: "#ffffff",
                 borderRadius: "12px",
-                boxShadow: " 0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
+                boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
               }}
             >
               <FiLogIn style={{ width: "30px", height: "30px" }} />

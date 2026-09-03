@@ -95,7 +95,7 @@ export default function AdminAccount({ params, children }) {
           right: 0,
           zIndex: 1000,
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          backgroundColor: "#fff",
+          backgroundcolor: "#fff",
         }}
       >
         <Link href={`/${lang}`} className="d-none d-lg-flex">
@@ -119,9 +119,8 @@ export default function AdminAccount({ params, children }) {
       </div>
       <div className="d-flex bg-light">
         <div
-          className={`offcanvas-lg offcanvas-${
-            lang === "ar" ? "end" : "start"
-          }`}
+          className={`offcanvas-lg offcanvas-${lang === "ar" ? "end" : "start"
+            }`}
           tabIndex="-1"
           id="offcanvasMenu"
           aria-labelledby="offcanvasMenuLabel"
@@ -152,11 +151,10 @@ export default function AdminAccount({ params, children }) {
                 style={{ position: "relative" }}
               >
                 <Link
-                  className={`${styles["account-nav-item"]} mb-1 mb-xl-2 ${
-                    pathName === `/${lang}/admin/contacts`
-                      ? styles["active-route"]
-                      : ""
-                  }`}
+                  className={`${styles["account-nav-item"]} mb-1 mb-xl-2 ${pathName === `/${lang}/admin/contacts`
+                    ? styles["active-route"]
+                    : ""
+                    }`}
                   href={`/${lang}/admin/contacts`}
                 >
                   <ContactsOutlinedIcon />
@@ -175,11 +173,10 @@ export default function AdminAccount({ params, children }) {
               </div>
               <div data-bs-dismiss="offcanvas" data-bs-target="#offcanvasMenu">
                 <Link
-                  className={`${styles["account-nav-item"]} mb-1 mb-xl-2 ${
-                    pathName === `/${lang}/admin/admins`
-                      ? styles["active-route"]
-                      : ""
-                  }`}
+                  className={`${styles["account-nav-item"]} mb-1 mb-xl-2 ${pathName === `/${lang}/admin/admins`
+                    ? styles["active-route"]
+                    : ""
+                    }`}
                   href={`/${lang}/admin/admins`}
                 >
                   <SupervisorAccountIcon />
@@ -194,9 +191,8 @@ export default function AdminAccount({ params, children }) {
               >
                 <SettingsOutlinedIcon />
                 <h5
-                  className={`m-0 ${lang === "en" ? "ms-3" : "me-3"} ${
-                    lang === "en" ? "me-5" : "ms-5"
-                  }`}
+                  className={`m-0 ${lang === "en" ? "ms-3" : "me-3"} ${lang === "en" ? "me-5" : "ms-5"
+                    }`}
                 >
                   {t.settings}
                 </h5>
@@ -214,13 +210,11 @@ export default function AdminAccount({ params, children }) {
                       data-bs-target="#offcanvasMenu"
                     >
                       <Link
-                        className={`${
-                          styles["account-nav-item"]
-                        } mb-1 mb-xl-2 ${
-                          pathName === `/${lang}/admin/profile`
+                        className={`${styles["account-nav-item"]
+                          } mb-1 mb-xl-2 ${pathName === `/${lang}/admin/profile`
                             ? styles["active-route"]
                             : ""
-                        }`}
+                          }`}
                         href={`/${lang}/admin/profile`}
                         style={{ fontWeight: "500" }}
                       >
@@ -232,13 +226,11 @@ export default function AdminAccount({ params, children }) {
                       data-bs-target="#offcanvasMenu"
                     >
                       <Link
-                        className={`${
-                          styles["account-nav-item"]
-                        } mb-1 mb-xl-2 ${
-                          pathName === `/${lang}/admin/change-password`
+                        className={`${styles["account-nav-item"]
+                          } mb-1 mb-xl-2 ${pathName === `/${lang}/admin/change-password`
                             ? styles["active-route"]
                             : ""
-                        }`}
+                          }`}
                         href={`/${lang}/admin/change-password`}
                         style={{ fontWeight: "500" }}
                       >
@@ -250,13 +242,11 @@ export default function AdminAccount({ params, children }) {
                       data-bs-target="#offcanvasMenu"
                     >
                       <Link
-                        className={`${
-                          styles["account-nav-item"]
-                        } mb-1 mb-xl-2 ${
-                          pathName === `/${lang}/admin/change-email`
+                        className={`${styles["account-nav-item"]
+                          } mb-1 mb-xl-2 ${pathName === `/${lang}/admin/change-email`
                             ? styles["active-route"]
                             : ""
-                        }`}
+                          }`}
                         href={`/${lang}/admin/change-email`}
                         style={{ fontWeight: "500" }}
                       >

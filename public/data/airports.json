@@ -1,0 +1,359 @@
+[
+  {
+    "Code": "CCU",
+    "Name": "Netaji Subhas Chandra",
+    "Country": "India",
+    "CityName": "Kolkata",
+    "CityCode": "CCU"
+  },
+  {
+    "Code": "IXU",
+    "Name": "Chikkalthana",
+    "Country": "India",
+    "CityName": "Aurangabad",
+    "CityCode": "IXU"
+  },
+  {
+    "Code": "ZER",
+    "Name": "Ziro Airport",
+    "Country": "India",
+    "CityName": "Ziro, Arunachal Pradesh",
+    "CityCode": "ZER"
+  },
+  {
+    "Code": "SXR",
+    "Name": "Srinagar",
+    "Country": "India",
+    "CityName": "Srinagar",
+    "CityCode": "SXR"
+  },
+  {
+    "Code": "GAU",
+    "Name": "Borjhar",
+    "Country": "India",
+    "CityName": "Guwahati",
+    "CityCode": "GAU"
+  },
+  {
+    "Code": "HYD",
+    "Name": "Rajiv Gandhi International Airport",
+    "Country": "India",
+    "CityName": "Hyderabad",
+    "CityCode": "HYD"
+  },
+  {
+    "Code": "DEL",
+    "Name": "Indira Gandhi International",
+    "Country": "India",
+    "CityName": "New Delhi",
+    "CityCode": "DEL"
+  },
+  {
+    "Code": "IXC",
+    "Name": "Chandigarh",
+    "Country": "India",
+    "CityName": "Chandigarh",
+    "CityCode": "IXC"
+  },
+  {
+    "Code": "VTZ",
+    "Name": "Vishakhapatnam",
+    "Country": "India",
+    "CityName": "Vishakhapatnam",
+    "CityCode": "VTZ"
+  },
+  {
+    "Code": "CCJ",
+    "Name": "Kozhikode",
+    "Country": "India",
+    "CityName": "Kozhikode",
+    "CityCode": "CCJ"
+  },
+  {
+    "Code": "IXJ",
+    "Name": "Satwari",
+    "Country": "India",
+    "CityName": "Jammu",
+    "CityCode": "IXJ"
+  },
+  {
+    "Code": "IXZ",
+    "Name": "Port Blair",
+    "Country": "India",
+    "CityName": "Port Blair",
+    "CityCode": "IXZ"
+  },
+  {
+    "Code": "BLR",
+    "Name": "Bengaluru International Airport",
+    "Country": "India",
+    "CityName": "Bangalore",
+    "CityCode": "BLR"
+  },
+  {
+    "Code": "AMD",
+    "Name": "Sardar Vallabhbhai Patel International Airport",
+    "Country": "India",
+    "CityName": "Ahmedabad",
+    "CityCode": "AMD"
+  },
+  {
+    "Code": "VGA",
+    "Name": "Vijayawada",
+    "Country": "India",
+    "CityName": "Vijayawada",
+    "CityCode": "VGA"
+  },
+  {
+    "Code": "MAA",
+    "Name": "Chennai",
+    "Country": "India",
+    "CityName": "Chennai",
+    "CityCode": "MAA"
+  },
+  {
+    "Code": "PAT",
+    "Name": "Patna",
+    "Country": "India",
+    "CityName": "Patna",
+    "CityCode": "PAT"
+  },
+  {
+    "Code": "LKO",
+    "Name": "Amausi",
+    "Country": "India",
+    "CityName": "Lucknow",
+    "CityCode": "LKO"
+  },
+  {
+    "Code": "GOX",
+    "Name": "Mopa International Airport",
+    "Country": "India",
+    "CityName": "Mopa North Goa",
+    "CityCode": "GOX"
+  },
+  {
+    "Code": "BOM",
+    "Name": "Chhatrapati Shivaji",
+    "Country": "India",
+    "CityName": "Mumbai",
+    "CityCode": "BOM"
+  },
+  {
+    "Code": "DGH",
+    "Name": "Deoghar International Airport",
+    "Country": "India",
+    "CityName": "Deoghar",
+    "CityCode": "DGH"
+  },
+  {
+    "Code": "TRZ",
+    "Name": "Civil",
+    "Country": "India",
+    "CityName": "Tiruchirapally",
+    "CityCode": "TRZ"
+  },
+  {
+    "Code": "JAI",
+    "Name": "Sanganeer",
+    "Country": "India",
+    "CityName": "Jaipur",
+    "CityCode": "JAI"
+  },
+  {
+    "Code": "IDR",
+    "Name": "Indore",
+    "Country": "India",
+    "CityName": "Indore",
+    "CityCode": "IDR"
+  },
+  {
+    "Code": "VNS",
+    "Name": "Varanasi",
+    "Country": "India",
+    "CityName": "Varanasi",
+    "CityCode": "VNS"
+  },
+  {
+    "Code": "ATQ",
+    "Name": "Raja Sansi International Airport",
+    "Country": "India",
+    "CityName": "Amritsar",
+    "CityCode": "ATQ"
+  },
+  {
+    "Code": "QQS",
+    "Name": "London Airport",
+    "Country": "United Kingdom",
+    "CityName": "London",
+    "CityCode": "LON"
+  },
+  {
+    "Code": "LGW",
+    "Name": "Gatwick",
+    "Country": "United Kingdom",
+    "CityName": "London",
+    "CityCode": "LON"
+  },
+  {
+    "Code": "LHR",
+    "Name": "London Heathrow",
+    "Country": "United Kingdom",
+    "CityName": "London",
+    "CityCode": "LON"
+  },
+  {
+    "Code": "MEL",
+    "Name": "Melbourne Airport",
+    "Country": "Australia",
+    "CityName": "Melbourne",
+    "CityCode": "MEL"
+  },
+  {
+    "Code": "SYD",
+    "Name": "Sydney Kingsford Smith Airport",
+    "Country": "Australia",
+    "CityName": "Sydney",
+    "CityCode": "SYD"
+  },
+  {
+    "Code": "DAC",
+    "Name": "Hazrat Shahjalal International Airport",
+    "Country": "Bangladesh",
+    "CityName": "Dhaka",
+    "CityCode": "DAC"
+  },
+  {
+    "Code": "CAI",
+    "Name": "Cairo International Airport",
+    "Country": "Egypt",
+    "CityName": "Cairo",
+    "CityCode": "CAI"
+  },
+  {
+    "Code": "CDG",
+    "Name": "Charles De Gaulle Airport",
+    "Country": "France",
+    "CityName": "Paris",
+    "CityCode": "PAR"
+  },
+  {
+    "Code": "FCO",
+    "Name": "Rome Airport Fiumicino",
+    "Country": "Italy",
+    "CityName": "Rome",
+    "CityCode": "ROM"
+  },
+  {
+    "Code": "KUL",
+    "Name": "Kuala Lumpur International Airport",
+    "Country": "Malaysia",
+    "CityName": "Kuala Lumpur",
+    "CityCode": "KUL"
+  },
+  {
+    "Code": "AMS",
+    "Name": "Amsterdam-Schiphol",
+    "Country": "Netherlands",
+    "CityName": "Amsterdam",
+    "CityCode": "AMS"
+  },
+  {
+    "Code": "ULH",
+    "Name": "AlUla International Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "AlUla",
+    "CityCode": "ULH"
+  },
+  {
+    "Code": "DMM",
+    "Name": "King Fahad International Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "Dammam",
+    "CityCode": "DMM"
+  },
+  {
+    "Code": "RUH",
+    "Name": "King Khalid International Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "Riyadh",
+    "CityCode": "RUH"
+  },
+  {
+    "Code": "MED",
+    "Name": "Prince Mohammad Bin Abdulaziz International Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "Madinah",
+    "CityCode": "MED"
+  },
+  {
+    "Code": "JED",
+    "Name": "King Abdulaziz International Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "Jeddah",
+    "CityCode": "JED"
+  },
+  {
+    "Code": "NUM",
+    "Name": "Neom Bay Airport",
+    "Country": "Saudi Arabia",
+    "CityName": "Neom",
+    "CityCode": "NUM"
+  },
+  {
+    "Code": "SIN",
+    "Name": "Singapore Changi Airport",
+    "Country": "Singapore",
+    "CityName": "Singapore",
+    "CityCode": "SIN"
+  },
+  {
+    "Code": "BKK",
+    "Name": "Suvarnabhumi International Airport",
+    "Country": "Thailand",
+    "CityName": "Bangkok",
+    "CityCode": "BKK"
+  },
+  {
+    "Code": "SHJ",
+    "Name": "Sharjah International Airport",
+    "Country": "United Arab Emirates",
+    "CityName": "Sharjah",
+    "CityCode": "SHJ"
+  },
+  {
+    "Code": "AUH",
+    "Name": "Abu Dhabi International Airport",
+    "Country": "United Arab Emirates",
+    "CityName": "Abu Dhabi",
+    "CityCode": "AUH"
+  },
+  {
+    "Code": "DXB",
+    "Name": "Dubai International Airport",
+    "Country": "United Arab Emirates",
+    "CityName": "Dubai",
+    "CityCode": "DXB"
+  },
+  {
+    "Code": "IST",
+    "Name": "Istanbul Airport",
+    "Country": "Turkey",
+    "CityName": "Istanbul",
+    "CityCode": "IST"
+  },
+  {
+    "Code": "JFK",
+    "Name": "John F. Kennedy International Airport",
+    "Country": "USA",
+    "CityName": "New York",
+    "CityCode": "NYC"
+  },
+  {
+    "Code": "LAX",
+    "Name": "Los Angeles International Airport",
+    "Country": "USA",
+    "CityName": "Los Angeles",
+    "CityCode": "LAX"
+  }
+]

@@ -31,7 +31,7 @@ const cardVariants = {
 
 export default function Services({ lang, servicesData, sectionTitle, sectionDescription }) {
   return (
-    <section className="position-relative py-5" style={{ backgroundColor: "#f9f9f9" }}>
+    <section className="position-relative py-5" style={{ backgroundcolor: "#f9f9f9" }}>
       <div className="container position-relative" style={{ zIndex: 1 }}>
         {/* Section Header */}
         <div className="text-center mb-5">
@@ -63,7 +63,7 @@ export default function Services({ lang, servicesData, sectionTitle, sectionDesc
                   cursor: "pointer",
                   overflow: "hidden",
                   color: "black",
-                  backgroundColor: "rgba(255,255,255,0.8)",
+                  backgroundcolor: "rgba(255,255,255,0.8)",
                 }}
               >
                 {/* Icon */}

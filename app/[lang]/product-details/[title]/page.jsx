@@ -69,7 +69,7 @@ export default async function ProductDetailsPage({ params }) {
   const product = querySnapshot.docs[0]?.data();
 
   if (!product) {
-    notFound(); 
+    notFound();
   }
 
   const content = {
@@ -97,7 +97,7 @@ export default async function ProductDetailsPage({ params }) {
               position: "relative",
               width: "100%",
               paddingTop: "83.83%",
-              backgroundColor: "#f0f0f0",
+              backgroundcolor: "#f0f0f0",
               overflow: "hidden",
             }}
             className="rounded"

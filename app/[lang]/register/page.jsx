@@ -32,12 +32,12 @@ export default function RegisterPage({ params }) {
   // Email pre-check state
   const [emailExists, setEmailExists] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
-  
+
   // OTP flow state
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [devOtp, setDevOtp] = useState(null);
-  const [resendCooldown, setResendCooldown] = useState(0);
+  const [reseakbarooldown, setReseakbarooldown] = useState(0);
 
   const translations = {
     en: {
@@ -60,7 +60,7 @@ export default function RegisterPage({ params }) {
       otpSubtitle: "Enter the verification code sent to your phone",
       otpPlaceholder: "Enter 6-digit code",
       verify: "Verify",
-      resendCode: "Resend Code",
+      reseakbarode: "Resend Code",
       backToRegister: "Back to Registration",
       codeSentTo: "Code sent to",
       emailAvailable: "Email available",
@@ -87,7 +87,7 @@ export default function RegisterPage({ params }) {
       otpSubtitle: "أدخل رمز التحقق المرسل إلى هاتفك",
       otpPlaceholder: "أدخل الرمز المكون من 6 أرقام",
       verify: "تحقق",
-      resendCode: "إعادة إرسال الرمز",
+      reseakbarode: "إعادة إرسال الرمز",
       backToRegister: "العودة للتسجيل",
       codeSentTo: "تم إرسال الرمز إلى",
       emailAvailable: "البريد الإلكتروني متاح",
@@ -95,44 +95,44 @@ export default function RegisterPage({ params }) {
       checkingEmail: "جاري التحقق من البريد...",
     },
 
-     zh: {
-    title: "创建账户",
-    subtitle: "立即加入我们！填写您的信息开始使用",
-    name: "全名",
-    namePlaceholder: "请输入您的全名",
-    email: "电子邮箱（选填）",
-    emailPlaceholder: "you@example.com（可选）",
-    phone: "电话号码",
-    phonePlaceholder: "+966xxxxxxxxx",
-    password: "密码",
-    passwordPlaceholder: "设置密码（至少6位）",
-    confirmPassword: "确认密码",
-    confirmPasswordPlaceholder: "再次输入密码",
-    register: "创建账户",
-    haveAccount: "已有账户？",
-    login: "登录",
-    otpTitle: "验证您的手机",
-    otpSubtitle: "请输入发送到您手机的验证码",
-    otpPlaceholder: "输入6位数字验证码",
-    verify: "验证",
-    resendCode: "重新发送验证码",
-    backToRegister: "返回注册",
-    codeSentTo: "验证码已发送至",
-    emailAvailable: "电子邮箱可用",
-    emailTaken: "该电子邮箱已被注册。",
-    checkingEmail: "正在检查电子邮箱...",
-  },
+    zh: {
+      title: "创建账户",
+      subtitle: "立即加入我们！填写您的信息开始使用",
+      name: "全名",
+      namePlaceholder: "请输入您的全名",
+      email: "电子邮箱（选填）",
+      emailPlaceholder: "you@example.com（可选）",
+      phone: "电话号码",
+      phonePlaceholder: "+966xxxxxxxxx",
+      password: "密码",
+      passwordPlaceholder: "设置密码（至少6位）",
+      confirmPassword: "确认密码",
+      confirmPasswordPlaceholder: "再次输入密码",
+      register: "创建账户",
+      haveAccount: "已有账户？",
+      login: "登录",
+      otpTitle: "验证您的手机",
+      otpSubtitle: "请输入发送到您手机的验证码",
+      otpPlaceholder: "输入6位数字验证码",
+      verify: "验证",
+      reseakbarode: "重新发送验证码",
+      backToRegister: "返回注册",
+      codeSentTo: "验证码已发送至",
+      emailAvailable: "电子邮箱可用",
+      emailTaken: "该电子邮箱已被注册。",
+      checkingEmail: "正在检查电子邮箱...",
+    },
   };
 
   const t = translations[lang] || translations.en;
 
   // Resend cooldown timer
   useEffect(() => {
-    if (resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+    if (reseakbarooldown > 0) {
+      const timer = setTimeout(() => setReseakbarooldown(reseakbarooldown - 1), 1000);
       return () => clearTimeout(timer);
     }
-  }, [resendCooldown]);
+  }, [reseakbarooldown]);
 
   // Debounced email existence check
   useEffect(() => {
@@ -180,7 +180,7 @@ export default function RegisterPage({ params }) {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     if (emailExists) {
       toast.error(t.emailTaken);
       return;
@@ -192,7 +192,7 @@ export default function RegisterPage({ params }) {
     }
 
     setLoading(true);
-    
+
     try {
       const registerData = {
         name: formData.name,
@@ -208,7 +208,7 @@ export default function RegisterPage({ params }) {
         if (result.requiresOtp) {
           setShowOtp(true);
           setDevOtp(result.devOtp);
-          setResendCooldown(60);
+          setReseakbarooldown(60);
         } else {
           toast.success(lang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account created successfully!');
           const returnUrl = getReturnUrl();
@@ -227,10 +227,10 @@ export default function RegisterPage({ params }) {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const result = await verifyOtp(formData.phone, otpCode, 'register');
-      
+
       if (result.success) {
         toast.success(lang === 'ar' ? 'تم إنشاء الحساب بنجاح!' : 'Account created successfully!');
         const returnUrl = getReturnUrl();
@@ -247,13 +247,13 @@ export default function RegisterPage({ params }) {
   };
 
   const handleResendOtp = async () => {
-    if (resendCooldown > 0) return;
-    
+    if (reseakbarooldown > 0) return;
+
     setLoading(true);
     try {
       const result = await sendOtp(formData.phone, 'register');
       if (result.success) {
-        setResendCooldown(60);
+        setReseakbarooldown(60);
         setDevOtp(result.devOtp);
         toast.info(lang === 'ar' ? 'تم إرسال رمز جديد' : 'New code sent');
       }
@@ -293,10 +293,10 @@ export default function RegisterPage({ params }) {
   if (showOtp) {
     return (
       <div
-        className="d-flex align-items-center"
-        style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#000" }}
+        className="d-flex align-items-center justify-content-center"
+        style={{ minHeight: "100vh", paddingTop: "140px", paddingBottom: "80px", backgroundColor: "#f8fafc" }}
       >
-      <div className="container py-5" style={{ paddingTop: "15rem" }}>
+        <div className="container py-3">
           <div className="d-flex flex-column align-items-center">
             <div
               className={`px-2 px-sm-4 py-4 d-flex flex-column align-items-center ${styles.formWidth}`}
@@ -304,7 +304,8 @@ export default function RegisterPage({ params }) {
                 borderRadius: "25px",
                 border: "1px solid rgba(202, 218, 231, 1)",
                 background:
-                  "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)",
+                  "linear-gradient(180deg, #E2F2FF 0%, #ffffff 78.01%)",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
               }}
             >
               <div
@@ -312,7 +313,7 @@ export default function RegisterPage({ params }) {
                 style={{
                   width: "61px",
                   height: "61px",
-                  backgroundColor: "white",
+                  backgroundColor: "#ffffff",
                   borderRadius: "12px",
                   boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
                 }}
@@ -328,13 +329,13 @@ export default function RegisterPage({ params }) {
               <div className="text-center mb-4" style={{ fontSize: "14px", color: "#0d6efd" }}>
                 {t.codeSentTo}: <strong>{formData.phone}</strong>
               </div>
-              
+
               {devOtp && (
                 <div className="alert alert-success w-100 text-center mb-3" style={{ fontSize: "14px" }}>
                   Dev OTP: <strong>{devOtp}</strong>
                 </div>
               )}
-              
+
               <form className="w-100" onSubmit={handleVerifyOtp}>
                 <div className="mb-4">
                   <input
@@ -372,10 +373,10 @@ export default function RegisterPage({ params }) {
                   type="button"
                   className="btn btn-link w-100"
                   onClick={handleResendOtp}
-                  disabled={resendCooldown > 0 || loading}
-                  style={{ color: resendCooldown > 0 ? "#999" : "#0d6efd" }}
+                  disabled={reseakbarooldown > 0 || loading}
+                  style={{ color: reseakbarooldown > 0 ? "#999" : "#0d6efd" }}
                 >
-                  {resendCooldown > 0 ? `${t.resendCode} (${resendCooldown}s)` : t.resendCode}
+                  {reseakbarooldown > 0 ? `${t.reseakbarode} (${reseakbarooldown}s)` : t.reseakbarode}
                 </button>
 
                 <button
@@ -397,10 +398,10 @@ export default function RegisterPage({ params }) {
   // Registration Form
   return (
     <div
-      className="d-flex "
-      style={{ minHeight: "calc(100vh - 88px)", backgroundColor: "#7b7b7b", justifyContent: "center", alignItems: "flex-start", paddingTop: "2rem" }}
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh", paddingTop: "140px", paddingBottom: "80px", backgroundColor: "#f8fafc" }}
     >
-      <div className="container py-5" style={{}}>
+      <div className="container py-3">
 
         <div className="d-flex flex-column align-items-center" style={{ width: "100%" }}>
           <div
@@ -409,7 +410,8 @@ export default function RegisterPage({ params }) {
               borderRadius: "25px",
               border: "1px solid rgba(202, 218, 231, 1)",
               background:
-                "linear-gradient(180deg, #E2F2FF 0%, rgba(255, 255, 255, 0) 78.01%)",
+                "linear-gradient(180deg, #E2F2FF 0%, #ffffff 78.01%)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.06)"
             }}
           >
             <div
@@ -417,7 +419,7 @@ export default function RegisterPage({ params }) {
               style={{
                 width: "61px",
                 height: "61px",
-                backgroundColor: "white",
+                backgroundColor: "#ffffff",
                 borderRadius: "12px",
                 boxShadow: "0px 0px 16.15px 0px rgba(0, 0, 0, 0.07)",
               }}
@@ -430,7 +432,7 @@ export default function RegisterPage({ params }) {
             <div className="text-secondary text-center mb-4" style={{ fontSize: "14px" }}>
               {t.subtitle}
             </div>
-            
+
             <form className="w-100" onSubmit={handleRegister}>
               {/* Name */}
               <div className="mb-3 position-relative">

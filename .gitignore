@@ -42,3 +42,8 @@ next-env.d.ts
 
 serviceAccountKey.json
 .vercel
+frontend-test/
+
+
+
+ 

@@ -247,7 +247,7 @@ export default async function Home({ params }) {
 
       <ModernTestimonials lang={lang} />
 
-      <div className="section-header-contact" style={{ textAlign: "center", padding: "0 20px 35px 20px", marginBottom: "0", backgroundColor: "#FAF6F0" }}>
+      <div className="section-header-contact" style={{ textAlign: "center", padding: "0 20px 35px 20px", marginBottom: "0", backgroundcolor: "#FAF6F0" }}>
         <span className="accent-tag" style={{
           fontSize: "0.85rem",
           fontWeight: "700",

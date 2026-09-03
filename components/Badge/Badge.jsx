@@ -34,7 +34,7 @@ export default function Badge({ lang = "en" }) {
       className="hero-section col-lg-12 mx-auto position-relative"
       dir={lang === "ar" ? "rtl" : "ltr"}
     >
-  
+
 
       <div
         className="hero-container row align-items-center position-relative"
@@ -42,9 +42,8 @@ export default function Badge({ lang = "en" }) {
       >
 
         <div
-          className={`col-lg-8 order-2 order-lg-1 ${
-            lang === "ar" ? "text-end" : "text-start"
-          }`}
+          className={`col-lg-8 order-2 order-lg-1 ${lang === "ar" ? "text-end" : "text-start"
+            }`}
         >
           <motion.h2
             className="fw-bold mb-3"
@@ -65,9 +64,8 @@ export default function Badge({ lang = "en" }) {
           </motion.p>
 
           <div
-            className={`d-flex flex-wrap gap-2 ${
-              lang === "ar" ? "justify-content-end" : ""
-            }`}
+            className={`d-flex flex-wrap gap-2 ${lang === "ar" ? "justify-content-end" : ""
+              }`}
           >
             {features[lang].map((feature, idx) => (
               <div key={idx} className="feature-badge">
@@ -80,18 +78,17 @@ export default function Badge({ lang = "en" }) {
 
         {/* Icon Section */}
         <div
-          className={`col-lg-4 d-flex justify-content-center ${
-            lang === "ar"
-              ? "justify-content-lg-start"
-              : "justify-content-lg-end"
-          } order-1 order-lg-2 mb-4 mb-lg-0`}
+          className={`col-lg-4 d-flex justify-content-center ${lang === "ar"
+            ? "justify-content-lg-start"
+            : "justify-content-lg-end"
+            } order-1 order-lg-2 mb-4 mb-lg-0`}
         >
           <div className="shield-container">
             {circleColors.map((color, idx) => (
               <motion.div
                 key={idx}
                 className="floating-circle"
-                style={{ backgroundColor: color }}
+                style={{ backgroundcolor: color }}
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{
                   duration: 2 + idx * 0.2,

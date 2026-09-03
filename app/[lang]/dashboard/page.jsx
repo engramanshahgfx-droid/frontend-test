@@ -75,7 +75,8 @@ export default function DashboardPage() {
     waitingForReview: isRTL ? 'في انتظار مراجعة الإدارة...' : 'Waiting for admin review...',
     adminContactedMessage: isRTL ? 'تواصلت الإدارة معك. في انتظار التأكيد.' : 'Admin has contacted you. Awaiting confirmation.',
     reservationConfirmed: isRTL ? 'تم تأكيد الطلب من قبل الإدارة.' : 'Reservation confirmed by admin.',
-    convertedToBooking: isRTL ? "تم التحويل إلى حجز! تحقق من تبويب 'حجوزاتي' لإكمال الدفع." : "Converted to booking! Check My Bookings tab to complete payment.",  }), [isRTL]);
+    convertedToBooking: isRTL ? "تم التحويل إلى حجز! تحقق من تبويب 'حجوزاتي' لإكمال الدفع." : "Converted to booking! Check My Bookings tab to complete payment.",
+  }), [isRTL]);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -195,7 +196,7 @@ export default function DashboardPage() {
       unpaid: '#ffc107',
       failed: '#dc3545',
     };
-    
+
     return (
       <span style={{
         padding: '0.25rem 0.75rem',
@@ -203,7 +204,7 @@ export default function DashboardPage() {
         fontSize: '0.875rem',
         fontWeight: '600',
         color: 'white',
-        backgroundColor: colors[status] || '#6c757d',
+        backgroundcolor: colors[status] || '#6c757d',
       }}>
         {translateStatus(status)}
       </span>
@@ -256,176 +257,176 @@ export default function DashboardPage() {
         </div>
 
         <div className="dashboard-content">
-        {isLoadingData ? (
-          <div className="loading">{t.loading}</div>
-        ) : (
-          <>
-            {activeTab === 'reservations' && (
-              <div className="reservations-list">
-                <h2>{t.myReservations}</h2>
-                {reservations.length === 0 ? (
-                  <div className="empty-state">
-                    <p>{t.noReservations}</p>
-                    <Link href={`/${lang}`} className="btn-primary">
-                      {t.browseTrips}
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="bookings-grid">
-                    {reservations.map((reservation) => (
-                      <div key={reservation.id} className="booking-card">
-                        <div className="booking-header">
-                          <h3>{t.reservation} #{reservation.id}</h3>
-                          {getStatusBadge(reservation.status)}
+          {isLoadingData ? (
+            <div className="loading">{t.loading}</div>
+          ) : (
+            <>
+              {activeTab === 'reservations' && (
+                <div className="reservations-list">
+                  <h2>{t.myReservations}</h2>
+                  {reservations.length === 0 ? (
+                    <div className="empty-state">
+                      <p>{t.noReservations}</p>
+                      <Link href={`/${lang}`} className="btn-primary">
+                        {t.browseTrips}
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="bookings-grid">
+                      {reservations.map((reservation) => (
+                        <div key={reservation.id} className="booking-card">
+                          <div className="booking-header">
+                            <h3>{t.reservation} #{reservation.id}</h3>
+                            {getStatusBadge(reservation.status)}
+                          </div>
+                          <div className="booking-details">
+                            <p><strong>{t.date}:</strong> {new Date(reservation.preferred_date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
+                            <p><strong>{t.guests}:</strong> {reservation.guests}</p>
+                            <p><strong>{t.tripType}:</strong> {reservation.trip_type || 'Activity'}</p>
+                            {reservation.trip_title && (
+                              <p><strong>{t.trip}:</strong> {reservation.trip_title}</p>
+                            )}
+                            <p><strong>{t.adminContacted}:</strong> {reservation.admin_contacted ? '✓ Yes' : '✗ No'}</p>
+                            <p style={{ fontSize: '0.85rem', color: '#999', marginTop: '10px' }}>
+                              {reservation.status === 'pending' && t.waitingForReview}
+                              {reservation.status === 'contacted' && t.adminContactedMessage}
+                              {reservation.status === 'confirmed' && t.reservationConfirmed}
+                              {reservation.status === 'converted' && t.convertedToBooking}
+                            </p>
+                          </div>
                         </div>
-                        <div className="booking-details">
-                          <p><strong>{t.date}:</strong> {new Date(reservation.preferred_date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
-                          <p><strong>{t.guests}:</strong> {reservation.guests}</p>
-                          <p><strong>{t.tripType}:</strong> {reservation.trip_type || 'Activity'}</p>
-                          {reservation.trip_title && (
-                            <p><strong>{t.trip}:</strong> {reservation.trip_title}</p>
-                          )}
-                          <p><strong>{t.adminContacted}:</strong> {reservation.admin_contacted ? '✓ Yes' : '✗ No'}</p>
-                          <p style={{ fontSize: '0.85rem', color: '#999', marginTop: '10px' }}>
-                            {reservation.status === 'pending' && t.waitingForReview}
-                            {reservation.status === 'contacted' && t.adminContactedMessage}
-                            {reservation.status === 'confirmed' && t.reservationConfirmed}
-                            {reservation.status === 'converted' && t.convertedToBooking}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'bookings' && (
-              <div className="bookings-list">
-                <h2>{t.myBookings}</h2>
-                {bookings.length === 0 ? (
-                  <div className="empty-state">
-                    <p>{t.noBookings}</p>
-                    <Link href={`/${lang}`} className="btn-primary">
-                      {t.browseTrips}
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="bookings-grid">
-                    {bookings.map((booking) => (
-                      <div key={booking.id} className="booking-card">
-                        <div className="booking-header">
-                          <h3>{t.booking} #{booking.id + 1000}</h3>
-                          {getStatusBadge(booking.status)}
-                        </div>
-                        <div className="booking-details">
-                          <p><strong>{t.date}:</strong> {new Date(booking.date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
-                          <p><strong>{t.guests}:</strong> {booking.guests}</p>
-                          <p><strong>{t.paymentStatus}:</strong> {getStatusBadge(booking.payment_status)}</p>
-                          {booking.details?.amount && (
-                            <p><strong>{t.amount}:</strong> {formatCurrency(amountWithVAT(booking.details.amount), 'SAR', lang)}</p>
-                          )}
-                          {booking.details?.trip_title && (
-                            <p><strong>{t.trip}:</strong> {booking.details.trip_title}</p>
-                          )}
-                        </div>
-                        <div className="booking-actions">
-                          {booking.status === 'pending' && booking.payment_status !== 'paid' && (
-                            <>
-                              <Link
-                                href={`/${lang}/payment?booking_id=${booking.id}`}
-                                className="btn-pay"
-                              >
-                                {t.payNow}
-                              </Link>
-                              <button
-                                onClick={() => handleCancelBooking(booking.id)}
-                                className="btn-cancel"
-                              >
-                                {t.cancel}
-                              </button>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === 'payments' && (
-              <div className="payments-list">
-                <h2>{t.paymentHistory}</h2>
-                {payments.length === 0 ? (
-                  <div className="empty-state">
-                    <p>{t.noPayments}</p>
-                  </div>
-                ) : (
-                  <table className="payments-table">
-                    <thead>
-                      <tr>
-                        <th>{isRTL ? 'رقم الدفع' : 'Payment ID'}</th>
-                        <th>{isRTL ? 'رقم الحجز' : 'Booking ID'}</th>
-                        <th>{t.method}</th>
-                        <th>{t.amount}</th>
-                        <th>{t.status}</th>
-                        <th>{t.date}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {payments.map((payment) => (
-                        <tr key={payment.id}>
-                          <td>#{payment.id}</td>
-                          <td>#{payment.booking_id}</td>
-                          <td>{payment.method}</td>
-                          <td>{payment.meta?.amount || 'N/A'} SAR</td>
-                          <td>{getStatusBadge(payment.status)}</td>
-                          <td>{new Date(payment.created_at).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</td>
-                        </tr>
                       ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            )}
+                    </div>
+                  )}
+                </div>
+              )}
 
-            {activeTab === 'profile' && (
-              <div className="profile-section">
-                <h2>{t.profileSettings}</h2>
-                <div className="profile-info">
-                  <div className="info-item">
-                    <label>{isRTL ? 'الاسم:' : 'Name:'}</label>
-                    <p>{user?.name}</p>
-                  </div>
-                  <div className="info-item">
-                    <label>{isRTL ? 'البريد الإلكتروني:' : 'Email:'}</label>
-                    <p>{user?.email}</p>
-                  </div>
-                  <div className="info-item">
-                    <label>{t.phoneLabel}:</label>
-                    {editingPhone ? (
-                      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                        <input type="tel" value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} style={{ padding: '0.5rem', borderRadius: '8px', border: '1px solid #ddd' }} />
-                        <button className="btn-primary" onClick={savePhone} disabled={savingPhone} style={{ padding: '0.45rem 0.75rem' }}>{savingPhone ? 'Saving...' : 'Save'}</button>
-                        <button className="btn-secondary" onClick={() => { setEditingPhone(false); setPhoneInput(user?.phone || '') }} disabled={savingPhone} style={{ padding: '0.45rem 0.75rem' }}>Cancel</button>
-                      </div>
-                    ) : (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <p style={{ margin: 0 }}>{user?.phone || '-'}</p>
-                        <button className="btn-link" onClick={() => setEditingPhone(true)} style={{ marginLeft: '8px' }}>Edit</button>
-                      </div>
-                    )}
-                  </div>
-                  <div className="info-item">
-                    <label>{isRTL ? 'تاريخ الانضمام:' : 'Member Since:'}</label>
-                    <p>{new Date(user?.created_at).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
+              {activeTab === 'bookings' && (
+                <div className="bookings-list">
+                  <h2>{t.myBookings}</h2>
+                  {bookings.length === 0 ? (
+                    <div className="empty-state">
+                      <p>{t.noBookings}</p>
+                      <Link href={`/${lang}`} className="btn-primary">
+                        {t.browseTrips}
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="bookings-grid">
+                      {bookings.map((booking) => (
+                        <div key={booking.id} className="booking-card">
+                          <div className="booking-header">
+                            <h3>{t.booking} #{booking.id + 1000}</h3>
+                            {getStatusBadge(booking.status)}
+                          </div>
+                          <div className="booking-details">
+                            <p><strong>{t.date}:</strong> {new Date(booking.date).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
+                            <p><strong>{t.guests}:</strong> {booking.guests}</p>
+                            <p><strong>{t.paymentStatus}:</strong> {getStatusBadge(booking.payment_status)}</p>
+                            {booking.details?.amount && (
+                              <p><strong>{t.amount}:</strong> {formatCurrency(amountWithVAT(booking.details.amount), 'SAR', lang)}</p>
+                            )}
+                            {booking.details?.trip_title && (
+                              <p><strong>{t.trip}:</strong> {booking.details.trip_title}</p>
+                            )}
+                          </div>
+                          <div className="booking-actions">
+                            {booking.status === 'pending' && booking.payment_status !== 'paid' && (
+                              <>
+                                <Link
+                                  href={`/${lang}/payment?booking_id=${booking.id}`}
+                                  className="btn-pay"
+                                >
+                                  {t.payNow}
+                                </Link>
+                                <button
+                                  onClick={() => handleCancelBooking(booking.id)}
+                                  className="btn-cancel"
+                                >
+                                  {t.cancel}
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'payments' && (
+                <div className="payments-list">
+                  <h2>{t.paymentHistory}</h2>
+                  {payments.length === 0 ? (
+                    <div className="empty-state">
+                      <p>{t.noPayments}</p>
+                    </div>
+                  ) : (
+                    <table className="payments-table">
+                      <thead>
+                        <tr>
+                          <th>{isRTL ? 'رقم الدفع' : 'Payment ID'}</th>
+                          <th>{isRTL ? 'رقم الحجز' : 'Booking ID'}</th>
+                          <th>{t.method}</th>
+                          <th>{t.amount}</th>
+                          <th>{t.status}</th>
+                          <th>{t.date}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {payments.map((payment) => (
+                          <tr key={payment.id}>
+                            <td>#{payment.id}</td>
+                            <td>#{payment.booking_id}</td>
+                            <td>{payment.method}</td>
+                            <td>{payment.meta?.amount || 'N/A'} SAR</td>
+                            <td>{getStatusBadge(payment.status)}</td>
+                            <td>{new Date(payment.created_at).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'profile' && (
+                <div className="profile-section">
+                  <h2>{t.profileSettings}</h2>
+                  <div className="profile-info">
+                    <div className="info-item">
+                      <label>{isRTL ? 'الاسم:' : 'Name:'}</label>
+                      <p>{user?.name}</p>
+                    </div>
+                    <div className="info-item">
+                      <label>{isRTL ? 'البريد الإلكتروني:' : 'Email:'}</label>
+                      <p>{user?.email}</p>
+                    </div>
+                    <div className="info-item">
+                      <label>{t.phoneLabel}:</label>
+                      {editingPhone ? (
+                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                          <input type="tel" value={phoneInput} onChange={(e) => setPhoneInput(e.target.value)} style={{ padding: '0.5rem', borderRadius: '8px', border: '1px solid #ddd' }} />
+                          <button className="btn-primary" onClick={savePhone} disabled={savingPhone} style={{ padding: '0.45rem 0.75rem' }}>{savingPhone ? 'Saving...' : 'Save'}</button>
+                          <button className="btn-secondary" onClick={() => { setEditingPhone(false); setPhoneInput(user?.phone || '') }} disabled={savingPhone} style={{ padding: '0.45rem 0.75rem' }}>Cancel</button>
+                        </div>
+                      ) : (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <p style={{ margin: 0 }}>{user?.phone || '-'}</p>
+                          <button className="btn-link" onClick={() => setEditingPhone(true)} style={{ marginLeft: '8px' }}>Edit</button>
+                        </div>
+                      )}
+                    </div>
+                    <div className="info-item">
+                      <label>{isRTL ? 'تاريخ الانضمام:' : 'Member Since:'}</label>
+                      <p>{new Date(user?.created_at).toLocaleDateString(isRTL ? 'ar-SA' : 'en-US')}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
         </div>
       </div>
 

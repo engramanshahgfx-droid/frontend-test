@@ -376,7 +376,7 @@
 }
 
 /* Not Found View */
-.notFoundContainer {
+.notFouakbarontainer {
   padding: 80px 20px;
   text-align: center;
   background: #FAF6F0;
@@ -526,7 +526,8 @@
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: var(--accent-color); /* Usually orange */
+  background: var(--accent-color);
+  /* Usually orange */
 }
 
 .offersTitleHighlight {
@@ -817,10 +818,12 @@
     margin-top: 40px;
     padding-top: 30px;
   }
+
   .offersGrid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+
   .btnViewAll {
     width: 100%;
     justify-content: center;

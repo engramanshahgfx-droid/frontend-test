@@ -75,7 +75,7 @@ export default function Products({ params }) {
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundcolor: "white",
         padding: "16px",
         borderRadius: "18px",
         border: "1px solid rgba(227, 227, 227, 1)",
@@ -119,9 +119,8 @@ export default function Products({ params }) {
                       </p>
                       <div className="d-flex">
                         <div
-                          className={`btn btn-primary ${
-                            lang === "en" ? "me-2" : "ms-2"
-                          }`}
+                          className={`btn btn-primary ${lang === "en" ? "me-2" : "ms-2"
+                            }`}
                           onClick={() =>
                             router.push(
                               `/${lang}/product-details/${product.title[
@@ -134,9 +133,8 @@ export default function Products({ params }) {
                           <FaEye />
                         </div>
                         <div
-                          className={`btn btn-warning text-white ${
-                            lang === "en" ? "me-2" : "ms-2"
-                          }`}
+                          className={`btn btn-warning text-white ${lang === "en" ? "me-2" : "ms-2"
+                            }`}
                           onClick={() =>
                             router.push(
                               `/${lang}/admin/edit-product/${product.id}`
@@ -148,7 +146,7 @@ export default function Products({ params }) {
                         </div>
                         <div
                           className="btn btn-danger"
-                          style={{ backgroundColor: "red" }}
+                          style={{ backgroundcolor: "red" }}
                           onClick={() => handleDelete(product)}
                           title={t.delete}
                         >

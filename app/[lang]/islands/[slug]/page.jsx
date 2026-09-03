@@ -19,7 +19,7 @@ export default function IslandDetailPage() {
   const [error, setError] = useState(null);
 
   // Static labels
-const labels = {
+  const labels = {
     en: {
       backButton: "Back",
       bookNow: "Book Now",
@@ -87,7 +87,7 @@ const labels = {
 
     // Fallback to storage/islands
     return `${backendBase}/storage/islands/${img}`;
-  }; 
+  };
 
   // Parse list
   const parseList = (value) => {
@@ -272,9 +272,9 @@ const labels = {
                 style={{
                   fontSize: "2.2rem",
                   background: "linear-gradient(135deg, #ffffff, #EFC8AE, #dfa528)",
-                  WebkitBackgroundClip: "text",
+                  WebkitBackgrouakbarlip: "text",
                   WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
+                  backgrouakbarlip: "text",
                   lineHeight: "1.3",
                 }}
               >
@@ -492,7 +492,7 @@ const labels = {
                   lineHeight: "1.95",
                   whiteSpace: "pre-wrap",
                   wordWrap: "break-word",
-                  backgroundColor: "rgba(255,255,255,0.08)",
+                  backgroundcolor: "rgba(255,255,255,0.08)",
                   padding: "35px",
                   borderRadius: "15px",
                   border: "2px solid rgba(255,255,255,0.15)",

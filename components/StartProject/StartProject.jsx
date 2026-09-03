@@ -60,30 +60,30 @@ export default function StartProject({ lang }) {
     },
   };
 
-const reservationTitles = {
-  domestic: {
-    en: "Domestic Reservation",
-    ar: "حجز محلي",
-    zh: "国内预订"
-  },
-  international: {
-    en: "International Reservation",
-    ar: "حجز دولي",
-    zh: "国际预订"
-  }
-};
+  const reservationTitles = {
+    domestic: {
+      en: "Domestic Reservation",
+      ar: "حجز محلي",
+      zh: "国内预订"
+    },
+    international: {
+      en: "International Reservation",
+      ar: "حجز دولي",
+      zh: "国际预订"
+    }
+  };
 
-const handleReservation = (type = "domestic") => {
-  setActiveReservation(type);
-  openReservationModal({
-    title: reservationTitles[type][lang] || reservationTitles[type].en,
-    slug: "",
-    type,
-    bookingLocation: type === "domestic" ? "local" : "international",
-    preferredBookingType: "activity",
-    isLocalService: type === "domestic",
-  });
-};
+  const handleReservation = (type = "domestic") => {
+    setActiveReservation(type);
+    openReservationModal({
+      title: reservationTitles[type][lang] || reservationTitles[type].en,
+      slug: "",
+      type,
+      bookingLocation: type === "domestic" ? "local" : "international",
+      preferredBookingType: "activity",
+      isLocalService: type === "domestic",
+    });
+  };
   return (
     <section
       className="position-relative py-5 text-center text-white"
@@ -117,7 +117,7 @@ const handleReservation = (type = "domestic") => {
       <div
         className="position-absolute top-0 start-0 w-100 h-100"
         style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backgroundcolor: "rgba(0, 0, 0, 0.5)",
           zIndex: 1,
         }}
       ></div>
@@ -152,7 +152,7 @@ const handleReservation = (type = "domestic") => {
 
           <motion.p
             className="lead mx-auto mt-3 mb-5"
-            style={{ 
+            style={{
               maxWidth: "700px",
               color: "#e0e0e0",
               lineHeight: "1.6"
@@ -162,7 +162,7 @@ const handleReservation = (type = "domestic") => {
             transition={{ duration: 1, delay: 0.6 }}
           >
             {(content[lang] || content.en).desc}
-          </motion.p> 
+          </motion.p>
 
           <motion.div
             className="d-flex flex-column flex-sm-row justify-content-center gap-3 w-100"
@@ -232,7 +232,7 @@ const handleReservation = (type = "domestic") => {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(74, 144, 226, 0.2)",
+                    backgroundcolor: "rgba(74, 144, 226, 0.2)",
                     border: "1px solid rgba(74, 144, 226, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -253,7 +253,7 @@ const handleReservation = (type = "domestic") => {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(34, 197, 94, 0.2)",
+                    backgroundcolor: "rgba(34, 197, 94, 0.2)",
                     border: "1px solid rgba(34, 197, 94, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -274,7 +274,7 @@ const handleReservation = (type = "domestic") => {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(245, 158, 11, 0.2)",
+                    backgroundcolor: "rgba(245, 158, 11, 0.2)",
                     border: "1px solid rgba(245, 158, 11, 0.5)",
                     width: "70px",
                     height: "70px",
@@ -295,7 +295,7 @@ const handleReservation = (type = "domestic") => {
                 <div
                   className="rounded-circle p-3 mb-2 d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(168, 85, 247, 0.2)",
+                    backgroundcolor: "rgba(168, 85, 247, 0.2)",
                     border: "1px solid rgba(168, 85, 247, 0.5)",
                     width: "70px",
                     height: "70px",

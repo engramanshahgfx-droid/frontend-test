@@ -243,12 +243,12 @@ export default function PrivateJetRequestForm({ lang }) {
   };
 
   return (
-    <div className="container" style={{ 
-      direction: isRTL ? "rtl" : "ltr", 
+    <div className="container" style={{
+      direction: isRTL ? "rtl" : "ltr",
       overflow: "visible",
       paddingBottom: "5rem",
       maxWidth: "1200px"
-      }}>
+    }}>
       {/* Hero Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -273,18 +273,18 @@ export default function PrivateJetRequestForm({ lang }) {
           className="col-lg-7"
           style={{ overflow: "visible" }}
         >
-          <div 
+          <div
             className="card border-0 shadow-sm overflow-visible"
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundColor: "#ffffff"
+              backgroundcolor: "#ffffff"
             }}
           >
-            <div 
+            <div
               className="card-header text-white py-4 px-4 border-0"
               style={{
-                backgroundColor: "#1C0052",
+                backgroundcolor: "#1C0052",
                 borderRadius: "10px 10px 0 0"
               }}
             >
@@ -351,7 +351,7 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       required
                       className={`form-select form-select-lg pj-select ${isRTL ? 'text-end' : 'text-start'}`}
-                      style={{ 
+                      style={{
                         direction: isRTL ? 'rtl' : 'ltr',
                         borderRadius: "10px",
                         borderColor: "rgba(28, 0, 82, 0.15)",
@@ -452,7 +452,7 @@ export default function PrivateJetRequestForm({ lang }) {
                       onChange={handleChange}
                       required
                       className={`form-select form-select-lg pj-select ${isRTL ? 'text-end' : 'text-start'}`}
-                      style={{ 
+                      style={{
                         direction: isRTL ? 'rtl' : 'ltr',
                         borderRadius: "10px",
                         borderColor: "rgba(28, 0, 82, 0.15)",
@@ -530,28 +530,28 @@ export default function PrivateJetRequestForm({ lang }) {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="col-lg-5"
         >
-          <div 
+          <div
             className="card border-0 shadow-sm mb-4 overflow-hidden"
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundColor: "#ffffff"
+              backgroundcolor: "#ffffff"
             }}
           >
-            <div 
+            <div
               className="card-header text-white py-3 px-4 border-0"
               style={{
-                backgroundColor: "#1C0052"
+                backgroundcolor: "#1C0052"
               }}
             >
               <h4 className="h5 mb-0 fw-semibold">{t.featuresTitle}</h4>
             </div>
             <div className="card-body p-4">
               <div className="d-flex gap-3 mb-4">
-                <div 
+                <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(232, 93, 31, 0.08)",
+                    backgroundcolor: "rgba(232, 93, 31, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -566,10 +566,10 @@ export default function PrivateJetRequestForm({ lang }) {
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
-                <div 
+                <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(28, 0, 82, 0.08)",
+                    backgroundcolor: "rgba(28, 0, 82, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -584,10 +584,10 @@ export default function PrivateJetRequestForm({ lang }) {
                 </div>
               </div>
               <div className="d-flex gap-3 mb-4">
-                <div 
+                <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(232, 93, 31, 0.08)",
+                    backgroundcolor: "rgba(232, 93, 31, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -602,10 +602,10 @@ export default function PrivateJetRequestForm({ lang }) {
                 </div>
               </div>
               <div className="d-flex gap-3">
-                <div 
+                <div
                   className="d-flex align-items-center justify-content-center"
                   style={{
-                    backgroundColor: "rgba(28, 0, 82, 0.08)",
+                    backgroundcolor: "rgba(28, 0, 82, 0.08)",
                     borderRadius: "10px",
                     width: "50px",
                     height: "50px",
@@ -622,12 +622,12 @@ export default function PrivateJetRequestForm({ lang }) {
             </div>
           </div>
 
-          <div 
+          <div
             className="card border-0 shadow-sm overflow-hidden"
             style={{
               borderRadius: "10px",
               border: "1px solid rgba(28, 0, 82, 0.06)",
-              backgroundColor: "#ffffff"
+              backgroundcolor: "#ffffff"
             }}
           >
             <div className="card-body p-4">
